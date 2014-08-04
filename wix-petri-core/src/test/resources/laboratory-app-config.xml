@@ -1,0 +1,7 @@
+<configuration>
+
+    <serviceTopology>
+        <petriUrl>http://127.0.01:9902</petriUrl>
+    </serviceTopology>
+
+</configuration>

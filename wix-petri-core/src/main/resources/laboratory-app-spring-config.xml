@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:wix="http://www.wixpress.com/spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+            http://www.wixpress.com/spring http://www.wixpress.com/spring/wix-spring.xsd">
+
+
+    <bean class="com.wixpress.petri.laboratory.LaboratoryConfig"/>
+
+
+    <wix:import-once resource="classpath:wix-framework-mvc-config.xml"/>
+    <wix:import-once resource="classpath:wix-framework-security-config.xml"/>
+
+    <bean class="com.wixpress.petri.laboratory.spring.ExperimentsRequestAspectFactory"/>
+    <bean class="com.wixpress.framework.spring.WixAnnotationAwareAspectJProxyCreator"/>
+
+
+</beans>

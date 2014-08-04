@@ -1,0 +1,29 @@
+<configuration>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level thread=[%thread] class=[%logger{0}] %marker %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="TEST_APPENDER" class="com.wixpress.hoopoe.test.TestConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level thread=[%thread] class=[%logger{0}] %marker %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.wixpress" level="all"/>
+    <logger name="experimentsLog" level="all">
+        <appender-ref ref="TEST_APPENDER"/>
+    </logger>
+    <logger name="com.wixpress.petri.petri.LogPetriSupport" level="all">
+        <appender-ref ref="TEST_APPENDER"/>
+    </logger>
+
+
+    <root level="error">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>

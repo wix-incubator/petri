@@ -1,0 +1,66 @@
+package com.wixpress.petri.experiments.domain;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.wixpress.petri.laboratory.UserInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static java.util.Arrays.asList;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: uri
+ * Date: 4/23/14
+ * Time: 4:09 PM
+ * To change this template use File | Settings | File Templates.
+ */
+public class IncludeUserIdsFilter implements Filter {
+
+    private final List<UUID> userGuids;
+
+    @JsonCreator
+    public IncludeUserIdsFilter(@JsonProperty("ids") UUID... userGuids) {
+        this.userGuids = (userGuids == null) ? new ArrayList<UUID>() : asList(userGuids);
+    }
+
+    public List<UUID> getIds() {
+        return new ArrayList<>(userGuids);
+    }
+
+    @Override
+    public boolean isEligible(UserInfo user, Experiment experiment) {
+        return userGuids.contains(userGuid(user));
+    }
+
+    private UUID userGuid(UserInfo user) {
+        return user.getUserId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IncludeUserIdsFilter that = (IncludeUserIdsFilter) o;
+
+        if (userGuids != null ? !userGuids.equals(that.userGuids) : that.userGuids != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return userGuids != null ? userGuids.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "IncludeUserIdsFilter{" +
+                "userGuids=" + userGuids +
+                '}';
+    }
+
+}
