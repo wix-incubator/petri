@@ -18,7 +18,8 @@
 
     <modules>
         <module>wix-petri-core</module>
-  </modules>
+        <module>petri-spring-integration</module>
+    </modules>
 
 
 </project>
