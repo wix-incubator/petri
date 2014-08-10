@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context"
+
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--
+        This declaration will cause Spring to locate every @Component,
+        @Repository and @Service in your application. In practical terms this
+        allows you to write a POJO and then simply annotate the new POJO as an
+        @Service and Spring will automatically detect, instantiate and
+        dependency inject your service at startup time. Importantly, you can
+        then also have your new service injected into any other class that
+        requires it simply by declaring a field for your service inside the
+        relying class and Spring will inject it. Note that two exclude filters
+        are declared. The first ensures that Spring doesn't spend time
+        introspecting Roo-specific ITD aspects. The second ensures Roo doesn't
+        instantiate your @Controller classes, as these should be instantiated
+        by a web tier application context. Refer to web.xml for more details
+        about the web tier application context setup services.
+        
+        Furthermore, this turns on @Autowired, @PostConstruct etc support. These 
+        annotations allow you to use common Spring and Java Enterprise Edition 
+        annotations in your classes without needing to do any special configuration. 
+        The most commonly used annotation is @Autowired, which instructs Spring to
+        dependency inject an object into your class.
+    -->
+    <context:component-scan base-package="com.wixpress.common.petri.server">
+    </context:component-scan>
+
+    <bean name="petriServerExporter"
+          class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="petriServerBean"/>
+        <property name="serviceInterface" value="com.wixpress.petri.petri.PetriClient"/>
+    </bean>
+
+</beans>
