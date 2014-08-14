@@ -37,10 +37,14 @@ public class UserInfoExtractorTest {
     public void extractAUserInfoForIncomingRequest(){
         String host = "some host";
         when(hostResolver.resolve()).thenReturn(host);
+        String userAgent = "Some-User-Agent-Bot";
+        stubRequest.addHeader("user-agent",userAgent);
 
         UserInfo userInfo = userInfoExtractor.extract();
 
         assertThat(userInfo.host, is(host));
+        assertThat(userInfo.userAgent, is(userAgent));
+        assertThat(userInfo.isRobot, is(true));
 
     }
 
@@ -58,6 +62,31 @@ public class UserInfoExtractorTest {
                 new NullUserInfoType(), "", "", new DateTime(0), "", "", false, new HashMap<String, String>(), false, host);
 
         assertThat(userInfo, is(expectedUserInfo));
+
+    }
+
+    @Test
+    public void extractAUserInfoForIncomingRequestWithNullHeaders(){
+        String host = "some host";
+        when(hostResolver.resolve()).thenReturn(host);
+
+        UserInfo userInfo = userInfoExtractor.extract();
+
+        assertThat(userInfo.host, is(host));
+        assertThat(userInfo.userAgent, is(""));
+        assertThat(userInfo.isRobot, is(false));
+
+    }
+
+    @Test
+    public void checkIsRobot(){
+        assertThat(userInfoExtractor.checkForRobotHeader("Bot-Agent"), is(true));
+        assertThat(userInfoExtractor.checkForRobotHeader("crawler-Agent"), is(true));
+        assertThat(userInfoExtractor.checkForRobotHeader("spider-Agent"), is(true));
+        assertThat(userInfoExtractor.checkForRobotHeader("ping-Agent"), is(true));
+        assertThat(userInfoExtractor.checkForRobotHeader("nagios-plugins-Agent"), is(true));
+        assertThat(userInfoExtractor.checkForRobotHeader("My-Agent"), is(false));
+
 
     }
 
