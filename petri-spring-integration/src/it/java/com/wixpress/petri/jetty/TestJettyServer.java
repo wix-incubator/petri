@@ -1,4 +1,4 @@
-package com.wix.jetty;
+package com.wixpress.petri.jetty;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;

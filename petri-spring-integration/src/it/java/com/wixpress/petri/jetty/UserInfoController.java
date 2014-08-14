@@ -1,19 +1,17 @@
-package com.wix.jetty;
+package com.wixpress.petri.jetty;
 
-import com.wixpress.petri.laboratory.NullUserInfoType;
+import com.wixpress.petri.experiments.domain.HostResolver;
 import com.wixpress.petri.laboratory.UserInfo;
+import com.wixpress.petri.laboratory.UserInfoExtractor;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.joda.time.DateTime;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.UUID;
 
-import static com.wix.jackson.ObjectMapperFactory.getObjectMapper;
+import static com.wixpress.petri.jackson.ObjectMapperFactory.getObjectMapper;
 
 /**
  * User: Dalias
@@ -21,20 +19,20 @@ import static com.wix.jackson.ObjectMapperFactory.getObjectMapper;
  * Time: 6:31 PM
  */
 public class UserInfoController  extends HttpServlet {
+    ObjectMapper objectMapper =  getObjectMapper();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ObjectMapper objectMapper =  getObjectMapper();
+        UserInfoExtractor userInfoExtractor = new UserInfoExtractor(request, new HostResolver());
 
-        UserInfo userInfo = new UserInfo("log", UUID.randomUUID() , UUID.randomUUID(), "ip", "url", "userAgent",
-                new NullUserInfoType(), "language", "country", new DateTime(), "email", "anonymousExperimentsLog",
-                false, new HashMap<String, String>(),  false, "host") ;
+        UserInfo userInfo = userInfoExtractor.extract();
+
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().println(objectMapper.writeValueAsString(userInfo));
-//        response.getWriter().println("{\"name\":\"ddd\"}");
 
     }
 }

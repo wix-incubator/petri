@@ -1,6 +1,6 @@
-package com.wix.test;
+package com.wixpress.petri.test;
 
-import com.wix.jetty.TestJettyServer;
+import com.wixpress.petri.jetty.TestJettyServer;
 import com.wixpress.petri.laboratory.UserInfo;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -12,7 +12,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.wix.jackson.ObjectMapperFactory.getObjectMapper;
+import java.net.InetAddress;
+
+import static com.wixpress.petri.jackson.ObjectMapperFactory.getObjectMapper;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -41,7 +43,7 @@ public class UserInfoExtractorIT {
         assertThat(response.getStatusLine().getStatusCode(), is(HttpStatus.SC_OK));
         String responseString = EntityUtils.toString(response.getEntity(), "UTF-8");
         UserInfo userInfo = objectMapper.readValue(responseString, UserInfo.class);
-        assertThat(userInfo.email, is("email"));
+        assertThat(userInfo.host, is(InetAddress.getLocalHost().getHostName()));
 
     }
 }

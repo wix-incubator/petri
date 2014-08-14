@@ -1,4 +1,4 @@
-package com.wix.jackson;
+package com.wixpress.petri.jackson;
 
 import com.wixpress.petri.laboratory.NullUserInfoType;
 import com.wixpress.petri.laboratory.RegisteredUserInfoType;
