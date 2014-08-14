@@ -39,7 +39,8 @@ public class UserInfoExtractorIT {
         String googleBotUserAgent = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
 
         HttpClient client  = HttpClientBuilder.create().build();
-        HttpGet request  = new HttpGet("http://127.0.0.1:9002/hello");
+        String uri = "http://127.0.0.1:9002/hello";
+        HttpGet request  = new HttpGet(uri);
         request.addHeader("Accept", "application/json");
         request.addHeader("user-agent", googleBotUserAgent);
 
@@ -52,6 +53,7 @@ public class UserInfoExtractorIT {
         assertThat(userInfo.host, is(InetAddress.getLocalHost().getHostName()));
         assertThat(userInfo.userAgent, is(googleBotUserAgent));
         assertThat(userInfo.isRobot, is(true));
+        assertThat(userInfo.url, is(uri));
 
     }
 }

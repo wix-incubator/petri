@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -25,6 +24,12 @@ public class UserInfoExtractorTest {
     private MockHttpServletRequest stubRequest;
     private UserInfoExtractor userInfoExtractor;
 
+
+    private String host = "some host";
+    private String appUrl = "http://server/app";
+    private String userAgent = "Some-User-Agent-Bot";
+
+
     @Before
     public void setup() {
         stubRequest = new MockHttpServletRequest();
@@ -35,30 +40,29 @@ public class UserInfoExtractorTest {
 
     @Test
     public void extractAUserInfoForIncomingRequest(){
-        String host = "some host";
         when(hostResolver.resolve()).thenReturn(host);
-        String userAgent = "Some-User-Agent-Bot";
-        stubRequest.addHeader("user-agent",userAgent);
+        stubRequest.addHeader("user-agent", userAgent);
+        stubRequest.addParameter("appUrl", appUrl);
 
         UserInfo userInfo = userInfoExtractor.extract();
 
         assertThat(userInfo.host, is(host));
         assertThat(userInfo.userAgent, is(userAgent));
         assertThat(userInfo.isRobot, is(true));
+        assertThat(userInfo.url, is(appUrl));
 
     }
 
     @Test
     public void extractAUserInfoForNullRequest(){
 
-        String host = "some host";
         when(hostResolver.resolve()).thenReturn(host);
 
         UserInfoExtractor userInfoExtractor = new UserInfoExtractor(null, hostResolver);
 
         UserInfo userInfo = userInfoExtractor.extract();
 
-        UserInfo expectedUserInfo =   new UserInfo("", (UUID) null, null, "", "", "",
+        UserInfo expectedUserInfo =   new UserInfo("", null, null, "", "", "",
                 new NullUserInfoType(), "", "", new DateTime(0), "", "", false, new HashMap<String, String>(), false, host);
 
         assertThat(userInfo, is(expectedUserInfo));
@@ -67,7 +71,6 @@ public class UserInfoExtractorTest {
 
     @Test
     public void extractAUserInfoForIncomingRequestWithNullHeaders(){
-        String host = "some host";
         when(hostResolver.resolve()).thenReturn(host);
 
         UserInfo userInfo = userInfoExtractor.extract();
@@ -75,6 +78,7 @@ public class UserInfoExtractorTest {
         assertThat(userInfo.host, is(host));
         assertThat(userInfo.userAgent, is(""));
         assertThat(userInfo.isRobot, is(false));
+        assertThat(userInfo.url, is("http://localhost:80"));
 
     }
 
@@ -88,6 +92,38 @@ public class UserInfoExtractorTest {
         assertThat(userInfoExtractor.checkForRobotHeader("My-Agent"), is(false));
 
 
+    }
+
+    @Test
+    public void getUrlFromRequestAppUrlParamSet(){
+        stubRequest.addParameter("appUrl", appUrl);
+        assertThat(userInfoExtractor.getRequestURL(), is(appUrl));
+    }
+
+    @Test
+    public void getUrlFromRequestServerNameNotLocalHost(){
+        stubRequest.setServerName("test.wix.com");
+        assertThat(userInfoExtractor.getRequestURL(), is("http://test.wix.com:80"));
+    }
+
+    @Test
+    public void getUrlFromRequestServerNameIsLocalHostAndSmallXForwardHeader(){
+        stubRequest.setServerName("localhost");
+        stubRequest.addHeader("x-forwarded-host", "test.wix.com");
+        assertThat(userInfoExtractor.getRequestURL(), is("http://test.wix.com:80"));
+    }
+
+    @Test
+    public void getUrlFromRequestServerNameIsLocalHostAndCapitalXForwarsHeader(){
+        stubRequest.setServerName("localhost");
+        stubRequest.addHeader("X_FORWARDED_HOST", "test.wix.com");
+        assertThat(userInfoExtractor.getRequestURL(), is("http://test.wix.com:80"));
+    }
+
+    @Test
+    public void getUrlFromRequestServerNameIsLocalHostAndNoXForwarsHeader(){
+        stubRequest.setServerName("localhost");
+        assertThat(userInfoExtractor.getRequestURL(), is("http://localhost:80"));
     }
 
 }
