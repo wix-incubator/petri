@@ -1,9 +1,13 @@
 package com.wixpress.petri.laboratory;
 
 import com.wixpress.petri.experiments.domain.HostResolver;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -27,6 +31,8 @@ public class UserInfoExtractorTest {
         hostResolver =   mock(HostResolver.class);
         userInfoExtractor = new UserInfoExtractor(stubRequest, hostResolver);
     }
+
+
     @Test
     public void extractAUserInfoForIncomingRequest(){
         String host = "some host";
@@ -35,6 +41,23 @@ public class UserInfoExtractorTest {
         UserInfo userInfo = userInfoExtractor.extract();
 
         assertThat(userInfo.host, is(host));
+
+    }
+
+    @Test
+    public void extractAUserInfoForNullRequest(){
+
+        String host = "some host";
+        when(hostResolver.resolve()).thenReturn(host);
+
+        UserInfoExtractor userInfoExtractor = new UserInfoExtractor(null, hostResolver);
+
+        UserInfo userInfo = userInfoExtractor.extract();
+
+        UserInfo expectedUserInfo =   new UserInfo("", (UUID) null, null, "", "", "",
+                new NullUserInfoType(), "", "", new DateTime(0), "", "", false, new HashMap<String, String>(), false, host);
+
+        assertThat(userInfo, is(expectedUserInfo));
 
     }
 

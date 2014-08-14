@@ -26,22 +26,26 @@ public class UserInfoExtractor {
 
     public UserInfo extract() {
 
-        String experimentsLog = null;
-        UUID userId = null;
-        UUID clientId = null;
-        String ip = null;
-        String url = null;
-        String userAgent = null;
-        UserInfoType userInfoType = null;
-        String language = null;
-        String country = null;
-        DateTime userCreationDate = null;
-        String email = null;
-        String anonymousExperimentsLog = null;
-        boolean isRecurring = false;  //todo
-        Map<String, String> experimentOverrides = null;
-        boolean isRobot = false; //todo
         String host = hostResolver.resolve();
+        if (request == null) {
+            return UserInfo.userInfoFromNullRequest(host);
+        }
+
+        String experimentsLog = null; //todo
+        UUID userId = null; //todo
+        UUID clientId = null; //todo
+        String ip = null;   //todo
+        String url = null;   //todo
+        String userAgent = null; //todo
+        UserInfoType userInfoType = null; //todo
+        String language = null;  //todo
+        String country = null; //todo
+        DateTime userCreationDate = null; //todo
+        String email = null; //todo
+        String anonymousExperimentsLog = null; //todo
+        boolean isRecurring = false;  //todo
+        Map<String, String> experimentOverrides = null; //todo
+        boolean isRobot = false; //todo
         return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, userInfoType, language, country,
                 userCreationDate, email, anonymousExperimentsLog, isRecurring, experimentOverrides, isRobot, host);
 
