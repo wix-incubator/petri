@@ -8,7 +8,7 @@
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="petriInvokerTestProxy" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+    <bean id="petriServerProxy" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
         <property name="serviceUrl" value="http://localhost:9924/test/wix/petri"/>
         <property name="serviceInterface" value="com.wixpress.petri.petri.PetriClient"/>
     </bean>

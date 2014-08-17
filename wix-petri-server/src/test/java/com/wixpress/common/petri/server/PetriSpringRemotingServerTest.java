@@ -29,16 +29,15 @@ import java.util.List;
         "/META-INF/spring/serverApplicationContext-test.xml"
 
 })
-public class PetriServerBeanTest {
+public class PetriSpringRemotingServerTest {
 
     public static final int PORT = 9924;
     public static final String CONTEXT_PATH = "/test";
 
     static JettyLocalServletServer jettyLocal;
-    //  static JettyLocalServletServer jettyLocalServletServerOrderPage;
 
     @Autowired
-    @Qualifier ("petriInvokerTestProxy")
+    @Qualifier ("petriServerProxy")
     PetriClient petriClient;
 
 
