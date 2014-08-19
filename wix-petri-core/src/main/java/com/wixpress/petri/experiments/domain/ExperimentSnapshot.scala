@@ -30,8 +30,8 @@ case class ExperimentSnapshot(
                                @BooleanBeanProperty persistent: Boolean,
                                filters: java.util.List[Filter],
                                @BooleanBeanProperty onlyForLoggedInUsers: Boolean,
-                               comment: String, //not needed for conductableExperiment
-                               editor: String) {
+                               comment: String, updater: String //not needed for conductableExperiment
+                               ) {
   //not needed for conductableExperiment
 
 

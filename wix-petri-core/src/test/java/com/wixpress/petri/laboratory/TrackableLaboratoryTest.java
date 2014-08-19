@@ -487,6 +487,8 @@ public class TrackableLaboratoryTest {
         errorReportWasSent(Matchers.<Throwable>instanceOf(BlowingUpFilter.FilterExploded.class));
     }
 
+
+
     Matcher<Throwable> anException(final Class<?extends Throwable> type, final Matcher<String> msg) {
         return new TypeSafeMatcher<Throwable>() {
             @Override

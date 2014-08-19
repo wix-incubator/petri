@@ -1,5 +1,6 @@
 package com.wixpress.petri.petri;
 
+import com.wixpress.petri.laboratory.ErrorHandler;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
@@ -24,36 +25,38 @@ public class ClasspathSpecDefinitionsIT {
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
-    private PetriSupport petriSupport;
+    private ErrorHandler errorHandler;
 
     @Before
     public void setup() {
-        petriSupport = context.mock(PetriSupport.class);
+        errorHandler = context.mock(ErrorHandler.class);
     }
 
     @Test
     public void collectsAllSpecsFromSpecDefinitions() throws Exception {
-        ClasspathSpecDefinitions specDefs = new ClasspathSpecDefinitions(VALID_SPECS_PACKAGE, petriSupport);
+        ClasspathSpecDefinitions specDefs = new ClasspathSpecDefinitions(VALID_SPECS_PACKAGE, errorHandler);
         SpecDefinition value = new ValidStubSpecDefinition_1();
         assertThat(specDefs.get(), is(asList(value)));
     }
 
     @Test
     public void notifiesErrors() {
-        ClasspathSpecDefinitions specDefs = new ClasspathSpecDefinitions(INVALID_SPECS_PACKAGE, petriSupport);
+        ClasspathSpecDefinitions specDefs = new ClasspathSpecDefinitions(INVALID_SPECS_PACKAGE, errorHandler);
         context.checking(new Expectations() {{
-            oneOf(petriSupport).report(with(ClasspathSpecDefinitions.ERROR_CREATING_SPEC), with(containsString("InvalidStubSpecDefinition_1")),
-                    with((String) null));
+            oneOf(errorHandler).handle(
+                    with(allOf(containsString(String.format(ClasspathSpecDefinitions.ERROR_CREATING_SPEC, "")), containsString("InvalidStubSpecDefinition_1"))),
+                    with(any(IllegalAccessException.class)));
         }});
         assertThat(specDefs.get(), is(empty()));
     }
 
     @Test
     public void retrievesOnlyValidSpecs() {
-        ClasspathSpecDefinitions specDefs = new ClasspathSpecDefinitions(VALID_AND_INVALID_SPECS_PACKAGE, petriSupport);
+        ClasspathSpecDefinitions specDefs = new ClasspathSpecDefinitions(VALID_AND_INVALID_SPECS_PACKAGE, errorHandler);
         context.checking(new Expectations() {{
-            oneOf(petriSupport).report(with(ClasspathSpecDefinitions.ERROR_CREATING_SPEC), with(containsString("InvalidStubSpecDefinition_1")),
-                    with((String) null));
+            oneOf(errorHandler).handle(
+                    with(allOf(containsString(String.format(ClasspathSpecDefinitions.ERROR_CREATING_SPEC, "")), containsString("InvalidStubSpecDefinition_1"))),
+                    with(any(IllegalAccessException.class)));
         }});
         SpecDefinition validSpecDef = new ValidStubSpecDefinition_1();
         assertThat(specDefs.get(), is(asList(validSpecDef)));

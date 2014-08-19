@@ -38,8 +38,8 @@ public class ExperimentSnapshotBuilder {
     private int linkedId = Experiment.NO_ID;
     private boolean persistent = true;
     private Boolean onlyForLoggedInUsers = null;
+    private String updater = "";
     private String comment = "";
-    private String editor = "";
 
     private ExperimentSnapshotBuilder() {
     }
@@ -58,6 +58,8 @@ public class ExperimentSnapshotBuilder {
                 withScope(snapshot.scope()).
                 withGroups(snapshot.groups()).
                 withDescription(snapshot.description()).
+                withComment(snapshot.comment()).
+                withUpdater(snapshot.updater()).
                 withName(snapshot.name()).
                 withStartDate(snapshot.startDate()).
                 withEndDate(snapshot.endDate()).
@@ -159,20 +161,24 @@ public class ExperimentSnapshotBuilder {
         return this;
     }
 
-    public ExperimentSnapshotBuilder withEditor(String editor) {
-        this.editor = editor;
+    public ExperimentSnapshotBuilder withUpdater(String updater) {
+        this.updater = updater;
         return this;
+    }
+
+    public ExperimentSnapshotBuilder withTrigger(Trigger trigger) {
+        return this.withComment(trigger.text()).withUpdater(trigger.updater());
     }
 
     public ExperimentSnapshot build() {
         validate();
-        return new ExperimentSnapshot(key, isFromSpec, creationDate, description, startDate, endDate, assignIdsIfMissing(groups), scope, paused, name, creator, featureToggle, originalId, linkedId, persistent, filters, onlyForLoggedInUsers, comment, editor);
+        return new ExperimentSnapshot(key, isFromSpec, creationDate, description, startDate, endDate, assignIdsIfMissing(groups), scope, paused, name, creator, featureToggle, originalId, linkedId, persistent, filters, onlyForLoggedInUsers, comment, updater);
     }
 
     private List<TestGroup> assignIdsIfMissing(List<TestGroup> groups) {
         Set<Integer> occupiedIDs = ids(groups);
         int availableID = 1;
-        List<TestGroup> result = new ArrayList<TestGroup>(groups);
+        List<TestGroup> result = new ArrayList<>(groups);
         for (TestGroup group : result) {
             if (group.getId() == 0) {
                 availableID = nextAvailableID(occupiedIDs, availableID);

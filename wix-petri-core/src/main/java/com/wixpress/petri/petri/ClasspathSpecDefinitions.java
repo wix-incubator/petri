@@ -1,5 +1,6 @@
 package com.wixpress.petri.petri;
 
+import com.wixpress.petri.laboratory.ErrorHandler;
 import org.reflections.Reflections;
 
 import java.util.ArrayList;
@@ -12,14 +13,14 @@ import java.util.Set;
  */
 public class ClasspathSpecDefinitions implements SpecDefinitions {
 
-    public static final String ERROR_CREATING_SPEC = "error trying to instantiate SpecDefintion";
+    public static final String ERROR_CREATING_SPEC = "error trying to instantiate SpecDefintion for type %s";
 
     private final String prefix;
-    private final PetriSupport petriSupport;
+    private final ErrorHandler errorHandler;
 
-    public ClasspathSpecDefinitions(String packageToScan, PetriSupport petriSupport) {
+    public ClasspathSpecDefinitions(String packageToScan, ErrorHandler errorHandler) {
         prefix = packageToScan;
-        this.petriSupport = petriSupport;
+        this.errorHandler = errorHandler;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class ClasspathSpecDefinitions implements SpecDefinitions {
             try {
                 results.add(subType.newInstance());
             } catch (Exception e) {
-                petriSupport.report(ERROR_CREATING_SPEC, String.format("for type %s. Exception was - %s", subType, e.getMessage()), null);
+                errorHandler.handle(String.format(ERROR_CREATING_SPEC, subType), e);
             }
         }
         return results;

@@ -152,8 +152,8 @@ public class Experiment {
     }
 
     @JsonIgnore
-    public String getEditor() {
-        return experimentSnapshot.editor();
+    public String getUpdater() {
+        return experimentSnapshot.updater();
     }
 
     private boolean isValid() {
@@ -204,36 +204,36 @@ public class Experiment {
         return false;
     }
 
-    public Experiment terminateAsOf(DateTime instant,String comment) {
+    public Experiment terminateAsOf(DateTime instant, Trigger trigger) {
         DateTime terminateTime = getStartDate().isBefore(instant) ? instant : getStartDate();
 
         return ExperimentBuilder.aCopyOf(this).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(getExperimentSnapshot()).
                         withEndDate(terminateTime).
-                        withComment(comment).
+                        withTrigger(trigger).
                         build()).
                 build();
     }
 
-    public Experiment pause(String comment) {
+    public Experiment pause(Trigger trigger) {
         return ExperimentBuilder.aCopyOf(this).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(getExperimentSnapshot()).
                                 withPaused(true).
-                                withComment(comment).
+                        withTrigger(trigger).
                                 build()
                 ).build();
     }
 
-    public Experiment resume(String comment) {
+    public Experiment resume(Trigger trigger) {
         return ExperimentBuilder.aCopyOf(this).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(getExperimentSnapshot()).
                                 withPaused(false).
-                                withComment(comment).
+                        withTrigger(trigger).
                                 build()
                 ).build();
     }
 
-    public Experiment toOpenToAllTestGroupValueAlwaysReturning(String value) {
+    public Experiment openToAllAlwaysReturning(String value) {
         return ExperimentBuilder.aCopyOf(this).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(getExperimentSnapshot()).
                                 withFeatureToggle(true).
@@ -285,12 +285,12 @@ public class Experiment {
                 '}';
     }
 
-    public Experiment pauseOrTerminateAsOf(DateTime instant,String comment) {
+    public Experiment pauseOrTerminateAsOf(DateTime instant, Trigger trigger) {
         if (isOnlyForLoggedInUsers()) {
-            return terminateAsOf(instant,comment);  // TODO: INLINE THIS TO REMOVE DEPENDENCY ON TIME SOURCE
+            return terminateAsOf(instant, trigger);  // TODO: INLINE THIS TO REMOVE DEPENDENCY ON TIME SOURCE
         }
 
-        return pause(comment);
+        return pause(trigger);
     }
 
     public Assignment conduct(ConductContext context, UserInfo userInfo) {

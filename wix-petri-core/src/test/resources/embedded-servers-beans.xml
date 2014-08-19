@@ -26,13 +26,6 @@
     <bean id="ramPetriClient" class="com.wixpress.petri.petri.RAMPetriClient"/>
 
 
-    <bean id="mysqlServer" class="com.wixpress.framework.test.embeddedMySql.ITEmbeddedMySql" init-method="start"
-          destroy-method="stop">
-        <property name="user" value="auser"/>
-        <property name="password" value="sa"/>
-    </bean>
-
-
     <!-- This plays the part of the renderer (for example) in the test topology, and laboratoryTestApp plays the part of public (for example) -->
     <bean id="fakeRpcServer" class="com.wixpress.petri.laboratory.FakeRpcServer"
           init-method="start" destroy-method="stop"/>

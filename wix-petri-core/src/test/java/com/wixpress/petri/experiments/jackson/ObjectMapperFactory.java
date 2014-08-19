@@ -24,9 +24,6 @@ public class ObjectMapperFactory {
     private static final Version MODULE_VERSION = new Version(1, 0, 0, null);
 
     public static ObjectMapper makeObjectMapper() {
-
-//        return JacksonObjectMapperFactoryBean.anObjectMapperWithDefaultModules();
-
         final ObjectMapper objectMapper = new ObjectMapper();
         final SimpleModule module = new SimpleModule(MODULE_NAME, MODULE_VERSION);
 

@@ -42,7 +42,7 @@ public class ExperimentMakers {
     public static final Property<Experiment, Boolean> persistent = newProperty();
     public static final Property<Experiment, Boolean> onlyForLoggedIn = newProperty();
     public static final Property<Experiment, String> comment = newProperty();
-    public static final Property<Experiment, String> editor = newProperty();
+    public static final Property<Experiment, String> updater = newProperty();
 
     public static final DateTime DEFAULT_START_DATE = new DateTime();
     public static final DateTime DEFAULT_END_DATE = DEFAULT_START_DATE.plusYears(1);
@@ -74,7 +74,7 @@ public class ExperimentMakers {
                                     withPersistent(lookup.valueOf(persistent, true)).
                                     withOnlyForLoggedInUsers(lookup.valueOf(onlyForLoggedIn, false)).
                                     withComment(lookup.valueOf(comment, "")).
-                                    withEditor(lookup.valueOf(editor, "")).
+                                    withUpdater(lookup.valueOf(updater, "")).
                                     build()
                     ).
                     build();
@@ -110,7 +110,7 @@ public class ExperimentMakers {
                                         withPersistent(lookup.valueOf(persistent, original.isPersistent())).
                                         withOnlyForLoggedInUsers(lookup.valueOf(onlyForLoggedIn, original.isOnlyForLoggedInUsers())).
                                         withComment(lookup.valueOf(comment, original.getComment())).
-                                        withEditor(lookup.valueOf(editor, original.getEditor())).
+                                        withUpdater(lookup.valueOf(updater, original.getUpdater())).
                                         build()
                         ).build();
             }

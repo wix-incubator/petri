@@ -195,7 +195,7 @@ public class ExperimentTest {
         Experiment activeExperiment = an(Experiment,
                 with(startDate, NOW.minusDays(1)),
                 with(endDate, NOW.plusDays(1))).make();
-        Experiment terminated = activeExperiment.terminateAsOf(NOW,"terminate active experiment");
+        Experiment terminated = activeExperiment.terminateAsOf(NOW, new Trigger("terminate active experiment", ""));
         assertThat(terminated.getEndDate(), is(NOW));
     }
 
@@ -204,7 +204,7 @@ public class ExperimentTest {
         Experiment futureExperiment = an(Experiment,
                 with(startDate, NOW.plusDays(1)),
                 with(endDate, NOW.plusDays(2))).make();
-        Experiment terminated = futureExperiment.terminateAsOf(NOW,"terminate future experiment");
+        Experiment terminated = futureExperiment.terminateAsOf(NOW, new Trigger("terminate future experiment", ""));
         assertThat(terminated.getEndDate(), is(futureExperiment.getStartDate()));
     }
 
@@ -328,7 +328,7 @@ public class ExperimentTest {
                     add(new RegisteredUsersFilter());
                 }})
         );
-        Experiment updated = abTestWithFilters.make().toOpenToAllTestGroupValueAlwaysReturning("new");
+        Experiment updated = abTestWithFilters.make().openToAllAlwaysReturning("new");
 
         assertThat(updated.getFilters(), is(empty()));
         assertThat(updated.isToggle(), is(true));
@@ -349,7 +349,7 @@ public class ExperimentTest {
     @Test
     public void canBeSerializedWithCommentAndEditor() throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
-        Experiment theExperiment = an(Experiment, with(comment, "some very good reason"), with(editor, "someone@wix.com")).make();
+        Experiment theExperiment = an(Experiment).but(with(comment, "some very good reason"), with(updater, "someone@wix.com")).make();
         String json = objectMapper.writeValueAsString(theExperiment);
         Experiment deSerialized = objectMapper.readValue(json, new TypeReference<Experiment>() {
         });
