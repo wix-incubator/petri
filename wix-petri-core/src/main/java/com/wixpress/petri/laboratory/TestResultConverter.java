@@ -9,7 +9,7 @@ package com.wixpress.petri.laboratory;
  * <p>
  * This interface defines a single method, {@link #convert(String)}, that accepts the test result as a {@link String},
  * and responsible for converting it to the desired type.
- * If the call to the {@link Laboratory}'s {@code #conductExperiment} method includes an implementation of this
+ * If the call to the {@link com.wixpress.petri.laboratory.Laboratory}'s {@code #conductExperiment} method includes an implementation of this
  * interface, the {@link #convert(String)} method is invoked on that instance as an experiment is conducted, and a
  * result is at hand.
  * If no converter is specified, the default one, {@link com.wixpress.petri.laboratory.converters.StringConverter}, is
@@ -42,7 +42,7 @@ package com.wixpress.petri.laboratory;
  * {@link com.wixpress.petri.laboratory.converters.IntegerConverter} and
  * {@link com.wixpress.petri.laboratory.converters.StringConverter}.
  *
- * @see Laboratory#conductExperiment(Class, Object, TestResultConverter)
+ * @see com.wixpress.petri.laboratory.Laboratory#conductExperiment(Class, Object, com.wixpress.petri.laboratory.TestResultConverter)
  * @see com.wixpress.petri.laboratory.converters.IntegerConverter
  * @see com.wixpress.petri.laboratory.converters.StringConverter
  */

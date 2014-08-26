@@ -1,11 +1,15 @@
 package com.wixpress.petri.petri;
 
+import com.google.common.base.Predicate;
 import com.wixpress.petri.laboratory.ErrorHandler;
 import org.reflections.Reflections;
 
+import javax.annotation.Nullable;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
+import static com.google.common.collect.Iterables.filter;
 
 /**
  * @author sagyr
@@ -14,6 +18,7 @@ import java.util.Set;
 public class ClasspathSpecDefinitions implements SpecDefinitions {
 
     public static final String ERROR_CREATING_SPEC = "error trying to instantiate SpecDefintion for type %s";
+
 
     private final String prefix;
     private final ErrorHandler errorHandler;
@@ -26,11 +31,13 @@ public class ClasspathSpecDefinitions implements SpecDefinitions {
     @Override
     public List<SpecDefinition> get() {
         Reflections reflections = new Reflections(prefix);
-        Set<Class<? extends SpecDefinition>> subTypes =
-                reflections.getSubTypesOf(SpecDefinition.class);
-        List<SpecDefinition> results = new ArrayList<SpecDefinition>();
-        for (Class<? extends SpecDefinition> subType : subTypes) {
+        Iterable<Class<? extends SpecDefinition>> nonAbstractSubtypes =
+                filter(reflections.getSubTypesOf(SpecDefinition.class), NonAbstractClassPredicate);
+
+        List<SpecDefinition> results = new ArrayList<>();
+        for (Class<? extends SpecDefinition> subType : nonAbstractSubtypes) {
             try {
+
                 results.add(subType.newInstance());
             } catch (Exception e) {
                 errorHandler.handle(String.format(ERROR_CREATING_SPEC, subType), e);
@@ -38,5 +45,12 @@ public class ClasspathSpecDefinitions implements SpecDefinitions {
         }
         return results;
     }
+
+    private static final Predicate<Class<? extends SpecDefinition>> NonAbstractClassPredicate = new Predicate<Class<? extends SpecDefinition>>() {
+        @Override
+        public boolean apply(@Nullable Class<? extends SpecDefinition> input) {
+            return !Modifier.isAbstract(input.getModifiers());
+        }
+    };
 
 }

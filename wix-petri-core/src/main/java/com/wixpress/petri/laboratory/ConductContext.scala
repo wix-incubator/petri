@@ -1,6 +1,5 @@
 package com.wixpress.petri.laboratory
 
-
 /**
  * Created with IntelliJ IDEA.
  * User: daniels

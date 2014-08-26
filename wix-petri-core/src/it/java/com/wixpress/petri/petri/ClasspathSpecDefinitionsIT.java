@@ -22,10 +22,19 @@ public class ClasspathSpecDefinitionsIT {
     public static final String VALID_SPECS_PACKAGE = "specs.valid";
     public static final String INVALID_SPECS_PACKAGE = "specs.invalid";
     public static final String VALID_AND_INVALID_SPECS_PACKAGE = "specs";
+    public static final String ABSTRACT_SPECS_PACKAGE = "specs.abstracts";
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 
     private ErrorHandler errorHandler;
+
+    private void expectErrorForInvalidSpec() {
+        context.checking(new Expectations() {{
+            oneOf(errorHandler).handle(
+                    with(allOf(containsString(String.format(ClasspathSpecDefinitions.ERROR_CREATING_SPEC, "")), containsString("InvalidStubSpecDefinition_1"))),
+                    with(any(IllegalAccessException.class)));
+        }});
+    }
 
     @Before
     public void setup() {
@@ -42,24 +51,22 @@ public class ClasspathSpecDefinitionsIT {
     @Test
     public void notifiesErrors() {
         ClasspathSpecDefinitions specDefs = new ClasspathSpecDefinitions(INVALID_SPECS_PACKAGE, errorHandler);
-        context.checking(new Expectations() {{
-            oneOf(errorHandler).handle(
-                    with(allOf(containsString(String.format(ClasspathSpecDefinitions.ERROR_CREATING_SPEC, "")), containsString("InvalidStubSpecDefinition_1"))),
-                    with(any(IllegalAccessException.class)));
-        }});
+        expectErrorForInvalidSpec();
         assertThat(specDefs.get(), is(empty()));
     }
 
     @Test
     public void retrievesOnlyValidSpecs() {
         ClasspathSpecDefinitions specDefs = new ClasspathSpecDefinitions(VALID_AND_INVALID_SPECS_PACKAGE, errorHandler);
-        context.checking(new Expectations() {{
-            oneOf(errorHandler).handle(
-                    with(allOf(containsString(String.format(ClasspathSpecDefinitions.ERROR_CREATING_SPEC, "")), containsString("InvalidStubSpecDefinition_1"))),
-                    with(any(IllegalAccessException.class)));
-        }});
+        expectErrorForInvalidSpec();
         SpecDefinition validSpecDef = new ValidStubSpecDefinition_1();
         assertThat(specDefs.get(), is(asList(validSpecDef)));
+    }
+
+    @Test
+    public void skipsAbstractSpecDefinitions() throws Exception {
+        ClasspathSpecDefinitions specDefs = new ClasspathSpecDefinitions(ABSTRACT_SPECS_PACKAGE, errorHandler);
+        assertThat(specDefs.get(), is(empty()));
     }
 
 }
