@@ -177,14 +177,14 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <!--TODO - should be extracted into a test-common module, and an external testkit (containing PetriTestUtils) -->
+                                <!--&lt;!&ndash;TODO - should be extracted into a test-common module, and an external testkit (containing PetriTestUtils) &ndash;&gt;-->
                                 <include>**/dsl/*.class</include>
-                                <include>**/util/*.class</include>
+                                <!--<include>**/util/*.class</include>-->
 
-                                <include>**/FakePetriServer.class</include>
-                                <include>**/TestAppController.class</include>
-                                <include>**/ValidStubSpecDefinition_1.class</include>
-
+                                <!--<include>**/FakePetriServer.class</include>-->
+                                <!--<include>**/TestAppController.class</include>-->
+                                <!--<include>**/ValidStubSpecDefinition_1.class</include>-->
+                                <include>**/jackson/*.class</include>
                             </includes>
                         </configuration>
                     </execution>

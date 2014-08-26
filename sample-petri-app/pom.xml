@@ -2,33 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <parent>
         <artifactId>wix-petri</artifactId>
         <groupId>com.wixpress.common</groupId>
         <version>1.19.0-SNAPSHOT</version>
     </parent>
-
-    <developers>
-        <developer>
-            <name>Talya Gendler</name>
-            <email>talyag@wix.com</email>
-            <roles>
-                <role>owner</role>
-            </roles>
-        </developer>
-        <developer>
-            <name>Sagy Rozman</name>
-            <email>sagyr@wix.com</email>
-        </developer>
-        <developer>
-            <name>Avraham Rosenzweig</name>
-            <email>avrahamr@wix.com</email>
-        </developer>
-    </developers>
-
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>wix-petri-server</artifactId>
+
+    <artifactId>sample-petri-app</artifactId>
     <packaging>war</packaging>
     <name>Wix Petri Server</name>
     <version>1.19.0-SNAPSHOT</version>
@@ -37,10 +18,18 @@
         <spring.version>4.0.5.RELEASE</spring.version>
     </properties>
 
+
     <dependencies>
         <dependency>
             <groupId>com.wixpress.common</groupId>
             <artifactId>wix-petri-core</artifactId>
+            <version>1.19.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -104,12 +93,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.briandilley.jsonrpc4j</groupId>
-            <artifactId>jsonrpc4j</artifactId>
-            <version>1.1</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -123,6 +106,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

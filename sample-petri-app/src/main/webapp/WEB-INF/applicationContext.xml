@@ -9,15 +9,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <!--<bean name="petriServerExporter"-->
-          <!--class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">-->
-        <!--<property name="service" ref="petriServerBean"/>-->
-        <!--<property name="serviceInterface" value="com.wixpress.petri.petri.PetriClient"/>-->
-    <!--</bean>-->
-
-    <context:annotation-config/>
-
-    <bean name="PetriServerSpringConfig" class="com.wixpress.common.petri.PetriServerSpringConfig"/>
+    <bean class="com.wixpress.common.petri.SampleAppController">
+    </bean>
 
 </beans>
-

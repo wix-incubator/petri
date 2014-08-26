@@ -13,11 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Time: 12:29
  * Embedded Jetty server for servlets
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "/META-INF/spring/serverApplicationContext-test.xml"
-
-})
 public class JettyLocalServletServer {
 
     private Server server = null;

@@ -23,8 +23,13 @@ public class ObjectMapperFactory {
     private static final String MODULE_NAME = JodaModule.class.getName();
     private static final Version MODULE_VERSION = new Version(1, 0, 0, null);
 
+
+    public static class MyMapper extends ObjectMapper{
+
+    }
+
     public static ObjectMapper makeObjectMapper() {
-        final ObjectMapper objectMapper = new ObjectMapper();
+        final ObjectMapper objectMapper = new MyMapper();
         final SimpleModule module = new SimpleModule(MODULE_NAME, MODULE_VERSION);
 
         module.addDeserializer(DateTime.class, new TimeZoneAwareDateTimeDeserializer());

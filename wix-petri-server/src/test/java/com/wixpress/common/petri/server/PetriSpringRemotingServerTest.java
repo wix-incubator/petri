@@ -1,16 +1,16 @@
 package com.wixpress.common.petri.server;
 
 
+import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
+import com.googlecode.jsonrpc4j.ProxyUtil;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentBuilder;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
+import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.PetriClient;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,44 +18,68 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-        "/META-INF/spring/serverApplicationContext-test.xml"
-
-})
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = {
+//        "file:/Users/sagyr/Projects/github-projects/petri/wix-petri-server/src/main/webapp/WEB-INF/applicationContext.xml"
+//
+//})
 public class PetriSpringRemotingServerTest {
 
     public static final int PORT = 9924;
-    public static final String CONTEXT_PATH = "/test";
+    public static final String CONTEXT_PATH = "/";
 
     static JettyLocalServletServer jettyLocal;
 
-    @Autowired
-    @Qualifier ("petriServerProxy")
     PetriClient petriClient;
+
+    public static class PetriServerProxy {
+        public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
+//            HttpInvokerProxyFactoryBean proxyFactory = new HttpInvokerProxyFactoryBean();
+//            proxyFactory.setServiceUrl(serviceUrl);
+//            proxyFactory.setServiceInterface(PetriClient.class);
+//            proxyFactory.afterPropertiesSet();
+//            return (PetriClient) proxyFactory.getObject();
+
+            JsonRpcHttpClient client = new JsonRpcHttpClient(ObjectMapperFactory.makeObjectMapper(),
+                    new URL(serviceUrl),
+                    new HashMap<String, String>());
+
+
+            return ProxyUtil.createClientProxy(
+                    PetriServerProxy.class.getClassLoader(),
+                    PetriClient.class,
+                    client);
+
+        }
+
+    }
 
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-
-
         jettyLocal = new JettyLocalServletServer();
-
-        jettyLocal.startServer(PORT, CONTEXT_PATH, "src/main/webapp");
-
+        final String baseDir = PetriSpringRemotingServerTest.class.getResource("/").getPath();
+        jettyLocal.startServer(PORT, CONTEXT_PATH, baseDir + "../../src/main/webapp");
     }
 
     @AfterClass
     public static void tearDown() throws Exception {
         jettyLocal.stopServer();
-        //      jettyLocalServletServerOrderPage.stopServer();
     }
+
+    @Before
+    public void setup() throws MalformedURLException {
+        petriClient = PetriServerProxy.makeFor("http://localhost:9924/wix/petri");
+    }
+
 
     @Test
     public void testFetchActiveExperiments() throws Exception {

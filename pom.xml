@@ -20,6 +20,8 @@
         <module>wix-petri-core</module>
         <module>petri-spring-integration</module>
         <module>wix-petri-server</module>
+        <module>e2e-tests</module>
+        <module>sample-petri-app</module>
     </modules>
 
 
