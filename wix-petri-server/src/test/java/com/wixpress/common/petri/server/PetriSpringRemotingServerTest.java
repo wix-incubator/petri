@@ -26,11 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations = {
-//        "file:/Users/sagyr/Projects/github-projects/petri/wix-petri-server/src/main/webapp/WEB-INF/applicationContext.xml"
-//
-//})
 public class PetriSpringRemotingServerTest {
 
     public static final int PORT = 9924;
@@ -42,11 +37,6 @@ public class PetriSpringRemotingServerTest {
 
     public static class PetriServerProxy {
         public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
-//            HttpInvokerProxyFactoryBean proxyFactory = new HttpInvokerProxyFactoryBean();
-//            proxyFactory.setServiceUrl(serviceUrl);
-//            proxyFactory.setServiceInterface(PetriClient.class);
-//            proxyFactory.afterPropertiesSet();
-//            return (PetriClient) proxyFactory.getObject();
 
             JsonRpcHttpClient client = new JsonRpcHttpClient(ObjectMapperFactory.makeObjectMapper(),
                     new URL(serviceUrl),
@@ -59,7 +49,6 @@ public class PetriSpringRemotingServerTest {
                     client);
 
         }
-
     }
 
 

@@ -1,25 +1,29 @@
 package com.wixpress.common.petri.e2e;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.ProxyUtil;
+import com.wixpress.common.petri.testutils.ServerRunner;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.PetriClient;
-import com.wixpress.petri.petri.SpecDefinition;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
-import org.joda.time.DateTime;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.web.client.RestTemplate;
 
 
-import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 
+import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.*;
+import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.*;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertNotNull;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 
 /**
@@ -29,91 +33,72 @@ import static junit.framework.Assert.assertNotNull;
  * Time: 12:10 PM
  * To change this template use File | Settings | File Templates.
  */
+@Ignore
 public class PetriE2eTest {
+
+
+    private final static ServerRunner petriDriver = new ServerRunner(9010, petriServerResourceBase());
+    private final static ServerRunner sampleAppDriver = new ServerRunner(9011, sampleAppResourceBase());
+
+    @BeforeClass
+    public static void startServers() throws Exception {
+        petriDriver.start();
+        sampleAppDriver.start();
+    }
+
+    @AfterClass
+    public static void stopServers() throws Exception {
+        sampleAppDriver.stop();
+        petriDriver.stop();
+    }
 
     @Test
     public void conductingASimpleExperiment() throws Exception {
-        PetriServerDriver petriDriver = new PetriServerDriver(9010, petriServerResourceBase());
-        petriDriver.start();
-        PetriServerDriver sampleAppDriver = new PetriServerDriver(9011, sampleAppResourceBase());
-        sampleAppDriver.start();
 
         PetriClient petriClient = PetriServerProxy.makeFor("http://localhost:9010/wix/petri");
 
-        final ScopeDefinition scopeDefinition = new ScopeDefinition("the scope", false);
-        final ExperimentSpec spec = SpecDefinition.ExperimentSpecBuilder.
+        petriClient.addSpecs(asList(
                 aNewlyGeneratedExperimentSpec("THE_KEY").
-                withTestGroups(asList("a", "b")).
-                withScopes(scopeDefinition).build();
+                    withTestGroups(asList("a", "b")).
+                    withScopes(new ScopeDefinition("the scope", false)).
+                build()));
 
-        petriClient.addSpecs(asList(spec));
-        final ExperimentSnapshot snapshot = ExperimentSnapshotBuilder.anExperimentSnapshot().
-                withKey("THE_KEY").
-                withGroups(asList(new TestGroup(0, 100, "a"), new TestGroup(1, 0, "b"))).
-                withOnlyForLoggedInUsers(false).build();
-        petriClient.insertExperiment(snapshot);
+        petriClient.insertExperiment(
+                anExperimentSnapshot().
+                    withKey("THE_KEY").
+                    withGroups(asList(new TestGroup(0, 100, "a"), new TestGroup(1, 0, "b"))).
+                    withOnlyForLoggedInUsers(false).
+                build());
 
-        // TODO: Flash out the rest of the test once the real server is integrated
-        assertNotNull(petriClient.fetchActiveExperiments());
-        sampleAppDriver.stop();
-        petriDriver.stop();
+        RestTemplate rt = new RestTemplate();
+        String testResult = rt.getForObject(new URI("http://localhost:9011/conductExperiment?key=THE_KEY&fallback=FALLBACK"),String.class);
+        assertThat(testResult, is("a"));
+
+        // TODO: replace RamPetriClient with real server
     }
 
 
     public static class PetriServerProxy {
         public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
-//            HttpInvokerProxyFactoryBean proxyFactory = new HttpInvokerProxyFactoryBean();
-//            proxyFactory.setServiceUrl(serviceUrl);
-//            proxyFactory.setServiceInterface(PetriClient.class);
-//            proxyFactory.afterPropertiesSet();
-//            return (PetriClient) proxyFactory.getObject();
 
             JsonRpcHttpClient client = new JsonRpcHttpClient(ObjectMapperFactory.makeObjectMapper(),
                     new URL(serviceUrl),
                     new HashMap<String, String>());
 
-
             return ProxyUtil.createClientProxy(
                     PetriServerProxy.class.getClassLoader(),
                     PetriClient.class,
                     client);
-
         }
 
     }
 
-    public static class PetriServerDriver {
-
-        private final Server petriServer;
-        private final String pathToWebapp;
-
-        public PetriServerDriver(int port, String pathToWebapp) {
-            this.petriServer = new Server(port);
-            this.pathToWebapp = pathToWebapp;
-            WebAppContext context = new WebAppContext();
-
-            context.setContextPath("/");
-            context.setParentLoaderPriority(true);
-            context.setResourceBase(pathToWebapp);
-            petriServer.setHandler(context);
-
-        }
-
-        public void start() throws Exception {
-            petriServer.start();
-        }
-
-        public void stop() throws Exception {
-            petriServer.stop();
-        }
+    private static String petriServerResourceBase() {
+        return PetriE2eTest.class.getResource("/").getPath() + "../../../wix-petri-server/src/main/webapp";
     }
 
-    private String petriServerResourceBase() {
-        return getClass().getResource("/").getPath() + "../../../wix-petri-server/src/main/webapp";
-    }
-
-    private String sampleAppResourceBase() {
-        return getClass().getResource("/").getPath() + "../../../sample-petri-app/src/main/webapp";
+    private static String sampleAppResourceBase() {
+        return PetriE2eTest.class.getResource("/").getPath() + "../../../sample-petri-app/src/main/webapp";
     }
 
 }

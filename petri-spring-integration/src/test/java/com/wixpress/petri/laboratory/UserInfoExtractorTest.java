@@ -22,7 +22,7 @@ public class UserInfoExtractorTest {
 
     private HostResolver hostResolver;
     private MockHttpServletRequest stubRequest;
-    private UserInfoExtractor userInfoExtractor;
+    private HttpRequestUserInfoExtractor userInfoExtractor;
 
 
     private String host = "some host";
@@ -34,7 +34,7 @@ public class UserInfoExtractorTest {
     public void setup() {
         stubRequest = new MockHttpServletRequest();
         hostResolver =   mock(HostResolver.class);
-        userInfoExtractor = new UserInfoExtractor(stubRequest, hostResolver);
+        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest, hostResolver);
     }
 
 
@@ -58,7 +58,7 @@ public class UserInfoExtractorTest {
 
         when(hostResolver.resolve()).thenReturn(host);
 
-        UserInfoExtractor userInfoExtractor = new UserInfoExtractor(null, hostResolver);
+        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null, hostResolver);
 
         UserInfo userInfo = userInfoExtractor.extract();
 
@@ -78,7 +78,7 @@ public class UserInfoExtractorTest {
         assertThat(userInfo.host, is(host));
         assertThat(userInfo.userAgent, is(""));
         assertThat(userInfo.isRobot, is(false));
-        assertThat(userInfo.url, is("http://localhost:80"));
+        assertThat(userInfo.url, is("http://localhost"));
 
     }
 
@@ -103,27 +103,27 @@ public class UserInfoExtractorTest {
     @Test
     public void getUrlFromRequestServerNameNotLocalHost(){
         stubRequest.setServerName("test.wix.com");
-        assertThat(userInfoExtractor.getRequestURL(), is("http://test.wix.com:80"));
+        assertThat(userInfoExtractor.getRequestURL(), is("http://test.wix.com"));
     }
 
     @Test
     public void getUrlFromRequestServerNameIsLocalHostAndSmallXForwardHeader(){
         stubRequest.setServerName("localhost");
         stubRequest.addHeader("x-forwarded-host", "test.wix.com");
-        assertThat(userInfoExtractor.getRequestURL(), is("http://test.wix.com:80"));
+        assertThat(userInfoExtractor.getRequestURL(), is("http://test.wix.com"));
     }
 
     @Test
     public void getUrlFromRequestServerNameIsLocalHostAndCapitalXForwarsHeader(){
         stubRequest.setServerName("localhost");
         stubRequest.addHeader("X_FORWARDED_HOST", "test.wix.com");
-        assertThat(userInfoExtractor.getRequestURL(), is("http://test.wix.com:80"));
+        assertThat(userInfoExtractor.getRequestURL(), is("http://test.wix.com"));
     }
 
     @Test
     public void getUrlFromRequestServerNameIsLocalHostAndNoXForwarsHeader(){
         stubRequest.setServerName("localhost");
-        assertThat(userInfoExtractor.getRequestURL(), is("http://localhost:80"));
+        assertThat(userInfoExtractor.getRequestURL(), is("http://localhost"));
     }
 
 }

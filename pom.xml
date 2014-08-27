@@ -22,6 +22,7 @@
         <module>wix-petri-server</module>
         <module>e2e-tests</module>
         <module>sample-petri-app</module>
+        <module>petri-test-utils</module>
     </modules>
 
 

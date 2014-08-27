@@ -10,10 +10,11 @@
 
 
     <context:annotation-config/>
+    <mvc:annotation-driven />
 
     <bean class="com.wixpress.petri.laboratory.LaboratoryConfig"/>
 
-    <bean name = "samplePetriApp" class="com.wixpress.common.petri.SampleAppController"/>
+    <bean name = "testAppController" class="com.wixpress.petri.TestAppController"/>
 
 
 </beans>

@@ -1,6 +1,7 @@
 package com.wixpress.petri.jetty;
 
 import com.wixpress.petri.experiments.domain.HostResolver;
+import com.wixpress.petri.laboratory.HttpRequestUserInfoExtractor;
 import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.UserInfoExtractor;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -25,7 +26,7 @@ public class UserInfoController  extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        UserInfoExtractor userInfoExtractor = new UserInfoExtractor(request, new HostResolver());
+        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(request, new HostResolver());
 
         UserInfo userInfo = userInfoExtractor.extract();
 
