@@ -1,10 +1,8 @@
 package com.wixpress.common.petri.e2e;
 
-import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
-import com.googlecode.jsonrpc4j.ProxyUtil;
+import com.wixpress.common.petri.PetriServerProxy;
 import com.wixpress.common.petri.testutils.ServerRunner;
 import com.wixpress.petri.experiments.domain.*;
-import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.PetriClient;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -13,10 +11,7 @@ import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
 
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.util.HashMap;
 
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.*;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.*;
@@ -33,6 +28,7 @@ import static org.junit.Assert.assertThat;
  * Time: 12:10 PM
  * To change this template use File | Settings | File Templates.
  */
+
 @Ignore
 public class PetriE2eTest {
 
@@ -56,7 +52,6 @@ public class PetriE2eTest {
     public void conductingASimpleExperiment() throws Exception {
 
         PetriClient petriClient = PetriServerProxy.makeFor("http://localhost:9010/wix/petri");
-
         petriClient.addSpecs(asList(
                 aNewlyGeneratedExperimentSpec("THE_KEY").
                     withTestGroups(asList("a", "b")).
@@ -77,21 +72,6 @@ public class PetriE2eTest {
         // TODO: replace RamPetriClient with real server
     }
 
-
-    public static class PetriServerProxy {
-        public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
-
-            JsonRpcHttpClient client = new JsonRpcHttpClient(ObjectMapperFactory.makeObjectMapper(),
-                    new URL(serviceUrl),
-                    new HashMap<String, String>());
-
-            return ProxyUtil.createClientProxy(
-                    PetriServerProxy.class.getClassLoader(),
-                    PetriClient.class,
-                    client);
-        }
-
-    }
 
     private static String petriServerResourceBase() {
         return PetriE2eTest.class.getResource("/").getPath() + "../../../wix-petri-server/src/main/webapp";

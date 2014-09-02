@@ -12,26 +12,26 @@ import org.eclipse.jetty.webapp.WebAppContext;
 */
 public class ServerRunner {
 
-    private final Server petriServer;
+    private final Server server;
     private final String pathToWebapp;
 
     public ServerRunner(int port, String pathToWebapp) {
-        this.petriServer = new Server(port);
+        this.server = new Server(port);
         this.pathToWebapp = pathToWebapp;
         WebAppContext context = new WebAppContext();
 
         context.setContextPath("/");
         context.setParentLoaderPriority(true);
         context.setResourceBase(pathToWebapp);
-        petriServer.setHandler(context);
+        server.setHandler(context);
 
     }
 
     public void start() throws Exception {
-        petriServer.start();
+        server.start();
     }
 
     public void stop() throws Exception {
-        petriServer.stop();
+        server.stop();
     }
 }

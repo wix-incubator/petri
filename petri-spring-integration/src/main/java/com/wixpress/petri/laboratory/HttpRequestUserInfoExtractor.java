@@ -41,7 +41,7 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         UUID userId = null; //todo
         UUID clientId = null; //todo
         String ip = null;   //todo
-        UserInfoType userInfoType = null; //todo
+        UserInfoType userInfoType = UserInfoTypeFactory.make(null);
         String language = null;  //todo
         String country = null; //todo
         DateTime userCreationDate = null; //todo

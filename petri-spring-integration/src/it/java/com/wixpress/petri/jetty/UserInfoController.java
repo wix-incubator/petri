@@ -1,10 +1,11 @@
 package com.wixpress.petri.jetty;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wixpress.petri.experiments.domain.HostResolver;
 import com.wixpress.petri.laboratory.HttpRequestUserInfoExtractor;
 import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.UserInfoExtractor;
-import org.codehaus.jackson.map.ObjectMapper;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.wixpress.petri.jackson.ObjectMapperFactory.getObjectMapper;
+import static com.wixpress.petri.experiments.jackson.ObjectMapperFactory.makeObjectMapper;
 
 /**
  * User: Dalias
@@ -20,7 +21,7 @@ import static com.wixpress.petri.jackson.ObjectMapperFactory.getObjectMapper;
  * Time: 6:31 PM
  */
 public class UserInfoController  extends HttpServlet {
-    ObjectMapper objectMapper =  getObjectMapper();
+    ObjectMapper objectMapper = makeObjectMapper();
 
 
     @Override

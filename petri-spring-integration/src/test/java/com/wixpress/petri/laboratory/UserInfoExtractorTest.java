@@ -126,4 +126,9 @@ public class UserInfoExtractorTest {
         assertThat(userInfoExtractor.getRequestURL(), is("http://localhost"));
     }
 
+    @Test
+    public void generatesAnonymousUserInfoByDefault() {
+        assertThat(userInfoExtractor.extract().isAnonymous(), is(true));
+    }
+
 }

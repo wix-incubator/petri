@@ -1,12 +1,14 @@
 package com.wixpress.petri.laboratory;
 
 import com.wixpress.petri.experiments.domain.HostResolver;
+import com.wixpress.petri.petri.JodaTimeClock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.MalformedURLException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,10 +21,30 @@ import javax.servlet.http.HttpServletRequest;
 public class LaboratoryConfig {
 
     @Bean
-    public Laboratory laboratory(UserInfoExtractor extractor) {
-        //TODO: This is where we need to assemble TrackableLaboratory
-        // UserInfoStorage should be a request scoped
-        return null;
+    public Laboratory laboratory(final UserInfoExtractor extractor) throws MalformedURLException {
+
+        Experiments experiments = new CachedExperiments(new PetriClientExperimentSource());
+        TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
+        // TODO: Implement userInfoStorage to read from cookie and write to cookie
+        UserInfoStorage userInfoStorage = new UserInfoStorage() {
+            @Override
+            public void write(UserInfo info) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public UserInfo read() {
+                return extractor.extract();
+            }
+        };
+        // TODO: implement file logging error handler
+        ErrorHandler errorHandler = new ErrorHandler() {
+            @Override
+            public void handle(String message, Throwable cause) {
+                throw new RuntimeException(cause);
+            }
+        };
+        return new TrackableLaboratory(experiments,tracker,userInfoStorage,errorHandler);
     }
 
     @Bean
