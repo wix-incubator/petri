@@ -17,12 +17,12 @@ import static java.util.Arrays.asList;
 * To change this template use File | Settings | File Templates.
 */
 public class FakePetriServer {
-    private final EmbeddedRPCServer petriServer;
+    private final JsonRPCServer petriServer;
     private final int port;
     private PetriClient petriClient;
 
     public FakePetriServer(int port){
-        petriServer = new EmbeddedRPCServer(new RAMPetriClient(), makeObjectMapper(), port, PetriClient.class);
+        petriServer = new JsonRPCServer(new RAMPetriClient(), makeObjectMapper(), port, PetriClient.class);
         this.port = port;
     }
 

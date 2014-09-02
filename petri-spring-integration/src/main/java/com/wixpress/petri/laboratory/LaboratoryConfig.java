@@ -41,7 +41,7 @@ public class LaboratoryConfig {
         ErrorHandler errorHandler = new ErrorHandler() {
             @Override
             public void handle(String message, Throwable cause) {
-                throw new RuntimeException(cause);
+                cause.printStackTrace();
             }
         };
         return new TrackableLaboratory(experiments,tracker,userInfoStorage,errorHandler);

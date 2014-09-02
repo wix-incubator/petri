@@ -17,12 +17,17 @@ import java.io.IOException;
 * To change this template use File | Settings | File Templates.
 */
 public class SampleAppRunner {
+    public static final String DEFAULT_PATH_TO_WEBAPP = ServerRunner.class.getResource("/").getPath() + "../../src/it/webapp";
     private final ServerRunner sampleAppServer;
     private final int port;
 
     public SampleAppRunner(int port) {
+        this(port, DEFAULT_PATH_TO_WEBAPP);
+    }
+
+    public SampleAppRunner(int port, String pathToWebapp) {
         this.port = port;
-        sampleAppServer = new ServerRunner(port,ServerRunner.class.getResource("/").getPath() + "../../src/it/webapp");
+        sampleAppServer = new ServerRunner(port, pathToWebapp);
     }
 
     public void start() throws Exception {
