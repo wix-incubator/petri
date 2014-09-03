@@ -1,10 +1,11 @@
 package com.wixpress.common.petri.e2e;
 
-import com.wixpress.common.petri.PetriServerProxy;
+import com.wixpress.common.petri.PetriRPCClient;
 import com.wixpress.common.petri.testutils.ServerRunner;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.test.SampleAppRunner;
+import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -29,7 +30,7 @@ import static org.junit.Assert.assertThat;
  * To change this template use File | Settings | File Templates.
  */
 
-@Ignore
+
 public class PetriE2eTest {
 
 
@@ -54,7 +55,7 @@ public class PetriE2eTest {
     }
 
     private PetriClient petriClient() throws MalformedURLException {
-        return PetriServerProxy.makeFor("http://localhost:" +
+        return PetriRPCClient.makeFor("http://localhost:" +
                 PETRI_PORT +
                 "/wix/petri");
     }
@@ -70,12 +71,16 @@ public class PetriE2eTest {
                     withScopes(new ScopeDefinition("the scope", false)).
                 build()));
 
+        DateTime now = new DateTime();
         petriClient.insertExperiment(
                 anExperimentSnapshot().
-                    withKey("THE_KEY").
+                        withStartDate(now.minusMinutes(1)).
+                        withEndDate(now.plusYears(1)).
+                        withKey("THE_KEY").
                     withGroups(asList(new TestGroup(0, 100, "a"), new TestGroup(1, 0, "b"))).
                     withOnlyForLoggedInUsers(false).
                 build());
+        assertThat(petriClient.fetchActiveExperiments().size(), is(1));
 
         String testResult = sampleAppRunner.conductExperiment("THE_KEY","FALLBACK_VALUE");
         assertThat(testResult, is("a"));

@@ -53,6 +53,9 @@ public class JsonRPCServer {
         @Override
         public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
             rpcServer.handle(request, response);
+            baseRequest.setHandled(true);
+            response.setStatus(HttpServletResponse.SC_OK);
+
         }
     }
 }

@@ -1,10 +1,9 @@
 package com.wixpress.petri.test;
 
-import com.wixpress.common.petri.PetriServerProxy;
+import com.wixpress.common.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.petri.PetriClient;
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.anExperimentSnapshot;
@@ -54,10 +53,9 @@ public class LaboratoryIT {
                         withOnlyForLoggedInUsers(false));
 
 
-        PetriClient c = PetriServerProxy.makeFor("http://localhost:" +
+        PetriClient c = PetriRPCClient.makeFor("http://localhost:" +
                 PETRI_PORT +
                 "/");
-        assertThat(c.fetchActiveExperiments().size(), is(1));
 
         String testResult = sampleApp.conductExperiment("THE_KEY", "FALLBACK");
         assertThat(testResult, is("a"));

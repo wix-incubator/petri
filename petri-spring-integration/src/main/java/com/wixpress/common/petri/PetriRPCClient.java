@@ -16,7 +16,7 @@ import java.util.HashMap;
 * Time: 2:25 PM
 * To change this template use File | Settings | File Templates.
 */
-public class PetriServerProxy {
+public class PetriRPCClient {
     public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
 
         JsonRpcHttpClient client = new JsonRpcHttpClient(ObjectMapperFactory.makeObjectMapper(),
@@ -24,7 +24,7 @@ public class PetriServerProxy {
                 new HashMap<String, String>());
 
         return ProxyUtil.createClientProxy(
-                PetriServerProxy.class.getClassLoader(),
+                PetriRPCClient.class.getClassLoader(),
                 PetriClient.class,
                 client);
     }

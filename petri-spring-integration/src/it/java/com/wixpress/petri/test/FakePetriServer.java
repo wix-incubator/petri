@@ -1,6 +1,6 @@
 package com.wixpress.petri.test;
 
-import com.wixpress.common.petri.PetriServerProxy;
+import com.wixpress.common.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.RAMPetriClient;
@@ -28,7 +28,7 @@ public class FakePetriServer {
 
     public void start() throws Exception {
         petriServer.start();
-        petriClient = PetriServerProxy.makeFor("http://localhost:" +
+        petriClient = PetriRPCClient.makeFor("http://localhost:" +
                 port +
                 "/");
     }

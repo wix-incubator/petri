@@ -18,14 +18,6 @@ import org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter;
 @Configuration
 public class PetriServerSpringConfig {
 
-//    @Bean
-//    public HttpInvokerServiceExporter petriServerExporter() {
-//        HttpInvokerServiceExporter exporter = new HttpInvokerServiceExporter();
-//        exporter.setService(new RAMPetriClient());
-//        exporter.setServiceInterface(PetriClient.class);
-//        return exporter;
-//    }
-
 
     @Bean
     public JsonServiceExporter petriServerExporter() {
@@ -35,23 +27,5 @@ public class PetriServerSpringConfig {
         exporter.setObjectMapper(ObjectMapperFactory.makeObjectMapper());
         return exporter;
     }
-
-
-//    <!--<bean name="petriServerExporter"-->
-//    <!--class="com.googlecode.jsonrpc4j.spring.JsonServiceExporter">-->
-//    <!--<property name="service" ref="petriServerBean"/>-->
-//    <!--<property name="serviceInterface" value="com.wixpress.petri.petri.PetriClient"/>-->
-//    <!--<property name="objectMapper" ref="myObjectMapper"/>-->
-//    <!--</bean>-->
-
-//
-//
-//    <bean name = "petriServerBean" class = "com.wixpress.petri.petri.RAMPetriClient">
-//    </bean>
-//
-//    <bean name = "myObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" factory-bean="objectMapperFactory" />
-//
-//    <bean name = "objectMapperFactory" class = "com.wixpress.petri.experiments.jackson.ObjectMapperFactory" factory-method="makeObjectMapper"/>
-
 
 }

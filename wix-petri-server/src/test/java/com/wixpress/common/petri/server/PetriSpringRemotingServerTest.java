@@ -66,7 +66,9 @@ public class PetriSpringRemotingServerTest {
 
     @Before
     public void setup() throws MalformedURLException {
-        petriClient = PetriServerProxy.makeFor("http://localhost:9924/wix/petri");
+        petriClient = PetriServerProxy.makeFor("http://localhost:" +
+                PORT +
+                "/wix/petri");
     }
 
 

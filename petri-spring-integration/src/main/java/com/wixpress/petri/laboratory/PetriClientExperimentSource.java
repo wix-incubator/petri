@@ -1,6 +1,6 @@
 package com.wixpress.petri.laboratory;
 
-import com.wixpress.common.petri.PetriServerProxy;
+import com.wixpress.common.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.petri.PetriClient;
 
@@ -18,7 +18,7 @@ class PetriClientExperimentSource implements CachedExperiments.ExperimentsSource
     private final PetriClient petriProxy;
 
     public PetriClientExperimentSource(String petriUrl) throws MalformedURLException {
-        this.petriProxy = PetriServerProxy.makeFor(petriUrl);
+        this.petriProxy = PetriRPCClient.makeFor(petriUrl);
     }
 
     @Override
