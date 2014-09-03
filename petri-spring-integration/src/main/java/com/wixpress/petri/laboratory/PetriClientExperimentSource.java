@@ -17,9 +17,8 @@ import java.util.List;
 class PetriClientExperimentSource implements CachedExperiments.ExperimentsSource {
     private final PetriClient petriProxy;
 
-    public PetriClientExperimentSource() throws MalformedURLException {
-        // TODO: The URL should be passed to the constructor and read from a config file.
-        this.petriProxy = PetriServerProxy.makeFor("http://localhost:9016/");
+    public PetriClientExperimentSource(String petriUrl) throws MalformedURLException {
+        this.petriProxy = PetriServerProxy.makeFor(petriUrl);
     }
 
     @Override

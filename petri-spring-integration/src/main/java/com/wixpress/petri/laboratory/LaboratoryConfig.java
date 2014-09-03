@@ -2,10 +2,10 @@ package com.wixpress.petri.laboratory;
 
 import com.wixpress.petri.experiments.domain.HostResolver;
 import com.wixpress.petri.petri.JodaTimeClock;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
@@ -18,12 +18,23 @@ import java.net.MalformedURLException;
  * To change this template use File | Settings | File Templates.
  */
 @Configuration
+//@Import(LaboratoryConfigProperties.class)
 public class LaboratoryConfig {
+
+
+    private @Value("${petri.url}") String petriUrl;
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        final PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+        propertyPlaceholderConfigurer.setLocation(new ClassPathResource("laboratory.properties"));
+        return propertyPlaceholderConfigurer;
+    }
 
     @Bean
     public Laboratory laboratory(final UserInfoExtractor extractor) throws MalformedURLException {
 
-        Experiments experiments = new CachedExperiments(new PetriClientExperimentSource());
+        Experiments experiments = new CachedExperiments(new PetriClientExperimentSource(petriUrl));
         TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
         // TODO: Implement userInfoStorage to read from cookie and write to cookie
         UserInfoStorage userInfoStorage = new UserInfoStorage() {
