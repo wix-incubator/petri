@@ -1,6 +1,7 @@
 package com.wixpress.petri.laboratory;
 
 import com.google.common.base.Joiner;
+import org.springframework.web.util.WebUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,7 +30,6 @@ public class ExperimentsLog {
                 String key = parsedExperiment[0];
                 String value = parsedExperiment[1];
                 validateExperiment(key, value);
-
                 experiments.put(key, value);
             }
             return new ExperimentsLog(experiments);

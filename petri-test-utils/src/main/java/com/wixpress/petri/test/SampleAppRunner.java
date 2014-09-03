@@ -40,7 +40,7 @@ public class SampleAppRunner {
 
     public String conductExperiment(String key, String fallback) throws IOException {
         HttpClient client  = HttpClientBuilder.create().build();
-        String uri = "http://127.0.0.1:" +
+        String uri = "http://localhost:" +
                 port +
                 "/conductExperiment?key=" +
                 key +

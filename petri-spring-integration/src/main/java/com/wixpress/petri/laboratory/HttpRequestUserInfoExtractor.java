@@ -3,8 +3,11 @@ package com.wixpress.petri.laboratory;
 import com.wixpress.petri.experiments.domain.HostResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
+import org.springframework.web.util.WebUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -36,8 +39,7 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         boolean isRobot = checkForRobotHeader(userAgent);
         String url = getRequestURL();
 
-
-        String experimentsLog = null; //todo
+        String experimentsLog = ""; //todo
         UUID userId = null; //todo
         UUID clientId = null; //todo
         String ip = null;   //todo
@@ -46,12 +48,16 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         String country = null; //todo
         DateTime userCreationDate = null; //todo
         String email = null; //todo
-        String anonymousExperimentsLog = null; //todo
+        String anonymousExperimentsLog = anonymousExperimentsLog();
         boolean isRecurring = false;  //todo
-        Map<String, String> experimentOverrides = null; //todo
+        Map<String, String> experimentOverrides = new HashMap<String, String>(); //todo
         return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, userInfoType, language, country,
                 userCreationDate, email, anonymousExperimentsLog, isRecurring, experimentOverrides, isRobot, host);
+    }
 
+    private String anonymousExperimentsLog() {
+        final Cookie laboratoryCookie = WebUtils.getCookie(request, "_wixAB3");
+        return laboratoryCookie == null ? "" : laboratoryCookie.getValue();
     }
 
     private String sanitizeString(String someString) {

@@ -1,7 +1,6 @@
 package com.wixpress.petri.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wixpress.common.petri.testutils.ServerRunner;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -9,10 +8,17 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.*;
-import org.springframework.core.io.FileSystemResource;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +35,11 @@ import static org.junit.Assert.assertThat;
 
 public class UserInfoExtractorIT {
 
-    ObjectMapper objectMapper = makeObjectMapper();
+    private static final SampleAppRunner testAppRunner = new SampleAppRunner(9002);
+    private static final String ANONYMOUS_LOG_STORAGE_KEY = "_wixAB3";
 
-    private static final ServerRunner testAppRunner = new ServerRunner(9002,UserInfoExtractorIT.class.getResource("/").getPath() + "../../src/it/webapp");
+
+    private final ObjectMapper objectMapper = makeObjectMapper();
 
     @BeforeClass
     public static void before() throws Exception {
@@ -41,6 +49,37 @@ public class UserInfoExtractorIT {
     @AfterClass
     public static void after() throws Exception {
         testAppRunner.stop();
+    }
+
+    private Map<String, Object> extractUserInfoWithAnonymousCookie(String anonCookieValue) throws IOException {
+        URL url = new URL("http://localhost:9002/extractUserInfo");
+        URLConnection conn = url.openConnection();
+        conn.setRequestProperty("Cookie", ANONYMOUS_LOG_STORAGE_KEY + "=" + anonCookieValue);
+        conn.connect();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        return objectMapper.readValue(reader.readLine(), HashMap.class);
+    }
+
+    private Map<String, Object> extractUserInfo() throws IOException {
+        URL url = new URL("http://localhost:9002/extractUserInfo");
+        URLConnection conn = url.openConnection();
+        conn.connect();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        return objectMapper.readValue(reader.readLine(), HashMap.class);
+    }
+
+    private Matcher<scala.collection.immutable.Map> isMapOfSize(final int size) {
+        return new TypeSafeDiagnosingMatcher<scala.collection.immutable.Map>() {
+            @Override
+            protected boolean matchesSafely(scala.collection.immutable.Map o, Description description) {
+                return o.size() == size;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Map of size " + size);
+            }
+        };
     }
 
     @Test
@@ -66,4 +105,28 @@ public class UserInfoExtractorIT {
 
 
     }
+
+
+    @Test
+    public void extractsExperimentsLogFromAnonymousCookie() throws Exception {
+        Map<String, Object> userInfo = extractUserInfoWithAnonymousCookie("1#2");
+        assertThat(userInfo.toString(),userInfo.get("anonymousExperimentsLog"), CoreMatchers.<Object>is("1#2"));
+    }
+
+
+    @Test
+    public void extractsEmptyExperimentLogsByDefault() throws Exception {
+        Map<String, Object> userInfo = extractUserInfo();
+        assertThat(userInfo.toString(),userInfo.get("anonymousExperimentsLog"), CoreMatchers.<Object>is(""));
+        assertThat(userInfo.toString(),userInfo.get("experimentsLog"), CoreMatchers.<Object>is(""));
+    }
+
+    @Test
+    public void extractsEmptyExperimentOverridesByDefault() throws Exception {
+        Map<String, Object> userInfo = extractUserInfo();
+        final scala.collection.immutable.Map experimentOverrides = (scala.collection.immutable.Map) userInfo.get("experimentOverrides");
+        assertThat(userInfo.toString(), experimentOverrides, isMapOfSize(0));
+    }
+
+
 }
