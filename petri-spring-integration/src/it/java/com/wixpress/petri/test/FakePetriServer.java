@@ -1,6 +1,7 @@
 package com.wixpress.petri.test;
 
 import com.wixpress.common.petri.PetriRPCClient;
+import com.wixpress.petri.JsonRPCServer;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.RAMPetriClient;

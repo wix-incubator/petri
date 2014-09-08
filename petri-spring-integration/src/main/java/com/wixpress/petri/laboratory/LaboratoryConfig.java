@@ -18,7 +18,7 @@ import java.net.MalformedURLException;
  * To change this template use File | Settings | File Templates.
  */
 @Configuration
-//@Import(LaboratoryConfigProperties.class)
+
 public class LaboratoryConfig {
 
 

@@ -1,7 +1,8 @@
 package com.wixpress.common.petri;
 
-import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
-import com.googlecode.jsonrpc4j.ProxyUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.googlecode.jsonrpc4j.*;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.PetriClient;
 
@@ -19,9 +20,12 @@ import java.util.HashMap;
 public class PetriRPCClient {
     public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
 
-        JsonRpcHttpClient client = new JsonRpcHttpClient(ObjectMapperFactory.makeObjectMapper(),
+        final ObjectMapper mapper = ObjectMapperFactory.makeObjectMapper();
+        JsonRpcHttpClient client = new JsonRpcHttpClient(mapper,
                 new URL(serviceUrl),
                 new HashMap<String, String>());
+
+        client.setExceptionResolver(new DeserializingExceptionResolver(mapper));
 
         return ProxyUtil.createClientProxy(
                 PetriRPCClient.class.getClassLoader(),
@@ -29,4 +33,24 @@ public class PetriRPCClient {
                 client);
     }
 
+    private static class DeserializingExceptionResolver implements ExceptionResolver {
+
+        private final ObjectMapper objectMapper;
+
+        public DeserializingExceptionResolver(ObjectMapper objectMapper) {
+            this.objectMapper = objectMapper;
+        }
+
+        public Throwable resolveException(ObjectNode response) {
+            ObjectNode errorObject = ObjectNode.class.cast(response.get("error"));
+            ObjectNode dataObject = ObjectNode.class.cast(errorObject.get("data"));
+            String exceptionTypeName = dataObject.get("exceptionTypeName").asText();
+            String serializedException =  dataObject.get("message").asText();
+            try {
+                return Throwable.class.cast(objectMapper.readValue(serializedException, Class.forName(exceptionTypeName)));
+            } catch (Exception e) {
+                return null;
+            }
+        }
+    }
 }

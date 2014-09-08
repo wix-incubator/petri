@@ -36,6 +36,8 @@ public class JdbcSpecsDao extends JdbcPetriDao<ExperimentSpec, ExperimentSpec> i
     @Override
     public void update(ExperimentSpec spec, DateTime currentDateTime) {
         try {
+            System.out.println(">>>>>>> "+jdbcTemplate.queryForList("select * from specs where fqn = ?;",spec.getKey()));
+
             jdbcTemplate.update("update specs " +
                     "set spec = ?" +
                     "where fqn = ?", mapper.serialize(spec), spec.getKey());

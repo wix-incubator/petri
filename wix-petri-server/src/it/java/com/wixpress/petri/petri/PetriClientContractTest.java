@@ -1,13 +1,20 @@
 package com.wixpress.petri.petri;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.domain.*;
+import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.laboratory.dsl.TestGroupMakers;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +27,8 @@ import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.id;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.key;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.anExperimentSpec;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public abstract class PetriClientContractTest {
@@ -184,14 +191,18 @@ public abstract class PetriClientContractTest {
     }
 
     @Test
-    public void specKeyIsCaseInsensitive() {
+    public void specKeyIsCaseInsensitive() throws IOException {
         ExperimentSpec spec = anExperimentSpec("f.q.n.Spec1", new DateTime()).withTestGroups(asList("yellow", "green")).build();
-        ExperimentSpec duplicateSpec = anExperimentSpec("f.q.n.spec1", new DateTime()).withTestGroups(asList("yellow", "green")).build();
+        ExperimentSpec duplicateSpec = anExperimentSpec("f.q.n.spec1", new DateTime()).withTestGroups(asList("blue", "green")).build();
 
         petriClient().addSpecs(asList(spec));
         petriClient().addSpecs(asList(duplicateSpec));
 
-        assertThat(petriClient().fetchSpecs(), is(asList(duplicateSpec)));
+        final List<ExperimentSpec> actualSpecs = petriClient().fetchSpecs();
+        assertThat(actualSpecs, hasSize(1));
+        final ExperimentSpec actualSpec = actualSpecs.get(0);
+        assertThat(actualSpec.getKey(), is("f.q.n.spec1"));
+        assertThat(actualSpec.getTestGroups(), is(asList("blue","green")));
     }
 
     @Test

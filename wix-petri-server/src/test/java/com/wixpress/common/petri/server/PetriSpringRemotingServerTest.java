@@ -31,9 +31,9 @@ public class PetriSpringRemotingServerTest {
     public static final int PORT = 9924;
     public static final String CONTEXT_PATH = "/";
 
-    static JettyLocalServletServer jettyLocal;
+    private static JettyLocalServletServer jettyLocal;
 
-    PetriClient petriClient;
+    private PetriClient petriClient;
 
     public static class PetriServerProxy {
         public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
@@ -91,25 +91,6 @@ public class PetriSpringRemotingServerTest {
     }
 
     @Test
-    @Ignore
-    public void testGetHistoryById() throws Exception {
-        List<Experiment> resp = petriClient.getHistoryById(0);
-        Assert.notNull(resp);
-    }
-
-    @Test
-    @Ignore
-    public void testAddSpecs() throws Exception {
-        ExperimentSpec spec = createSpec();
-        petriClient.addSpecs(Collections.singletonList(spec));
-    }
-
-    private ExperimentSpec createSpec() {
-        ExperimentSpec spec = new ExperimentSpec("key", "owner", Collections.singletonList("testGroup"), new DateTime(), null, null, false);
-        return spec;
-    }
-
-    @Test
     public void testDeleteSpec() throws Exception {
         petriClient.deleteSpec("toDelete");
     }
@@ -119,28 +100,4 @@ public class PetriSpringRemotingServerTest {
         List<ExperimentSpec> resp = petriClient.fetchSpecs();
         Assert.notNull(resp);
     }
-
-    @Test
-    @Ignore
-    public void testInsertExperiment() throws Exception {
-        Experiment exp = createExperiment();
-        Experiment resp = petriClient.insertExperiment(exp.getExperimentSnapshot());
-        Assert.notNull(resp);
-    }
-
-    private Experiment createExperiment() {
-        ExperimentBuilder builder = new ExperimentBuilder();
-        return builder.build();
-    }
-
-    @Test
-    @Ignore
-    public void testUpdateExperiment() throws Exception {
-        Experiment exp = createExperiment();
-        Experiment resp = petriClient.updateExperiment(exp);
-        Assert.notNull(resp);
-    }
-
-
-
 }

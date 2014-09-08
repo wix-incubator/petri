@@ -11,21 +11,49 @@
 
     <artifactId>petri-spring-integration</artifactId>
 
+
     <properties>
         <spring.version>4.0.5.RELEASE</spring.version>
+        <com.fasterxml.jackson.default.version>2.2.3</com.fasterxml.jackson.default.version>
     </properties>
 
 
     <dependencies>
+
         <dependency>
             <groupId>com.wixpress.common</groupId>
             <artifactId>wix-petri-core</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.wixpress.common</groupId>
+            <artifactId>wix-petri-server</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+            <version>1.5.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.181</version>
+        </dependency>
+
 
         <!-- test dependencies -->
         <dependency>
@@ -44,13 +72,11 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>8.1.5.v20120716</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
             <version>8.1.5.v20120716</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -136,6 +162,43 @@
             <version>2.0</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.wixpress.common</groupId>
+            <artifactId>wix-petri-server</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <version>1.19.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.natpryce</groupId>
+            <artifactId>make-it-easy</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.wixpress.common</groupId>
+            <artifactId>wix-petri-core</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_2.10</artifactId>
+        </dependency>
+
 
     </dependencies>
 

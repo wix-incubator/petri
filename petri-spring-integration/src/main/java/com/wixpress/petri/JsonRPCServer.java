@@ -1,15 +1,24 @@
-package com.wixpress.petri.test;
+package com.wixpress.petri;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.googlecode.jsonrpc4j.DefaultErrorResolver;
+import com.googlecode.jsonrpc4j.ErrorResolver;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.joda.time.DateTime;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
 * Created with IntelliJ IDEA.
@@ -24,8 +33,9 @@ public class JsonRPCServer {
 
     public JsonRPCServer(Object serviceImpl, ObjectMapper objectMapper, int port, Class<?> remoteInterface) {
         this.rpc = serviceImpl;
-        server = new Server(port);
-        server.setHandler(new JsonRpcHandler(serviceImpl, objectMapper, remoteInterface));
+        this.server = new Server(port);
+        this.server.setHandler(new JsonRpcHandler(serviceImpl, objectMapper, remoteInterface));
+
     }
 
     public void start() throws Exception {
@@ -46,8 +56,9 @@ public class JsonRPCServer {
     public static class JsonRpcHandler extends AbstractHandler {
         private JsonRpcServer rpcServer;
 
-        public JsonRpcHandler(Object rpc, ObjectMapper objectMapper, Class<?> remoteInterface) {
+        public JsonRpcHandler(Object rpc, final ObjectMapper objectMapper, Class<?> remoteInterface) {
             rpcServer = new JsonRpcServer(objectMapper,rpc, remoteInterface);
+            rpcServer.setErrorResolver(new ExceptionSerializingErrorResolver(objectMapper));
         }
 
         @Override
@@ -55,6 +66,26 @@ public class JsonRPCServer {
             rpcServer.handle(request, response);
             baseRequest.setHandled(true);
             response.setStatus(HttpServletResponse.SC_OK);
+
+        }
+
+        private static class ExceptionSerializingErrorResolver extends DefaultErrorResolver {
+            private final ObjectMapper objectMapper;
+
+            public ExceptionSerializingErrorResolver(ObjectMapper objectMapper) {
+                this.objectMapper = objectMapper;
+            }
+
+            @Override
+            public JsonError resolveError(Throwable t, Method method, List<JsonNode> arguments) {
+
+                try {
+                    return new JsonError(0, t.getMessage(),
+                                new ErrorData(t.getClass().getName(), objectMapper.writeValueAsString(t)));
+                } catch (JsonProcessingException e) {
+                    return super.resolveError(t, method, arguments);
+                }
+            }
 
         }
     }

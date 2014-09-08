@@ -88,11 +88,6 @@
             <version>2.3</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${com.fasterxml.jackson.default.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -101,6 +96,12 @@
         </dependency>
 
         <!-- TODO - these 2 should move to scope test after next merge -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${com.fasterxml.jackson.default.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
@@ -112,6 +113,7 @@
             <artifactId>jackson-module-scala_2.10</artifactId>
             <version>${com.fasterxml.jackson.default.version}</version>
         </dependency>
+
 
         <!-- this one should be removed after next merge -->
         <dependency>
