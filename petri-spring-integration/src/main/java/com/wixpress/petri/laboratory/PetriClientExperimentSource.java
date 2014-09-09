@@ -1,6 +1,6 @@
 package com.wixpress.petri.laboratory;
 
-import com.wixpress.common.petri.PetriRPCClient;
+import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.petri.PetriClient;
 

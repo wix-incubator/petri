@@ -1,6 +1,8 @@
 package com.wixpress.common.petri.e2e;
 
-import com.wixpress.common.petri.PetriRPCClient;
+import com.wixpress.petri.Main;
+import com.wixpress.petri.PetriConfigFile;
+import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.common.petri.testutils.ServerRunner;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.petri.PetriClient;
@@ -8,18 +10,20 @@ import com.wixpress.petri.test.SampleAppRunner;
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
+import util.DBDriver;
 
 
 import java.net.MalformedURLException;
 
+import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.*;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.*;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -35,8 +39,6 @@ public class PetriE2eTest {
 
 
     private static final int PETRI_PORT = 9010;
-    private static final String PETRI_WEBAPP_PATH = PetriE2eTest.class.getResource("/").getPath() + "../../../wix-petri-server/src/main/webapp";
-    private static final  ServerRunner petriRunner = new ServerRunner(PETRI_PORT, PETRI_WEBAPP_PATH);
 
     private static final int SAMPLE_APP_PORT = 9011;
     private static final String SAMPLE_WEBAPP_PATH = PetriE2eTest.class.getResource("/").getPath() + "../../../sample-petri-app/src/main/webapp";
@@ -44,14 +46,28 @@ public class PetriE2eTest {
 
     @BeforeClass
     public static void startServers() throws Exception {
-        petriRunner.start();
+
+        // TODO: Remove duplication with RPCPetriServerTest
+        DBDriver dbDriver = DBDriver.dbDriver("jdbc:h2:mem:test;IGNORECASE=TRUE");
+        dbDriver.createSchema();
+
+        aPetriConfigFile().delete();
+        aPetriConfigFile().
+                withUsername("auser").
+                withPassword("sa").
+                withUrl("jdbc:h2:mem:test").
+                withPort(PETRI_PORT).
+                save();
+
+        Main.main();
+
         sampleAppRunner.start();
     }
 
     @AfterClass
     public static void stopServers() throws Exception {
         sampleAppRunner.stop();
-        petriRunner.stop();
+        aPetriConfigFile().delete();
     }
 
     private PetriClient petriClient() throws MalformedURLException {
@@ -85,7 +101,6 @@ public class PetriE2eTest {
         String testResult = sampleAppRunner.conductExperiment("THE_KEY","FALLBACK_VALUE");
         assertThat(testResult, is("a"));
 
-        // TODO: replace RamPetriClient with real server
     }
 
 

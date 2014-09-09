@@ -1,13 +1,15 @@
 package com.wixpress.petri;
 
-import com.wixpress.common.petri.PetriRPCClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.PetriClientContractTest;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import util.DBDriver;
 
 import java.sql.SQLException;
+
+import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,10 +24,23 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     private static DBDriver dbDriver;
 
     @BeforeClass
-    public static void startPetriServer() throws SQLException, ClassNotFoundException {
+    public static void startPetriServer() throws Exception {
         dbDriver = DBDriver.dbDriver("jdbc:h2:mem:test;IGNORECASE=TRUE");
         dbDriver.createSchema();
+        aPetriConfigFile().delete();
+        aPetriConfigFile().
+                withUsername("auser").
+                withPassword("sa").
+                withUrl("jdbc:h2:mem:test").
+                withPort(9011).
+                save();
+
         Main.main();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        aPetriConfigFile().delete();
     }
 
     public RPCPetriServerTest() throws Exception{

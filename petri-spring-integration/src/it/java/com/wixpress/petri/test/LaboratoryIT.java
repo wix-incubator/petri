@@ -1,6 +1,6 @@
 package com.wixpress.petri.test;
 
-import com.wixpress.common.petri.PetriRPCClient;
+import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.petri.PetriClient;
 import org.joda.time.DateTime;
