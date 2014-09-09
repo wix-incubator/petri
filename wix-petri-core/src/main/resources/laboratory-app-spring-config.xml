@@ -7,7 +7,6 @@
             http://www.wixpress.com/spring http://www.wixpress.com/spring/wix-spring.xsd">
 
 
-<!--
     <bean class="com.wixpress.petri.laboratory.LaboratoryConfig"/>
 
 
@@ -16,7 +15,6 @@
 
     <bean class="com.wixpress.petri.laboratory.spring.ExperimentsRequestAspectFactory"/>
     <bean class="com.wixpress.framework.spring.WixAnnotationAwareAspectJProxyCreator"/>
--->
 
 
 </beans>

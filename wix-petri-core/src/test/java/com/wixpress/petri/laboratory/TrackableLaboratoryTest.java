@@ -579,8 +579,8 @@ public class TrackableLaboratoryTest {
 
     @Test
     public void whenConductingSeveralExperimentsOnSameKeyFtsHavePrecedence() {
-        Maker<com.wixpress.petri.experiments.domain.Experiment> experiment = experimentWithWinningFirstGroup.but(with(scope, "someScope"));
-        Maker<com.wixpress.petri.experiments.domain.Experiment> ft = experiment.but(
+        Maker<Experiment> experiment = experimentWithWinningFirstGroup.but(with(scope, "someScope"));
+        Maker<Experiment> ft = experiment.but(
                 with(id, 2),
                 with(featureToggle, true),
                 with(testGroups, TEST_GROUPS_WITH_SECOND_ALWAYS_WINNING));
@@ -624,7 +624,7 @@ public class TrackableLaboratoryTest {
 
     @Test
     public void customTestGroupDrawerFromConductContextIsUsedEvenIfNullUserInfo() throws Exception {
-        com.wixpress.petri.experiments.domain.Experiment experiment = experimentWithWinningFirstGroup.make();
+        Experiment experiment = experimentWithWinningFirstGroup.make();
 
         addExperimentToCache(experiment);
         writeUserInfoFromNullRequest();
@@ -654,6 +654,39 @@ public class TrackableLaboratoryTest {
 
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(LOSING_VALUE));
     }
+
+    @Test
+    public void filterCanUseCustomEligibilityField() throws Exception {
+        List<Filter> customFilter = new ArrayList<>();
+        customFilter.add(new Filter() {
+            @Override
+            public boolean isEligible(FilterEligibility filterEligibility) {
+                return filterEligibility.getField(StringField.class).getString().equals("someString");
+            }
+        });
+        Experiment experimentWithCustomFilter = experimentWithWinningFirstGroup.but(with(filters, customFilter)).make();
+        addExperimentToCache(experimentWithCustomFilter);
+
+        userInfoStorage.write(aRegisteredUserInfo.make());
+        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
+
+        userInfoStorage.write(aRegisteredUserInfo.make());
+        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE, ConductContextBuilder.newInstance().withField(new StringField())),
+                is(WINNING_VALUE));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void passingNullEligibilityFieldThrowsNPE() throws Exception {
+        userInfoStorage.write(aRegisteredUserInfo.make());
+        lab.conductExperiment(TheKey, FALLBACK_VALUE, ConductContextBuilder.newInstance().withField(null));
+    }
+
+    private class StringField implements EligibilityField {
+        public String getString() {
+            return "someString";
+        }
+    }
+
 
 
 }

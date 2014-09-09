@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import static com.natpryce.makeiteasy.MakeItEasy.a;
 import static com.natpryce.makeiteasy.MakeItEasy.with;
+import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultFilterEligibilityForUser;
 import static com.wixpress.petri.laboratory.dsl.UserInfoMakers.userId;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -25,8 +26,6 @@ import static org.junit.Assert.assertThat;
  * To change this template use File | Settings | File Templates.
  */
 public class IncludeUserIdsFilterTest {
-
-    public static final Experiment IRRELEVANT = null;
 
     private UUID uid;
     private IncludeUserIdsFilter filter;
@@ -48,19 +47,19 @@ public class IncludeUserIdsFilterTest {
     @Test
     public void eligibleForListedUsers() {
         final UserInfo userWithId = a(UserInfoMakers.UserInfo, with(userId, uid)).make();
-        assertThat(filter.isEligible(userWithId, IRRELEVANT), is(true));
+        assertThat(filter.isEligible(defaultFilterEligibilityForUser(userWithId)), is(true));
     }
 
     @Test
     public void isNonEligibleForNonListedUsers() {
         final UserInfo userWithId = a(UserInfoMakers.UserInfo, with(userId, UUID.randomUUID())).make();
-        assertThat(filter.isEligible(userWithId, IRRELEVANT), is(false));
+        assertThat(filter.isEligible(defaultFilterEligibilityForUser(userWithId)), is(false));
     }
 
     @Test
     public void treatsNullAsEmptyListOfIds() throws IOException {
         UUID[] emptyIds = new UUID[0];
-        assertEquals(new IncludeUserIdsFilter((UUID[])null), new IncludeUserIdsFilter(emptyIds));
+        assertEquals(new IncludeUserIdsFilter((UUID[]) null), new IncludeUserIdsFilter(emptyIds));
     }
 
 }

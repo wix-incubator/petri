@@ -19,18 +19,20 @@ import static org.junit.Assert.assertThat;
  */
 public class NotFilterTest {
 
+    public static FilterEligibility IRRELEVANT_FITLER_ELGIBILITY = new FilterEligibility(null, null, null);
+
     @Test
     public void shouldReturnFalseIfInternalFilterIsTrue() {
         Filter alwaysTrueFilter = new ConstantFilter(true);
         Filter notFilter = new NotFilter(alwaysTrueFilter);
-        assertThat(notFilter.isEligible(null, null), is(false));
+        assertThat(notFilter.isEligible(IRRELEVANT_FITLER_ELGIBILITY), is(false));
     }
 
     @Test
     public void shouldReturnTrueIfInternalFilterIsFalse() {
         Filter alwaysFalseFilter = new ConstantFilter(false);
         Filter notFilter = new NotFilter(alwaysFalseFilter);
-        assertThat(notFilter.isEligible(null, null), is(true));
+        assertThat(notFilter.isEligible(IRRELEVANT_FITLER_ELGIBILITY), is(true));
     }
 
     @Test

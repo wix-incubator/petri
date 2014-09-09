@@ -2,7 +2,6 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wixpress.petri.laboratory.UserInfo;
 
 import java.util.List;
 
@@ -24,8 +23,8 @@ public class LanguageFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
-        return languages.contains(user.language);
+    public boolean isEligible(FilterEligibility filterEligibility) {
+        return languages.contains(filterEligibility.getLanguage());
     }
 
     @Override

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
+import com.wixpress.petri.laboratory.ConductContextBuilder;
 import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
+import com.wixpress.petri.laboratory.dsl.UserInfoMakers;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static com.wixpress.petri.experiments.domain.Experiment.InvalidExperiment;
+import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultFilterEligibilityForUser;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.Experiment;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.*;
 import static com.wixpress.petri.laboratory.dsl.TestGroupMakers.TestGroup;
@@ -99,7 +102,7 @@ public class ExperimentTest {
         Experiment deSerialized = objectMapper.readValue(jsonWithUnknownFilter, new TypeReference<Experiment>() {
         });
 
-        deSerialized.isEligible(null);
+        deSerialized.conduct(ConductContextBuilder.newInstance(), null);
     }
 
     @Test
@@ -109,8 +112,8 @@ public class ExperimentTest {
         Experiment experiment = an(Experiment, with(filters, anonFilter)).make();
         UserInfo registeredUserInfo = a(UserInfo).make();
         UserInfo anonymousUserInfo = AnonymousUserInfo.make();
-        assertThat(experiment.isEligible(anonymousUserInfo), is(true));
-        assertThat(experiment.isEligible(registeredUserInfo), is(false));
+        userIsEligible(experiment, anonymousUserInfo);
+        userIsNotEligible(experiment, registeredUserInfo);
     }
 
     @Test
@@ -213,11 +216,11 @@ public class ExperimentTest {
     }
 
     private void userIsEligible(Experiment experiment, UserInfo user) {
-        assertThat(experiment.isEligible(user), is(true));
+        assertThat(experiment.isEligible(defaultFilterEligibilityForUser(user)), is(true));
     }
 
-    private void assertUserIsNotEligible(Experiment experiment, UserInfo user) {
-        assertThat(experiment.isEligible(user), is(false));
+    private void userIsNotEligible(Experiment experiment, UserInfo user) {
+        assertThat(experiment.isEligible(defaultFilterEligibilityForUser(user)), is(false));
     }
 
     @Test
@@ -230,7 +233,7 @@ public class ExperimentTest {
         userIsEligible(experiment, AnonymousUserInfo.make());
 
         UserInfo aRegisteredUserInfo = a(UserInfo, with(userId, SOME_USER_GUID)).make();
-        assertUserIsNotEligible(experiment, aRegisteredUserInfo);
+        userIsNotEligible(experiment, aRegisteredUserInfo);
 
     }
 
@@ -239,7 +242,7 @@ public class ExperimentTest {
         Experiment experiment = experimentWithFilters(new WixEmployeesFilter());
 
         UserInfo aNonWixUserInfo = a(UserInfo, with(email, "a@not-wix.com")).make();
-        assertUserIsNotEligible(experiment, aNonWixUserInfo);
+        userIsNotEligible(experiment, aNonWixUserInfo);
 
         UserInfo aWixUserInfo = a(UserInfo, with(email, "a@wix.com")).make();
         userIsEligible(experiment, aWixUserInfo);
@@ -252,13 +255,13 @@ public class ExperimentTest {
         );
 
         UserInfo excludedWixUserInfo = a(UserInfo, with(email, "a@wix.com"), with(userId, SOME_USER_GUID)).make();
-        assertUserIsNotEligible(experiment, excludedWixUserInfo);
+        userIsNotEligible(experiment, excludedWixUserInfo);
 
         UserInfo otherWixUserInfo = a(UserInfo, with(email, "b@wix.com"), with(userId, ANOTHER_USER_GUID)).make();
         userIsEligible(experiment, otherWixUserInfo);
 
         UserInfo otherNonWixUserInfo = a(UserInfo, with(email, "b@non-wix.com"), with(userId, ANOTHER_USER_GUID)).make();
-        assertUserIsNotEligible(experiment, otherNonWixUserInfo);
+        userIsNotEligible(experiment, otherNonWixUserInfo);
     }
 
     @Test
@@ -267,7 +270,7 @@ public class ExperimentTest {
                 new NotFilter(new IncludeUserIdsFilter(SOME_USER_GUID)));
 
         UserInfo excludedUserInfo = a(UserInfo, with(userId, SOME_USER_GUID)).make();
-        assertUserIsNotEligible(experimentExcludingOneUser, excludedUserInfo);
+        userIsNotEligible(experimentExcludingOneUser, excludedUserInfo);
 
         UserInfo nonExcludedUserInfo = a(UserInfo, with(userId, ANOTHER_USER_GUID)).make();
         userIsEligible(experimentExcludingOneUser, nonExcludedUserInfo);
@@ -287,7 +290,7 @@ public class ExperimentTest {
         userIsEligible(experiment, includedNonWixUserInfo);
 
         UserInfo nonIncludedNonWixUserInfo = a(UserInfo, with(email, "b@not-wix.com"), with(userId, ANOTHER_USER_GUID)).make();
-        assertUserIsNotEligible(experiment, nonIncludedNonWixUserInfo);
+        userIsNotEligible(experiment, nonIncludedNonWixUserInfo);
     }
 
     @Test
@@ -295,10 +298,10 @@ public class ExperimentTest {
         Experiment experimentIncludingOnlyOne = experimentWithFilters(new IncludeUserIdsFilter(SOME_USER_GUID));
 
         UserInfo nonIncludedUserInfo = a(UserInfo, with(userId, ANOTHER_USER_GUID)).make();
-        assertUserIsNotEligible(experimentIncludingOnlyOne, nonIncludedUserInfo);
+        userIsNotEligible(experimentIncludingOnlyOne, nonIncludedUserInfo);
 
         UserInfo userInfoWithNoUid = AnonymousUserInfo.make();
-        assertUserIsNotEligible(experimentIncludingOnlyOne, userInfoWithNoUid);
+        userIsNotEligible(experimentIncludingOnlyOne, userInfoWithNoUid);
 
         UserInfo includedUserInfo = a(UserInfo, with(userId, SOME_USER_GUID)).make();
         userIsEligible(experimentIncludingOnlyOne, includedUserInfo);
@@ -311,10 +314,10 @@ public class ExperimentTest {
         );
 
         UserInfo wrongLanguageUserInfo = a(UserInfo, with(language, "not-en"), with(country, "fr")).make();
-        assertUserIsNotEligible(experimentWithGeoAndLangFilters, wrongLanguageUserInfo);
+        userIsNotEligible(experimentWithGeoAndLangFilters, wrongLanguageUserInfo);
 
         UserInfo wrongCountryUserInfo = a(UserInfo, with(language, "en"), with(country, "non-fr")).make();
-        assertUserIsNotEligible(experimentWithGeoAndLangFilters, wrongCountryUserInfo);
+        userIsNotEligible(experimentWithGeoAndLangFilters, wrongCountryUserInfo);
 
         UserInfo includedUserInfo = a(UserInfo, with(language, "en"), with(country, "fr")).make();
         userIsEligible(experimentWithGeoAndLangFilters, includedUserInfo);
@@ -355,5 +358,41 @@ public class ExperimentTest {
         });
         assertThat(deSerialized, is(theExperiment));
     }
+
+    @Test
+    public void pausesWhenExperimentIsNotOnRegisteredOnly() {
+        Experiment experimentOnAnonymous = an(Experiment, with(onlyForLoggedIn, false)).make();
+        Experiment result = experimentOnAnonymous.pauseOrTerminateAsOf(new DateTime(), new ArrayList<Filter>(), new Trigger("should pause", ""));
+        assertTrue(result.isPaused());
+    }
+
+    @Test
+    public void terminatesWhenExperimentIsOnRegisteredOnly() {
+        Experiment experimentOnAnonymous = an(Experiment, with(onlyForLoggedIn, true)).make();
+        DateTime now = new DateTime();
+        Experiment result = experimentOnAnonymous.pauseOrTerminateAsOf(now, new ArrayList<Filter>(), new Trigger("should terminate", ""));
+        assertThat(result.getEndDate(), is(now));
+    }
+
+    @Test
+    public void pausesWhenExperimentIsOnRegisteredOnlyButNewVersionHasNewUsersFilters() {
+        Experiment experimentOnAnonymous = an(Experiment, with(onlyForLoggedIn, true)).make();
+        List<Filter> newUsersFilter = new ArrayList<Filter>();
+        newUsersFilter.add(new NewUsersFilter());
+        Experiment result = experimentOnAnonymous.pauseOrTerminateAsOf(new DateTime(), newUsersFilter, new Trigger("should terminate", ""));
+        assertTrue(result.isPaused());
+    }
+
+    @Test
+    public void canBeEligibleForNewUsersOnly() {
+        Experiment experiment = experimentWithFilters(new NewUsersFilter());
+
+        UserInfo oldUserInfo = a(UserInfoMakers.UserInfo).but(with(dateCreated, new DateTime().minusHours(1))).make();
+        assertThat(experiment.conduct(ConductContextBuilder.newInstance(), oldUserInfo).getTestGroup(), is(nullValue()));
+
+        UserInfo newUserInfo = a(UserInfoMakers.UserInfo).make();
+        assertThat(experiment.conduct(ConductContextBuilder.newInstance(), newUserInfo).getTestGroup(), is(notNullValue()));
+    }
+
 
 }

@@ -1,6 +1,6 @@
 package com.wixpress.petri.experiments.domain;
 
-import com.wixpress.petri.laboratory.UserInfo;
+import org.joda.time.DateTime;
 
 /**
  * @author: talyag
@@ -25,7 +25,9 @@ public class NewUsersFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
-        return user.dateCreated != null && user.dateCreated.isAfter(experiment.getStartDate());
+    public boolean isEligible(FilterEligibility filterEligibility) {
+        DateTime userCreationDate = filterEligibility.getUserCreationDate();
+        return userCreationDate != null && userCreationDate.isAfter(filterEligibility.getExperimentStartDate());
     }
+
 }

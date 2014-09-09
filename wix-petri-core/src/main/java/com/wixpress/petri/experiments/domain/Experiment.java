@@ -13,7 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.common.base.Predicates.instanceOf;
 import static com.google.common.collect.Iterables.transform;
+import static com.google.common.collect.Iterables.tryFind;
 import static com.google.common.collect.Lists.newArrayList;
 
 /**
@@ -177,11 +179,12 @@ public class Experiment {
     }
 
     //TODO - can make this private now (and move its test to the FilterTest)
-    public boolean isEligible(UserInfo userInfo) {
+    public boolean isEligible(FilterEligibility filterEligibility) {
         if (!isValid()) {
             throw new InvalidExperiment(this);
         }
-        return theFilter.isEligible(userInfo, this);
+
+        return theFilter.isEligible(filterEligibility);
     }
 
     // TODO: This can be moved to an ActivationPeriod object with all related members and constants
@@ -285,18 +288,27 @@ public class Experiment {
                 '}';
     }
 
-    public Experiment pauseOrTerminateAsOf(DateTime instant, Trigger trigger) {
-        if (isOnlyForLoggedInUsers()) {
-            return terminateAsOf(instant, trigger);  // TODO: INLINE THIS TO REMOVE DEPENDENCY ON TIME SOURCE
+    public Experiment pauseOrTerminateAsOf(DateTime instant, List<Filter> newFilters, Trigger trigger) {
+        if (canRelyOnPreviouslyConductedUid(newFilters)) {
+            return terminateAsOf(instant, trigger);
         }
 
         return pause(trigger);
     }
 
+    private boolean canRelyOnPreviouslyConductedUid(List<Filter> newFilters) {
+        return isOnlyForLoggedInUsers() && noNewUsersFilter(newFilters);
+    }
+
+    private boolean noNewUsersFilter(List<Filter> newFilters) {
+        return !(tryFind(newFilters, instanceOf(NewUsersFilter.class)).isPresent());
+    }
+
     public Assignment conduct(ConductContext context, UserInfo userInfo) {
         TestGroup winning = null;
+        FilterEligibility filterEligibility = new FilterEligibility(userInfo, context.eligibilityFields(), getStartDate());
 
-        if (!isPaused() && isEligible(userInfo)) {
+        if (!isPaused() && isEligible(filterEligibility)) {
             if (isToggle()) {
                 winning = getTestGroupByChunk(0);
             } else {

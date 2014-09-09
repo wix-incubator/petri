@@ -2,7 +2,6 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wixpress.petri.laboratory.UserInfo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,8 +26,8 @@ public class NotFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
-        return !internal.isEligible(user, experiment);
+    public boolean isEligible(FilterEligibility filterEligibility) {
+        return !internal.isEligible(filterEligibility);
     }
 
     @Override

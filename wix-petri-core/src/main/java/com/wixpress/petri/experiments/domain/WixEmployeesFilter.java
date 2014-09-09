@@ -1,7 +1,5 @@
 package com.wixpress.petri.experiments.domain;
 
-import com.wixpress.petri.laboratory.UserInfo;
-
 /**
  * @author: talyag
  * @since: 11/26/13
@@ -25,7 +23,8 @@ public class WixEmployeesFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
-        return user.email != null && user.email.endsWith("@wix.com");
+    public boolean isEligible(FilterEligibility filterEligibility) {
+        String email = filterEligibility.getEmail();
+        return email != null && email.endsWith("@wix.com");
     }
 }

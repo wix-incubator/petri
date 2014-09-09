@@ -2,7 +2,6 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
-import com.wixpress.petri.laboratory.UserInfo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,6 +15,6 @@ import com.wixpress.petri.laboratory.UserInfo;
 //!!! when creating new filter type add it in FilterTypeIdResolver !!!
 
 public interface Filter {
-    boolean isEligible(UserInfo user, Experiment experiment);
+    boolean isEligible(FilterEligibility filterEligibility);
 
 }

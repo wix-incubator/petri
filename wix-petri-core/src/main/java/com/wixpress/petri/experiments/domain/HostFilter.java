@@ -2,7 +2,6 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wixpress.petri.laboratory.UserInfo;
 
 import java.util.List;
 
@@ -25,8 +24,8 @@ public class HostFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
-        return hosts.contains(user.host);
+    public boolean isEligible(FilterEligibility filterEligibility) {
+        return hosts.contains(filterEligibility.getHost());
     }
 
     @Override

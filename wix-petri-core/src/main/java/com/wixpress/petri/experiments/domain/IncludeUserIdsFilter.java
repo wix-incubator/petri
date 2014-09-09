@@ -2,7 +2,6 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wixpress.petri.laboratory.UserInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +30,8 @@ public class IncludeUserIdsFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
-        return userGuids.contains(userGuid(user));
-    }
-
-    private UUID userGuid(UserInfo user) {
-        return user.getUserId();
+    public boolean isEligible(FilterEligibility filterEligibility) {
+        return userGuids.contains(filterEligibility.getUserId());
     }
 
     @Override

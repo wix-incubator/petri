@@ -1,7 +1,5 @@
 package com.wixpress.petri.experiments.domain;
 
-import com.wixpress.petri.laboratory.UserInfo;
-
 /**
  * Created with IntelliJ IDEA.
  * User: sagyr
@@ -11,7 +9,7 @@ import com.wixpress.petri.laboratory.UserInfo;
  */
 public class NoFilter implements Filter {
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
+    public boolean isEligible(FilterEligibility filterEligibility) {
         return true;
     }
 }

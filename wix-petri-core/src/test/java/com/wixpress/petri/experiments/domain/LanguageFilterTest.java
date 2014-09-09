@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import static com.natpryce.makeiteasy.MakeItEasy.a;
 import static com.natpryce.makeiteasy.MakeItEasy.with;
+import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultFilterEligibilityForUser;
 import static com.wixpress.petri.laboratory.dsl.UserInfoMakers.language;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
@@ -22,7 +23,7 @@ public class LanguageFilterTest {
         LanguageFilter languageFilter = new LanguageFilter(asList("en"));
         UserInfo userWithEnglish = a(UserInfoMakers.UserInfo, with(language, "en")).make();
         UserInfo userWithOtherLanguage = a(UserInfoMakers.UserInfo).make();
-        assertThat(languageFilter.isEligible(userWithEnglish, null), is(true));
-        assertThat(languageFilter.isEligible(userWithOtherLanguage, null), is(false));
+        assertThat(languageFilter.isEligible(defaultFilterEligibilityForUser(userWithEnglish)), is(true));
+        assertThat(languageFilter.isEligible(defaultFilterEligibilityForUser(userWithOtherLanguage)), is(false));
     }
 }

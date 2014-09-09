@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import static com.natpryce.makeiteasy.MakeItEasy.a;
 import static com.natpryce.makeiteasy.MakeItEasy.with;
+import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultFilterEligibilityForUser;
 import static com.wixpress.petri.laboratory.dsl.UserInfoMakers.host;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
@@ -24,7 +25,7 @@ public class HostFilterTest {
         UserInfo userWithMyHost = a(UserInfoMakers.UserInfo, with(host, myHost)).make();
 
         HostFilter hostFilter = new HostFilter(asList(myHost));
-        assertThat(hostFilter.isEligible(userWithMyHost, null), is(true));
+        assertThat(hostFilter.isEligible(defaultFilterEligibilityForUser(userWithMyHost)), is(true));
     }
 
     @Test
@@ -34,7 +35,7 @@ public class HostFilterTest {
         UserInfo userWithDifferentHost = a(UserInfoMakers.UserInfo, with(host, differentHost)).make();
 
         HostFilter hostFilter = new HostFilter(asList(myHost));
-        assertThat(hostFilter.isEligible(userWithDifferentHost, null), is(false));
+        assertThat(hostFilter.isEligible(defaultFilterEligibilityForUser(userWithDifferentHost)), is(false));
     }
 
 }

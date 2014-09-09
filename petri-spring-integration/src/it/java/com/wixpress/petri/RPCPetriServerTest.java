@@ -3,8 +3,6 @@ package com.wixpress.petri;
 import com.wixpress.common.petri.PetriRPCClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.PetriClientContractTest;
-import com.wixpress.petri.test.EmbeddedMysqlDatabase;
-import com.wixpress.petri.test.EmbeddedMysqlDatabaseBuilder;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import util.DBDriver;

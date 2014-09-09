@@ -1,7 +1,5 @@
 package com.wixpress.petri.experiments.domain;
 
-import com.wixpress.petri.laboratory.UserInfo;
-
 /**
  * @author: talyag
  * @since: 5/25/14
@@ -9,7 +7,7 @@ import com.wixpress.petri.laboratory.UserInfo;
 public class UnrecognizedFilter implements Filter {
 
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
+    public boolean isEligible(FilterEligibility filterEligibility) {
         return false;
     }
 

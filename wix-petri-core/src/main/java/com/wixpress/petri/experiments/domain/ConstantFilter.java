@@ -2,7 +2,6 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wixpress.petri.laboratory.UserInfo;
 
 /**
  * @author: talyag
@@ -18,7 +17,7 @@ public class ConstantFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
+    public boolean isEligible(FilterEligibility filterEligibility) {
         return value;
     }
 

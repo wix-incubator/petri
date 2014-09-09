@@ -1,7 +1,5 @@
 package com.wixpress.petri.experiments.domain;
 
-import com.wixpress.petri.laboratory.UserInfo;
-
 import java.util.List;
 
 import static com.google.common.collect.Iterables.any;
@@ -21,8 +19,8 @@ public class OrFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(final UserInfo userInfo, final Experiment experiment) {
-        return any(filters, isEligibleFor(userInfo, experiment));
+    public boolean isEligible(FilterEligibility filterEligibility) {
+        return any(filters, isEligibleFor(filterEligibility));
     }
 
 }

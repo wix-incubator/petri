@@ -6,7 +6,6 @@
 \*                |/                                                 */
 package com.wixpress.petri.laboratory.converters
 
-
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.Scope
 

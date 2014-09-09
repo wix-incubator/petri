@@ -1,7 +1,6 @@
 package com.wixpress.petri.experiments.domain;
 
 import com.google.common.base.Predicate;
-import com.wixpress.petri.laboratory.UserInfo;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -27,8 +26,8 @@ public class AggregateFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(UserInfo user, Experiment experiment) {
-        return aggregate.isEligible(user, experiment);
+    public boolean isEligible(FilterEligibility filterEligibility) {
+        return aggregate.isEligible(filterEligibility);
     }
 
     private Filter aggregate() {
@@ -97,7 +96,7 @@ public class AggregateFilter implements Filter {
         }
 
         private IsNotFilter withType(Type T) {
-            this.T = T ;
+            this.T = T;
             return this;
         }
 
