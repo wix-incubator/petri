@@ -2,11 +2,10 @@ package com.wixpress.petri;
 
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.PetriClientContractTest;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import util.DBDriver;
 
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 
 import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
@@ -44,7 +43,7 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     }
 
     public RPCPetriServerTest() throws Exception{
-        petriClient = PetriRPCClient.makeFor("http://localhost:9011/petri");
+        petriClient = PetriRPCClient.makeFor("http://localhost:9011/petri/");
 
     }
 
@@ -57,4 +56,10 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     protected PetriClient petriClient() {
         return petriClient;
     }
+
+    @Test(expected = Exception.class)
+    public void respondsWithErrorForIrrelevantURLs() throws MalformedURLException {
+        PetriRPCClient.makeFor("http://localhost:9011/SOME_OTHER_SERVICE").fetchSpecs();
+    }
+
 }

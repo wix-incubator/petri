@@ -31,7 +31,7 @@ public class FakePetriServer {
         petriServer.start();
         petriClient = PetriRPCClient.makeFor("http://localhost:" +
                 port +
-                "/");
+                "/petri/");
     }
 
     public void stop() throws Exception {

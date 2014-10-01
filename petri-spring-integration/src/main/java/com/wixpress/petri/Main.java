@@ -19,7 +19,6 @@ public class Main {
             JsonRPCServer rpcServer = new PetriServerFactory(port(config), dbConfig(config)).makePetriServer();
 
             rpcServer.start();
-            // TODO: rpcServer.join() -> In order to do this run the server on a different thread when testing.
 
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

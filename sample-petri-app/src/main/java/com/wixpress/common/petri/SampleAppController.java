@@ -30,7 +30,7 @@ public class SampleAppController {
     @RequestMapping(value = "/conductExperiment", method = RequestMethod.GET)
     @ResponseBody
     public String conductExperiment(@RequestParam("key") String key, @RequestParam("fallback") String fallback) throws ClassNotFoundException {
-        return laboratory.conductExperiment(key,fallback,new StringConverter());
+        return laboratory.conductExperiment(key, fallback, new StringConverter());
     }
 
 }

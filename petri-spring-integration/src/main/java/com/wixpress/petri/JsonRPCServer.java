@@ -9,6 +9,7 @@ import com.googlecode.jsonrpc4j.JsonRpcServer;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.eclipse.jetty.server.handler.ContextHandler;
 import org.joda.time.DateTime;
 
 import javax.servlet.ServletException;
@@ -28,18 +29,23 @@ import java.util.List;
 * To change this template use File | Settings | File Templates.
 */
 public class JsonRPCServer {
-    private Object rpc;
     private final Server server;
 
     public JsonRPCServer(Object serviceImpl, ObjectMapper objectMapper, int port, Class<?> remoteInterface) {
-        this.rpc = serviceImpl;
         this.server = new Server(port);
-        this.server.setHandler(new JsonRpcHandler(serviceImpl, objectMapper, remoteInterface));
 
+        final JsonRpcHandler handler = new JsonRpcHandler(serviceImpl, objectMapper, remoteInterface);
+        ContextHandler context = new ContextHandler();
+        context.setContextPath("/petri");
+        context.setResourceBase(".");
+        context.setClassLoader(Thread.currentThread().getContextClassLoader());
+        context.setHandler(handler);
+        server.setHandler(context);
     }
 
     public void start() throws Exception {
         server.start();
+        // TODO: rpcServer.join() -> In order to do this run the server on a different thread when testing.
     }
 
     public void stop() throws Exception {
