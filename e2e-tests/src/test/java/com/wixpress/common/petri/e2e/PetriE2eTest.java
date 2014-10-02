@@ -73,7 +73,7 @@ public class PetriE2eTest {
     private PetriClient petriClient() throws MalformedURLException {
         return PetriRPCClient.makeFor("http://localhost:" +
                 PETRI_PORT +
-                "/petri/");
+                "/petri/api");
     }
 
 

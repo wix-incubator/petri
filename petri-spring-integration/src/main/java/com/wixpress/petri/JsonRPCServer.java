@@ -1,25 +1,10 @@
 package com.wixpress.petri;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.googlecode.jsonrpc4j.DefaultErrorResolver;
-import com.googlecode.jsonrpc4j.ErrorResolver;
-import com.googlecode.jsonrpc4j.JsonRpcServer;
-import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.eclipse.jetty.server.handler.ContextHandler;
-import org.joda.time.DateTime;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Method;
-import java.util.List;
 
 /**
 * Created with IntelliJ IDEA.
@@ -34,13 +19,12 @@ public class JsonRPCServer {
     public JsonRPCServer(Object serviceImpl, ObjectMapper objectMapper, int port, Class<?> remoteInterface) {
         this.server = new Server(port);
 
-        final JsonRpcHandler handler = new JsonRpcHandler(serviceImpl, objectMapper, remoteInterface);
-        ContextHandler context = new ContextHandler();
-        context.setContextPath("/petri");
-        context.setResourceBase(".");
-        context.setClassLoader(Thread.currentThread().getContextClassLoader());
-        context.setHandler(handler);
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
         server.setHandler(context);
+
+        context.addServlet(new ServletHolder(new JsonRPCServlet(serviceImpl,objectMapper,remoteInterface)),"/petri/api");
+
     }
 
     public void start() throws Exception {
@@ -52,47 +36,4 @@ public class JsonRPCServer {
         server.stop();
     }
 
-    /**
-    * Created with IntelliJ IDEA.
-    * User: sagyr
-    * Date: 9/1/14
-    * Time: 5:15 PM
-    * To change this template use File | Settings | File Templates.
-    */
-    public static class JsonRpcHandler extends AbstractHandler {
-        private JsonRpcServer rpcServer;
-
-        public JsonRpcHandler(Object rpc, final ObjectMapper objectMapper, Class<?> remoteInterface) {
-            rpcServer = new JsonRpcServer(objectMapper,rpc, remoteInterface);
-            rpcServer.setErrorResolver(new ExceptionSerializingErrorResolver(objectMapper));
-        }
-
-        @Override
-        public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-            rpcServer.handle(request, response);
-            baseRequest.setHandled(true);
-            response.setStatus(HttpServletResponse.SC_OK);
-
-        }
-
-        private static class ExceptionSerializingErrorResolver extends DefaultErrorResolver {
-            private final ObjectMapper objectMapper;
-
-            public ExceptionSerializingErrorResolver(ObjectMapper objectMapper) {
-                this.objectMapper = objectMapper;
-            }
-
-            @Override
-            public JsonError resolveError(Throwable t, Method method, List<JsonNode> arguments) {
-
-                try {
-                    return new JsonError(0, t.getMessage(),
-                                new ErrorData(t.getClass().getName(), objectMapper.writeValueAsString(t)));
-                } catch (JsonProcessingException e) {
-                    return super.resolveError(t, method, arguments);
-                }
-            }
-
-        }
-    }
 }

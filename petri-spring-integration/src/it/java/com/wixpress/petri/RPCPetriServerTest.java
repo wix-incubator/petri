@@ -43,7 +43,7 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     }
 
     public RPCPetriServerTest() throws Exception{
-        petriClient = PetriRPCClient.makeFor("http://localhost:9011/petri/");
+        petriClient = PetriRPCClient.makeFor("http://localhost:9011/petri/api");
 
     }
 
