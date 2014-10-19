@@ -2,6 +2,8 @@ package com.wixpress.petri.test;
 
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.JsonRPCServer;
+import com.wixpress.petri.experiments.domain.Experiment;
+import com.wixpress.petri.experiments.domain.ExperimentBuilder;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.RAMPetriClient;
@@ -42,7 +44,11 @@ public class FakePetriServer {
         petriClient.addSpecs(asList(spec.build()));
     }
 
-    public void addExperiment(ExperimentSnapshotBuilder experiment) {
-        petriClient.insertExperiment(experiment.build());
+    public Experiment addExperiment(ExperimentSnapshotBuilder experiment) {
+        return petriClient.insertExperiment(experiment.build());
+    }
+
+    public void updateExperiment(ExperimentBuilder experimentBuilder) {
+        petriClient.updateExperiment(experimentBuilder.build());
     }
 }

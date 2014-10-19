@@ -7,12 +7,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 
 /**
 * Created with IntelliJ IDEA.
@@ -25,6 +20,7 @@ public class SampleAppRunner {
     public static final String DEFAULT_PATH_TO_WEBAPP = ServerRunner.class.getResource("/").getPath() + "../../src/it/webapp";
     private final ServerRunner sampleAppServer;
     private final int port;
+    private final HttpClient client;
 
     public SampleAppRunner(int port) {
         this(port, DEFAULT_PATH_TO_WEBAPP);
@@ -32,7 +28,8 @@ public class SampleAppRunner {
 
     public SampleAppRunner(int port, String pathToWebapp) {
         this.port = port;
-        sampleAppServer = new ServerRunner(port, pathToWebapp);
+        this.sampleAppServer = new ServerRunner(port, pathToWebapp);
+        this.client = HttpClientBuilder.create().build();
     }
 
     public void start() throws Exception {
@@ -44,7 +41,6 @@ public class SampleAppRunner {
     }
 
     public String conductExperiment(String key, String fallback) throws IOException {
-        HttpClient client  = HttpClientBuilder.create().build();
         String uri = "http://localhost:" +
                 port +
                 "/conductExperiment?key=" +
@@ -55,4 +51,5 @@ public class SampleAppRunner {
         HttpResponse response = client.execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
+
 }

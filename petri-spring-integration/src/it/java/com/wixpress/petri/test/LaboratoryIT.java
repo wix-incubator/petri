@@ -1,11 +1,12 @@
 package com.wixpress.petri.test;
 
-import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.*;
-import com.wixpress.petri.petri.PetriClient;
 import org.joda.time.DateTime;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import static com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf;
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.anExperimentSnapshot;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.aNewlyGeneratedExperimentSpec;
 import static java.util.Arrays.asList;
@@ -24,42 +25,64 @@ public class LaboratoryIT {
 
     public static final int SAMPLE_APP_PORT = 9015;
     public static final int PETRI_PORT = 9016;
+    public static final String THE_KEY = "THE_KEY";
 
-    @Test
-    public void conductingASimpleExperiment() throws Exception {
+    private final SampleAppRunner sampleApp = new SampleAppRunner(SAMPLE_APP_PORT);
+    private final FakePetriServer petri = new FakePetriServer(PETRI_PORT);
+    private Experiment originalExperiment;
+    private final DateTime now = new DateTime();
 
-        final SampleAppRunner sampleApp = new SampleAppRunner(SAMPLE_APP_PORT);
-
-        final FakePetriServer petri = new FakePetriServer(PETRI_PORT);
-
+    @Before
+    public void startServers() throws Exception {
         petri.start();
-
         sampleApp.start();
-
-
         petri.addSpec(
-                aNewlyGeneratedExperimentSpec("THE_KEY").
+                aNewlyGeneratedExperimentSpec(THE_KEY).
                         withTestGroups(asList("a", "b")).
                         withScopes(new ScopeDefinition("the scope", false)));
 
-        DateTime now = new DateTime();
-
-        petri.addExperiment(
-                anExperimentSnapshot().
-                        withStartDate(now.minusMinutes(1)).
-                        withEndDate(now.plusYears(1)).
-                        withKey("THE_KEY").
-                        withGroups(asList(new TestGroup(0, 100, "a"), new TestGroup(1, 0, "b"))).
-                        withOnlyForLoggedInUsers(false));
-
-
-        PetriClient c = PetriRPCClient.makeFor("http://localhost:" +
-                PETRI_PORT +
-                "/");
-
-        String testResult = sampleApp.conductExperiment("THE_KEY", "FALLBACK");
-        assertThat(testResult, is("a"));
-
+        originalExperiment = petri.addExperiment(
+                snapshotWithGroups(new TestGroup(0, 100, "a"), new TestGroup(1, 0, "b")));
     }
+
+    @After
+    public void stopServers() throws Exception {
+        sampleApp.stop();
+        petri.stop();
+    }
+
+    private void updateExperimentState(final TestGroup... testGroups) {
+        petri.updateExperiment(aCopyOf(originalExperiment).withExperimentSnapshot(
+                snapshotWithGroups(testGroups).build()
+        ));
+    }
+
+    private ExperimentSnapshotBuilder snapshotWithGroups(final TestGroup... testGroups) {
+        return anExperimentSnapshot().
+                withStartDate(now.minusMinutes(1)).
+                withEndDate(now.plusYears(1)).
+                withKey(THE_KEY).
+                withGroups(asList(testGroups)).
+                withOnlyForLoggedInUsers(false);
+    }
+
+    @Test
+    public void conductingASimpleExperiment() throws Exception {
+        String testResult = sampleApp.conductExperiment(THE_KEY, "FALLBACK");
+        assertThat(testResult, is("a"));
+    }
+
+    @Test
+    public void experimentsResultsArePreservedAcrossDifferentRequests() throws Exception {
+
+        // this causes the experiment to be persisted
+        sampleApp.conductExperiment(THE_KEY, "FALLBACK");
+
+        // flip the toggle so that group 'b' is now the winning group
+        updateExperimentState(new TestGroup(0, 0, "a"), new TestGroup(1, 100, "b"));
+
+        assertThat(sampleApp.conductExperiment(THE_KEY, "FALLBACK"), is("a"));
+    }
+
 
 }

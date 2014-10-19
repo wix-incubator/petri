@@ -56,7 +56,12 @@ public class LaboratoryFilter implements Filter {
         final HttpServletResponseWrapper response = new CachingHttpResponse(resp, sos, pw);
         chain.doFilter(req, response);
         final UserInfo ui = storage.read();
-        // TODO: write cookie to response
+
+        // TODO: add specific unit tests that drive storing both anonymous and user experiments logs.
+        // TODO: check that cookie age is 6 months and path is "/"
+        Cookie cookie = new Cookie("_wixAB3", ui.anonymousExperimentsLog);
+
+        response.addCookie(cookie);
         resp.getOutputStream().write(baos.toByteArray());
     }
 

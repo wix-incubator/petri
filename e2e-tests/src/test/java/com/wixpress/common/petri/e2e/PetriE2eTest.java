@@ -1,9 +1,7 @@
 package com.wixpress.common.petri.e2e;
 
 import com.wixpress.petri.Main;
-import com.wixpress.petri.PetriConfigFile;
 import com.wixpress.petri.PetriRPCClient;
-import com.wixpress.common.petri.testutils.ServerRunner;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.test.SampleAppRunner;
@@ -98,7 +96,7 @@ public class PetriE2eTest {
                 build());
         assertThat(petriClient.fetchActiveExperiments().size(), is(1));
 
-        String testResult = sampleAppRunner.conductExperiment("THE_KEY","FALLBACK_VALUE");
+        String testResult = sampleAppRunner.conductExperiment("THE_KEY", "FALLBACK_VALUE");
         assertThat(testResult, is("a"));
 
     }
