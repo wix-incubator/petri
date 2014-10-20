@@ -2,12 +2,9 @@ package com.wixpress.petri.laboratory.http;
 
 import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.UserInfoStorage;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.ByteArrayOutputStream;
@@ -57,9 +54,7 @@ public class LaboratoryFilter implements Filter {
         chain.doFilter(req, response);
         final UserInfo ui = storage.read();
 
-        // TODO: add specific unit tests that drive storing both anonymous and user experiments logs.
-        // TODO: check that cookie age is 6 months and path is "/"
-        Cookie cookie = new Cookie("_wixAB3", ui.anonymousExperimentsLog);
+        Cookie cookie = CookieMaker.makeAnonymousCookie(ui.anonymousExperimentsLog);
 
         response.addCookie(cookie);
         resp.getOutputStream().write(baos.toByteArray());
@@ -89,4 +84,5 @@ public class LaboratoryFilter implements Filter {
             return pw;
         }
     }
+
 }
