@@ -38,8 +38,10 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     }
 
     @AfterClass
-    public static void afterClass() {
+    public static void afterClass() throws SQLException {
         aPetriConfigFile().delete();
+        dbDriver.closeConnection();
+
     }
 
     public RPCPetriServerTest() throws Exception{

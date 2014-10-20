@@ -53,4 +53,7 @@ public class DBDriver {
                 "','" + serializedSpec + "')");
     }
 
+    public void closeConnection() throws SQLException {
+        jdbcTemplate.getDataSource().getConnection().close();
+    }
 }

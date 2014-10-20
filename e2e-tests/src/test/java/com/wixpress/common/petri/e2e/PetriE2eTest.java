@@ -41,12 +41,13 @@ public class PetriE2eTest {
     private static final int SAMPLE_APP_PORT = 9011;
     private static final String SAMPLE_WEBAPP_PATH = PetriE2eTest.class.getResource("/").getPath() + "../../../sample-petri-app/src/main/webapp";
     private static final SampleAppRunner sampleAppRunner = new SampleAppRunner(SAMPLE_APP_PORT, SAMPLE_WEBAPP_PATH);
+    private static DBDriver dbDriver;
 
     @BeforeClass
     public static void startServers() throws Exception {
 
         // TODO: Remove duplication with RPCPetriServerTest
-        DBDriver dbDriver = DBDriver.dbDriver("jdbc:h2:mem:test;IGNORECASE=TRUE");
+        dbDriver = DBDriver.dbDriver("jdbc:h2:mem:test;IGNORECASE=TRUE");
         dbDriver.createSchema();
 
         aPetriConfigFile().delete();
@@ -66,6 +67,7 @@ public class PetriE2eTest {
     public static void stopServers() throws Exception {
         sampleAppRunner.stop();
         aPetriConfigFile().delete();
+        dbDriver.closeConnection();
     }
 
     private PetriClient petriClient() throws MalformedURLException {

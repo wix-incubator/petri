@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -41,6 +42,12 @@ public abstract class PetriDaoIT<T, V> {
         generateSchema();
         objectMapper = ObjectMapperFactory.makeObjectMapper();
         mappingErrorHandler = context.mock(MappingErrorHandler.class);
+
+    }
+
+    @After
+    public void closeConnection() throws SQLException {
+        dbDriver.closeConnection();
     }
 
     @Test
