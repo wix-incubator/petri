@@ -38,14 +38,16 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         String userAgent = sanitizeString(request.getHeader("user-agent"));
         boolean isRobot = checkForRobotHeader(userAgent);
         String url = getRequestURL();
+        String ip = getIp();
+        String language = request.getLocale().getLanguage();
+        String country = getCountry();
 
         String experimentsLog = ""; //todo
         UUID userId = null; //todo
         UUID clientId = null; //todo
-        String ip = null;   //todo
+
         UserInfoType userInfoType = UserInfoTypeFactory.make(null);
-        String language = null;  //todo
-        String country = null; //todo
+
         DateTime userCreationDate = null; //todo
         String email = null; //todo
         String anonymousExperimentsLog = anonymousExperimentsLog();
@@ -71,6 +73,22 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
                 userAgent.contains("spider") ||
                 userAgent.contains("ping") ||
                 userAgent.contains("nagios-plugins"));
+    }
+
+    String getCountry(){
+        String geoCountry = request.getHeader("GEOIP_COUNTRY_CODE");
+        if (geoCountry != null){
+            return geoCountry;
+        }
+        return request.getLocale().getCountry();
+    }
+
+    String getIp(){
+        String originatingIP = request.getHeader("X-FORWARDED-FOR");
+        if (originatingIP != null){
+            return originatingIP;
+        }
+        return request.getRemoteAddr();
     }
 
     String getRequestURL() {

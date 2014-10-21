@@ -1,6 +1,8 @@
 package com.wixpress.petri.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -19,7 +21,9 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.wixpress.petri.experiments.jackson.ObjectMapperFactory.makeObjectMapper;
@@ -37,7 +41,8 @@ public class UserInfoExtractorIT {
 
     private static final SampleAppRunner testAppRunner = new SampleAppRunner(9002);
     private static final String ANONYMOUS_LOG_STORAGE_KEY = "_wixAB3";
-
+    private static final String extractUserInfoUrl = "http://localhost:9002/extractUserInfo";
+    private static final List<Pair<String,String>> NO_PROPERTIES = null;
 
     private final ObjectMapper objectMapper = makeObjectMapper();
 
@@ -51,18 +56,44 @@ public class UserInfoExtractorIT {
         testAppRunner.stop();
     }
 
-    private Map<String, Object> extractUserInfoWithAnonymousCookie(String anonCookieValue) throws IOException {
-        URL url = new URL("http://localhost:9002/extractUserInfo");
-        URLConnection conn = url.openConnection();
-        conn.setRequestProperty("Cookie", ANONYMOUS_LOG_STORAGE_KEY + "=" + anonCookieValue);
-        conn.connect();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        return objectMapper.readValue(reader.readLine(), HashMap.class);
+
+    private PropertyList aPropertyList(){
+        return new PropertyList();
     }
 
-    private Map<String, Object> extractUserInfo() throws IOException {
-        URL url = new URL("http://localhost:9002/extractUserInfo");
+    private class PropertyList{
+
+        private List<Pair<String,String>> properties = new ArrayList<Pair<String,String>>();
+
+        public PropertyList withPair(String key, String value){
+            properties.add(new ImmutablePair<String, String>(key,value));
+            return this;
+        }
+
+        public List<Pair<String,String>> build(){
+            return properties;
+        }
+
+    }
+
+    private void assertWithDefaultValueForProperty(Map<String, Object> userInfo, String propertyName, String expectedValue, String expectedDefaultValue) throws IOException {
+        assertThat(userInfo.toString(),userInfo.get(propertyName), CoreMatchers.<Object>is(expectedValue));
+
+        Map<String, Object> defaultUserInfo = extractUserInfoWithProperties(NO_PROPERTIES);
+        assertThat(defaultUserInfo.toString(),defaultUserInfo.get(propertyName), CoreMatchers.<Object>is(expectedDefaultValue));
+    }
+
+    private Map<String, Object> extractUserInfoWithProperties(List<Pair<String,String>> properties) throws IOException {
+
+        URL url = new URL(extractUserInfoUrl);
         URLConnection conn = url.openConnection();
+
+        if (properties != NO_PROPERTIES) {
+            for (Pair<String, String> property : properties) {
+                conn.setRequestProperty(property.getKey(), property.getValue());
+            }
+        }
+
         conn.connect();
         BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         return objectMapper.readValue(reader.readLine(), HashMap.class);
@@ -81,6 +112,7 @@ public class UserInfoExtractorIT {
             }
         };
     }
+
 
     @Test
     public void getUserInfo() throws Exception {
@@ -109,24 +141,52 @@ public class UserInfoExtractorIT {
 
     @Test
     public void extractsExperimentsLogFromAnonymousCookie() throws Exception {
-        Map<String, Object> userInfo = extractUserInfoWithAnonymousCookie("1#2");
-        assertThat(userInfo.toString(),userInfo.get("anonymousExperimentsLog"), CoreMatchers.<Object>is("1#2"));
+        String experimentsLog = "1#2";
+        Map<String, Object> userInfo =
+                extractUserInfoWithProperties(aPropertyList().withPair("Cookie", ANONYMOUS_LOG_STORAGE_KEY + "=" + experimentsLog).build());
+
+        assertThat(userInfo.toString(),userInfo.get("anonymousExperimentsLog"), CoreMatchers.<Object>is(experimentsLog));
     }
 
 
     @Test
     public void extractsEmptyExperimentLogsByDefault() throws Exception {
-        Map<String, Object> userInfo = extractUserInfo();
+        Map<String, Object> userInfo = extractUserInfoWithProperties(NO_PROPERTIES);
         assertThat(userInfo.toString(),userInfo.get("anonymousExperimentsLog"), CoreMatchers.<Object>is(""));
         assertThat(userInfo.toString(),userInfo.get("experimentsLog"), CoreMatchers.<Object>is(""));
     }
 
     @Test
     public void extractsEmptyExperimentOverridesByDefault() throws Exception {
-        Map<String, Object> userInfo = extractUserInfo();
+        Map<String, Object> userInfo = extractUserInfoWithProperties(NO_PROPERTIES);
         final scala.collection.immutable.Map experimentOverrides = (scala.collection.immutable.Map) userInfo.get("experimentOverrides");
         assertThat(userInfo.toString(), experimentOverrides, isMapOfSize(0));
     }
 
+    @Test
+    public void extractsIpFromUserInfo() throws Exception {
+        String clientIp = "9.0.2.10";
+        Map<String, Object> userInfo =
+                extractUserInfoWithProperties(aPropertyList().withPair("X-Forwarded-For", clientIp).build());
 
+        assertWithDefaultValueForProperty(userInfo, "ip", clientIp, "127.0.0.1");
+    }
+
+    @Test
+    public void extractsLanguageFromUserInfo() throws Exception {
+        String languageTag = "es-ES";
+        Map<String, Object> userInfo =
+                extractUserInfoWithProperties(aPropertyList().withPair("Accept-Language", languageTag).build());
+
+        assertWithDefaultValueForProperty(userInfo, "language", "es", "en");
+    }
+
+    @Test
+    public void extractsCountryFromUserInfo() throws Exception {
+        String country = "AF";
+        Map<String, Object> userInfo =
+                extractUserInfoWithProperties(aPropertyList().withPair("GEOIP_COUNTRY_CODE", country).build());
+
+        assertWithDefaultValueForProperty(userInfo, "country", "AF", "US");
+    }
 }
