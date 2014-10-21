@@ -2,5 +2,6 @@
 test.log
 *.iml
 **/target
+bi-events-tests.log
 
 
