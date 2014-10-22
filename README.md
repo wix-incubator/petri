@@ -8,4 +8,4 @@ Experiments can either affect the experience users receive, thus enabling our pr
 
 Petri allows you to define filters that determine what users will be included in the experiment (by language, geo, user-agent, for individual users and more).
 
-Want to learn more? Have a look at the quickstart guide or browse our [wiki](https://github.com/wix/petri/wiki/PETRI)
+Want to learn more? Have a look at the [quickstart guide](https://github.com/wix/petri/wiki/Quickstart-Guide) or browse our [wiki](https://github.com/wix/petri/wiki/PETRI)
