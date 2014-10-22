@@ -15,6 +15,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.junit.*;
 
+import javax.servlet.http.Cookie;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -76,7 +77,7 @@ public class UserInfoExtractorIT {
 
     }
 
-    private void assertWithDefaultValueForProperty(Map<String, Object> userInfo, String propertyName, String expectedValue, String expectedDefaultValue) throws IOException {
+    private void assertWithDefaultValueForProperty(Map<String, Object> userInfo, String propertyName, Object expectedValue, Object expectedDefaultValue) throws IOException {
         assertThat(userInfo.toString(),userInfo.get(propertyName), CoreMatchers.<Object>is(expectedValue));
 
         Map<String, Object> defaultUserInfo = extractUserInfoWithProperties(NO_PROPERTIES);
@@ -97,6 +98,10 @@ public class UserInfoExtractorIT {
         conn.connect();
         BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         return objectMapper.readValue(reader.readLine(), HashMap.class);
+    }
+
+    private String userExperimentCookieStr(String userId, String value) {
+        return "_wixAB3|" + userId + "=" + value;
     }
 
     private Matcher<scala.collection.immutable.Map> isMapOfSize(final int size) {
@@ -187,6 +192,53 @@ public class UserInfoExtractorIT {
         Map<String, Object> userInfo =
                 extractUserInfoWithProperties(aPropertyList().withPair("GEOIP_COUNTRY_CODE", country).build());
 
-        assertWithDefaultValueForProperty(userInfo, "country", "AF", "US");
+        assertWithDefaultValueForProperty(userInfo, "country", country, "US");
+    }
+
+    @Test
+    public void extractsUserIdFromUserInfo() throws Exception {
+        String userId = "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
+        String labUserIdCookie = "laboratory_user_id="+userId;
+        Map<String, Object> userInfo =
+                extractUserInfoWithProperties(
+                        aPropertyList().withPair("Cookie", labUserIdCookie).build());
+
+        assertWithDefaultValueForProperty(userInfo, "userId", userId, null);
+    }
+
+    @Test
+    public void extractsClientIdFromUserInfo() throws Exception {
+        String clientId = "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
+        String labClientIdCookie = "laboratory_client_id="+clientId;
+        Map<String, Object> userInfo =
+                extractUserInfoWithProperties(
+                        aPropertyList().withPair("Cookie", labClientIdCookie).build());
+
+        assertWithDefaultValueForProperty(userInfo, "clientId", clientId, null);
+    }
+
+    @Test
+    public void extractsExperimentsLogFromUserInfo() throws Exception {
+        String userId = "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
+        String experimentsLog = "1#2";
+        String labUserIdCookie = "laboratory_user_id="+userId;
+
+        Map<String, Object> userInfo =
+                extractUserInfoWithProperties(
+                        aPropertyList().withPair("Cookie", userExperimentCookieStr(userId, experimentsLog) + "; " + labUserIdCookie).build());
+
+        assertWithDefaultValueForProperty(userInfo, "experimentsLog", experimentsLog, "");
+    }
+
+    @Test
+    public void extractsIsRecurringFromUserInfo() throws Exception {
+        String userId = "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
+        String labUserIdCookie = "laboratory_user_id="+userId;
+
+        Map<String, Object> userInfo =
+                extractUserInfoWithProperties(
+                        aPropertyList().withPair("Cookie", labUserIdCookie).build());
+
+        assertWithDefaultValueForProperty(userInfo, "isRecurringUser", true, false);
     }
 }

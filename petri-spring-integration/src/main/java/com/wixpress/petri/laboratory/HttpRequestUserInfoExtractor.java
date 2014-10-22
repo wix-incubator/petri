@@ -41,25 +41,40 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         String ip = getIp();
         String language = request.getLocale().getLanguage();
         String country = getCountry();
-
-        String experimentsLog = ""; //todo
-        UUID userId = null; //todo
-        UUID clientId = null; //todo
-
+        UUID userId = getUserId();
+        UUID clientId = getClientId();
+        String experimentsLog = getExperimentsLog(userId);
+        String anonymousExperimentsLog = getCookieValue("_wixAB3");
         UserInfoType userInfoType = UserInfoTypeFactory.make(null);
-
         DateTime userCreationDate = null; //todo
         String email = null; //todo
-        String anonymousExperimentsLog = anonymousExperimentsLog();
-        boolean isRecurring = false;  //todo
+        boolean isRecurringUser = clientId != null || userId != null;
+
         Map<String, String> experimentOverrides = new HashMap<String, String>(); //todo
+
         return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, userInfoType, language, country,
-                userCreationDate, email, anonymousExperimentsLog, isRecurring, experimentOverrides, isRobot, host);
+                userCreationDate, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host);
     }
 
-    private String anonymousExperimentsLog() {
-        final Cookie laboratoryCookie = WebUtils.getCookie(request, "_wixAB3");
-        return laboratoryCookie == null ? "" : laboratoryCookie.getValue();
+    private UUID getClientId() {
+        String clientId = getCookieValue("laboratory_client_id");
+        return clientId.equals("") ? null : UUID.fromString(clientId);
+    }
+
+    private UUID getUserId() {
+        String userId = getCookieValue("laboratory_user_id");
+        return userId.equals("") ? null : UUID.fromString(userId);
+    }
+
+    private String getExperimentsLog(UUID userId) {
+        if (userId != null)
+            return getCookieValue("_wixAB3|" + userId.toString());
+        else return "";
+    }
+
+    private String getCookieValue(String key) {
+        final Cookie cookie = WebUtils.getCookie(request,key);
+        return cookie == null ? "" : cookie.getValue();
     }
 
     private String sanitizeString(String someString) {
