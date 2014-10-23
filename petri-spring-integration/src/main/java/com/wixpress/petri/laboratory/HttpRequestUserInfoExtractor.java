@@ -20,6 +20,7 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
 
     private final HttpServletRequest request;
     private final HostResolver hostResolver;
+    //private final LaboratoryRequestOverrideDecoder requestOverrideDecoder = new LaboratoryRequestOverrideDecoder();
 
     public HttpRequestUserInfoExtractor(HttpServletRequest request, HostResolver hostResolver) {
         this.request = request;
@@ -42,23 +43,18 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         String language = request.getLocale().getLanguage();
         String country = getCountry();
         UUID userId = getUserId();
-        UUID clientId = getClientId();
+        UUID clientId = null;
+        boolean isRecurringUser = clientId != null;
         String experimentsLog = getExperimentsLog(userId);
         String anonymousExperimentsLog = getCookieValue("_wixAB3");
         UserInfoType userInfoType = UserInfoTypeFactory.make(null);
+        Map<String, String> experimentOverrides = new HashMap<String, String>(); //todo
+
         DateTime userCreationDate = null; //todo
         String email = null; //todo
-        boolean isRecurringUser = clientId != null || userId != null;
-
-        Map<String, String> experimentOverrides = new HashMap<String, String>(); //todo
 
         return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, userInfoType, language, country,
                 userCreationDate, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host);
-    }
-
-    private UUID getClientId() {
-        String clientId = getCookieValue("laboratory_client_id");
-        return clientId.equals("") ? null : UUID.fromString(clientId);
     }
 
     private UUID getUserId() {

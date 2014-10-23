@@ -207,17 +207,6 @@ public class UserInfoExtractorIT {
     }
 
     @Test
-    public void extractsClientIdFromUserInfo() throws Exception {
-        String clientId = "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
-        String labClientIdCookie = "laboratory_client_id="+clientId;
-        Map<String, Object> userInfo =
-                extractUserInfoWithProperties(
-                        aPropertyList().withPair("Cookie", labClientIdCookie).build());
-
-        assertWithDefaultValueForProperty(userInfo, "clientId", clientId, null);
-    }
-
-    @Test
     public void extractsExperimentsLogFromUserInfo() throws Exception {
         String userId = "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
         String experimentsLog = "1#2";
@@ -232,13 +221,7 @@ public class UserInfoExtractorIT {
 
     @Test
     public void extractsIsRecurringFromUserInfo() throws Exception {
-        String userId = "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
-        String labUserIdCookie = "laboratory_user_id="+userId;
-
-        Map<String, Object> userInfo =
-                extractUserInfoWithProperties(
-                        aPropertyList().withPair("Cookie", labUserIdCookie).build());
-
-        assertWithDefaultValueForProperty(userInfo, "isRecurringUser", true, false);
+        Map<String, Object> userInfo = extractUserInfoWithProperties(NO_PROPERTIES);
+        assertThat(userInfo.toString(),userInfo.get("isRecurringUser"), CoreMatchers.<Object>is(false));
     }
 }
