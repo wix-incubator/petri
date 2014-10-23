@@ -4,7 +4,10 @@ import com.wixpress.petri.experiments.domain.*;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.UUID;
 
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf;
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.anExperimentSnapshot;
@@ -52,18 +55,32 @@ public class LaboratoryIT {
     }
 
     private void updateExperimentState(final TestGroup... testGroups) {
-        petri.updateExperiment(aCopyOf(originalExperiment).withExperimentSnapshot(
+        final ExperimentBuilder experimentBuilder = aCopyOf(originalExperiment).withExperimentSnapshot(
                 snapshotWithGroups(testGroups).build()
-        ));
+        );
+        petri.updateExperiment(experimentBuilder);
+        originalExperiment = experimentBuilder.build();
+    }
+
+    private void updateExperimentState(boolean forLoggedInUsersOnly) {
+        final ExperimentBuilder experimentBuilder = aCopyOf(originalExperiment).withExperimentSnapshot(
+                snapshotWithGroups(originalExperiment.getGroups().toArray(new TestGroup[0]))
+                        .withOnlyForLoggedInUsers(forLoggedInUsersOnly).build()
+        );
+        petri.updateExperiment(experimentBuilder);
+        originalExperiment = experimentBuilder.build();
     }
 
     private ExperimentSnapshotBuilder snapshotWithGroups(final TestGroup... testGroups) {
+        return anActiveSnapshot().
+                withGroups(asList(testGroups)).withOnlyForLoggedInUsers(false);
+    }
+
+    private ExperimentSnapshotBuilder anActiveSnapshot() {
         return anExperimentSnapshot().
                 withStartDate(now.minusMinutes(1)).
                 withEndDate(now.plusYears(1)).
-                withKey(THE_KEY).
-                withGroups(asList(testGroups)).
-                withOnlyForLoggedInUsers(false);
+                withKey(THE_KEY);
     }
 
     @Test
@@ -84,5 +101,22 @@ public class LaboratoryIT {
         assertThat(sampleApp.conductExperiment(THE_KEY, "FALLBACK"), is("a"));
     }
 
+    @Test
+    @Ignore("Fix HttpRequestUserInfoExtractor to pass this test")
+    public void experimentsResultsArePreservedAcrossDifferentRequestsForRegisteredUsers() throws Exception {
+
+        final boolean forLoggedInUsersOnly = true;
+        updateExperimentState(forLoggedInUsersOnly);
+
+        // this causes the experiment to be persisted
+        final UUID uuid = UUID.randomUUID();
+        sampleApp.conductExperimentByUser(THE_KEY, "FALLBACK", uuid);
+
+        // flip the toggle so that group 'b' is now the winning group
+        updateExperimentState(new TestGroup(0, 0, "a"), new TestGroup(1, 100, "b"));
+        updateExperimentState(forLoggedInUsersOnly);
+
+        assertThat(sampleApp.conductExperimentByUser(THE_KEY, "FALLBACK", uuid), is("a"));
+    }
 
 }

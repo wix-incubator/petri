@@ -38,6 +38,7 @@ import static org.junit.Assert.assertThat;
  * Time: 6:45 PM
  */
 
+
 public class UserInfoExtractorIT {
 
     private static final SampleAppRunner testAppRunner = new SampleAppRunner(9002);

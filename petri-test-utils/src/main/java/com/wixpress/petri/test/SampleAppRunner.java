@@ -8,6 +8,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.UUID;
 
 /**
 * Created with IntelliJ IDEA.
@@ -52,4 +53,17 @@ public class SampleAppRunner {
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
 
+    // TODO: Remove duplication
+    public String conductExperimentByUser(String key, String fallback, UUID uuid) throws IOException {
+        String uri = "http://localhost:" +
+                port +
+                "/conductExperiment?key=" +
+                key +
+                "&fallback=" +
+                fallback;
+        HttpGet request  = new HttpGet(uri);
+        request.addHeader("laboratory_user_id",uuid.toString());
+        HttpResponse response = client.execute(request);
+        return EntityUtils.toString(response.getEntity(), "UTF-8");
+    }
 }

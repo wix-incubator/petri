@@ -4,7 +4,6 @@ import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.UserInfoStorage;
 
 import javax.servlet.*;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.ByteArrayOutputStream;
@@ -45,6 +44,8 @@ public class LaboratoryFilter implements Filter {
         }
     }
 
+
+
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final PrintWriter pw = new PrintWriter(baos);
@@ -54,9 +55,16 @@ public class LaboratoryFilter implements Filter {
         chain.doFilter(req, response);
         final UserInfo ui = storage.read();
 
-        Cookie cookie = CookieMaker.makeAnonymousCookie(ui.anonymousExperimentsLog);
+//        Cookie cookie = CookieMaker.makeAnonymousCookie(ui.anonymousExperimentsLog);
+//        Cookie cookie2 = CookieMaker.makeUserCookie(ui.experimentsLog,ui.getUserId());
+//
+//        response.addCookie(cookie);
+//        response.addCookie(cookie2);
 
-        response.addCookie(cookie);
+        // TODO: While the above solution passes the new ignored test in LaboratoryIT it is partial.
+        // use this instead:
+
+        ui.saveExperimentState(new CookieExperimentStateStorage(response));
         resp.getOutputStream().write(baos.toByteArray());
     }
 
