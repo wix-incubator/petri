@@ -12,10 +12,22 @@ import javax.servlet.http.Cookie;
 public class CookieMaker {
 
     private static final String ANONYMOUS_COOKIE_NAME = "_wixAB3";
+    private static final int SIX_MONTHS_IN_SECONDS = 6 * 30 * 24 * 60 * 60;
+    public static final int COOKIE_AGE = SIX_MONTHS_IN_SECONDS;
 
     public static Cookie makeAnonymousCookie(String anonymousExperimentsLog) {
-        // TODO: add specific unit tests that drive storing both anonymous and user experiments logs.
-        // TODO: check that cookie age is 6 months and path is "/"
-        return new Cookie(ANONYMOUS_COOKIE_NAME, anonymousExperimentsLog);
+        return createPetriCookie(ANONYMOUS_COOKIE_NAME, anonymousExperimentsLog);
     }
+
+    public static Cookie makeUserCookie(String usersExperimentsLog, String userId) {
+        return createPetriCookie(ANONYMOUS_COOKIE_NAME + "|" + userId, usersExperimentsLog);
+    }
+
+    private static Cookie createPetriCookie(String name, String value) {
+        final Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(COOKIE_AGE);
+        cookie.setPath("/");
+        return cookie;
+    }
+
 }
