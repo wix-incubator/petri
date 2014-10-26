@@ -11,3 +11,7 @@ Feature toggles can be used to control inner implementation details, thus enabli
 Petri allows you to define filters that determine what users will be included in the experiment (by language, geo, user-agent, for individual users and more).
 
 Want to learn more? Have a look at the [quickstart guide](https://github.com/wix/petri/wiki/Quickstart-Guide) or browse our [wiki](https://github.com/wix/petri/wiki/PETRI)
+
+
+
+Copyright (c) 2014 Wix.com Ltd. All Rights Reserved. Use of this source code is governed by a BSD-style license that can be found in the LICENSE file in the root of the source tree.
