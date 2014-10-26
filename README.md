@@ -5,13 +5,21 @@ Wix's holistic experiment system - covers the lifecycle of product experimenting
 
 Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of daily changes (instantly affecting production).  
 
-A/B tests can be used to affect the experience users receive, thus enabling our product to know what our users prefer.
-Feature toggles can be used to control inner implementation details, thus enabling our devs to gradually roll out features and sleep well at nights.  
+### Main features
+* A/B tests can be used to affect the experience users receive - thus enabling product managers to know what users prefer.
+* Feature toggles can be used to control inner implementation details - thus enabling developers to gradually roll out features.  
+* Petri allows you to define filters that determine what users will be included in the experiment (by language, geo, user-agent, for individual users and more).
 
-Petri allows you to define filters that determine what users will be included in the experiment (by language, geo, user-agent, for individual users and more).
+### Getting started
+* [Install Petri server + DB](https://github.com/wix/petri/wiki/Installing-Petri-Server)
+* [Integrate Laboratory (petri client) into your app](https://github.com/wix/petri/wiki/Integrating-Petri-into-your-app)
 
-Want to learn more? Have a look at the [quickstart guide](https://github.com/wix/petri/wiki/Quickstart-Guide) or browse our [wiki](https://github.com/wix/petri/wiki/PETRI)
 
+### Want to learn more? 
+Have a look at the [quickstart guide](https://github.com/wix/petri/wiki/Quickstart-Guide) or browse our [wiki](https://github.com/wix/petri/wiki/PETRI) for advanced topics and general A/B testing topics.
 
+</br>
+
+### License
 
 Copyright (c) 2014 Wix.com Ltd. All Rights Reserved. Use of this source code is governed by a BSD-style license that can be found in the LICENSE file in the root of the source tree.
