@@ -68,7 +68,6 @@ public class UserInfoExtractorIT {
         assertThat(userInfo.get("anonymous"), CoreMatchers.<Object>is(true));
     }
 
-
     @Test
     public void extractsExperimentsLogFromAnonymousCookie() throws Exception {
         String experimentsLog = "1#2";
@@ -78,7 +77,6 @@ public class UserInfoExtractorIT {
 
         assertThat(userInfo.toString(), userInfo.get("anonymousExperimentsLog"), CoreMatchers.<Object>is(experimentsLog));
     }
-
 
     @Test
     public void extractsEmptyExperimentLogsByDefault() throws Exception {

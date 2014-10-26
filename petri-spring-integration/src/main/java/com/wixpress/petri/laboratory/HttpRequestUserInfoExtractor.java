@@ -45,11 +45,15 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         UUID userId = getUserId();
         UUID clientId = null;
         boolean isRecurringUser = clientId != null;
-        String experimentsLog = getExperimentsLog(userId);
         String anonymousExperimentsLog = getCookieValue("_wixAB3");
-        UserInfoType userInfoType = UserInfoTypeFactory.make(null); //todo check regualr file
+        UserInfoType userInfoType = UserInfoTypeFactory.make(userId);
         Map<String, String> experimentOverrides =
                 experimentOverridesUrlDecoder.decode(request.getParameter(EXPERIMENTS_OVERRIDE_REQUEST_PARAM));
+
+        String experimentsLog = "";
+        if (!userInfoType.isAnonymous()) {
+            experimentsLog = getExperimentsLog(userId);
+        }
 
         DateTime userCreationDate = null; //todo
         String email = null; //todo
@@ -64,9 +68,10 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
     }
 
     private String getExperimentsLog(UUID userId) {
-        if (userId != null)
+        if (userId != null) {
             return getCookieValue("_wixAB3|" + userId.toString());
-        else return "";
+        }
+        return "";
     }
 
     private String getCookieValue(String key) {
