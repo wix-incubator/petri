@@ -7,7 +7,6 @@ import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,13 +17,14 @@ import java.util.UUID;
  */
 public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
 
+    private final String EXPERIMENTS_OVERRIDE_REQUEST_PARAM = "petri_ovr";
+    private final String USER_ID_REQUEST_PARAM = "laboratory_user_id";
     private final HttpServletRequest request;
     private final HostResolver hostResolver;
-    //private final LaboratoryRequestOverrideDecoder requestOverrideDecoder = new LaboratoryRequestOverrideDecoder();
+    private final ExperimentOverridesUrlDecoder experimentOverridesUrlDecoder = new ExperimentOverridesUrlDecoder();
 
     public HttpRequestUserInfoExtractor(HttpServletRequest request, HostResolver hostResolver) {
         this.request = request;
-
         this.hostResolver = hostResolver;
     }
 
@@ -47,8 +47,9 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         boolean isRecurringUser = clientId != null;
         String experimentsLog = getExperimentsLog(userId);
         String anonymousExperimentsLog = getCookieValue("_wixAB3");
-        UserInfoType userInfoType = UserInfoTypeFactory.make(null);
-        Map<String, String> experimentOverrides = new HashMap<String, String>(); //todo
+        UserInfoType userInfoType = UserInfoTypeFactory.make(null); //todo check regualr file
+        Map<String, String> experimentOverrides =
+                experimentOverridesUrlDecoder.decode(request.getParameter(EXPERIMENTS_OVERRIDE_REQUEST_PARAM));
 
         DateTime userCreationDate = null; //todo
         String email = null; //todo
@@ -58,8 +59,8 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
     }
 
     private UUID getUserId() {
-        String userId = getCookieValue("laboratory_user_id");
-        return userId.equals("") ? null : UUID.fromString(userId);
+        String userId = request.getParameter(USER_ID_REQUEST_PARAM);
+        return userId == null ? null : UUID.fromString(userId);
     }
 
     private String getExperimentsLog(UUID userId) {
