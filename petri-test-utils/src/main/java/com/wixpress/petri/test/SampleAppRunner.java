@@ -59,10 +59,11 @@ public class SampleAppRunner {
                 port +
                 "/conductExperiment?key=" +
                 key +
+                "&laboratory_user_id=" +
+                uuid.toString() +
                 "&fallback=" +
                 fallback;
         HttpGet request  = new HttpGet(uri);
-        request.addHeader("laboratory_user_id",uuid.toString());
         HttpResponse response = client.execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }

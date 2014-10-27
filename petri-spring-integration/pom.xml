@@ -13,7 +13,7 @@
 
 
     <properties>
-        <spring.version>4.0.5.RELEASE</spring.version>
+        <spring.version>4.1.1.RELEASE</spring.version>
         <com.fasterxml.jackson.default.version>2.2.3</com.fasterxml.jackson.default.version>
     </properties>
 

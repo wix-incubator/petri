@@ -102,7 +102,6 @@ public class LaboratoryIT {
     }
 
     @Test
-    @Ignore("Fix HttpRequestUserInfoExtractor to pass this test")
     public void experimentsResultsArePreservedAcrossDifferentRequestsForRegisteredUsers() throws Exception {
 
         final boolean forLoggedInUsersOnly = true;
