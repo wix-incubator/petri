@@ -74,6 +74,7 @@
             <artifactId>wix-petri-core</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
+            <version>1.19.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
