@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <artifactId>wix-war-parent-ng</artifactId>
+        <artifactId>wix-petri</artifactId>
         <groupId>com.wixpress.common</groupId>
-        <version>100.0.0-SNAPSHOT</version>
+        <version>1.19.0-SNAPSHOT</version>
     </parent>
 
     <developers>
@@ -33,14 +33,11 @@
     <name>Wix Petri Server</name>
     <version>1.19.0-SNAPSHOT</version>
 
-    <properties>
-        <spring.version>4.0.5.RELEASE</spring.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.wixpress.common</groupId>
             <artifactId>wix-petri-core</artifactId>
+            <version>1.19.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -59,28 +56,28 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
+            <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
+            <version>${org.springframework.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
+            <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
+            <version>${org.springframework.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>${spring.version}</version>
+            <version>${org.springframework.version}</version>
         </dependency>
 
         <dependency>
@@ -122,17 +119,20 @@
             <artifactId>wix-petri-core</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
+            <version>1.19.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.natpryce</groupId>
             <artifactId>make-it-easy</artifactId>
+            <version>${make-it-easy-version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
+            <version>${jmock-version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -146,14 +146,90 @@
     </dependencies>
 
     <build>
+        <!-- TODO - complete duplication of petri-core pom. extract build plugins to parent pom! -->
         <plugins>
-            <!--<plugin>-->
-                <!--<artifactId>maven-war-plugin</artifactId>-->
-                <!--<version>2.1.1</version>-->
-                <!--<configuration>-->
-                    <!--<attachClasses>true</attachClasses>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <additionalClasspathElements>
+                        <additionalClasspathElement>src/it/java</additionalClasspathElement>
+                    </additionalClasspathElements>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9</version>
+                <executions>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/it/java</source>
+                                <source>src/it/scala</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>${scala-maven-plugin.version}</version>
+                <configuration>
+                    <args>
+                        <arg>-unchecked</arg>
+                        <arg>-deprecation</arg>
+                    </args>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <recompileMode>incremental</recompileMode>
+                    <scalaCompatVersion>${scala.dependencies.version}</scalaCompatVersion>
+                    <addJavacArgs>-deprecation</addJavacArgs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
