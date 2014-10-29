@@ -50,10 +50,10 @@ public class PetriConfigFile {
     public void save() throws ConfigurationException, IOException {
         properties.createNewFile();
         PropertiesConfiguration config = new PropertiesConfiguration(properties);
-        config.setProperty("username", username);
-        config.setProperty("password", password);
-        config.setProperty("url", url);
-        config.setProperty("port", port);
+        config.setProperty("db.username", username);
+        config.setProperty("db.password", password);
+        config.setProperty("db.url", url);
+        config.setProperty("server.port", port);
         config.save();
     }
 

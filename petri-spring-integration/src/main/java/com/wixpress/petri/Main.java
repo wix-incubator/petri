@@ -26,13 +26,13 @@ public class Main {
     }
 
     private static int port(PropertiesConfiguration config) {
-        return config.getInt("port");
+        return config.getInt("server.port");
     }
 
     private static DBConfig dbConfig(PropertiesConfiguration config) {
-        final String username =  config.getString("username");
-        final String password = config.getString("password");
-        final String url = config.getString("url");
+        final String username =  config.getString("db.username");
+        final String password = config.getString("db.password");
+        final String url = config.getString("db.url");
         return makeDBConfig(username, password, url);
     }
 
