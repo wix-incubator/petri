@@ -55,15 +55,6 @@ public class LaboratoryFilter implements Filter {
         chain.doFilter(req, response);
         final UserInfo ui = storage.read();
 
-//        Cookie cookie = CookieMaker.makeAnonymousCookie(ui.anonymousExperimentsLog);
-//        Cookie cookie2 = CookieMaker.makeUserCookie(ui.experimentsLog,ui.getUserId());
-//
-//        response.addCookie(cookie);
-//        response.addCookie(cookie2);
-
-        // TODO: While the above solution passes the new ignored test in LaboratoryIT it is partial.
-        // use this instead:
-
         ui.saveExperimentState(new CookieExperimentStateStorage(response));
         resp.getOutputStream().write(baos.toByteArray());
     }
