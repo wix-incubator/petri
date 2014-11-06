@@ -33,4 +33,10 @@ public class SampleAppController {
         return laboratory.conductExperiment(key, fallback, new StringConverter());
     }
 
+    @RequestMapping(value = "/conductExperimentWithSpecDefinition", method = RequestMethod.GET)
+    @ResponseBody
+    public String conductExperimentWithSpecDefinition( @RequestParam("fallback") String fallback) throws ClassNotFoundException {
+        return laboratory.conductExperiment(TestSpecDefinition.class, fallback, new StringConverter());
+    }
+
 }
