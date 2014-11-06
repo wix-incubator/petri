@@ -1,9 +1,13 @@
 package com.wixpress.petri.laboratory.http;
 
+import com.wixpress.petri.experiments.domain.HostResolver;
+import com.wixpress.petri.laboratory.HttpRequestUserInfoExtractor;
+import com.wixpress.petri.laboratory.RequestScopedUserInfoStorage;
 import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.UserInfoStorage;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.ByteArrayOutputStream;
@@ -19,10 +23,9 @@ import java.io.PrintWriter;
  */
 public class LaboratoryFilter implements Filter {
 
-    private final UserInfoStorage storage;
+    public static final String PETRI_USER_INFO_STORAGE = "petri_userInfoStorage";
 
-    public LaboratoryFilter(UserInfoStorage storage) {
-        this.storage = storage;
+    public LaboratoryFilter() {
     }
 
     public void destroy() {
@@ -45,16 +48,20 @@ public class LaboratoryFilter implements Filter {
     }
 
 
-
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+
+        HttpServletRequest httpServletRequest = (HttpServletRequest) req;
+        UserInfoStorage storage = new RequestScopedUserInfoStorage(
+                new HttpRequestUserInfoExtractor(
+                        httpServletRequest, new HostResolver()));
+        httpServletRequest.getSession(true).setAttribute(PETRI_USER_INFO_STORAGE, storage);
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final PrintWriter pw = new PrintWriter(baos);
+        final HttpServletResponseWrapper response = new CachingHttpResponse(resp, new ByteArrayServletStream(baos), new PrintWriter(baos));
 
-        final ServletOutputStream sos = new ByteArrayServletStream(baos);
-        final HttpServletResponseWrapper response = new CachingHttpResponse(resp, sos, pw);
         chain.doFilter(req, response);
-        final UserInfo ui = storage.read();
 
+        final UserInfo ui = storage.read();
         ui.saveExperimentState(new CookieExperimentStateStorage(response));
         resp.getOutputStream().write(baos.toByteArray());
     }

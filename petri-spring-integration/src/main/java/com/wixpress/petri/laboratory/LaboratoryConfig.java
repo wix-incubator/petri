@@ -1,16 +1,18 @@
 package com.wixpress.petri.laboratory;
 
-import com.wixpress.petri.experiments.domain.HostResolver;
-import com.wixpress.petri.laboratory.http.LaboratoryFilter;
 import com.wixpress.petri.petri.JodaTimeClock;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 
-import javax.servlet.Filter;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.net.MalformedURLException;
+
+import static com.wixpress.petri.laboratory.http.LaboratoryFilter.PETRI_USER_INFO_STORAGE;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,19 +52,8 @@ public class LaboratoryConfig {
 
     @Bean
     @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public UserInfoStorage requestScopedUserInfoStorage(UserInfoExtractor extractor) {
-        return new RequestScopedUserInfoStorage(extractor);
-    }
-
-    @Bean
-    @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public UserInfoExtractor userInfoExtractor(HttpServletRequest request) {
-        return new HttpRequestUserInfoExtractor(request, new HostResolver());
-    }
-
-    @Bean
-    public Filter laboratoryFilter(UserInfoStorage storage) {
-        return new LaboratoryFilter(storage);
+    public UserInfoStorage requestScopedUserInfoStorage(HttpSession session) {
+        return (UserInfoStorage) session.getAttribute(PETRI_USER_INFO_STORAGE);
     }
 
 }

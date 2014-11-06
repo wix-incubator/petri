@@ -2,9 +2,8 @@ package com.wixpress.petri;
 
 import com.wixpress.petri.laboratory.Laboratory;
 import com.wixpress.petri.laboratory.UserInfo;
-import com.wixpress.petri.laboratory.UserInfoExtractor;
+import com.wixpress.petri.laboratory.UserInfoStorage;
 import com.wixpress.petri.laboratory.converters.StringConverter;
-import com.wixpress.petri.petri.SpecDefinition;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,7 @@ import javax.annotation.Resource;
 public class TestAppController {
 
     @Resource
-    private UserInfoExtractor uiExtractor;
+    private UserInfoStorage uiStorage;
 
     @Resource
     private Laboratory laboratory;
@@ -32,8 +31,7 @@ public class TestAppController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public UserInfo extractUserInfo() {
-        final UserInfo extract = uiExtractor.extract();
-        return extract;
+        return uiStorage.read();
     }
 
     @RequestMapping(value = "/conductExperiment", method = RequestMethod.GET)
