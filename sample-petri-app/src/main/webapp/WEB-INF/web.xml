@@ -24,6 +24,10 @@
     <filter>
         <filter-name>laboratoryFilter</filter-name>
         <filter-class>com.wixpress.petri.laboratory.http.LaboratoryFilter</filter-class>
+        <init-param>
+            <param-name>laboratoryConfig</param-name>
+            <param-value>/WEB-INF/laboratory.properties</param-value>
+        </init-param>
     </filter>
 
     <filter-mapping>

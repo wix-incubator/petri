@@ -14,7 +14,7 @@ import java.util.List;
 * Time: 12:17 PM
 * To change this template use File | Settings | File Templates.
 */
-class PetriClientExperimentSource implements CachedExperiments.ExperimentsSource {
+public class PetriClientExperimentSource implements CachedExperiments.ExperimentsSource {
     private final PetriClient petriProxy;
 
     public PetriClientExperimentSource(String petriUrl) throws MalformedURLException {
