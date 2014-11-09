@@ -16,7 +16,7 @@ public class UserInfo implements TestGroupDrawer {
 
     public static UserInfo userInfoFromNullRequest(String host) {
         return new UserInfo("", (UUID) null, null, "", "", "",
-                new NullUserInfoType(), "", "", BEGINNING_OF_TIME, "", "", false, new HashMap<String, String>(), false, host);
+                new NullUserInfoType(), "", "", BEGINNING_OF_TIME, "", "", false, new HashMap<String, String>(), false, host, null);
     }
 
     public final String experimentsLog;
@@ -35,8 +35,9 @@ public class UserInfo implements TestGroupDrawer {
     public final Map<String, String> experimentOverrides;
     public final boolean isRobot;
     public final String host;
+    public final BrowserVersion browserVersion;
 
-    public UserInfo(String experimentsLog, UUID userId, UUID clientId, String ip, String url, String userAgent, UserInfoType type, String language, String country, DateTime dateCreated, String email, String anonymousExperimentsLog, boolean isRecurringUser, Map<String, String> experimentOverrides, boolean robot, String host) {
+    public UserInfo(String experimentsLog, UUID userId, UUID clientId, String ip, String url, String userAgent, UserInfoType type, String language, String country, DateTime dateCreated, String email, String anonymousExperimentsLog, boolean isRecurringUser, Map<String, String> experimentOverrides, boolean robot, String host, BrowserVersion browserVersion) {
         this.experimentsLog = experimentsLog;
         this.userId = userId;
         this.type = type;
@@ -53,6 +54,7 @@ public class UserInfo implements TestGroupDrawer {
         this.experimentOverrides = experimentOverrides;
         this.isRobot = robot;
         this.host = host;
+        this.browserVersion = browserVersion;
     }
 
 
@@ -99,6 +101,7 @@ public class UserInfo implements TestGroupDrawer {
         if (getUserId() != null ? !getUserId().equals(userInfo.getUserId()) : userInfo.getUserId() != null)
             return false;
         if (host != null ? !host.equals(userInfo.host) : userInfo.host != null) return false;
+        if (browserVersion != null ? !browserVersion.equals(userInfo.browserVersion) : userInfo.browserVersion != null) return false;
 
         return true;
     }
@@ -120,15 +123,16 @@ public class UserInfo implements TestGroupDrawer {
         result = 31 * result + (isRobot ? 1 : 0);
         result = 31 * result + (experimentOverrides != null ? experimentOverrides.hashCode() : 0);
         result = 31 * result + (host != null ? host.hashCode() : 0);
+        result = 31 * result + (browserVersion != null ? browserVersion.hashCode() : 0);
         return result;
     }
 
     public UserInfo setExperiments(ExperimentsLog experiments) {
-        return new UserInfo(experiments.serialized(), getUserId(), clientId, ip, url, userAgent, type, language, country, dateCreated, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host);
+        return new UserInfo(experiments.serialized(), getUserId(), clientId, ip, url, userAgent, type, language, country, dateCreated, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host, browserVersion);
     }
 
     public UserInfo setAnonymousExperiments(ExperimentsLog experiments) {
-        return new UserInfo(experimentsLog, getUserId(), clientId, ip, url, userAgent, type, language, country, dateCreated, email, experiments.serialized(), isRecurringUser, experimentOverrides, isRobot, host);
+        return new UserInfo(experimentsLog, getUserId(), clientId, ip, url, userAgent, type, language, country, dateCreated, email, experiments.serialized(), isRecurringUser, experimentOverrides, isRobot, host, browserVersion);
     }
 
     public String getStorageKey() {

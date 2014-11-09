@@ -5,6 +5,7 @@ import com.wixpress.petri.JsonRPCServer;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentBuilder;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
+import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.RAMPetriClient;
 import com.wixpress.petri.petri.SpecDefinition;
@@ -22,10 +23,10 @@ import static java.util.Arrays.asList;
 public class FakePetriServer {
     private final JsonRPCServer petriServer;
     private final int port;
-    private PetriClient petriClient;
+    private FullPetriClient petriClient;
 
     public FakePetriServer(int port){
-        petriServer = new JsonRPCServer(new RAMPetriClient(), makeObjectMapper(), port, PetriClient.class);
+        petriServer = new JsonRPCServer(new RAMPetriClient(), makeObjectMapper(), port, FullPetriClient.class);
         this.port = port;
     }
 

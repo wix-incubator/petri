@@ -7,7 +7,6 @@ import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.joda.time.DateTime;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,11 +53,6 @@ public class JdbcExperimentsDao_FetchInIntervalIT {
         JdbcExperimentsDaoDriver daoDriver = new JdbcExperimentsDaoDriver(dao, dbDriver, objectMapper);
 
         addNewlyCreatedExperiment(daoDriver);
-    }
-
-    @After
-    public void closeConnection() throws SQLException {
-        dbDriver.closeConnection();
     }
 
     private void addNewlyCreatedExperiment(JdbcExperimentsDaoDriver daoDriver) throws JsonProcessingException {

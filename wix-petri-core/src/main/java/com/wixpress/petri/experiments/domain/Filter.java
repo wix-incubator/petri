@@ -15,6 +15,6 @@ import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 //!!! when creating new filter type add it in FilterTypeIdResolver !!!
 
 public interface Filter {
-    boolean isEligible(FilterEligibility filterEligibility);
+    boolean isEligible(EligibilityCriteria eligibilityCriteria);
 
 }

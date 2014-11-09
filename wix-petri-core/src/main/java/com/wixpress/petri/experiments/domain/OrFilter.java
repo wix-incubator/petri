@@ -19,8 +19,8 @@ public class OrFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return any(filters, isEligibleFor(filterEligibility));
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return any(filters, isEligibleFor(eligibilityCriteria));
     }
 
 }

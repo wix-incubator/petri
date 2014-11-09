@@ -4,8 +4,7 @@ import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.mock.Mockito
 import com.wixpress.petri.petri.SpecDefinition
 import org.specs2.specification.Scope
-import com.wixpress.petri.laboratory.laboratory.ExperimentOutcome.UndefinedFallback
-import com.wixpress.petri.laboratory.laboratory._
+import com.wixpress.petri.laboratory.ExperimentOutcome.UndefinedFallback
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +16,7 @@ class RichLaboratoryTest extends SpecificationWithJUnit with Mockito {
   trait ctx extends Scope {
     val laboratory = mock[Laboratory]
 
-    laboratory.conductExperiment(===(classOf[MySpec]), any[String], any[TestResultConverter[Any]]) answers { (args, _) =>
+    laboratory.conductExperiment(===(classOf[MySpec]), any, any[TestResultConverter[Any]]) answers { (args, _) =>
       val converter = args.asInstanceOf[Array[Any]].apply(2).asInstanceOf[TestResultConverter[Any]]
       converter.convert("777")
     }
@@ -29,7 +28,7 @@ class RichLaboratoryTest extends SpecificationWithJUnit with Mockito {
       laboratory.conductExperiment(classOf[MySpec], 666, (_: String).toInt) === 777
     }
   }
-
+  
   "getOrElse" should {
 
     "return fallback" in new ctx {
@@ -44,16 +43,16 @@ class RichLaboratoryTest extends SpecificationWithJUnit with Mockito {
       laboratory.conduct[MySpec].getOrElse("fallback") must be_===("group")
     }
   }
-
+  
   "fold" should {
 
     "fallback when not defined" in new ctx {
       laboratory.conductExperiment(===(classOf[MySpec]), any) returns "fallback"
-
+      
       val x: Unit => Int = laboratory.conduct[MySpec].fold(1) {
         case "x" => 2
       }
-
+      
       x() must be_===(1)
     }
 

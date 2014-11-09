@@ -23,8 +23,8 @@ public class GeoFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return countries.contains(filterEligibility.getCountry());
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return countries.contains(eligibilityCriteria.getCountry());
     }
 
     @Override

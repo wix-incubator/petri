@@ -3,6 +3,7 @@ package com.wixpress.common.petri.e2e;
 import com.wixpress.petri.Main;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.*;
+import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.test.SampleAppRunner;
 import org.joda.time.DateTime;
@@ -70,7 +71,7 @@ public class PetriE2eTest {
         dbDriver.closeConnection();
     }
 
-    private PetriClient petriClient() throws MalformedURLException {
+    private FullPetriClient petriClient() throws MalformedURLException {
         return PetriRPCClient.makeFor("http://localhost:" +
                 PETRI_PORT +
                 "/petri/api");
@@ -80,7 +81,7 @@ public class PetriE2eTest {
     @Test
     public void conductingASimpleExperiment() throws Exception {
 
-        PetriClient petriClient = petriClient();
+        FullPetriClient petriClient = petriClient();
         petriClient.addSpecs(asList(
                 aNewlyGeneratedExperimentSpec("THE_KEY").
                     withTestGroups(asList("a", "b")).

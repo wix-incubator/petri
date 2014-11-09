@@ -8,8 +8,8 @@ import com.wixpress.petri.laboratory.UserInfo;
  */
 public class FilterTestUtils {
 
-    public static FilterEligibility defaultFilterEligibilityForUser(UserInfo userInfo) {
-        return new FilterEligibility(userInfo, new EligibilityFields(), null);
+    public static EligibilityCriteria defaultEligibilityCriteriaForUser(UserInfo userInfo) {
+        return new EligibilityCriteria(userInfo, new AdditionalEligibilityCriteria(), null);
     }
 
 }

@@ -2,6 +2,7 @@ package com.wixpress.petri.laboratory;
 
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.Experiment;
+import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 
 import java.net.MalformedURLException;
@@ -15,7 +16,7 @@ import java.util.List;
 * To change this template use File | Settings | File Templates.
 */
 public class PetriClientExperimentSource implements CachedExperiments.ExperimentsSource {
-    private final PetriClient petriProxy;
+    private final FullPetriClient petriProxy;
 
     public PetriClientExperimentSource(String petriUrl) throws MalformedURLException {
         this.petriProxy = PetriRPCClient.makeFor(petriUrl);

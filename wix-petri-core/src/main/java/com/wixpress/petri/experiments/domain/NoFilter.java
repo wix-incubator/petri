@@ -9,7 +9,7 @@ package com.wixpress.petri.experiments.domain;
  */
 public class NoFilter implements Filter {
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
         return true;
     }
 }

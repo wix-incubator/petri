@@ -1,14 +1,14 @@
 package com.wixpress.petri.experiments.domain;
 
 /**
- * @author: talyag
- * @since: 5/25/14
+ * @author talyag
+ * @since 9/9/14
  */
-public class UnrecognizedFilter implements Filter {
+public class AdditionalFilter implements Filter {
 
     @Override
     public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
-        return false;
+        return true;
     }
 
     @Override
@@ -16,10 +16,5 @@ public class UnrecognizedFilter implements Filter {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName();
     }
 }

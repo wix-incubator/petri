@@ -23,7 +23,7 @@ public class RegisteredUsersFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return !filterEligibility.isAnonymous();
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return !eligibilityCriteria.isAnonymous();
     }
 }

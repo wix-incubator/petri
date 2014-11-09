@@ -30,8 +30,8 @@ public class IncludeUserIdsFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return userGuids.contains(filterEligibility.getUserId());
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return userGuids.contains(eligibilityCriteria.getUserId());
     }
 
     @Override

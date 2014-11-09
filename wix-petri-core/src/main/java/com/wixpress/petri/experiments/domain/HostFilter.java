@@ -24,8 +24,8 @@ public class HostFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return hosts.contains(filterEligibility.getHost());
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return hosts.contains(eligibilityCriteria.getHost());
     }
 
     @Override

@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static com.natpryce.makeiteasy.MakeItEasy.a;
+import static com.wixpress.petri.laboratory.dsl.UserInfoMakers.UserInfo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -19,7 +21,7 @@ import static org.junit.Assert.assertThat;
  */
 public class NotFilterTest {
 
-    public static FilterEligibility IRRELEVANT_FITLER_ELGIBILITY = new FilterEligibility(null, null, null);
+    public static EligibilityCriteria IRRELEVANT_FITLER_ELGIBILITY = new EligibilityCriteria(a(UserInfo).make(), new AdditionalEligibilityCriteria(), null);
 
     @Test
     public void shouldReturnFalseIfInternalFilterIsTrue() {

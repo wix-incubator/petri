@@ -20,7 +20,7 @@ import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.id;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.key;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.anExperimentSpec;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -66,7 +66,7 @@ public abstract class PetriClientContractTest {
         return petriClient().updateExperiment(experimentToUpdate);
     }
 
-    protected abstract PetriClient petriClient();
+    protected abstract FullPetriClient petriClient();
 
     @Test
     public void returnsEmptyListWhenNoneDefined() {
@@ -120,20 +120,20 @@ public abstract class PetriClientContractTest {
         assertThat(historyById, is(asList(updatedExperiment, experiment)));
     }
 
-    @Test(expected = PetriClient.CreateFailed.class)
+    @Test(expected = FullPetriClient.CreateFailed.class)
     public void createExperimentWithNonExistingKeyThrowsException() {
         String nonExistingKey = "someKey";
         petriClient().insertExperiment(anActiveSnapshot.withKey(nonExistingKey).build());
     }
 
-    @Test(expected = PetriClient.UpdateFailed.class)
+    @Test(expected = FullPetriClient.UpdateFailed.class)
     public void updateExperimentToNonExistingKeyThrowsException() {
         Experiment experiment = addExperimentWithKey(anActiveSnapshot.withKey("ex1"));
         Experiment mutatedExperiment = aValidExperiment.but(with(key, "ex2"), with(id, experiment.getId())).make();
         petriClient().updateExperiment(mutatedExperiment);
     }
 
-    @Test(expected = PetriClient.UpdateFailed.class)
+    @Test(expected = FullPetriClient.UpdateFailed.class)
     public void updateExperimentWithNonExistingIdThrowsException() {
         SpecDefinition.ExperimentSpecBuilder builder =
                 new SpecDefinition.ExperimentSpecBuilder("ex1", new DateTime()).withTestGroups(asList("1", "2"));
@@ -184,18 +184,15 @@ public abstract class PetriClientContractTest {
     }
 
     @Test
-    public void specKeyIsCaseInsensitive() {
-        ExperimentSpec spec = anExperimentSpec("f.q.n.Spec1", new DateTime()).withTestGroups(asList("yellow", "green")).build();
-        ExperimentSpec duplicateSpec = anExperimentSpec("f.q.n.spec1", new DateTime()).withTestGroups(asList("blue", "green")).build();
+    public void specKeyIsCaseInsensitive() throws InterruptedException {
+        ExperimentSpec spec = anExperimentSpec("allLowerCase", new DateTime()).withTestGroups(asList("yellow", "green")).build();
+        ExperimentSpec duplicateSpec = anExperimentSpec("alllowercase", new DateTime()).withTestGroups(asList("yellow", "green")).build();
 
         petriClient().addSpecs(asList(spec));
         petriClient().addSpecs(asList(duplicateSpec));
 
-        final List<ExperimentSpec> actualSpecs = petriClient().fetchSpecs();
-        assertThat(actualSpecs, hasSize(1));
-        final ExperimentSpec actualSpec = actualSpecs.get(0);
-        assertThat(actualSpec.getKey(), is("f.q.n.spec1"));
-        assertThat(actualSpec.getTestGroups(), is(asList("blue","green")));
+        assertThat(petriClient().fetchSpecs().size(), is(1));
+        assertThat(petriClient().fetchSpecs().get(0).getKey(), is("alllowercase"));
     }
 
     @Test

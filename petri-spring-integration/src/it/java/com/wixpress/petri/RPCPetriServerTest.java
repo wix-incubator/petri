@@ -1,5 +1,6 @@
 package com.wixpress.petri;
 
+import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.PetriClientContractTest;
 import org.junit.*;
@@ -19,7 +20,7 @@ import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
  */
 public class RPCPetriServerTest extends PetriClientContractTest {
 
-    private final PetriClient petriClient;
+    private final FullPetriClient petriClient;
     private static DBDriver dbDriver;
 
     @BeforeClass
@@ -55,7 +56,7 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     }
 
     @Override
-    protected PetriClient petriClient() {
+    protected FullPetriClient petriClient() {
         return petriClient;
     }
 

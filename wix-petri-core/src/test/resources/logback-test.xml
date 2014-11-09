@@ -8,7 +8,7 @@
     </appender>
 
     <appender name="FILE_APPENDER" class="ch.qos.logback.core.FileAppender">
-        <file>bi-events-tests.log</file>
+        <file>target/bi-events-tests.log</file>
         <append>false</append>
         <encoder>
             <pattern>%msg%n</pattern>

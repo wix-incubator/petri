@@ -23,8 +23,8 @@ public class FirstTimeVisitorsOnlyFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return !filterEligibility.isRecurringUser();
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return !eligibilityCriteria.isRecurringUser();
     }
 
 }

@@ -48,7 +48,7 @@ public class JdbcExperimentsDaoIT extends PetriDaoIT<Experiment, ExperimentSnaps
         assertThat(dbDriver.jdbcTemplate.queryForObject("select count(*) from experiments where orig_id=1", Integer.class), is(1));
     }
 
-    @Test(expected = PetriClient.UpdateFailed.class)
+    @Test(expected = FullPetriClient.UpdateFailed.class)
     public void throwsWhenUpdatingWithNonExistingId() throws JsonProcessingException {
         daoDriver.addExperimentWithMatchingSpec(snapshot);  //make sure key does exist
         int nonExisting = 3;
@@ -57,7 +57,7 @@ public class JdbcExperimentsDaoIT extends PetriDaoIT<Experiment, ExperimentSnaps
     }
 
 
-    @Test(expected = PetriClient.CreateFailed.class)
+    @Test(expected = FullPetriClient.CreateFailed.class)
     public void throwsWhenCreateExperimentWithNonExistingKey() {
         dao.add(snapshot);
     }
@@ -67,7 +67,7 @@ public class JdbcExperimentsDaoIT extends PetriDaoIT<Experiment, ExperimentSnaps
         dao.add(experiment.but(with(fromSpec, false)).make().getExperimentSnapshot());
     }
 
-    @Test(expected = PetriClient.UpdateFailed.class)
+    @Test(expected = FullPetriClient.UpdateFailed.class)
     public void throwsWhenUpdateToNonExistingKey() throws JsonProcessingException {
         Experiment persistedExperiment = daoDriver.addExperimentWithMatchingSpec(snapshot);
 
@@ -144,7 +144,7 @@ public class JdbcExperimentsDaoIT extends PetriDaoIT<Experiment, ExperimentSnaps
         assertThat(updateableDao.getHistoryById(persistedWithCopiedOrigId.getId()), is(asList(persistedWithCopiedOrigId, experiment)));
     }
 
-    @Test(expected = PetriClient.UpdateFailed.class)
+    @Test(expected = FullPetriClient.UpdateFailed.class)
     public void throwsWhenUpdatingStaleVersion() throws JsonProcessingException {
         Experiment persistedExperiment = daoDriver.addExperimentWithMatchingSpec(snapshot);
 

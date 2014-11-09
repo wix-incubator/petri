@@ -3,7 +3,7 @@ package com.wixpress.petri.experiments.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Function;
-import com.wixpress.petri.laboratory.ConductContext;
+import com.wixpress.petri.laboratory.ConductionContext;
 import com.wixpress.petri.laboratory.UserInfo;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -179,12 +179,12 @@ public class Experiment {
     }
 
     //TODO - can make this private now (and move its test to the FilterTest)
-    public boolean isEligible(FilterEligibility filterEligibility) {
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
         if (!isValid()) {
             throw new InvalidExperiment(this);
         }
 
-        return theFilter.isEligible(filterEligibility);
+        return theFilter.isEligible(eligibilityCriteria);
     }
 
     // TODO: This can be moved to an ActivationPeriod object with all related members and constants
@@ -222,7 +222,7 @@ public class Experiment {
         return ExperimentBuilder.aCopyOf(this).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(getExperimentSnapshot()).
                                 withPaused(true).
-                        withTrigger(trigger).
+                                withTrigger(trigger).
                                 build()
                 ).build();
     }
@@ -231,7 +231,7 @@ public class Experiment {
         return ExperimentBuilder.aCopyOf(this).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(getExperimentSnapshot()).
                                 withPaused(false).
-                        withTrigger(trigger).
+                                withTrigger(trigger).
                                 build()
                 ).build();
     }
@@ -293,6 +293,11 @@ public class Experiment {
             return terminateAsOf(instant, trigger);
         }
 
+        if (!isPersistent()) {
+            return terminateAsOf(instant, trigger);
+        }
+
+        //TODO - change this method to be 'if (mustRetainExperienceForAnonUsers) then pause' (?)
         return pause(trigger);
     }
 
@@ -304,11 +309,12 @@ public class Experiment {
         return !(tryFind(newFilters, instanceOf(NewUsersFilter.class)).isPresent());
     }
 
-    public Assignment conduct(ConductContext context, UserInfo userInfo) {
+    public Assignment conduct(ConductionContext context, UserInfo userInfo) {
         TestGroup winning = null;
-        FilterEligibility filterEligibility = new FilterEligibility(userInfo, context.eligibilityFields(), getStartDate());
+        EligibilityCriteria eligibilityCriteria = new EligibilityCriteria(
+                userInfo, context.additionalEligibilityCriteria(), getStartDate());
 
-        if (!isPaused() && isEligible(filterEligibility)) {
+        if (!isPaused() && isEligible(eligibilityCriteria)) {
             if (isToggle()) {
                 winning = getTestGroupByChunk(0);
             } else {

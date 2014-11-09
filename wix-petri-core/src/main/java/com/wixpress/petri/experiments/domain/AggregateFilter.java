@@ -26,8 +26,8 @@ public class AggregateFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return aggregate.isEligible(filterEligibility);
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return aggregate.isEligible(eligibilityCriteria);
     }
 
     private Filter aggregate() {

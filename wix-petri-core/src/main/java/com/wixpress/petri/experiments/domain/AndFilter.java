@@ -19,8 +19,8 @@ public class AndFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return all(filters, isEligibleFor(filterEligibility));
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return all(filters, isEligibleFor(eligibilityCriteria));
     }
 
 }

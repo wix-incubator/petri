@@ -22,7 +22,7 @@ public class NewUsersFilterTest {
         NewUsersFilter newUsersFilter = new NewUsersFilter();
         UserInfo oldUserInfo = a(UserInfoMakers.UserInfo).but(with(dateCreated, new DateTime().minusHours(1))).make();
         assertThat(newUsersFilter.isEligible(
-                new FilterEligibility(oldUserInfo, new EligibilityFields(), new DateTime())), is(false));
+                new EligibilityCriteria(oldUserInfo, new AdditionalEligibilityCriteria(), new DateTime())), is(false));
     }
 
     @Test
@@ -30,6 +30,6 @@ public class NewUsersFilterTest {
         NewUsersFilter newUsersFilter = new NewUsersFilter();
         UserInfo newUserInfo = a(UserInfoMakers.UserInfo).make();
         assertThat(newUsersFilter.isEligible(
-                new FilterEligibility(newUserInfo, new EligibilityFields(), new DateTime().minusHours(1))), is(true));
+                new EligibilityCriteria(newUserInfo, new AdditionalEligibilityCriteria(), new DateTime().minusHours(1))), is(true));
     }
 }

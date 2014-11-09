@@ -26,6 +26,7 @@ public class LaboratoryFilter implements Filter {
 
     public static final String PETRI_USER_INFO_STORAGE = "petri_userInfoStorage";
     public static final String PETRI_LABORATORY = "petri_laboratory";
+    private static final int  EXPERIMENT_MAX_TIME_MILLIS = 50;
     private final PetriProperties petriProperties = new PetriProperties();
     private String petriUrl;
 
@@ -69,6 +70,7 @@ public class LaboratoryFilter implements Filter {
         resp.getOutputStream().write(baos.toByteArray());
     }
 
+
     private Laboratory laboratory(String petriUrl, UserInfoStorage storage) throws MalformedURLException {
         Experiments experiments = new CachedExperiments(new PetriClientExperimentSource(petriUrl));
         TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
@@ -78,7 +80,7 @@ public class LaboratoryFilter implements Filter {
                 cause.printStackTrace();
             }
         };
-        return new TrackableLaboratory(experiments, tracker, storage, errorHandler);
+        return new TrackableLaboratory(experiments, tracker, storage, errorHandler, 50);
     }
 
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {

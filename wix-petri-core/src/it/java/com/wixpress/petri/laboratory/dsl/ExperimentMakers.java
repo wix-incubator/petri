@@ -30,6 +30,7 @@ public class ExperimentMakers {
     public static final Property<Experiment, DateTime> creationDate = newProperty();
     public static final Property<Experiment, String> scope = newProperty();
     //TODO - should be Donor<List<TestGroup>> so we can use asList()
+    // (isn't listOf good enough / the same?)
     public static final Property<Experiment, List<TestGroup>> testGroups = newProperty();
     public static final Property<Experiment, String> description = newProperty();
     public static final Property<Experiment, DateTime> startDate = newProperty();

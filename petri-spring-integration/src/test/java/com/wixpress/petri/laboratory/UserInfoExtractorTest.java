@@ -63,7 +63,7 @@ public class UserInfoExtractorTest {
         UserInfo userInfo = userInfoExtractor.extract();
 
         UserInfo expectedUserInfo =   new UserInfo("", null, null, "", "", "",
-                new NullUserInfoType(), "", "", new DateTime(0), "", "", false, new HashMap<String, String>(), false, host);
+                new NullUserInfoType(), "", "", new DateTime(0), "", "", false, new HashMap<String, String>(), false, host, null);
 
         assertThat(userInfo, is(expectedUserInfo));
 

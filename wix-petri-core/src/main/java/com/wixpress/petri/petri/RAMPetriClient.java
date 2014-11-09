@@ -26,7 +26,7 @@ import static com.wixpress.petri.experiments.domain.ExperimentPredicates.IsActiv
  * Time: 12:55 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RAMPetriClient implements PetriClient {
+public class RAMPetriClient implements FullPetriClient, PetriClient {
 
     private Map<ExperimentKey, Experiment> experiments = new LinkedHashMap<>();
     private int currentId = 1;
@@ -146,7 +146,7 @@ public class RAMPetriClient implements PetriClient {
 
     private void assertHasMatchingSpec(ExperimentSnapshot snapshot) {
         if (!specs.containsKey(snapshot.key()))
-            throw new CreateFailed(Experiment.class, snapshot.key() + ". You cannot add an experiment without adding a matching spec first");
+            throw new FullPetriClient.CreateFailed(Experiment.class, snapshot.key() + ". You cannot add an experiment without adding a matching spec first");
     }
 
     private void store(Experiment theExperiment) {
@@ -171,12 +171,12 @@ public class RAMPetriClient implements PetriClient {
 
     private void assertExistsExperiment(Experiment experiment) {
         if (!isExistingExperiment(experiment))
-            throw new UpdateFailed(experiment, experiment.getId());
+            throw new FullPetriClient.UpdateFailed(experiment, experiment.getId());
     }
 
     private void assertHasMatchingSpec(Experiment experiment) {
         if (!hasMatchingSpec(experiment))
-            throw new UpdateFailed(experiment, experiment.getId());
+            throw new FullPetriClient.UpdateFailed(experiment, experiment.getId());
     }
 
     private boolean hasMatchingSpec(Experiment experiment) {

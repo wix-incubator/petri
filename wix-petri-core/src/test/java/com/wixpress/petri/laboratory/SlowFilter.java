@@ -3,6 +3,8 @@ package com.wixpress.petri.laboratory;
 import com.wixpress.petri.experiments.domain.EligibilityCriteria;
 import com.wixpress.petri.experiments.domain.Filter;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sagyr
@@ -10,13 +12,14 @@ import com.wixpress.petri.experiments.domain.Filter;
  * Time: 4:29 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BlowingUpFilter implements Filter {
+public class SlowFilter implements Filter {
     @Override
     public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
-        throw new FilterExploded();
-    }
-
-    static public class FilterExploded extends RuntimeException {
+        try {
+            sleep(TrackableLaboratoryTest.EXPERIMENT_MAX_TIME_MILLIS + 1);
+        } catch (InterruptedException e) {
+        }
+        return true;
 
     }
 }

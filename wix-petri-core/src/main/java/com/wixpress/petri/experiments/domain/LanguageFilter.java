@@ -23,8 +23,8 @@ public class LanguageFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return languages.contains(filterEligibility.getLanguage());
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return languages.contains(eligibilityCriteria.getLanguage());
     }
 
     @Override

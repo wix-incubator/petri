@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.googlecode.jsonrpc4j.*;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
+import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 
 import java.net.MalformedURLException;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 * To change this template use File | Settings | File Templates.
 */
 public class PetriRPCClient {
-    public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
+    public static FullPetriClient makeFor(String serviceUrl) throws MalformedURLException {
 
         final ObjectMapper mapper = ObjectMapperFactory.makeObjectMapper();
         JsonRpcHttpClient client = new JsonRpcHttpClient(mapper,
@@ -29,7 +30,7 @@ public class PetriRPCClient {
 
         return ProxyUtil.createClientProxy(
                 PetriRPCClient.class.getClassLoader(),
-                PetriClient.class,
+                FullPetriClient.class,
                 client);
     }
 

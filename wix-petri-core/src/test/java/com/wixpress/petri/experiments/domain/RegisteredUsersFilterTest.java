@@ -5,7 +5,7 @@ import com.wixpress.petri.laboratory.dsl.UserInfoMakers;
 import org.junit.Test;
 
 import static com.natpryce.makeiteasy.MakeItEasy.a;
-import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultFilterEligibilityForUser;
+import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultEligibilityCriteriaForUser;
 import static com.wixpress.petri.laboratory.dsl.UserInfoMakers.AnonymousUserInfo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -21,7 +21,7 @@ public class RegisteredUsersFilterTest {
         RegisteredUsersFilter registeredUsersFilter = new RegisteredUsersFilter();
         UserInfo registeredUserInfo = a(UserInfoMakers.UserInfo).make();
         UserInfo anonymousUserInfo = AnonymousUserInfo.make();
-        assertThat(registeredUsersFilter.isEligible(defaultFilterEligibilityForUser(anonymousUserInfo)), is(false));
-        assertThat(registeredUsersFilter.isEligible(defaultFilterEligibilityForUser(registeredUserInfo)), is(true));
+        assertThat(registeredUsersFilter.isEligible(defaultEligibilityCriteriaForUser(anonymousUserInfo)), is(false));
+        assertThat(registeredUsersFilter.isEligible(defaultEligibilityCriteriaForUser(registeredUserInfo)), is(true));
     }
 }

@@ -27,7 +27,7 @@ import static com.wixpress.petri.petri.PetriRpcServer.HasSpecSnapshot.hasSpecSna
  * @author: talyag
  * @since: 9/9/13
  */
-public class PetriRpcServer implements PetriClient {
+public class PetriRpcServer implements FullPetriClient, PetriClient {
     public static final String SPEC_OWNER_CHANGED_MSG = "Pay attention - Owner of %s has been changed to %s";
     public static final String SPEC_UPDATE_FAILED_MSG = "Failed to update spec [%s]";
     public static final String NON_TERMINATED_EXPERIMENTS_MSG = "There are non-terminated experiments defined for it";
@@ -173,6 +173,7 @@ public class PetriRpcServer implements PetriClient {
     private ExperimentSpec findOriginalSpecByKey(List<ExperimentSpec> existingSpecs, String key) {
         return find(existingSpecs, specHasKey(key), null);
     }
+
 
     public static class HasSpecSnapshot implements Predicate<ExperimentSpec> {
 

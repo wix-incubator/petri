@@ -43,7 +43,7 @@ public class BILoggingTestGroupAssignmentTrackerTest {
     private Clock clock = context.mock(Clock.class);
     private DateTime theTime = new DateTime();
     private BILoggingTestGroupAssignmentTracker biLogger = new BILoggingTestGroupAssignmentTracker(clock);
-    private LogDriver logDriver = new LogDriver("bi-events-tests.log");
+    private LogDriver logDriver = new LogDriver("target/bi-events-tests.log");
 
 
     @After

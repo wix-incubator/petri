@@ -4,7 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
-import com.wixpress.petri.laboratory.ConductContextBuilder;
+import com.wixpress.petri.laboratory.BrowserVersion;
+import com.wixpress.petri.laboratory.ConductionContextBuilder;
 import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.laboratory.dsl.UserInfoMakers;
@@ -18,7 +19,7 @@ import java.util.UUID;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static com.wixpress.petri.experiments.domain.Experiment.InvalidExperiment;
-import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultFilterEligibilityForUser;
+import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultEligibilityCriteriaForUser;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.Experiment;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.*;
 import static com.wixpress.petri.laboratory.dsl.TestGroupMakers.TestGroup;
@@ -87,7 +88,11 @@ public class ExperimentTest {
                         new RegisteredUsersFilter(),
                         new NewUsersFilter(),
                         new WixEmployeesFilter(),
-                        new HostFilter(asList("host1")))
+                        new HostFilter(asList("host1")),
+                        new IncludeUserIdsFilter(UUID.randomUUID()),
+                        new BrowserVersionFilter(asList(new BrowserVersion("chrome", 77)), true),
+                        new NotFilter(new LanguageFilter(asList("fr")))
+                )
         )).make();
         String json = objectMapper.writeValueAsString(theExperiment);
         Experiment deSerialized = objectMapper.readValue(json, new TypeReference<Experiment>() {
@@ -102,7 +107,7 @@ public class ExperimentTest {
         Experiment deSerialized = objectMapper.readValue(jsonWithUnknownFilter, new TypeReference<Experiment>() {
         });
 
-        deSerialized.conduct(ConductContextBuilder.newInstance(), null);
+        deSerialized.conduct(ConductionContextBuilder.newInstance(), a(UserInfo).make());
     }
 
     @Test
@@ -216,11 +221,11 @@ public class ExperimentTest {
     }
 
     private void userIsEligible(Experiment experiment, UserInfo user) {
-        assertThat(experiment.isEligible(defaultFilterEligibilityForUser(user)), is(true));
+        assertThat(experiment.isEligible(defaultEligibilityCriteriaForUser(user)), is(true));
     }
 
     private void userIsNotEligible(Experiment experiment, UserInfo user) {
-        assertThat(experiment.isEligible(defaultFilterEligibilityForUser(user)), is(false));
+        assertThat(experiment.isEligible(defaultEligibilityCriteriaForUser(user)), is(false));
     }
 
     @Test
@@ -368,10 +373,11 @@ public class ExperimentTest {
 
     @Test
     public void terminatesWhenExperimentIsOnRegisteredOnly() {
-        Experiment experimentOnAnonymous = an(Experiment, with(onlyForLoggedIn, true)).make();
+        Experiment experimentOnRegistered = an(Experiment, with(onlyForLoggedIn, true)).make();
         DateTime now = new DateTime();
-        Experiment result = experimentOnAnonymous.pauseOrTerminateAsOf(now, new ArrayList<Filter>(), new Trigger("should terminate", ""));
+        Experiment result = experimentOnRegistered.pauseOrTerminateAsOf(now, new ArrayList<Filter>(), new Trigger("should terminate", ""));
         assertThat(result.getEndDate(), is(now));
+        assertFalse(result.isPaused());
     }
 
     @Test
@@ -384,14 +390,47 @@ public class ExperimentTest {
     }
 
     @Test
+    public void terminatesWhenExperimentIsNotOnRegisteredOnlyButNotPersistent() {
+        Experiment nonPersistentOnAnonymous = an(Experiment,
+                with(onlyForLoggedIn, false),
+                with(persistent, false)).make();
+        DateTime now = new DateTime();
+        Experiment result = nonPersistentOnAnonymous.pauseOrTerminateAsOf(now, new ArrayList<Filter>(), new Trigger("should terminate", ""));
+        assertThat(result.getEndDate(), is(now));
+        assertFalse(result.isPaused());
+    }
+
+    @Test
     public void canBeEligibleForNewUsersOnly() {
         Experiment experiment = experimentWithFilters(new NewUsersFilter());
 
         UserInfo oldUserInfo = a(UserInfoMakers.UserInfo).but(with(dateCreated, new DateTime().minusHours(1))).make();
-        assertThat(experiment.conduct(ConductContextBuilder.newInstance(), oldUserInfo).getTestGroup(), is(nullValue()));
+        assertThat(experiment.conduct(ConductionContextBuilder.newInstance(), oldUserInfo).getTestGroup(), is(nullValue()));
 
         UserInfo newUserInfo = a(UserInfoMakers.UserInfo).make();
-        assertThat(experiment.conduct(ConductContextBuilder.newInstance(), newUserInfo).getTestGroup(), is(notNullValue()));
+        assertThat(experiment.conduct(ConductionContextBuilder.newInstance(), newUserInfo).getTestGroup(), is(notNullValue()));
+    }
+
+    @Test
+    public void canBeSerializedWithExtendedFilterTypes() throws IOException {
+        ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
+        ExtendedFilterTypesIds.extendFilterTypeIds("myPrettyFilter", AdditionalFilter.class);
+        Experiment experimentWithNewFilterType = an(Experiment, with(filters,
+                asList(new FirstTimeVisitorsOnlyFilter(), new AdditionalFilter())
+        )).make();
+        String json = objectMapper.writeValueAsString(experimentWithNewFilterType);
+        Experiment deSerialized = objectMapper.readValue(json, new TypeReference<Experiment>() {
+        });
+        assertThat(deSerialized, is(experimentWithNewFilterType));
+    }
+
+    //guardAgainstFilterTypeIdChanges
+    @Test
+    public void experimentWithFiltersCanBeDeserialzed() throws IOException {
+        String experimentWithFilters = "{\"id\":0,\"lastUpdated\":\"2014-09-09T18:24:52.840+03:00\",\"experimentSnapshot\":{\"key\":\"\",\"fromSpec\":true,\"creationDate\":\"2014-09-09T18:24:52.840+03:00\",\"description\":\"\",\"startDate\":\"2014-09-09T18:24:52.839+03:00\",\"endDate\":\"2015-09-09T18:24:52.839+03:00\",\"groups\":[{\"id\":1,\"chunk\":50,\"value\":\"\"},{\"id\":2,\"chunk\":50,\"value\":\"\"}],\"scope\":\"\",\"paused\":false,\"name\":\"\",\"creator\":\"\",\"featureToggle\":false,\"originalId\":0,\"linkedId\":0,\"persistent\":true,\"filters\":[{\"filter-type\":\"anonymous\"},{\"filter-type\":\"geo\",\"countries\":[\"us\",\"gb\"]},{\"filter-type\":\"language\",\"languages\":[\"en\"]},{\"filter-type\":\"registered\"},{\"filter-type\":\"newUsers\"},{\"filter-type\":\"wixUsers\"},{\"filter-type\":\"host\",\"hosts\":[\"host1\"]},{\"filter-type\":\"includeUserIds\",\"ids\":[\"89ac5f4b-d16d-44c3-bef9-e474ec2c0dd0\"]},{\"filter-type\":\"not\",\"internal\":{\"filter-type\":\"language\",\"languages\":[\"fr\"]}}],\"onlyForLoggedInUsers\":false,\"comment\":\"\",\"updater\":\"\"}}";
+        ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
+        objectMapper.readValue(experimentWithFilters, new TypeReference<Experiment>() {
+        });
     }
 
 

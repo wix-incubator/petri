@@ -19,6 +19,7 @@ public class FilterTypeIdResolver implements TypeIdResolver {
     private Map<String, Class<? extends Filter>> typeIdsMap = new HashMap<String, Class<? extends Filter>>();
     private Map<Class<? extends Filter>, String> typesMap = new HashMap<Class<? extends Filter>, String>();
 
+    // IMPORTANT - The keys here CANNOT be changed. They are the unique identifiers and enable you to rename your filter class if you like.
     public FilterTypeIdResolver() {
         registerTypeWithId("geo", GeoFilter.class);
         registerTypeWithId("anonymous", FirstTimeVisitorsOnlyFilter.class);
@@ -29,6 +30,8 @@ public class FilterTypeIdResolver implements TypeIdResolver {
         registerTypeWithId("host", HostFilter.class);
         registerTypeWithId("includeUserIds", IncludeUserIdsFilter.class);
         registerTypeWithId("not", NotFilter.class);
+        registerTypeWithId("browserVersion", BrowserVersionFilter.class);
+        registerTypeWithId("userAgentRegex", UserAgentRegexFilter.class);
     }
 
     private void registerTypeWithId(String typeId, Class<? extends Filter> filterClass) {
@@ -39,6 +42,9 @@ public class FilterTypeIdResolver implements TypeIdResolver {
     @Override
     public void init(JavaType baseType) {
         this.baseType = baseType;
+        for (Map.Entry<String, Class<? extends Filter>> entry : ExtendedFilterTypesIds.extendedTypes()) {
+            registerTypeWithId(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override

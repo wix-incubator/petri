@@ -16,8 +16,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.wixpress.petri.petri.PetriClient.PetriException;
-import static com.wixpress.petri.petri.PetriClient.UpdateFailed;
+import static com.wixpress.petri.petri.FullPetriClient.PetriException;
+import static com.wixpress.petri.petri.FullPetriClient.UpdateFailed;
 
 /**
  * @author: talyag

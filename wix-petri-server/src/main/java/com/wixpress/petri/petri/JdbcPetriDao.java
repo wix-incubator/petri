@@ -35,7 +35,7 @@ public abstract class JdbcPetriDao<T, V> implements PetriDao<T, V> {
         try {
             serializedObj = mapper.serialize(obj);
         } catch (Throwable e) {
-            throw new PetriClient.PetriException(e);
+            throw new FullPetriClient.PetriException(e);
         }
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -48,7 +48,7 @@ public abstract class JdbcPetriDao<T, V> implements PetriDao<T, V> {
             postUpdate(id.intValue());
             return (T) jdbcTemplate.query(String.format(selectSql, id.intValue()), mapper).get(0);
         }
-        throw new PetriClient.CreateFailed(obj.getClass(), identifierOf(obj));
+        throw new FullPetriClient.CreateFailed(obj.getClass(), identifierOf(obj));
     }
 
     protected void postUpdate(int id) {

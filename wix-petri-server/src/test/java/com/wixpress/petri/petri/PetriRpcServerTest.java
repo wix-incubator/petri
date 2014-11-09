@@ -212,15 +212,17 @@ public class PetriRpcServerTest {
     @Test
     public void notifiesByMailWhenUpdatingSpecToDifferentOwner() {
         final ExperimentSpec theOriginalSpec = defaultExperimentSpec().build();
-        final ExperimentSpec theUpdatedSpec = defaultExperimentSpec().withOwner("someone.else@wix.com").build();
 
         DateTime updateDate = new DateTime().plusDays(1);
         assumingTimeSourceReturns(updateDate);
         assumingDaoContainsExperiments(new ArrayList<Experiment>());
         assumingDaoContainsSpecs(asList(theOriginalSpec));
 
-        context.checking(specIsUpdatedAndEmailIsSent(theUpdatedSpec, updateDate, theOriginalSpec.getOwner()));
-        petriRpcServer.addSpecs(asList(theUpdatedSpec));
+        final ExperimentSpec expectedUpdatedSpec = defaultExperimentSpec().withOwner("someone.else@wix.com").build().
+                setCreationDate(theOriginalSpec.getCreationDate());
+
+        context.checking(specIsUpdatedAndEmailIsSent(expectedUpdatedSpec, updateDate, theOriginalSpec.getOwner()));
+        petriRpcServer.addSpecs(asList(expectedUpdatedSpec));
     }
 
     @Test

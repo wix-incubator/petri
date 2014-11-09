@@ -26,8 +26,8 @@ public class NotFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        return !internal.isEligible(filterEligibility);
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        return !internal.isEligible(eligibilityCriteria);
     }
 
     @Override

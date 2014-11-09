@@ -25,9 +25,9 @@ public class NewUsersFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        DateTime userCreationDate = filterEligibility.getUserCreationDate();
-        return userCreationDate != null && userCreationDate.isAfter(filterEligibility.getExperimentStartDate());
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        DateTime userCreationDate = eligibilityCriteria.getUserCreationDate();
+        return userCreationDate != null && userCreationDate.isAfter(eligibilityCriteria.getExperimentStartDate());
     }
 
 }

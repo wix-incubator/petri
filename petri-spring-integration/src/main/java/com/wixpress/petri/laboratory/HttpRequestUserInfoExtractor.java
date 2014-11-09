@@ -59,7 +59,7 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         String email = null; //todo
 
         return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, userInfoType, language, country,
-                userCreationDate, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host);
+                userCreationDate, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host,new BrowserVersion("",0));
     }
 
     private UUID getUserId() {

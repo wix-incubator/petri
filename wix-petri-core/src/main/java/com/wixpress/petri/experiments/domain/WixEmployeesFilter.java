@@ -12,7 +12,7 @@ public class WixEmployeesFilter implements Filter {
 
     @Override
     public String toString() {
-        return "WixUserFilter";
+        return "WixEmployeesFilter";
     }
 
     @Override
@@ -23,8 +23,8 @@ public class WixEmployeesFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
-        String email = filterEligibility.getEmail();
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+        String email = eligibilityCriteria.getEmail();
         return email != null && email.endsWith("@wix.com");
     }
 }

@@ -20,6 +20,7 @@ import java.util.*;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static com.wixpress.petri.experiments.domain.Experiment.InvalidExperiment;
+import static com.wixpress.petri.laboratory.EligibilityCriteriaTypes.UserCreationDateCriterion;
 import static com.wixpress.petri.laboratory.UserInfo.userInfoFromNullRequest;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.*;
 import static com.wixpress.petri.laboratory.dsl.TestGroupMakers.*;
@@ -41,6 +42,7 @@ public class TrackableLaboratoryTest {
     private CachedExperiments experiments;
     private static final UUID SOME_USER_GUID = UUID.fromString("19fc13d9-5943-4a87-82b1-4acb7e5cb039");
     private Maker<com.wixpress.petri.laboratory.UserInfo> aRegisteredUserInfo;
+    public static int EXPERIMENT_MAX_TIME_MILLIS = 10;
 
     private static final Class TheKey = new SpecDefinition() {
     }.getClass();
@@ -72,7 +74,7 @@ public class TrackableLaboratoryTest {
         testGroupAssignmentTracker = new FakeTestGroupAssignmentTracker();
         laboratoryErrorHandler = new FakeErrorHandler();
         lab = new TrackableLaboratory(experiments, testGroupAssignmentTracker, userInfoStorage,
-                laboratoryErrorHandler);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS);
     }
 
     public static class FakeErrorHandler implements ErrorHandler {
@@ -136,13 +138,21 @@ public class TrackableLaboratoryTest {
         userInfoStorage.assertAnonymousLogIs("");
     }
 
-    private void conductByKeyAndByScopeReturns(final String value) {
-        assertThat(lab.conductExperiment(TheKey, ""), is(value));
+    private void conductByKeyAndByScopeReturns(String value) {
+        conductByKeyAndByScopeReturns(value, ConductionContextBuilder.newInstance());
+    }
+
+    private void conductByKeyAndByScopeReturns(final String value, ConductionContextBuilder context) {
+        UserInfo prevUserInfo = userInfoStorage.read();
+        assertThat(lab.conductExperiment(TheKey, "", context), is(value));
+
+        //make sure cookies written by first conduction do not affect the second assertion
+        userInfoStorage.write(prevUserInfo);
 
         Map<String, String> expected = new HashMap<String, String>() {{
             put(TheKey.getName(), value);
         }};
-        assertThat(lab.conductAllInScope("someScope"), is(expected));
+        assertThat(lab.conductAllInScope("someScope", context), is(expected));
     }
 
     private void errorReportWasSent(final Matcher<Throwable> exceptionMatcher) {
@@ -174,6 +184,19 @@ public class TrackableLaboratoryTest {
         };
     }
 
+    Matcher<Throwable> anException(final Class<? extends Throwable> type, final Matcher<String> msg) {
+        return new TypeSafeMatcher<Throwable>() {
+            @Override
+            protected boolean matchesSafely(Throwable throwable) {
+                return type.equals(throwable.getClass()) && msg.matches(throwable.getMessage());
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("an exception of type: " + type + " with msg that " + description.appendDescriptionOf(msg));
+            }
+        };
+    }
 
     @Test
     public void experimentIsNotAppendedToLogTwiceIfAlreadyRunningAndExistingValueIsReturned() throws Exception {
@@ -276,7 +299,7 @@ public class TrackableLaboratoryTest {
         TestGroupDrawer customDrawer = mock(TestGroupDrawer.class);
         when(customDrawer.drawTestGroup(someExperiment)).thenReturn(someExperiment.getTestGroupById(6));
 
-        ConductContext contextWithCustomKernel = ConductContextBuilder.newInstance().withTestGroupDrawer(customDrawer);
+        ConductionContext contextWithCustomKernel = ConductionContextBuilder.newInstance().withTestGroupDrawer(customDrawer);
 
         assertThat(lab.conductExperiment(TheKey, -1, new IntegerConverter(), contextWithCustomKernel), is(321));
 
@@ -447,7 +470,7 @@ public class TrackableLaboratoryTest {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
         lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
-                laboratoryErrorHandler);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS);
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
         errorReportWasSent(Matchers.<Throwable>instanceOf(BlowingUpCachedExperiments.CacheExploded.class));
         assertBiLogIsEmpty();
@@ -458,7 +481,7 @@ public class TrackableLaboratoryTest {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
         lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
-                laboratoryErrorHandler);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS);
 
         Map<String, String> expected = new HashMap();
         assertThat(lab.conductAllInScope("whatever"), is(expected));
@@ -485,22 +508,6 @@ public class TrackableLaboratoryTest {
         }};
         assertThat(lab.conductAllInScope("someScope"), is(expected));
         errorReportWasSent(Matchers.<Throwable>instanceOf(BlowingUpFilter.FilterExploded.class));
-    }
-
-
-
-    Matcher<Throwable> anException(final Class<?extends Throwable> type, final Matcher<String> msg) {
-        return new TypeSafeMatcher<Throwable>() {
-            @Override
-            protected boolean matchesSafely(Throwable throwable) {
-                return type.equals(throwable.getClass()) && msg.matches(throwable.getMessage());
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("an exception of type: " + type + " with msg that " + description.appendDescriptionOf(msg));
-            }
-        };
     }
 
 
@@ -631,7 +638,7 @@ public class TrackableLaboratoryTest {
 
         TestGroupDrawer customDrawer = mock(TestGroupDrawer.class);
         when(customDrawer.drawTestGroup(experiment)).thenReturn(experiment.getTestGroupById(2));
-        ConductContext contextWithCustomKernel = ConductContextBuilder.newInstance().withTestGroupDrawer(customDrawer);
+        ConductionContext contextWithCustomKernel = ConductionContextBuilder.newInstance().withTestGroupDrawer(customDrawer);
 
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE, contextWithCustomKernel), is(LOSING_VALUE));
 
@@ -660,8 +667,8 @@ public class TrackableLaboratoryTest {
         List<Filter> customFilter = new ArrayList<>();
         customFilter.add(new Filter() {
             @Override
-            public boolean isEligible(FilterEligibility filterEligibility) {
-                return filterEligibility.getField(StringField.class).getString().equals("someString");
+            public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
+                return eligibilityCriteria.getAdditionalCriterion(StringCriterion.class).equals("someString");
             }
         });
         Experiment experimentWithCustomFilter = experimentWithWinningFirstGroup.but(with(filters, customFilter)).make();
@@ -671,21 +678,64 @@ public class TrackableLaboratoryTest {
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
 
         userInfoStorage.write(aRegisteredUserInfo.make());
-        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE, ConductContextBuilder.newInstance().withField(new StringField())),
+        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE, ConductionContextBuilder.newInstance().withCriterionOverride(new StringCriterion())),
                 is(WINNING_VALUE));
     }
 
     @Test(expected = NullPointerException.class)
     public void passingNullEligibilityFieldThrowsNPE() throws Exception {
         userInfoStorage.write(aRegisteredUserInfo.make());
-        lab.conductExperiment(TheKey, FALLBACK_VALUE, ConductContextBuilder.newInstance().withField(null));
+        lab.conductExperiment(TheKey, FALLBACK_VALUE, ConductionContextBuilder.newInstance().withCriterionOverride(null));
     }
 
-    private class StringField implements EligibilityField {
-        public String getString() {
+    private class StringCriterion implements EligibilityCriterion<String> {
+        @Override
+        public String getValue() {
             return "someString";
         }
     }
+
+    @Test
+    public void reportErrorWhenExperimentIsSlow() throws Exception {
+
+        Experiment experimentWithSlowCalculationTime = experimentWithWinningFirstGroup.but(
+                with(filters, new ArrayList<Filter>() {{
+                    add(new SlowFilter());
+                }})
+        ).make();
+
+        userInfoStorage.write(aRegisteredUserInfo.make());
+        addExperimentToCache(experimentWithSlowCalculationTime);
+
+        lab.conductExperiment(TheKey, FALLBACK_VALUE);
+
+        final Matcher<Throwable> matcher = anException(SlowExperimentException.class,allOf(
+                        containsString("Slow Conducting time of experiment"),
+                        containsString("Experiment{id=" + experimentWithSlowCalculationTime.getId()))
+
+        );
+
+        errorReportWasSent(matcher);
+    }
+
+    @Test
+    public void eligibilityFieldsCanBeOverridenOnConduct() throws Exception {
+        Experiment experimentOnNewUsers = experimentWithWinningFirstGroup.but(
+                with(scope, "someScope"),
+                with(filters, new ArrayList<Filter>() {{
+            add(new NewUsersFilter());
+        }})).make();
+        addExperimentToCache(experimentOnNewUsers);
+
+        UserInfo oldUserInfo = aRegisteredUserInfo.but(with(dateCreated, new DateTime().minusHours(1))).make();
+        userInfoStorage.write(oldUserInfo);
+        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
+
+        ConductionContextBuilder context = ConductionContextBuilder.newInstance().withCriterionOverride(new UserCreationDateCriterion(new DateTime()));
+
+        conductByKeyAndByScopeReturns(WINNING_VALUE, context);
+    }
+
 
 
 

@@ -17,7 +17,7 @@ public class ConstantFilter implements Filter {
     }
 
     @Override
-    public boolean isEligible(FilterEligibility filterEligibility) {
+    public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
         return value;
     }
 

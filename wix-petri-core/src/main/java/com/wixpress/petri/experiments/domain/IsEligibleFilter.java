@@ -12,18 +12,18 @@ import javax.annotation.Nullable;
  * To change this template use File | Settings | File Templates.
  */
 public class IsEligibleFilter implements Predicate<Filter> {
-    private final FilterEligibility filterEligibility;
+    private final EligibilityCriteria eligibilityCriteria;
 
-    IsEligibleFilter(FilterEligibility filterEligibility) {
-        this.filterEligibility = filterEligibility;
+    IsEligibleFilter(EligibilityCriteria eligibilityCriteria) {
+        this.eligibilityCriteria = eligibilityCriteria;
     }
 
-    public static IsEligibleFilter isEligibleFor(FilterEligibility filterEligibility) {
-        return new IsEligibleFilter(filterEligibility);
+    public static IsEligibleFilter isEligibleFor(EligibilityCriteria eligibilityCriteria) {
+        return new IsEligibleFilter(eligibilityCriteria);
     }
 
     @Override
     public boolean apply(@Nullable Filter filter) {
-        return filter.isEligible(filterEligibility);
+        return filter.isEligible(eligibilityCriteria);
     }
 }

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import static com.natpryce.makeiteasy.MakeItEasy.a;
 import static com.natpryce.makeiteasy.MakeItEasy.with;
-import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultFilterEligibilityForUser;
+import static com.wixpress.petri.experiments.domain.FilterTestUtils.defaultEligibilityCriteriaForUser;
 import static com.wixpress.petri.laboratory.dsl.UserInfoMakers.userId;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -47,13 +47,13 @@ public class IncludeUserIdsFilterTest {
     @Test
     public void eligibleForListedUsers() {
         final UserInfo userWithId = a(UserInfoMakers.UserInfo, with(userId, uid)).make();
-        assertThat(filter.isEligible(defaultFilterEligibilityForUser(userWithId)), is(true));
+        assertThat(filter.isEligible(defaultEligibilityCriteriaForUser(userWithId)), is(true));
     }
 
     @Test
     public void isNonEligibleForNonListedUsers() {
         final UserInfo userWithId = a(UserInfoMakers.UserInfo, with(userId, UUID.randomUUID())).make();
-        assertThat(filter.isEligible(defaultFilterEligibilityForUser(userWithId)), is(false));
+        assertThat(filter.isEligible(defaultEligibilityCriteriaForUser(userWithId)), is(false));
     }
 
     @Test
