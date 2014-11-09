@@ -1,6 +1,8 @@
 Petri
 =====
 
+[![Build Status](https://travis-ci.org/wix/petri.svg?branch=master)](https://travis-ci.org/wix/petri)
+
 Wix's holistic experiment system - covers the lifecycle of product experimenting (A/B tests and feature toggles).
 
 Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of daily changes (instantly affecting production).  
