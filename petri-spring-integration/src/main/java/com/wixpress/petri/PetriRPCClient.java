@@ -50,7 +50,7 @@ public class PetriRPCClient {
             try {
                 return Throwable.class.cast(objectMapper.readValue(serializedException, Class.forName(exceptionTypeName)));
             } catch (Exception e) {
-                return null;
+                return new NonSerializableServerException(exceptionTypeName,serializedException);
             }
         }
     }

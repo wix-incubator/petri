@@ -47,7 +47,6 @@ public class RPCPetriServerTest extends PetriClientContractTest {
 
     public RPCPetriServerTest() throws Exception{
         petriClient = PetriRPCClient.makeFor("http://localhost:9011/petri/api");
-
     }
 
     @Before
@@ -65,4 +64,10 @@ public class RPCPetriServerTest extends PetriClientContractTest {
         PetriRPCClient.makeFor("http://localhost:9011/SOME_OTHER_SERVICE").fetchSpecs();
     }
 
+    @Test(expected = NonSerializableServerException.class)
+    public void throwsSpecialExceptionIfServerExceptionIsNotSerializable() {
+        dbDriver.dropTables();
+        // should cause an exception on the server that is not serializable
+        petriClient.fetchActiveExperiments();
+    }
 }
