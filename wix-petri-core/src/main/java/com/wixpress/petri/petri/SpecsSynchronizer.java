@@ -22,16 +22,21 @@ public class SpecsSynchronizer {
         this.clock = clock;
     }
 
-    public void syncSpecs() {
+    public List<String> syncSpecs() {
         DateTime now = clock.getCurrentDateTime();
 
         List<ExperimentSpec> specs = new ArrayList<>();
+        List<String> specsKeys = new ArrayList<>();
         List<SpecDefinition> specDefinitions = specsDefinitions.get();
 
         for (SpecDefinition specDefinition : specDefinitions) {
-            specs.add(specDefinition.create(now));
+            ExperimentSpec experimentSpec = specDefinition.create(now);
+            specs.add(experimentSpec);
+            specsKeys.add(experimentSpec.getKey());
         }
         pc.addSpecs(specs);
+        return specsKeys;
+
     }
 
 }

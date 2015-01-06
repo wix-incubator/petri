@@ -132,7 +132,7 @@ public class JdbcExperimentsDao extends JdbcPetriDao<Experiment, ExperimentSnaps
         int rowsAffected = jdbcTemplate.update(updateSql, updateSqlArgs.toArray());
 
         if (rowsAffected != 1) {
-            throw new UpdateFailed(experiment, experiment.getId());
+            throw new UpdateFailed(experiment);
         }
     }
 

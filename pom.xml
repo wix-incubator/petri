@@ -14,7 +14,7 @@
         <scala.dependencies.version>2.10</scala.dependencies.version>
 
         <org.springframework.version>4.1.1.RELEASE</org.springframework.version>
-        <com.fasterxml.jackson.default.version>2.2.3</com.fasterxml.jackson.default.version>
+        <com.fasterxml.jackson.default.version>2.4.3</com.fasterxml.jackson.default.version>
 
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
         <commons-io.version>2.4</commons-io.version>

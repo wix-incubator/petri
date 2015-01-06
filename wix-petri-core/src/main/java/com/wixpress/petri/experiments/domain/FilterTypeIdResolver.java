@@ -14,6 +14,10 @@ import java.util.Map;
  */
 public class FilterTypeIdResolver implements TypeIdResolver {
 
+    static {
+        FiltersExtender.extendFilterTypes();
+    }
+
     private JavaType baseType;
 
     private Map<String, Class<? extends Filter>> typeIdsMap = new HashMap<String, Class<? extends Filter>>();
@@ -42,7 +46,7 @@ public class FilterTypeIdResolver implements TypeIdResolver {
     @Override
     public void init(JavaType baseType) {
         this.baseType = baseType;
-        for (Map.Entry<String, Class<? extends Filter>> entry : ExtendedFilterTypesIds.extendedTypes()) {
+        for (Map.Entry<String, Class<? extends Filter>> entry : ExtendedFilterTypesIds.extendedTypes().entrySet()) {
             registerTypeWithId(entry.getKey(), entry.getValue());
         }
     }

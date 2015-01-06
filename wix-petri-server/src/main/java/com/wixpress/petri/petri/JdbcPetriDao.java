@@ -7,6 +7,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import java.util.List;
 
+import static com.wixpress.petri.petri.FullPetriClient.CreateFailed;
+import static com.wixpress.petri.petri.FullPetriClient.CreateFailedData;
+
 /**
  * @author: talyag
  * @since: 10/30/13
@@ -48,7 +51,7 @@ public abstract class JdbcPetriDao<T, V> implements PetriDao<T, V> {
             postUpdate(id.intValue());
             return (T) jdbcTemplate.query(String.format(selectSql, id.intValue()), mapper).get(0);
         }
-        throw new FullPetriClient.CreateFailed(obj.getClass(), identifierOf(obj));
+        throw new CreateFailed(new CreateFailedData(obj.getClass().getSimpleName(), identifierOf(obj)));
     }
 
     protected void postUpdate(int id) {

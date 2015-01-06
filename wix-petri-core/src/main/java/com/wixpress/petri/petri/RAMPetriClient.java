@@ -146,7 +146,7 @@ public class RAMPetriClient implements FullPetriClient, PetriClient {
 
     private void assertHasMatchingSpec(ExperimentSnapshot snapshot) {
         if (!specs.containsKey(snapshot.key()))
-            throw new FullPetriClient.CreateFailed(Experiment.class, snapshot.key() + ". You cannot add an experiment without adding a matching spec first");
+            throw new CreateFailed(new CreateFailedData(ExperimentSnapshot.class.getSimpleName(), snapshot.key() + ". You cannot add an experiment without adding a matching spec first"));
     }
 
     private void store(Experiment theExperiment) {
@@ -171,12 +171,12 @@ public class RAMPetriClient implements FullPetriClient, PetriClient {
 
     private void assertExistsExperiment(Experiment experiment) {
         if (!isExistingExperiment(experiment))
-            throw new FullPetriClient.UpdateFailed(experiment, experiment.getId());
+            throw new FullPetriClient.UpdateFailed(experiment);
     }
 
     private void assertHasMatchingSpec(Experiment experiment) {
         if (!hasMatchingSpec(experiment))
-            throw new FullPetriClient.UpdateFailed(experiment, experiment.getId());
+            throw new FullPetriClient.UpdateFailed(experiment);
     }
 
     private boolean hasMatchingSpec(Experiment experiment) {

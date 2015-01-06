@@ -14,6 +14,10 @@ import java.util.List;
 
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.anExperimentSpec;
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author sagyr
@@ -83,7 +87,7 @@ public class SpecsSynchronizerTest {
         final ExperimentSpec expectedSpec = anExperimentSpec(TestableSpecDef.class.getName(), fakeClock.getCurrentDateTime())
                 .withTestGroups(testGroups).build();
         petriClientShouldRecieve(expectedSpec);
-        specsSynchronizer.syncSpecs();
+        assertThat(specsSynchronizer.syncSpecs(), hasItem(expectedSpec.getKey()));
     }
 
     @Test
@@ -93,7 +97,7 @@ public class SpecsSynchronizerTest {
             will(returnValue(new ArrayList<SpecDefinition>()));
             oneOf(petriClient).addSpecs(new ArrayList<ExperimentSpec>());
         }});
-        specsSynchronizer.syncSpecs();
+        assertThat(specsSynchronizer.syncSpecs().size(), is(0));
     }
 
     @Test
@@ -106,7 +110,7 @@ public class SpecsSynchronizerTest {
 
         assumingSpecDefs(TestableSpecDef.ofTestGroups(testGroups), TestableSpecDef.ofTestGroups(testGroups));
         petriClientShouldRecieve(expectedSpec1, expectedSpec2);
-        specsSynchronizer.syncSpecs();
+        assertThat(specsSynchronizer.syncSpecs(), hasItems(expectedSpec1.getKey(), expectedSpec2.getKey()) );
     }
 
 }

@@ -71,7 +71,13 @@ public class PetriE2eTest {
         dbDriver.closeConnection();
     }
 
-    private FullPetriClient petriClient() throws MalformedURLException {
+    private FullPetriClient fullPetriClient() throws MalformedURLException {
+        return PetriRPCClient.makeFullClientFor("http://localhost:" +
+                PETRI_PORT +
+                "/petri/full_api");
+    }
+
+    private PetriClient petriClient() throws MalformedURLException {
         return PetriRPCClient.makeFor("http://localhost:" +
                 PETRI_PORT +
                 "/petri/api");
@@ -80,8 +86,9 @@ public class PetriE2eTest {
 
     @Test
     public void conductingASimpleExperiment() throws Exception {
+        FullPetriClient fullPetriClient = fullPetriClient();
+        PetriClient petriClient = petriClient();
 
-        FullPetriClient petriClient = petriClient();
         petriClient.addSpecs(asList(
                 aNewlyGeneratedExperimentSpec("THE_KEY").
                     withTestGroups(asList("a", "b")).
@@ -89,7 +96,7 @@ public class PetriE2eTest {
                 build()));
 
         DateTime now = new DateTime();
-        petriClient.insertExperiment(
+        fullPetriClient.insertExperiment(
                 anExperimentSnapshot().
                         withStartDate(now.minusMinutes(1)).
                         withEndDate(now.plusYears(1)).

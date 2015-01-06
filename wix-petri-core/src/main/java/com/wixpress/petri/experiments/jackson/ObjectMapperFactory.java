@@ -21,7 +21,7 @@ import java.util.TimeZone;
 public class ObjectMapperFactory {
 
     private static final String MODULE_NAME = JodaModule.class.getName();
-    private static final Version MODULE_VERSION = new Version(1, 0, 0, null);
+    private static final Version MODULE_VERSION = new Version(1, 0, 0, null, "none", "none");
 
     public static ObjectMapper makeObjectMapper() {
         final ObjectMapper objectMapper = new ObjectMapper();

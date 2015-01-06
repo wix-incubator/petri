@@ -76,9 +76,10 @@ public class LaboratoryFilter implements Filter {
         TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
         ErrorHandler errorHandler = new ErrorHandler() {
             @Override
-            public void handle(String message, Throwable cause) {
+            public void handle(String message, Throwable cause, ExceptionType exceptionType) {
                 cause.printStackTrace();
             }
+
         };
         return new TrackableLaboratory(experiments, tracker, storage, errorHandler, 50);
     }

@@ -5,5 +5,5 @@ package com.wixpress.petri.laboratory;
  * @since: 3/22/14
  */
 public interface ErrorHandler {
-    void handle(String message, Throwable cause);
+    void handle(String message, Throwable cause, ExceptionType exceptionType);
 }

@@ -1,5 +1,6 @@
 package com.wixpress.petri.petri;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
@@ -12,10 +13,6 @@ import java.util.List;
  * @since 9/24/14
  */
 public interface FullPetriClient {
-    //TODO - should be split into different clients or more importantly data types
-    //(Experiment for laboratory can be much thinner than for GP)
-
-    List<Experiment> fetchActiveExperiments();
 
     List<Experiment> fetchAllExperiments();
 
@@ -45,22 +42,42 @@ public interface FullPetriClient {
         }
     }
 
-    public class CreateFailed extends PetriException {
-        public CreateFailed(@JsonProperty("aClass") Class<?> aClass, @JsonProperty("key") String key) {
-            super(String.format("unable to add a %s with key '%s'", aClass, key));
+    public class CreateFailedData {
+        public String clazz;
+        public String key;
+
+        public CreateFailedData() {
+        }
+
+        public CreateFailedData(String clazz, String key) {
+            this.clazz = clazz;
+            this.key = key;
         }
     }
 
-    //TODO - should only receive 1 parameter - experiment, and use its getId() method
-    // but that causes the JsonRpcProtocolClient to fail on the
-    // e = getReader().readValue(getReader().treeAsTokens(errorObject.get("data")),Exception.class);
+    public class CreateFailed extends PetriException {
+
+        public CreateFailedData data;
+
+        public CreateFailed(@JsonProperty("data") CreateFailedData createFailedData) {
+            super(String.format("unable to add a %s with key '%s'", createFailedData.clazz, createFailedData.key));
+            this.data = createFailedData;
+        }
+    }
+
     public class UpdateFailed extends PetriException {
-        public UpdateFailed(@JsonProperty("experiment") Experiment experiment, @JsonProperty("id") int id) {
+
+        public Experiment data;
+
+        @JsonCreator
+        public UpdateFailed(@JsonProperty("data") Experiment experiment) {
             super(String.format("Failed to update experiment %s. This can be due to either \n" +
                     " 1 - stale edit\n" +
                     " 2 - spec with matching key does not exist anymore\n" +
                     " 3 - experiment with such id does not exist\n" +
-                    " Experiment - '%s'", id, experiment));
+                    " Experiment - '%s'", experiment.getId(), experiment));
+            this.data = experiment;
+
         }
     }
 

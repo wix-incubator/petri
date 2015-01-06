@@ -1,7 +1,6 @@
 package com.wixpress.petri.experiments.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
@@ -25,8 +24,7 @@ public class TimeZoneAwareDateTimeDeserializer extends StdScalarDeserializer<Dat
     }
 
     @Override
-    public DateTime deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException
-    {
+    public DateTime deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         JsonToken t = jp.getCurrentToken();
         if (t == JsonToken.VALUE_NUMBER_INT)
         {
@@ -41,6 +39,6 @@ public class TimeZoneAwareDateTimeDeserializer extends StdScalarDeserializer<Dat
             }
             return new DateTime(str);       // Take TimeZone portion from str
         }
-        throw ctxt.mappingException(getValueClass());
+        throw ctxt.mappingException(handledType());
     }
 }

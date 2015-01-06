@@ -19,18 +19,34 @@ import java.util.HashMap;
 * To change this template use File | Settings | File Templates.
 */
 public class PetriRPCClient {
-    public static FullPetriClient makeFor(String serviceUrl) throws MalformedURLException {
 
+    private static JsonRpcHttpClient getJsonRpcHttpClient(String serviceUrl) throws MalformedURLException {
         final ObjectMapper mapper = ObjectMapperFactory.makeObjectMapper();
         JsonRpcHttpClient client = new JsonRpcHttpClient(mapper,
                 new URL(serviceUrl),
                 new HashMap<String, String>());
 
         client.setExceptionResolver(new DeserializingExceptionResolver(mapper));
+        return client;
+    }
+
+    public static FullPetriClient makeFullClientFor(String serviceUrl) throws MalformedURLException {
+
+        JsonRpcHttpClient client = getJsonRpcHttpClient(serviceUrl);
 
         return ProxyUtil.createClientProxy(
                 PetriRPCClient.class.getClassLoader(),
                 FullPetriClient.class,
+                client);
+    }
+
+    public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
+
+        JsonRpcHttpClient client = getJsonRpcHttpClient(serviceUrl);
+
+        return ProxyUtil.createClientProxy(
+                PetriRPCClient.class.getClassLoader(),
+                PetriClient.class,
                 client);
     }
 

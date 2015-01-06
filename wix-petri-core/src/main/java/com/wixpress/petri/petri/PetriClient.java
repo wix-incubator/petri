@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface PetriClient {
 
+    //TODO - should change return type : (Experiment for laboratory can be much thinner than for GP)
+    //(and rename to fetchConductableExperiments)
     List<Experiment> fetchActiveExperiments();
 
     void addSpecs(List<ExperimentSpec> expectedSpecs);

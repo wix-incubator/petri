@@ -43,7 +43,7 @@ class PetriServerFactory {
         DeleteEnablingPetriDao<ExperimentSpec, ExperimentSpec> specsDao = new JdbcSpecsDao(jdbcTemplate,specMapper);
         PetriNotifier notifier = new NoopPetriNotifier();
         PetriRpcServer petri = new PetriRpcServer(experimentsDao,clock,specsDao,notifier);
-        return new JsonRPCServer(petri, objectMapper, port,FullPetriClient.class);
+        return new JsonRPCServer(petri, objectMapper, port);
     }
 
     private static class NoopPetriNotifier implements PetriNotifier {

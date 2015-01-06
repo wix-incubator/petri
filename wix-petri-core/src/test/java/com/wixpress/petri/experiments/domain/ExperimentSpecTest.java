@@ -75,4 +75,11 @@ public class ExperimentSpecTest {
                 new ScopeDefinition("scope2", false))));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void cannotBeCreatedWithNullScope() throws IOException {
+        aNewlyGeneratedExperimentSpec("f.q.n.Class1").
+                withScopes(aScopeDefinitionOnlyForLoggedInUsers("scope1"), null).
+                build();
+    }
+
 }

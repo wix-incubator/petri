@@ -411,19 +411,6 @@ public class ExperimentTest {
         assertThat(experiment.conduct(ConductionContextBuilder.newInstance(), newUserInfo).getTestGroup(), is(notNullValue()));
     }
 
-    @Test
-    public void canBeSerializedWithExtendedFilterTypes() throws IOException {
-        ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
-        ExtendedFilterTypesIds.extendFilterTypeIds("myPrettyFilter", AdditionalFilter.class);
-        Experiment experimentWithNewFilterType = an(Experiment, with(filters,
-                asList(new FirstTimeVisitorsOnlyFilter(), new AdditionalFilter())
-        )).make();
-        String json = objectMapper.writeValueAsString(experimentWithNewFilterType);
-        Experiment deSerialized = objectMapper.readValue(json, new TypeReference<Experiment>() {
-        });
-        assertThat(deSerialized, is(experimentWithNewFilterType));
-    }
-
     //guardAgainstFilterTypeIdChanges
     @Test
     public void experimentWithFiltersCanBeDeserialzed() throws IOException {

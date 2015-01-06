@@ -56,6 +56,18 @@ public class TestGroupMakers {
     public static final List<TestGroup> VALID_TEST_GROUP_LIST = asList(
             a(TestGroupMakers.TestGroup,
                     with(TestGroupMakers.groupId, 1),
+                    with(value, "g1"),
+                    with(probability, 50)).
+                    make(),
+            a(TestGroupMakers.TestGroup,
+                    with(TestGroupMakers.groupId, 2),
+                    with(value, "g2"),
+                    with(probability, 50)).
+                    make());
+
+    public static final List<TestGroup> VALID_TEST_GROUP_WITH_NO_VALUES_LIST = asList(
+            a(TestGroupMakers.TestGroup,
+                    with(TestGroupMakers.groupId, 1),
                     with(probability, 50)).
                     make(),
             a(TestGroupMakers.TestGroup,

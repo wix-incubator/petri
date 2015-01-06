@@ -20,7 +20,8 @@ import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
  */
 public class RPCPetriServerTest extends PetriClientContractTest {
 
-    private final FullPetriClient petriClient;
+    private final FullPetriClient fullPetriClient;
+    private final PetriClient petriClient;
     private static DBDriver dbDriver;
 
     @BeforeClass
@@ -46,6 +47,7 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     }
 
     public RPCPetriServerTest() throws Exception{
+        fullPetriClient = PetriRPCClient.makeFullClientFor("http://localhost:9011/petri/full_api");
         petriClient = PetriRPCClient.makeFor("http://localhost:9011/petri/api");
     }
 
@@ -55,13 +57,18 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     }
 
     @Override
-    protected FullPetriClient petriClient() {
+    protected FullPetriClient fullPetriClient() {
+        return fullPetriClient;
+    }
+
+    @Override
+    protected PetriClient petriClient() {
         return petriClient;
     }
 
     @Test(expected = Exception.class)
     public void respondsWithErrorForIrrelevantURLs() throws MalformedURLException {
-        PetriRPCClient.makeFor("http://localhost:9011/SOME_OTHER_SERVICE").fetchSpecs();
+        PetriRPCClient.makeFullClientFor("http://localhost:9011/SOME_OTHER_SERVICE").fetchSpecs();
     }
 
     @Test(expected = NonSerializableServerException.class)

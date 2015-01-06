@@ -112,6 +112,19 @@ public class ExperimentPredicates {
         }
     }
 
+    public static class IsNotPaused implements Predicate<Experiment> {
+
+        @Override
+        public boolean apply(Experiment input) {
+            return !input.isPaused();
+        }
+
+        public static IsNotPaused isNotPaused() {
+            return new IsNotPaused();
+
+        }
+    }
+
     public static class SpecHasKey implements Predicate<ExperimentSpec> {
 
         private final String key;

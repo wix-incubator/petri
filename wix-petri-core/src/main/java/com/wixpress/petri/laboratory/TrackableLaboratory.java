@@ -14,7 +14,7 @@ import java.util.Map;
  * @author sagyr
  * @since 8/7/13
  */
-public class TrackableLaboratory implements Laboratory, PublicLaboratory {
+public class TrackableLaboratory implements Laboratory {
 
     private final int maxConductionTimeMillis;
     private final Experiments experiments;
@@ -35,11 +35,7 @@ public class TrackableLaboratory implements Laboratory, PublicLaboratory {
     }
 
     private void reportExperimentException(String experimentKey, Throwable cause) {
-        reportException("Unexpected exception while conducting experiment with key - '" + experimentKey + "', due to : " + cause.getMessage(), cause);
-    }
-
-    private void reportException(String message, Throwable cause) {
-        laboratoryErrorHandler.handle(message, cause);
+        laboratoryErrorHandler.handle("Unexpected exception while conducting experiment with key - '" + experimentKey + "', due to : " + cause.getMessage(), cause, ExceptionType.ErrorConductingExperiment);
     }
 
     @Override
@@ -99,7 +95,7 @@ public class TrackableLaboratory implements Laboratory, PublicLaboratory {
             removeExpiredExperiments();
             return conductAll(experiments.findNonExpiredByScope(scope), context);
         } catch (Throwable e) {
-            reportException("Unexpected exception while conducting all experiments for scope - " + scope, e);
+            laboratoryErrorHandler.handle("Unexpected exception while conducting all experiments for scope - " + scope, e, ExceptionType.ErrorConductingExperiment);
             return new HashMap<>();
         }
     }
@@ -188,7 +184,7 @@ public class TrackableLaboratory implements Laboratory, PublicLaboratory {
         if (totalTime > maxConductionTimeMillis) {
             String message = String.format("Conducting of experiment %s took %s milliseconds while the expected time should be under %s milliseconds",
                     experiment.getId(), totalTime, maxConductionTimeMillis);
-            reportException(message, new SlowExperimentException(experiment));
+            laboratoryErrorHandler.handle(message, new SlowExperimentException(experiment), ExceptionType.SlowExperiment);
         }
         return result;
     }

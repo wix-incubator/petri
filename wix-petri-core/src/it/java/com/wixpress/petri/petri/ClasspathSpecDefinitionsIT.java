@@ -1,6 +1,7 @@
 package com.wixpress.petri.petri;
 
 import com.wixpress.petri.laboratory.ErrorHandler;
+import com.wixpress.petri.laboratory.ExceptionType;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Before;
@@ -32,7 +33,8 @@ public class ClasspathSpecDefinitionsIT {
         context.checking(new Expectations() {{
             oneOf(errorHandler).handle(
                     with(allOf(containsString(String.format(ClasspathSpecDefinitions.ERROR_CREATING_SPEC, "")), containsString("InvalidStubSpecDefinition_1"))),
-                    with(any(IllegalAccessException.class)));
+                    with(any(IllegalAccessException.class)),
+                    with(ExceptionType.SpecScannerException));
         }});
     }
 

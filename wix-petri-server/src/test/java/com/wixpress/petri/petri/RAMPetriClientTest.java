@@ -19,7 +19,12 @@ public class RAMPetriClientTest extends PetriClientContractTest {
     }
 
     @Override
-    protected FullPetriClient petriClient() {
+    protected FullPetriClient fullPetriClient() {
+        return ramPetriClient;
+    }
+
+    @Override
+    protected PetriClient petriClient() {
         return ramPetriClient;
     }
 }

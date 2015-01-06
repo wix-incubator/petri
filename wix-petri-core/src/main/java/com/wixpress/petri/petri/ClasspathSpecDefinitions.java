@@ -2,6 +2,7 @@ package com.wixpress.petri.petri;
 
 import com.google.common.base.Predicate;
 import com.wixpress.petri.laboratory.ErrorHandler;
+import com.wixpress.petri.laboratory.ExceptionType;
 import org.reflections.Reflections;
 
 import javax.annotation.Nullable;
@@ -40,7 +41,7 @@ public class ClasspathSpecDefinitions implements SpecDefinitions {
 
                 results.add(subType.newInstance());
             } catch (Exception e) {
-                errorHandler.handle(String.format(ERROR_CREATING_SPEC, subType), e);
+                errorHandler.handle(String.format(ERROR_CREATING_SPEC, subType), e, ExceptionType.SpecScannerException);
             }
         }
         return results;

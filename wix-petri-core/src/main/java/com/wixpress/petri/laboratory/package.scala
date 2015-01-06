@@ -13,18 +13,6 @@ import com.wixpress.petri.petri.SpecDefinition
  */
 package object laboratory {
 
-  /**
-   * use ConductionContext
-   */
-  @Deprecated
-  type ConductContext = ConductionContext
-
-  /**
-   * use ConductionContextBuilder
-   */
-  @Deprecated
-  val ConductContextBuilder = ConductionContextBuilder
-
   implicit def func1ToTestResultConverter[U](f: String => U): TestResultConverter[U] = new TestResultConverter[U] {
     def convert(value: String): U = f(value)
   }

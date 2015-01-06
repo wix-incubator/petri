@@ -10,10 +10,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
-import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.joda.time.DateTime;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.*;
@@ -55,8 +53,6 @@ public class TrackableLaboratoryTest {
             with(key, TheKey.getName()),
             with(testGroups, TEST_GROUPS_WITH_FIRST_ALWAYS_WINNING));
 
-    @Rule
-    public JUnitRuleMockery context = new JUnitRuleMockery();
     private TrackableLaboratory lab;
     private RamUserInfoStorage userInfoStorage;
     private InMemoryExperimentsSource cache;
@@ -82,7 +78,7 @@ public class TrackableLaboratoryTest {
         private Throwable cause;
 
         @Override
-        public void handle(String message, Throwable cause) {
+        public void handle(String message, Throwable cause, ExceptionType exceptionType) {
             this.cause = cause;
         }
 
@@ -709,10 +705,9 @@ public class TrackableLaboratoryTest {
 
         lab.conductExperiment(TheKey, FALLBACK_VALUE);
 
-        final Matcher<Throwable> matcher = anException(SlowExperimentException.class,allOf(
+        final Matcher<Throwable> matcher = anException(SlowExperimentException.class, allOf(
                         containsString("Slow Conducting time of experiment"),
                         containsString("Experiment{id=" + experimentWithSlowCalculationTime.getId()))
-
         );
 
         errorReportWasSent(matcher);
@@ -723,8 +718,9 @@ public class TrackableLaboratoryTest {
         Experiment experimentOnNewUsers = experimentWithWinningFirstGroup.but(
                 with(scope, "someScope"),
                 with(filters, new ArrayList<Filter>() {{
-            add(new NewUsersFilter());
-        }})).make();
+                    add(new NewUsersFilter());
+                }})
+        ).make();
         addExperimentToCache(experimentOnNewUsers);
 
         UserInfo oldUserInfo = aRegisteredUserInfo.but(with(dateCreated, new DateTime().minusHours(1))).make();
@@ -735,8 +731,6 @@ public class TrackableLaboratoryTest {
 
         conductByKeyAndByScopeReturns(WINNING_VALUE, context);
     }
-
-
 
 
 }

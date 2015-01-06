@@ -6,7 +6,9 @@ import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.laboratory.dsl.TestGroupMakers;
 import org.joda.time.DateTime;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,8 @@ import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.id;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.key;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.anExperimentSpec;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public abstract class PetriClientContractTest {
@@ -50,9 +52,9 @@ public abstract class PetriClientContractTest {
 
         SpecDefinition.ExperimentSpecBuilder builder =
                 new SpecDefinition.ExperimentSpecBuilder(snapshot.key(), new DateTime());
-        petriClient().addSpecs(asList(builder.build()));
+        fullPetriClient().addSpecs(asList(builder.build()));
 
-        return petriClient().insertExperiment(snapshot);
+        return fullPetriClient().insertExperiment(snapshot);
     }
 
     private Experiment updateDescription(Experiment experiment, ExperimentSnapshotBuilder aSnapshot) {
@@ -63,20 +65,25 @@ public abstract class PetriClientContractTest {
                                 build()).
                         build();
 
-        return petriClient().updateExperiment(experimentToUpdate);
+        return fullPetriClient().updateExperiment(experimentToUpdate);
     }
 
-    protected abstract FullPetriClient petriClient();
+    protected abstract FullPetriClient fullPetriClient();
+
+    protected abstract PetriClient petriClient();
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void returnsEmptyListWhenNoneDefined() {
-        assertThat(petriClient().fetchAllExperiments(), is(empty()));
+        assertThat(fullPetriClient().fetchAllExperiments(), is(empty()));
     }
 
     @Test
     public void createsAndRetrievesSingleExperiment() {
         Experiment experiment = addExperimentWithKey(anActiveSnapshotWithKey);
-        final List<Experiment> actual = petriClient().fetchAllExperiments();
+        final List<Experiment> actual = fullPetriClient().fetchAllExperiments();
         assertThat(actual, is(asList(experiment)));
     }
 
@@ -84,11 +91,11 @@ public abstract class PetriClientContractTest {
     public void createsAndRetrievesTwoExperiments() {
         Experiment experiment1 = addExperimentWithKey(anActiveSnapshot.withKey("ex1"));
         Experiment experiment2 = addExperimentWithKey(anActiveSnapshot.withKey("ex2"));
-        assertThat(petriClient().fetchAllExperiments(), is(asList(experiment1, experiment2)));
+        assertThat(fullPetriClient().fetchAllExperiments(), is(asList(experiment1, experiment2)));
     }
 
     @Test
-    public void fectActiveRetrievesOnlyActive() {
+    public void fetchActiveRetrievesOnlyActive() {
         Experiment active = addExperimentWithKey(anActiveSnapshotWithKey);
         addExperimentWithKey(inactiveSnapshot.withKey("ex1"));
 
@@ -100,7 +107,7 @@ public abstract class PetriClientContractTest {
         Experiment experiment = addExperimentWithKey(anActiveSnapshotWithKey);
         Experiment updated = updateDescription(experiment, anActiveSnapshot);
 
-        assertThat(petriClient().fetchAllExperiments(), is(asList(updated)));
+        assertThat(fullPetriClient().fetchAllExperiments(), is(asList(updated)));
     }
 
     @Test
@@ -116,71 +123,80 @@ public abstract class PetriClientContractTest {
         Experiment experiment = addExperimentWithKey(anActiveSnapshotWithKey);
         Experiment updatedExperiment = updateDescription(experiment, anActiveSnapshot);
 
-        List<Experiment> historyById = petriClient().getHistoryById(experiment.getId());
+        List<Experiment> historyById = fullPetriClient().getHistoryById(experiment.getId());
         assertThat(historyById, is(asList(updatedExperiment, experiment)));
     }
 
-    @Test(expected = FullPetriClient.CreateFailed.class)
+    @Test
     public void createExperimentWithNonExistingKeyThrowsException() {
         String nonExistingKey = "someKey";
-        petriClient().insertExperiment(anActiveSnapshot.withKey(nonExistingKey).build());
+
+        thrown.expect(FullPetriClient.CreateFailed.class);
+        thrown.expectMessage(allOf(containsString("unable to add a"), containsString("ExperimentSnapshot"),
+                containsString("with key 'someKey")));
+
+        fullPetriClient().insertExperiment(anActiveSnapshot.withKey(nonExistingKey).build());
     }
 
-    @Test(expected = FullPetriClient.UpdateFailed.class)
+    @Test
     public void updateExperimentToNonExistingKeyThrowsException() {
         Experiment experiment = addExperimentWithKey(anActiveSnapshot.withKey("ex1"));
         Experiment mutatedExperiment = aValidExperiment.but(with(key, "ex2"), with(id, experiment.getId())).make();
-        petriClient().updateExperiment(mutatedExperiment);
+
+        thrown.expect(FullPetriClient.UpdateFailed.class);
+        thrown.expectMessage("Failed to update experiment 1");
+
+        fullPetriClient().updateExperiment(mutatedExperiment);
     }
 
     @Test(expected = FullPetriClient.UpdateFailed.class)
     public void updateExperimentWithNonExistingIdThrowsException() {
         SpecDefinition.ExperimentSpecBuilder builder =
                 new SpecDefinition.ExperimentSpecBuilder("ex1", new DateTime()).withTestGroups(asList("1", "2"));
-        petriClient().addSpecs(asList(builder.build()));
+        fullPetriClient().addSpecs(asList(builder.build()));
         int nonExistingId = 3;
-        petriClient().updateExperiment(aValidExperiment.but(with(key, "ex1"), with(id, nonExistingId)).make());
+        fullPetriClient().updateExperiment(aValidExperiment.but(with(key, "ex1"), with(id, nonExistingId)).make());
     }
 
     @Test
     public void createsAndRetrievesSingleSpec() {
         ExperimentSpec experimentSpec = anExperimentSpec("f.q.n.Spec1", new DateTime()).withTestGroups(asList("yellow", "green")).build();
 
-        petriClient().addSpecs(asList(experimentSpec));
+        fullPetriClient().addSpecs(asList(experimentSpec));
 
-        assertThat(petriClient().fetchSpecs(), is(asList(experimentSpec)));
+        assertThat(fullPetriClient().fetchSpecs(), is(asList(experimentSpec)));
     }
 
     @Test
     public void createsAndRetrievesExperimentWithFilters() {
         SpecDefinition.ExperimentSpecBuilder builder =
                 new SpecDefinition.ExperimentSpecBuilder("ex1", new DateTime()).withTestGroups(asList("1", "2"));
-        petriClient().addSpecs(asList(builder.build()));
+        fullPetriClient().addSpecs(asList(builder.build()));
         List<Filter> filters = new ArrayList<Filter>();
         filters.add(new FirstTimeVisitorsOnlyFilter());
-        Experiment experiment = petriClient().insertExperiment(
+        Experiment experiment = fullPetriClient().insertExperiment(
                 anActiveSnapshot.withKey("ex1").withFilters(filters).build());
 
         Experiment expected = anExperiment().withId(1).withLastUpdated(experiment.getCreationDate()).withExperimentSnapshot(experiment.getExperimentSnapshot()).build();
-        assertThat(petriClient().fetchAllExperiments(), is(asList(expected)));
+        assertThat(fullPetriClient().fetchAllExperiments(), is(asList(expected)));
     }
 
     @Test
     public void experimentNotFromSpecCanBeUpdatedTwice() {
         ExperimentSnapshot experimentNotFromSpec = anActiveSnapshot.withKey("ex1").withFromSpec(false).build();
-        petriClient().insertExperiment(experimentNotFromSpec);
+        fullPetriClient().insertExperiment(experimentNotFromSpec);
 
         Experiment persistedExperiment = petriClient().fetchActiveExperiments().get(0);
-        Experiment mutatedExperiment = ExperimentBuilder.aCopyOf(persistedExperiment).
+        Experiment mutatedExperiment = aCopyOf(persistedExperiment).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(persistedExperiment.getExperimentSnapshot()).withDescription("ha").build()).
                 build();
-        petriClient().updateExperiment(mutatedExperiment);
+        fullPetriClient().updateExperiment(mutatedExperiment);
 
         persistedExperiment = petriClient().fetchActiveExperiments().get(0);
-        mutatedExperiment = ExperimentBuilder.aCopyOf(persistedExperiment).
+        mutatedExperiment = aCopyOf(persistedExperiment).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(persistedExperiment.getExperimentSnapshot()).withDescription("haha!").build()).
                 build();
-        petriClient().updateExperiment(mutatedExperiment);
+        fullPetriClient().updateExperiment(mutatedExperiment);
     }
 
     @Test
@@ -188,20 +204,20 @@ public abstract class PetriClientContractTest {
         ExperimentSpec spec = anExperimentSpec("allLowerCase", new DateTime()).withTestGroups(asList("yellow", "green")).build();
         ExperimentSpec duplicateSpec = anExperimentSpec("alllowercase", new DateTime()).withTestGroups(asList("yellow", "green")).build();
 
-        petriClient().addSpecs(asList(spec));
-        petriClient().addSpecs(asList(duplicateSpec));
+        fullPetriClient().addSpecs(asList(spec));
+        fullPetriClient().addSpecs(asList(duplicateSpec));
 
-        assertThat(petriClient().fetchSpecs().size(), is(1));
-        assertThat(petriClient().fetchSpecs().get(0).getKey(), is("alllowercase"));
+        assertThat(fullPetriClient().fetchSpecs().size(), is(1));
+        assertThat(fullPetriClient().fetchSpecs().get(0).getKey(), is("alllowercase"));
     }
 
     @Test
     public void deleteSpec() {
         ExperimentSpec experimentSpec = anExperimentSpec("talya", new DateTime()).build();
-        petriClient().addSpecs(asList(experimentSpec));
+        fullPetriClient().addSpecs(asList(experimentSpec));
 
-        petriClient().deleteSpec(experimentSpec.getKey());
-        assertThat(petriClient().fetchSpecs(), is(empty()));
+        fullPetriClient().deleteSpec(experimentSpec.getKey());
+        assertThat(fullPetriClient().fetchSpecs(), is(empty()));
     }
 
 

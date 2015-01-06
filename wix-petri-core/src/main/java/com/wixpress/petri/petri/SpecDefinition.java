@@ -106,6 +106,9 @@ public abstract class SpecDefinition {
 
 
         public ExperimentSpec build() {
+            if (scopes.contains(null)) {
+                throw new IllegalArgumentException("cannot create spec with null scope");
+            }
             return new ExperimentSpec(key, owner, testGroups, creationDate, scopes, updateDate, persistent);
         }
 

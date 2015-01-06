@@ -30,7 +30,7 @@ import static com.wixpress.petri.petri.PetriRpcServer.HasSpecSnapshot.hasSpecSna
 public class PetriRpcServer implements FullPetriClient, PetriClient {
     public static final String SPEC_OWNER_CHANGED_MSG = "Pay attention - Owner of %s has been changed to %s";
     public static final String SPEC_UPDATE_FAILED_MSG = "Failed to update spec [%s]";
-    public static final String NON_TERMINATED_EXPERIMENTS_MSG = "There are non-terminated experiments defined for it";
+    public static final String NON_TERMINATED_EXPERIMENTS_MSG = "Cannot update spec when non-terminated experiments exist on it";
 
     private final OriginalIDAwarePetriDao<Experiment, ExperimentSnapshot> experimentsDao;
     private final Clock clock;

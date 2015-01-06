@@ -111,7 +111,7 @@ public class ExperimentSnapshotTest {
                         make()
         );
         assertThat(snapshotWithGroups(groupsWithNoID).build(),
-                is(snapshotWithGroups(VALID_TEST_GROUP_LIST).build()));
+                is(snapshotWithGroups(VALID_TEST_GROUP_WITH_NO_VALUES_LIST).build()));
     }
 
     @Test
@@ -127,7 +127,7 @@ public class ExperimentSnapshotTest {
                         make()
         );
         assertThat(snapshotWithGroups(groupsWithPartialIDs).build(),
-                is(snapshotWithGroups(VALID_TEST_GROUP_LIST).build()));
+                is(snapshotWithGroups(VALID_TEST_GROUP_WITH_NO_VALUES_LIST).build()));
     }
 
     @Test
