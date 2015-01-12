@@ -18,7 +18,7 @@ Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of 
 
 
 ### Want to learn more? 
-Have a look at the [quickstart guide](https://github.com/wix/petri/wiki/Quickstart-Guide) or browse our [wiki](https://github.com/wix/petri/wiki/PETRI) for more [concepts & best practices] (https://github.com/wix/petri/wiki/Concepts-&-Best-Practices).
+Have a look at the [quickstart guide](https://github.com/wix/petri/wiki/Quickstart-Guide) or browse our [wiki](https://github.com/wix/petri/wiki) for more [concepts & best practices] (https://github.com/wix/petri/wiki/Concepts-&-Best-Practices).
 
 </br>
 
