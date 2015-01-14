@@ -5,7 +5,7 @@ Petri
 
 Wix's holistic experiment system - covers the lifecycle of product experimenting (A/B tests and feature toggles).
 
-Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of daily changes (instantly affecting production).  
+Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of daily changes (instantly affecting production, no deployment needed).  
 
 ### Main features
 * A/B tests can be used to affect the experience users receive - thus enabling product managers to know what users prefer.
