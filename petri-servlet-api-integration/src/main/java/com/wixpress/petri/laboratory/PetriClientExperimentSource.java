@@ -17,8 +17,8 @@ import java.util.List;
 public class PetriClientExperimentSource implements CachedExperiments.ExperimentsSource {
     private final PetriClient petriProxy;
 
-    public PetriClientExperimentSource(String petriUrl) throws MalformedURLException {
-        this.petriProxy = PetriRPCClient.makeFor(petriUrl);
+    public PetriClientExperimentSource(PetriClient petriProxy) throws MalformedURLException {
+        this.petriProxy = petriProxy;
     }
 
     @Override

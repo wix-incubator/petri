@@ -31,6 +31,8 @@ public interface FullPetriClient {
 
     void deleteSpec(String key);
 
+    List<ConductExperimentSummary> getExperimentReport(int experimentId);
+
 
     public class PetriException extends RuntimeException {
         public PetriException(Throwable e) {

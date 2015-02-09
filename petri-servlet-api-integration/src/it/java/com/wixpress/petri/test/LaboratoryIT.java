@@ -1,18 +1,23 @@
 package com.wixpress.petri.test;
 
 import com.wixpress.petri.experiments.domain.*;
+import com.wixpress.petri.util.ConductExperimentSummaryMatcher;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.UUID;
 
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf;
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.anExperimentSnapshot;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.aNewlyGeneratedExperimentSpec;
+import static java.lang.Thread.sleep;
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -83,6 +88,12 @@ public class LaboratoryIT {
                 withKey(THE_KEY);
     }
 
+    private void assertConductExperimentReported(Experiment experiment) throws UnknownHostException, InterruptedException {
+        sleep(5);
+        assertThat(petri.getConductExperimentReport(experiment.getId()),
+                contains(ConductExperimentSummaryMatcher.hasSummary(InetAddress.getLocalHost().getHostName(), experiment.getId(), "a", 1l)));
+    }
+
     @Test
     public void conductingASimpleExperiment() throws Exception {
         String testResult = sampleApp.conductExperiment(THE_KEY, "FALLBACK");
@@ -116,6 +127,13 @@ public class LaboratoryIT {
         updateExperimentState(forLoggedInUsersOnly);
 
         assertThat(sampleApp.conductExperimentByUser(THE_KEY, "FALLBACK", uuid), is("a"));
+    }
+
+
+    @Test
+    public void conductsExperimentAndReportIt() throws IOException, InterruptedException {
+        sampleApp.conductExperiment(THE_KEY, "FALLBACK");
+        assertConductExperimentReported(originalExperiment);
     }
 
 }

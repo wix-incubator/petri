@@ -42,7 +42,8 @@ class PetriServerFactory {
         PetriMapper specMapper = new SpecMapper(objectMapper,mappingErrorHandler);
         DeleteEnablingPetriDao<ExperimentSpec, ExperimentSpec> specsDao = new JdbcSpecsDao(jdbcTemplate,specMapper);
         PetriNotifier notifier = new NoopPetriNotifier();
-        PetriRpcServer petri = new PetriRpcServer(experimentsDao,clock,specsDao,notifier);
+        MetricsReportsDao metricsReportaDao = new JdbcMetricsReportsDao(jdbcTemplate);
+        PetriRpcServer petri = new PetriRpcServer(experimentsDao,clock,specsDao,notifier, metricsReportaDao);
         return new JsonRPCServer(petri, objectMapper, port);
     }
 

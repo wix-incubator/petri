@@ -143,6 +143,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.specs2</groupId>
+            <artifactId>specs2_2.10</artifactId>
+            <version>2.3.13</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -150,7 +156,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.6</version>
+                <version>2.12.1</version>
                 <configuration>
                     <additionalClasspathElements>
                         <additionalClasspathElement>src/it/java</additionalClasspathElement>
@@ -215,6 +221,7 @@
                         <id>scala-test-compile</id>
                         <phase>process-test-resources</phase>
                         <goals>
+                            <goal>compile</goal>
                             <goal>testCompile</goal>
                         </goals>
                     </execution>

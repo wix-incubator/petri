@@ -10,6 +10,7 @@ import com.wixpress.petri.experiments.domain.ExperimentSpecSnapshot;
 import org.joda.time.DateTime;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.notNull;
@@ -36,13 +37,16 @@ public class PetriRpcServer implements FullPetriClient, PetriClient {
     private final Clock clock;
     private final DeleteEnablingPetriDao<ExperimentSpec, ExperimentSpec> specsDao;
     private final PetriNotifier petriNotifier;
+    private final MetricsReportsDao metricsReportsDao;
 
     public PetriRpcServer(OriginalIDAwarePetriDao<Experiment, ExperimentSnapshot> experimentsDao, Clock clock,
-                          DeleteEnablingPetriDao<ExperimentSpec, ExperimentSpec> specsDao, PetriNotifier petriNotifier) {
+                          DeleteEnablingPetriDao<ExperimentSpec, ExperimentSpec> specsDao, PetriNotifier petriNotifier,
+                          MetricsReportsDao metricsReportsDao) {
         this.experimentsDao = experimentsDao;
         this.clock = clock;
         this.specsDao = specsDao;
         this.petriNotifier = petriNotifier;
+        this.metricsReportsDao = metricsReportsDao;
     }
 
     private String printOriginalAndNewSpecs(ExperimentSpec experimentSpec, ExperimentSpec originalSpec) {
@@ -110,6 +114,16 @@ public class PetriRpcServer implements FullPetriClient, PetriClient {
     public void deleteSpec(String key) {
         if (!hasUnterminatedExperiments(key))
             specsDao.delete(key);
+    }
+
+    @Override
+    public void reportConductExperiment(List<ConductExperimentReport> conductExperimentReports) {
+        metricsReportsDao.addReports(conductExperimentReports);
+    }
+
+    @Override
+    public List<ConductExperimentSummary> getExperimentReport(int experimentId) {
+        return metricsReportsDao.getReport(experimentId);
     }
 
     private void addSpec(ExperimentSpec experimentSpec, List<ExperimentSpec> existingSpecs) {

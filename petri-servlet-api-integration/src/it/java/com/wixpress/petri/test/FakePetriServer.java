@@ -5,9 +5,9 @@ import com.wixpress.petri.JsonRPCServer;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentBuilder;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
-import com.wixpress.petri.petri.FullPetriClient;
-import com.wixpress.petri.petri.RAMPetriClient;
-import com.wixpress.petri.petri.SpecDefinition;
+import com.wixpress.petri.petri.*;
+
+import java.util.List;
 
 import static com.wixpress.petri.experiments.jackson.ObjectMapperFactory.makeObjectMapper;
 import static java.util.Arrays.asList;
@@ -50,5 +50,9 @@ public class FakePetriServer {
 
     public void updateExperiment(ExperimentBuilder experimentBuilder) {
         petriClient.updateExperiment(experimentBuilder.build());
+    }
+
+    public List<ConductExperimentSummary> getConductExperimentReport(int experimentId) {
+        return petriClient.getExperimentReport(experimentId);
     }
 }

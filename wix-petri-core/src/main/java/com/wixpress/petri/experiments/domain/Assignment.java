@@ -11,12 +11,14 @@ public class Assignment {
     private final String experimentScope;
     private final boolean isOnlyForLoggedInUsers;
     private final boolean isPersistent;
+    private final long executionTime;
 
     //TODO - extract the field copying of the experiment to a builder
-    public Assignment(BIAdditions biAdditions, UserInfo userInfo, TestGroup testGroup, Experiment experiment) {
+    public Assignment(BIAdditions biAdditions, UserInfo userInfo, TestGroup testGroup, Experiment experiment, long executionTime) {
         this.biAdditions = biAdditions;
         this.userInfo = userInfo;
         this.testGroup = testGroup;
+        this.executionTime = executionTime;
         this.isToggle = experiment.isToggle();
         this.experimentId = experiment.getId();
         this.experimentScope = experiment.getScope();
@@ -42,6 +44,10 @@ public class Assignment {
 
     public TestGroup getTestGroup() {
         return testGroup;
+    }
+
+    public long getExecutionTime() {
+        return executionTime;
     }
 
     public <T> T result(TestResultConverter<T> resultConverter) {

@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.*;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.*;
+import static java.lang.Thread.sleep;
 import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.Matchers.is;
@@ -34,54 +35,7 @@ import static org.junit.Assert.assertTrue;
  */
 
 
-public class PetriE2eTest {
-
-
-    private static final int PETRI_PORT = 9010;
-
-    private static final int SAMPLE_APP_PORT = 9011;
-    private static final String SAMPLE_WEBAPP_PATH = PetriE2eTest.class.getResource("/").getPath() + "../../../sample-petri-app/src/main/webapp";
-    private static final SampleAppRunner sampleAppRunner = new SampleAppRunner(SAMPLE_APP_PORT, SAMPLE_WEBAPP_PATH);
-    private static DBDriver dbDriver;
-
-    @BeforeClass
-    public static void startServers() throws Exception {
-
-        // TODO: Remove duplication with RPCPetriServerTest
-        dbDriver = DBDriver.dbDriver("jdbc:h2:mem:test;IGNORECASE=TRUE");
-        dbDriver.createSchema();
-
-        aPetriConfigFile().delete();
-        aPetriConfigFile().
-                withUsername("auser").
-                withPassword("sa").
-                withUrl("jdbc:h2:mem:test").
-                withPort(PETRI_PORT).
-                save();
-
-        Main.main();
-
-        sampleAppRunner.start();
-    }
-
-    @AfterClass
-    public static void stopServers() throws Exception {
-        sampleAppRunner.stop();
-        aPetriConfigFile().delete();
-        dbDriver.closeConnection();
-    }
-
-    private FullPetriClient fullPetriClient() throws MalformedURLException {
-        return PetriRPCClient.makeFullClientFor("http://localhost:" +
-                PETRI_PORT +
-                "/petri/full_api");
-    }
-
-    private PetriClient petriClient() throws MalformedURLException {
-        return PetriRPCClient.makeFor("http://localhost:" +
-                PETRI_PORT +
-                "/petri/api");
-    }
+public class PetriE2eTest  extends BaseTest {
 
 
     @Test

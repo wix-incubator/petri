@@ -1,5 +1,6 @@
 package com.wixpress.petri.petri;
 
+import com.google.common.collect.ImmutableList;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
@@ -45,6 +46,7 @@ public class PetriRpcServerTest {
     private DeleteEnablingPetriDao specsDao;
     private PetriNotifier mailService;
     private Clock clock;
+    private MetricsReportsDao metricsReportsDao;
 
 
     private final static Maker<Experiment> experimentMaker = an(Experiment,
@@ -164,7 +166,8 @@ public class PetriRpcServerTest {
         specsDao = context.mock(DeleteEnablingPetriDao.class);
         clock = context.mock(Clock.class);
         mailService = context.mock(PetriNotifier.class);
-        petriRpcServer = new PetriRpcServer(experimentsDao, clock, specsDao, mailService);
+        metricsReportsDao = context.mock(MetricsReportsDao.class);
+        petriRpcServer = new PetriRpcServer(experimentsDao, clock, specsDao, mailService, metricsReportsDao);
 
     }
 
@@ -346,6 +349,24 @@ public class PetriRpcServerTest {
 
         context.checking(specIsNotDeleted(spec.getKey()));
         petriRpcServer.deleteSpec(spec.getKey());
+    }
+
+    @Test
+    public void reportConductExperiment() {
+        final List<ConductExperimentReport> reports = ImmutableList.of(new ConductExperimentReport("localhost", 1, "true", 7l));
+        context.checking(new Expectations() {{
+            oneOf(metricsReportsDao).addReports(reports);
+        }});
+        petriRpcServer.reportConductExperiment(reports);
+    }
+
+    @Test
+    public void getExperimentReport() {
+        final List<ConductExperimentSummary> reports = ImmutableList.of(new ConductExperimentSummary("localhost", 1, "true", 7l, 11l, new DateTime()));
+        context.checking(new Expectations() {{
+            allowing(metricsReportsDao).getReport(1);
+            will(returnValue(reports));        }});
+        assertThat(petriRpcServer.getExperimentReport(1), is(reports));
     }
 
 

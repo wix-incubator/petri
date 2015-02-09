@@ -17,4 +17,6 @@ public interface PetriClient {
 
     void addSpecs(List<ExperimentSpec> expectedSpecs);
 
+    void reportConductExperiment( List<ConductExperimentReport> conductExperimentReports);
+
 }

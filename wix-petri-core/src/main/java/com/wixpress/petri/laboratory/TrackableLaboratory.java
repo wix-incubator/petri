@@ -3,7 +3,9 @@ package com.wixpress.petri.laboratory;
 import com.wixpress.petri.experiments.domain.Assignment;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
+import com.wixpress.petri.laboratory.converters.BooleanConverter;
 import com.wixpress.petri.laboratory.converters.StringConverter;
+import com.wixpress.petri.petri.MetricsReporter;
 import com.wixpress.petri.petri.SpecDefinition;
 
 import java.util.HashMap;
@@ -21,13 +23,18 @@ public class TrackableLaboratory implements Laboratory {
     private final UserInfoStorage userInfoStorage;
     private final TestGroupAssignmentTracker testGroupAssignmentTracker;
     private final ErrorHandler laboratoryErrorHandler;
+    private final MetricsReporter metricsReporter ;
+    public static String reportExperimentConduct = "ReportExperimentConduct";
 
-    public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage, ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis) {
+
+    public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
+                               ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter) {
         this.experiments = experiments;
         this.testGroupAssignmentTracker = testGroupAssignmentTracker;
         this.userInfoStorage = userInfoStorage;
         this.laboratoryErrorHandler = laboratoryErrorHandler;
         this.maxConductionTimeMillis = maxConductionTimeMillis;
+        this.metricsReporter = metricsReporter;
     }
 
     private UserInfo userInfo() {
@@ -168,25 +175,25 @@ public class TrackableLaboratory implements Laboratory {
     }
 
     private <T> T valueFromConduct(TestResultConverter<T> resultConverter, Experiment experiment, ConductionContext context) {
-        Assignment assignment = conductExperimentAndNotifySlowCalculationTime(context, experiment);
+        Assignment assignment = experiment.conduct(context, userInfo());
 
         assignment.executeSideEffects(testGroupAssignmentTracker, userInfoStorage);
+
+        generateExperimentReports(assignment, experiment);
 
         return assignment.result(resultConverter);
     }
 
-    private Assignment conductExperimentAndNotifySlowCalculationTime(ConductionContext context, Experiment experiment) {
-        long startTime = System.currentTimeMillis();
-        Assignment result = experiment.conduct(context, userInfo());
-        long endTime = System.currentTimeMillis();
-        double totalTime = endTime - startTime;
+    private void generateExperimentReports(Assignment assignment, Experiment experiment) {
 
-        if (totalTime > maxConductionTimeMillis) {
+        if (assignment.getExecutionTime() > maxConductionTimeMillis) {
             String message = String.format("Conducting of experiment %s took %s milliseconds while the expected time should be under %s milliseconds",
-                    experiment.getId(), totalTime, maxConductionTimeMillis);
+                    experiment.getId(), assignment.getExecutionTime(), maxConductionTimeMillis);
             laboratoryErrorHandler.handle(message, new SlowExperimentException(experiment), ExceptionType.SlowExperiment);
         }
-        return result;
+        if(assignment.getTestGroup() != null)
+              metricsReporter.reportConductExperiment(experiment.getId(), assignment.getTestGroup().getValue());
+
     }
 
 

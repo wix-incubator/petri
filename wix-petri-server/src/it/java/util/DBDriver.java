@@ -1,5 +1,9 @@
 package util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
+import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
@@ -14,13 +18,15 @@ import java.sql.SQLException;
 public class DBDriver {
 
     public final JdbcTemplate jdbcTemplate;
+    public final ObjectMapper objectMapper;
 
-    private DBDriver(JdbcTemplate template) {
+    private DBDriver(JdbcTemplate template, ObjectMapper objectMapper) {
         this.jdbcTemplate = template;
+        this.objectMapper = objectMapper;
     }
 
     public static DBDriver dbDriver(String url) throws SQLException, ClassNotFoundException {
-        return new DBDriver(createTemplate(url));
+        return new DBDriver(createTemplate(url), ObjectMapperFactory.makeObjectMapper());
     }
 
     private static JdbcTemplate createTemplate(String url) throws ClassNotFoundException, SQLException {
@@ -28,6 +34,15 @@ public class DBDriver {
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource(conn, false);
 
         return new JdbcTemplate(dataSource);
+    }
+
+    public void createMetricsTableSchema(){
+        dropMetricsTable();
+        jdbcTemplate.execute("CREATE TABLE metricsReport (server_name VARCHAR (255) NOT NULL, experiment_id INT NOT NULL, experiment_value VARCHAR (255) NOT NULL, total_count BIGINT,  five_minutes_count BIGINT , last_update_date BIGINT,  PRIMARY KEY (server_name, experiment_id, experiment_value))");
+    }
+
+    public void dropMetricsTable() {
+        jdbcTemplate.execute("DROP TABLE IF EXISTS metricsReport");
     }
 
     public void createSchema() {
@@ -45,6 +60,13 @@ public class DBDriver {
 
     public void insertIllegalExperiment() {
         jdbcTemplate.update("insert into experiments(id,last_update_date,experiment) values (1,0,'illegalExperiment')");
+    }
+
+    public void insertExperiment(ExperimentSnapshot experiment) throws JsonProcessingException {
+        jdbcTemplate.update("insert into experiments(id,last_update_date,experiment) values (?,?,?)",
+                experiment.originalId(),
+                experiment.creationDate().getMillis(),
+                objectMapper.writeValueAsString(experiment));
     }
 
     public void insertSpec(final String serializedSpec, String key) {

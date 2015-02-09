@@ -1,10 +1,13 @@
 package com.wixpress.petri.laboratory;
 
+import com.google.common.collect.ImmutableList;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.laboratory.converters.IntegerConverter;
 import com.wixpress.petri.laboratory.converters.StringConverter;
 import com.wixpress.petri.laboratory.dsl.UserInfoMakers;
+import com.wixpress.petri.petri.MetricsReporter;
+import com.wixpress.petri.petri.ReportKey;
 import com.wixpress.petri.petri.SpecDefinition;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -58,6 +61,7 @@ public class TrackableLaboratoryTest {
     private InMemoryExperimentsSource cache;
     private FakeTestGroupAssignmentTracker testGroupAssignmentTracker;
     private FakeErrorHandler laboratoryErrorHandler;
+    private FakeMetricsReporter metricsReporter;
 
     @Before
     public void setUp() throws Exception {
@@ -69,8 +73,9 @@ public class TrackableLaboratoryTest {
         userInfoStorage = new RamUserInfoStorage();
         testGroupAssignmentTracker = new FakeTestGroupAssignmentTracker();
         laboratoryErrorHandler = new FakeErrorHandler();
+        metricsReporter = new FakeMetricsReporter();
         lab = new TrackableLaboratory(experiments, testGroupAssignmentTracker, userInfoStorage,
-                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter);
     }
 
     public static class FakeErrorHandler implements ErrorHandler {
@@ -100,6 +105,25 @@ public class TrackableLaboratoryTest {
             return assignments;
         }
 
+    }
+
+    public static class FakeMetricsReporter implements MetricsReporter{
+
+        Map<ReportKey, Integer> reportMap = new HashMap<>();
+
+        @Override
+        public void reportConductExperiment(int experimentId, String experimentValue) {
+            reportMap.put(new ReportKey(experimentId, experimentValue), 1);
+        }
+
+        @Override
+        public void reportToServer() {
+
+        }
+
+        public Map<ReportKey, Integer> getReportMap(){
+            return reportMap;
+        }
     }
 
     public void addExperimentToCache(Experiment experiment) {
@@ -153,6 +177,10 @@ public class TrackableLaboratoryTest {
 
     private void errorReportWasSent(final Matcher<Throwable> exceptionMatcher) {
         assertThat(laboratoryErrorHandler.getCause(), is(exceptionMatcher));
+    }
+
+    private void noErrorReportsWereSent() {
+        assertThat(laboratoryErrorHandler.getCause(), is(nullValue()));
     }
 
     private void writeUserInfoFromNullRequest() {
@@ -466,7 +494,7 @@ public class TrackableLaboratoryTest {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
         lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
-                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter);
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
         errorReportWasSent(Matchers.<Throwable>instanceOf(BlowingUpCachedExperiments.CacheExploded.class));
         assertBiLogIsEmpty();
@@ -477,7 +505,7 @@ public class TrackableLaboratoryTest {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
         lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
-                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter);
 
         Map<String, String> expected = new HashMap();
         assertThat(lab.conductAllInScope("whatever"), is(expected));
@@ -732,5 +760,32 @@ public class TrackableLaboratoryTest {
         conductByKeyAndByScopeReturns(WINNING_VALUE, context);
     }
 
+    @Test
+    public void experimentIsReportedWhenConducted() throws Exception {
+        Experiment anExperiment = experimentWithWinningFirstGroup.make();
+        addExperimentToCache(anExperiment);
+        userInfoStorage.write(AnonymousUserInfo.make());
 
+        lab.conductExperiment(TheKey, FALLBACK_VALUE);
+
+        assertThat(metricsReporter.getReportMap(), hasEntry(new ReportKey(anExperiment.getId(), WINNING_VALUE), 1));
+    }
+
+
+    @Test
+    public void experimentIsNotReportedWhenTheExperimentIsPaused() throws Exception {
+        Experiment pausedExperiment = experimentWithWinningFirstGroup.but(
+                with(paused, true)
+        ).make();
+
+        userInfoStorage.write(AnonymousUserInfo.make());
+        addExperimentToCache(pausedExperiment);
+
+        lab.conductExperiment(TheKey, FALLBACK_VALUE);
+
+        assertThat(metricsReporter.getReportMap().isEmpty(), is(true));
+
+        noErrorReportsWereSent();
+
+    }
 }

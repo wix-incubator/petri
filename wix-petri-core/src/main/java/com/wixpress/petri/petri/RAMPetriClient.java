@@ -1,6 +1,7 @@
 package com.wixpress.petri.petri;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
@@ -32,11 +33,13 @@ public class RAMPetriClient implements FullPetriClient, PetriClient {
     private int currentId = 1;
     private Map<String, ExperimentSpec> specs = new TreeMap<String, ExperimentSpec>(String.CASE_INSENSITIVE_ORDER);
     private boolean blowUp = false;
+    private List<ConductExperimentReport> reports  = new ArrayList<>();
 
     public synchronized void clearAll() {
         experiments.clear();
         specs.clear();
         currentId = 1;
+        reports.clear();
     }
 
     public void setBlowUp(boolean blowUp) {
@@ -199,10 +202,11 @@ public class RAMPetriClient implements FullPetriClient, PetriClient {
         }
     }
 
-    private void store(ExperimentSpec expectedSpec) {
-        specs.put(expectedSpec.getKey(), expectedSpec);
-    }
+    @Override
+    public void reportConductExperiment(List<ConductExperimentReport> conductExperimentReports) {
+        store(conductExperimentReports);
 
+    }
     @Override
     public synchronized List<Experiment> getHistoryById(final int id) {
         return reverse(newLinkedList(filter(experiments.values(), hasID(id))));
@@ -212,6 +216,36 @@ public class RAMPetriClient implements FullPetriClient, PetriClient {
     public synchronized void deleteSpec(String key) {
         specs.remove(key);
     }
+
+
+    @Override
+    public List<ConductExperimentSummary> getExperimentReport(int experimentId) {
+
+        ConductExperimentReport report = getConductExperimentReport(experimentId);
+        if(report == null)
+            return ImmutableList.of();
+        return ImmutableList.of(new ConductExperimentSummary(report.serverName(), report.experimentId(), report.experimentValue(),
+                report.count(), report.count(), new DateTime()));
+    }
+
+
+    private void store(List<ConductExperimentReport> conductExperimentReports) {
+        reports.addAll(conductExperimentReports);
+    }
+
+    public ConductExperimentReport getConductExperimentReport(int id) {
+           for(ConductExperimentReport report : reports){
+               if(report.experimentId() ==  id )
+                   return report;
+           }
+        return null;
+     }
+
+    private void store(ExperimentSpec expectedSpec) {
+        specs.put(expectedSpec.getKey(), expectedSpec);
+    }
+
+
 
     public synchronized void addDirectly(Experiment e) {
         store(e);

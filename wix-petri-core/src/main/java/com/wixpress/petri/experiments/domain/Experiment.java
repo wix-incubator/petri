@@ -310,6 +310,7 @@ public class Experiment {
     }
 
     public Assignment conduct(ConductionContext context, UserInfo userInfo) {
+        long startTime = System.currentTimeMillis();
         TestGroup winning = null;
         EligibilityCriteria eligibilityCriteria = new EligibilityCriteria(
                 userInfo, context.additionalEligibilityCriteria(), getStartDate());
@@ -322,7 +323,11 @@ public class Experiment {
             }
         }
 
-        return new Assignment(context.biAdditions(), userInfo, winning, this);
+        return new Assignment(context.biAdditions(), userInfo, winning, this, calculateExecutionTime(startTime));
+    }
+
+    private long calculateExecutionTime(long startTime) {
+        return System.currentTimeMillis() - startTime;
     }
 
     public static class InvalidExperiment extends RuntimeException {
