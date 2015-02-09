@@ -1,6 +1,5 @@
 package com.wixpress.petri.petri.web;
 
-import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import com.wixpress.petri.petri.SpecsSynchronizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

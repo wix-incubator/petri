@@ -3,7 +3,6 @@ package com.wixpress.petri.laboratory;
 import com.wixpress.petri.experiments.domain.Assignment;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
-import com.wixpress.petri.laboratory.converters.BooleanConverter;
 import com.wixpress.petri.laboratory.converters.StringConverter;
 import com.wixpress.petri.petri.MetricsReporter;
 import com.wixpress.petri.petri.SpecDefinition;
@@ -24,8 +23,6 @@ public class TrackableLaboratory implements Laboratory {
     private final TestGroupAssignmentTracker testGroupAssignmentTracker;
     private final ErrorHandler laboratoryErrorHandler;
     private final MetricsReporter metricsReporter ;
-    public static String reportExperimentConduct = "ReportExperimentConduct";
-
 
     public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
                                ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter) {
@@ -192,7 +189,7 @@ public class TrackableLaboratory implements Laboratory {
             laboratoryErrorHandler.handle(message, new SlowExperimentException(experiment), ExceptionType.SlowExperiment);
         }
         if(assignment.getTestGroup() != null)
-              metricsReporter.reportConductExperiment(experiment.getId(), assignment.getTestGroup().getValue());
+           metricsReporter.reportConductExperiment(experiment.getId(), assignment.getTestGroup().getValue());
 
     }
 

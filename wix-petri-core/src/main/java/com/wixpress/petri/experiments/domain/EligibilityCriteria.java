@@ -1,6 +1,5 @@
 package com.wixpress.petri.experiments.domain;
 
-import com.wixpress.petri.laboratory.BrowserVersion;
 import com.wixpress.petri.laboratory.EligibilityCriterion;
 import com.wixpress.petri.laboratory.UserInfo;
 import org.joda.time.DateTime;
@@ -16,7 +15,6 @@ public class EligibilityCriteria {
     private final DateTime experimentStartDate;
 
     private final DateTime userCreationDate;
-    private final BrowserVersion browserVersion;
     private final String email;
     private final String host;
     private final String country;
@@ -39,7 +37,6 @@ public class EligibilityCriteria {
         this.country = userInfo.country;
         this.host = userInfo.host;
         this.email = userInfo.email;
-        this.browserVersion = userInfo.browserVersion;
         this.userAgent = userInfo.userAgent;
     }
 
@@ -89,10 +86,6 @@ public class EligibilityCriteria {
 
     public DateTime getUserCreationDate() {
         return userCreationDate;
-    }
-
-    public BrowserVersion getBrowserVersion() {
-        return browserVersion;
     }
 
     public String getUserAgent() {

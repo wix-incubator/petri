@@ -34,7 +34,6 @@ public class FilterTypeIdResolver implements TypeIdResolver {
         registerTypeWithId("host", HostFilter.class);
         registerTypeWithId("includeUserIds", IncludeUserIdsFilter.class);
         registerTypeWithId("not", NotFilter.class);
-        registerTypeWithId("browserVersion", BrowserVersionFilter.class);
         registerTypeWithId("userAgentRegex", UserAgentRegexFilter.class);
     }
 

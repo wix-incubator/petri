@@ -4,7 +4,6 @@ import com.natpryce.makeiteasy.Instantiator;
 import com.natpryce.makeiteasy.Maker;
 import com.natpryce.makeiteasy.Property;
 import com.natpryce.makeiteasy.PropertyLookup;
-import com.wixpress.petri.laboratory.BrowserVersion;
 import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.UserInfoType;
 import com.wixpress.petri.laboratory.UserInfoTypeFactory;
@@ -40,7 +39,6 @@ public class UserInfoMakers {
     public static final Property<UserInfo, Map<String, String>> experimentOverrides = newProperty();
     public static final Property<UserInfo, UserInfoType> userInfoType = newProperty();
     public static final Property<UserInfo, String> host = newProperty();
-    public static final Property<UserInfo, BrowserVersion> browserVersion = newProperty();
 
     public static final Instantiator<UserInfo> UserInfo = new Instantiator<UserInfo>() {
 
@@ -63,7 +61,6 @@ public class UserInfoMakers {
             final Map<String, String> experimentOverrides = lookup.valueOf(UserInfoMakers.experimentOverrides, new HashMap<String, String>());
             final Boolean robot = lookup.valueOf(UserInfoMakers.robot, false);
             final String host = lookup.valueOf(UserInfoMakers.host, "");
-            final BrowserVersion browserVersion = lookup.valueOf(UserInfoMakers.browserVersion, new BrowserVersion("", 0));
 
             return new UserInfo(experimentsLog, userId, clientId,
                     ip, url, userAgent,
@@ -71,7 +68,7 @@ public class UserInfoMakers {
                     country,
                     dateCreated, email,
                     anonymousExperimentsLog, recurringUser,
-                    experimentOverrides, robot, host, browserVersion);
+                    experimentOverrides, robot, host);
         }
     };
 

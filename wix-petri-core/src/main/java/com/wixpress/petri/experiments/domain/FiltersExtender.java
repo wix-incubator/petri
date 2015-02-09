@@ -1,7 +1,6 @@
 package com.wixpress.petri.experiments.domain;
 
 import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
 
 import java.util.Set;
 

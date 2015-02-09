@@ -58,6 +58,7 @@ public class Assignment {
 
     //TODO - extract to callbacks on the trackableLaboratory?
     public void executeSideEffects(TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage) {
+
         if (!isToggle && testGroup != null) {
 
             testGroupAssignmentTracker.newAssignment(this);

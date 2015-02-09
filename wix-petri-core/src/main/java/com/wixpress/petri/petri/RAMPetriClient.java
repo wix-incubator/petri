@@ -222,8 +222,6 @@ public class RAMPetriClient implements FullPetriClient, PetriClient {
     public List<ConductExperimentSummary> getExperimentReport(int experimentId) {
 
         ConductExperimentReport report = getConductExperimentReport(experimentId);
-        if(report == null)
-            return ImmutableList.of();
         return ImmutableList.of(new ConductExperimentSummary(report.serverName(), report.experimentId(), report.experimentValue(),
                 report.count(), report.count(), new DateTime()));
     }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
-import com.wixpress.petri.laboratory.BrowserVersion;
 import com.wixpress.petri.laboratory.ConductionContextBuilder;
 import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
@@ -90,7 +89,6 @@ public class ExperimentTest {
                         new WixEmployeesFilter(),
                         new HostFilter(asList("host1")),
                         new IncludeUserIdsFilter(UUID.randomUUID()),
-                        new BrowserVersionFilter(asList(new BrowserVersion("chrome", 77)), true),
                         new NotFilter(new LanguageFilter(asList("fr")))
                 )
         )).make();

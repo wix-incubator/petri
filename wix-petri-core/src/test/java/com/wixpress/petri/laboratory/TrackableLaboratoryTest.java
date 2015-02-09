@@ -1,6 +1,5 @@
 package com.wixpress.petri.laboratory;
 
-import com.google.common.collect.ImmutableList;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.laboratory.converters.IntegerConverter;
