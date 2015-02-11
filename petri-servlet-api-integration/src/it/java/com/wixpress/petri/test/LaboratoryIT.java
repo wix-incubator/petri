@@ -89,7 +89,7 @@ public class LaboratoryIT {
     }
 
     private void assertConductExperimentReported(Experiment experiment) throws UnknownHostException, InterruptedException {
-        sleep(5);
+        sleep(20);
         assertThat(petri.getConductExperimentReport(experiment.getId()),
                 contains(ConductExperimentSummaryMatcher.hasSummary(InetAddress.getLocalHost().getHostName(), experiment.getId(), "a", 1l)));
     }
