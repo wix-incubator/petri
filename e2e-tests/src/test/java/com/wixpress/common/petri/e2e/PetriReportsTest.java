@@ -57,7 +57,7 @@ public class PetriReportsTest extends BaseTest {
 
         sampleAppRunner.conductExperiment("NEW_KEY", "FALLBACK_VALUE");
 
-        sleep(5);
+        sleep(20);
         List<ConductExperimentSummary> experimentReport = fullPetriClient.getExperimentReport(experiment.getId());
         assertThat(experimentReport.size(), is(1));
         assertThat(experimentReport,  contains(ConductExperimentSummaryMatcher.hasSummary(experiment.getId(), "a", 1l)));
