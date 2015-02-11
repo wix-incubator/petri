@@ -1,29 +1,17 @@
 package com.wixpress.common.petri.e2e;
 
-import com.wixpress.petri.Main;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.wixpress.petri.PetriRPCClient;
-import com.wixpress.petri.experiments.domain.*;
-import com.wixpress.petri.petri.FullPetriClient;
-import com.wixpress.petri.petri.PetriClient;
-import com.wixpress.petri.test.SampleAppRunner;
-import org.joda.time.DateTime;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
+import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import org.junit.Test;
-import util.DBDriver;
-
 
 import java.net.MalformedURLException;
 
-import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
-import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.*;
-import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.*;
-import static java.lang.Thread.sleep;
-import static java.util.Arrays.asList;
-import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -35,34 +23,45 @@ import static org.junit.Assert.assertTrue;
  */
 
 
-public class PetriE2eTest  extends BaseTest {
+public class PetriE2eTest extends BaseTest {
+
+
+    private static JsonRpcHttpClient petriJsonClient() throws MalformedURLException {
+        return PetriRPCClient.getJsonRpcHttpClient("http://localhost:" +
+                PETRI_PORT +
+                "/petri/full_api");
+    }
+
+    // 'UserType' filter is not on the classpath, therefore added manually as text
+    // ( see in the e2e-tests pom.xml how the sample-extended-filters jar is copied via maven-antrun-plugin)
+    private JsonNode experimentWithCustomUserTypeFilter(ExperimentSnapshot experiment) {
+        JsonNode jsonNode = ObjectMapperFactory.makeObjectMapper().valueToTree(experiment);
+        ((ObjectNode)jsonNode).putArray("filters").addObject().put("filter-type", "UserType");
+        return jsonNode;
+    }
 
 
     @Test
     public void conductingASimpleExperiment() throws Exception {
-        FullPetriClient fullPetriClient = fullPetriClient();
-        PetriClient petriClient = petriClient();
+        addSpec("THE_KEY");
+        fullPetriClient.insertExperiment(experimentWithFirstWinning("THE_KEY"));
 
-        petriClient.addSpecs(asList(
-                aNewlyGeneratedExperimentSpec("THE_KEY").
-                    withTestGroups(asList("a", "b")).
-                    withScopes(new ScopeDefinition("the scope", false)).
-                build()));
-
-        DateTime now = new DateTime();
-        fullPetriClient.insertExperiment(
-                anExperimentSnapshot().
-                        withStartDate(now.minusMinutes(1)).
-                        withEndDate(now.plusYears(1)).
-                        withKey("THE_KEY").
-                    withGroups(asList(new TestGroup(0, 100, "a"), new TestGroup(1, 0, "b"))).
-                    withOnlyForLoggedInUsers(false).
-                build());
         assertThat(petriClient.fetchActiveExperiments().size(), is(1));
 
         String testResult = sampleAppRunner.conductExperiment("THE_KEY", "FALLBACK_VALUE");
         assertThat(testResult, is("a"));
 
+    }
+
+    @Test
+    public void conductingAnExperimentWithDynamicallyLoadedFiltersAndCustomContext() throws Throwable {
+        addSpec("THE_KEY");
+
+        ExperimentSnapshot experiment = experimentWithFirstWinning("THE_KEY");
+        petriJsonClient().invoke("insertExperiment", new JsonNode[]{experimentWithCustomUserTypeFilter(experiment)});
+
+        String testResult = sampleAppRunner.conductExperimentWithCustomContext("THE_KEY", "FALLBACK_VALUE");
+        assertThat(testResult, is("a"));
     }
 
 

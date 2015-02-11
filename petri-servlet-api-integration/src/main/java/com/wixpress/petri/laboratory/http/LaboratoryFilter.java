@@ -1,6 +1,7 @@
 package com.wixpress.petri.laboratory.http;
 
 import com.wixpress.petri.PetriRPCClient;
+import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
 import com.wixpress.petri.experiments.domain.HostResolver;
 import com.wixpress.petri.laboratory.*;
 import com.wixpress.petri.petri.JodaTimeClock;
@@ -113,11 +114,16 @@ public class LaboratoryFilter implements Filter {
             e.printStackTrace();
         }
 
+        startMetricsReporterScheduler(p);
+
+        FilterTypeIdResolver.useDynamicFilterClassLoading();
+    }
+
+    private void startMetricsReporterScheduler(Properties p) {
         String reporterInterval = p.getProperty("reporter.interval");
         long scheduleReportInterval = reporterInterval == null ?  SCHEDULE_REPORT_INTERVAL : Long.parseLong(reporterInterval);
         metricsReporter = new ServerMetricsReporter(petriClient , Executors.newScheduledThreadPool(5), scheduleReportInterval);
         metricsReporter.startScheduler();
-
     }
 
     private static class CachingHttpResponse extends HttpServletResponseWrapper {

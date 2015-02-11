@@ -20,7 +20,7 @@ import java.util.HashMap;
 */
 public class PetriRPCClient {
 
-    private static JsonRpcHttpClient getJsonRpcHttpClient(String serviceUrl) throws MalformedURLException {
+    public static JsonRpcHttpClient getJsonRpcHttpClient(String serviceUrl) throws MalformedURLException {
         final ObjectMapper mapper = ObjectMapperFactory.makeObjectMapper();
         JsonRpcHttpClient client = new JsonRpcHttpClient(mapper,
                 new URL(serviceUrl),

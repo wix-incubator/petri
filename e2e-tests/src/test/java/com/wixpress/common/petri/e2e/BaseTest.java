@@ -2,16 +2,24 @@ package com.wixpress.common.petri.e2e;
 
 import com.wixpress.petri.Main;
 import com.wixpress.petri.PetriRPCClient;
+import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
+import com.wixpress.petri.experiments.domain.TestGroup;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.test.SampleAppRunner;
+import org.joda.time.DateTime;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import util.DBDriver;
 
 import java.net.MalformedURLException;
 
 import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
+import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.anExperimentSnapshot;
+import static com.wixpress.petri.experiments.domain.ScopeDefinition.aScopeDefinitionForAllUserTypes;
+import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.aNewlyGeneratedExperimentSpec;
+import static java.util.Arrays.asList;
 
 /**
  * User: Dalias
@@ -26,6 +34,27 @@ public abstract class BaseTest {
     protected static final String SAMPLE_WEBAPP_PATH = PetriReportsTest.class.getResource("/").getPath() + "../../../sample-petri-app/src/main/webapp";
     protected static SampleAppRunner sampleAppRunner ;
     protected static DBDriver dbDriver;
+    protected FullPetriClient fullPetriClient;
+    protected PetriClient petriClient;
+
+    protected void addSpec(String key) {
+        petriClient.addSpecs(asList(
+                aNewlyGeneratedExperimentSpec(key).
+                        withTestGroups(asList("a", "b")).
+                        withScopes(aScopeDefinitionForAllUserTypes("the scope")).
+                        build()));
+    }
+
+    protected ExperimentSnapshot experimentWithFirstWinning(String key) {
+        DateTime now = new DateTime();
+        return anExperimentSnapshot().
+                withStartDate(now.minusMinutes(1)).
+                withEndDate(now.plusYears(1)).
+                withKey(key).
+                withGroups(asList(new TestGroup(0, 100, "a"), new TestGroup(1, 0, "b"))).
+                withOnlyForLoggedInUsers(false).
+                build();
+    }
 
     @BeforeClass
     public static void startServers() throws Exception {
@@ -49,6 +78,13 @@ public abstract class BaseTest {
 
         sampleAppRunner.start();
     }
+
+    @Before
+    public void start() throws MalformedURLException {
+        petriClient = petriClient();
+        fullPetriClient = fullPetriClient();
+    }
+
 
     @AfterClass
     public static void stopServers() throws Exception {

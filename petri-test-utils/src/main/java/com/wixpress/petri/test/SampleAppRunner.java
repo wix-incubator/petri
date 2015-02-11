@@ -1,13 +1,17 @@
 package com.wixpress.petri.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wixpress.common.petri.testutils.ServerRunner;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -41,6 +45,10 @@ public class SampleAppRunner {
         sampleAppServer.stop();
     }
 
+    private HttpClient newClient(){
+        return HttpClientBuilder.create().build();
+    }
+
     public String conductExperiment(String key, String fallback) throws IOException {
         String uri = "http://localhost:" +
                 port +
@@ -67,4 +75,23 @@ public class SampleAppRunner {
         HttpResponse response = client.execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
+
+    public String conductExperimentWithCustomContext(String key, String fallback) throws IOException {
+        String uri = "http://localhost:" +
+                port +
+                "/conductExperimentWithCustomContext?key=" +
+                key +
+                "&fallback=" +
+                fallback;
+        HttpPost request  = new HttpPost(uri);
+        request.setHeader("Content-type", "application/json");
+        HashMap<String, String> customContextMap = new HashMap<String, String>() {{
+            put("userType", "special");
+        }};
+        request.setEntity(new StringEntity(new ObjectMapper().writeValueAsString(customContextMap)));
+        HttpResponse response = newClient().execute(request);
+        return EntityUtils.toString(response.getEntity(), "UTF-8");
+    }
+
+
 }

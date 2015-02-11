@@ -9,6 +9,8 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 
+    <mvc:annotation-driven />
+
     <context:annotation-config/>
 
     <bean class="com.wixpress.petri.laboratory.LaboratoryConfig"/>

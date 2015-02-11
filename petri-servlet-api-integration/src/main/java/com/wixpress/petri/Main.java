@@ -1,5 +1,6 @@
 package com.wixpress.petri;
 
+import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import static com.wixpress.petri.DBConfig.makeDBConfig;
@@ -15,6 +16,8 @@ public class Main {
     public static void main(String... args) {
         try {
             PropertiesConfiguration config = new PropertiesConfiguration("petri.properties");
+
+            FilterTypeIdResolver.useDynamicFilterClassLoading();
 
             JsonRPCServer rpcServer = new PetriServerFactory(port(config), dbConfig(config)).makePetriServer();
 

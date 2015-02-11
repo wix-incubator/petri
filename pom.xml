@@ -29,9 +29,10 @@
         <module>wix-petri-core</module>
         <module>petri-servlet-api-integration</module>
         <module>wix-petri-server</module>
-        <module>e2e-tests</module>
         <module>sample-petri-app</module>
         <module>petri-test-utils</module>
+        <module>sample-extended-filters</module>
+        <module>e2e-tests</module>
     </modules>
 
     <build>

@@ -16,5 +16,9 @@ object EligibilityCriteriaTypes {
     override def getValue: String = language
   }
 
+  class CustomContextCriterion(customContextMap: java.util.Map[String,String]) extends EligibilityCriterion[java.util.Map[String,String]] {
+    override def getValue: java.util.Map[String,String] = customContextMap
+  }
+
 
 }

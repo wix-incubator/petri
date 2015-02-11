@@ -14,6 +14,14 @@ import java.util.Map;
  */
 public class FilterTypeIdResolver implements TypeIdResolver {
 
+    public static void useDynamicFilterClassLoading() {
+        useDynamicFilterClassLoading("filters");
+    }
+
+    public static void useDynamicFilterClassLoading(String filtersPackage) {
+        FiltersExtender.dynamicallyLoadFilterTypes(filtersPackage);
+    }
+
     static {
         FiltersExtender.extendFilterTypes();
     }
@@ -77,6 +85,7 @@ public class FilterTypeIdResolver implements TypeIdResolver {
     public JsonTypeInfo.Id getMechanism() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
 
 
 }
