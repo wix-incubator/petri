@@ -7,11 +7,9 @@ import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.Filter;
 import com.wixpress.petri.experiments.domain.TestGroup;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import static com.natpryce.makeiteasy.Property.newProperty;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.anExperiment;
@@ -22,11 +20,6 @@ import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.an
  * @since 8/6/13
  */
 public class ExperimentMakers {
-
-    static {
-        DateTimeZone.setDefault(DateTimeZone.UTC);
-        TimeZone.setDefault(DateTimeZone.UTC.toTimeZone());
-    }
 
     public static final Property<Experiment, String> key = newProperty();
     public static final Property<Experiment, Boolean> fromSpec = newProperty();
