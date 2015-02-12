@@ -2,6 +2,8 @@ package com.wixpress.petri.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wixpress.common.petri.testutils.ServerRunner;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -10,6 +12,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
@@ -27,14 +30,34 @@ public class SampleAppRunner {
     private final int port;
     private final HttpClient client;
 
-    public SampleAppRunner(int port) {
+    public SampleAppRunner(int port){
         this(port, DEFAULT_PATH_TO_WEBAPP);
     }
 
-    public SampleAppRunner(int port, String pathToWebapp) {
+    public SampleAppRunner(int port, String pathToWebapp){
+        this(port, pathToWebapp, 0);
+    }
+
+    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval){
         this.port = port;
         this.sampleAppServer = new ServerRunner(port, pathToWebapp);
         this.client = HttpClientBuilder.create().build();
+
+        if (reporterInterval != 0){
+            addReportingIntervalToProperties(pathToWebapp, reporterInterval);
+        }
+    }
+
+    private void addReportingIntervalToProperties(String pathToWebapp, int reporterInterval) {
+        File properties = new File(pathToWebapp + "/WEB-INF/laboratory.properties");
+        try {
+            properties.createNewFile();
+            PropertiesConfiguration config = new PropertiesConfiguration(properties);
+            config.setProperty("reporter.interval", reporterInterval);
+            config.save();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void start() throws Exception {

@@ -4,6 +4,7 @@ import com.wixpress.petri.Main;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
 import com.wixpress.petri.experiments.domain.TestGroup;
+import com.wixpress.petri.laboratory.http.LaboratoryFilter;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.test.SampleAppRunner;
@@ -59,7 +60,7 @@ public abstract class BaseTest {
     @BeforeClass
     public static void startServers() throws Exception {
 
-        sampleAppRunner = new SampleAppRunner(SAMPLE_APP_PORT, SAMPLE_WEBAPP_PATH);
+        sampleAppRunner = new SampleAppRunner(SAMPLE_APP_PORT, SAMPLE_WEBAPP_PATH, 1);
 
         // TODO: Remove duplication with RPCPetriServerTest
         dbDriver = DBDriver.dbDriver("jdbc:h2:mem:test;IGNORECASE=TRUE");
