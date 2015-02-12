@@ -94,7 +94,7 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
 
       })
 
-      futures.foreach(Await.result(_, Duration(2, TimeUnit.MILLISECONDS)))
+      futures.foreach(Await.result(_, Duration(20, TimeUnit.MILLISECONDS)))
 
       context.checking(
         new Expectations() {
