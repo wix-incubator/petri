@@ -3,3 +3,4 @@ script: mvn clean verify
 notifications:
   email:
     - talyag@wix.com
+    - dalias@wix.com
