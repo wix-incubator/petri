@@ -1,6 +1,6 @@
 package com.wixpress.petri.laboratory;
 
-import com.wixpress.petri.experiments.domain.HostResolver;
+import com.wixpress.petri.HostResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.web.util.WebUtils;
@@ -20,18 +20,16 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
     private final String EXPERIMENTS_OVERRIDE_REQUEST_PARAM = "petri_ovr";
     private final String USER_ID_REQUEST_PARAM = "laboratory_user_id";
     private final HttpServletRequest request;
-    private final HostResolver hostResolver;
     private final ExperimentOverridesUrlDecoder experimentOverridesUrlDecoder = new ExperimentOverridesUrlDecoder();
 
-    public HttpRequestUserInfoExtractor(HttpServletRequest request, HostResolver hostResolver) {
+    public HttpRequestUserInfoExtractor(HttpServletRequest request) {
         this.request = request;
-        this.hostResolver = hostResolver;
     }
 
     @Override
     public UserInfo extract() {
 
-        String host = hostResolver.resolve();
+        String host = HostResolver.getServerName();
         if (request == null) {
             return UserInfo.userInfoFromNullRequest(host);
         }

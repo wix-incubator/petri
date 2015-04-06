@@ -1,6 +1,6 @@
 package com.wixpress.petri.laboratory;
 
-import com.wixpress.petri.experiments.domain.HostResolver;
+import com.wixpress.petri.HostResolver;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +10,6 @@ import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * User: Dalias
@@ -20,12 +18,11 @@ import static org.mockito.Mockito.when;
  */
 public class UserInfoExtractorTest {
 
-    private HostResolver hostResolver;
     private MockHttpServletRequest stubRequest;
     private HttpRequestUserInfoExtractor userInfoExtractor;
 
 
-    private String host = "some host";
+    private String host = HostResolver.getServerName();
     private String appUrl = "http://server/app";
     private String userAgent = "Some-User-Agent-Bot";
 
@@ -33,14 +30,12 @@ public class UserInfoExtractorTest {
     @Before
     public void setup() {
         stubRequest = new MockHttpServletRequest();
-        hostResolver =   mock(HostResolver.class);
-        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest, hostResolver);
+        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest);
     }
 
 
     @Test
     public void extractAUserInfoForIncomingRequest(){
-        when(hostResolver.resolve()).thenReturn(host);
         stubRequest.addHeader("user-agent", userAgent);
         stubRequest.addParameter("appUrl", appUrl);
 
@@ -56,9 +51,7 @@ public class UserInfoExtractorTest {
     @Test
     public void extractAUserInfoForNullRequest(){
 
-        when(hostResolver.resolve()).thenReturn(host);
-
-        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null, hostResolver);
+        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null);
 
         UserInfo userInfo = userInfoExtractor.extract();
 
@@ -71,8 +64,6 @@ public class UserInfoExtractorTest {
 
     @Test
     public void extractAUserInfoForIncomingRequestWithNullHeaders(){
-        when(hostResolver.resolve()).thenReturn(host);
-
         UserInfo userInfo = userInfoExtractor.extract();
 
         assertThat(userInfo.host, is(host));

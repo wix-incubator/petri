@@ -2,7 +2,6 @@ package com.wixpress.petri.laboratory.http;
 
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
-import com.wixpress.petri.experiments.domain.HostResolver;
 import com.wixpress.petri.laboratory.*;
 import com.wixpress.petri.petri.JodaTimeClock;
 import com.wixpress.petri.petri.PetriClient;
@@ -93,7 +92,7 @@ public class LaboratoryFilter implements Filter {
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
         return new RequestScopedUserInfoStorage(
                 new HttpRequestUserInfoExtractor(
-                        httpServletRequest, new HostResolver()));
+                        httpServletRequest));
     }
 
     public void destroy() {
