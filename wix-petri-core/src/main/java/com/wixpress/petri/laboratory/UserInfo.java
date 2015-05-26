@@ -234,10 +234,6 @@ public class UserInfo implements ConductionStrategy {
         return setAnonymousExperiments(existingAnonLog.appendAll(localAnonLogToAdd));
     }
 
-    public UserInfo appendUserExperiments(String logToAppend) {
-        return appendUserExperiments(logToAppend, new Some(userId));
-    }
-
     public UserInfo appendUserExperiments(String logToAppend, Option<UUID> uuidOption) {
         if (uuidOption.isEmpty())
             return this;

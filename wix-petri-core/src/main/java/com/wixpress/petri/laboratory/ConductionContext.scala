@@ -15,11 +15,6 @@ trait ConductionContext{
   def conductionStrategyOrFallback(fallback: ConductionStrategy): ConductionStrategy
   def additionalEligibilityCriteria(): AdditionalEligibilityCriteria
   def biAdditions(): BIAdditions
-
-
-  @deprecated(message = "replaced by {@link com.wixpress.petri.laboratory.ConductionContext.ConductionStrategy", since = "5/18/2015")
-  @Deprecated
-  def testGroupDrawer(fallback: TestGroupDrawer): TestGroupDrawer
 }
 
 object ConductionContextBuilder {
@@ -28,7 +23,7 @@ object ConductionContextBuilder {
 
 }
 
-case class ConductionContextBuilder(customDrawer: Option[TestGroupDrawer] = None, biAdditions: BIAdditions = BIAdditions.Empty,
+case class ConductionContextBuilder(biAdditions: BIAdditions = BIAdditions.Empty,
                                     additionalEligibilityCriteria: AdditionalEligibilityCriteria = new AdditionalEligibilityCriteria(),
                                     customConductionStrategy: Option[ConductionStrategy] = None) extends ConductionContext {
 
@@ -37,13 +32,6 @@ case class ConductionContextBuilder(customDrawer: Option[TestGroupDrawer] = None
   def withCriterionOverride[T](criterion: EligibilityCriterion[T]): ConductionContextBuilder = copy(additionalEligibilityCriteria = additionalEligibilityCriteria.withCriterion(criterion))
 
   def conductionStrategyOrFallback(fallback: ConductionStrategy): ConductionStrategy = customConductionStrategy getOrElse fallback
-
-  @deprecated(message = "replaced by {@link com.wixpress.petri.laboratory.ConductionContextBuilder.withConductionStrategy", since = "5/18/2015")
-  @Deprecated
-  def withTestGroupDrawer(testGroupDrawer: TestGroupDrawer): ConductionContextBuilder = copy(customDrawer = Option(testGroupDrawer))
-  @deprecated(message = "replaced by {@link com.wixpress.petri.laboratory.ConductionContext.ConductionStrategy", since = "5/18/2015")
-  @Deprecated
-  def testGroupDrawer(fallback: TestGroupDrawer): TestGroupDrawer = customDrawer getOrElse fallback
 
 }
 

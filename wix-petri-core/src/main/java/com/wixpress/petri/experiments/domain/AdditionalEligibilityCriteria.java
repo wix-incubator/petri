@@ -25,4 +25,19 @@ public class AdditionalEligibilityCriteria {
         criteria.put(data.getClass(), data);
         return this;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AdditionalEligibilityCriteria that = (AdditionalEligibilityCriteria) o;
+
+        return !(criteria != null ? !criteria.equals(that.criteria) : that.criteria != null);
+    }
+
+    @Override
+    public int hashCode() {
+        return criteria != null ? criteria.hashCode() : 0;
+    }
 }
