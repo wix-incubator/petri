@@ -51,4 +51,13 @@
         </pluginManagement>
     </build>
 
+    <repositories>
+        <repository>
+            <id>scalaz-stream-bintray</id>
+            <url>http://dl.bintray.com/scalaz/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 </project>
