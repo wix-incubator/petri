@@ -1,6 +1,6 @@
 package com.wixpress.petri.laboratory;
 
-import com.wixpress.petri.HostResolver;
+import com.wixpress.petri.petri.HostResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.web.util.WebUtils;

@@ -1,8 +1,8 @@
 package com.wixpress.common.petri.e2e;
 
-import com.wixpress.petri.HostResolver;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.petri.ConductExperimentSummary;
+import com.wixpress.petri.petri.HostResolver;
 import com.wixpress.petri.util.ConductExperimentSummaryMatcher;
 import org.junit.Test;
 

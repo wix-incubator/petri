@@ -1,6 +1,5 @@
 package com.wixpress.petri.petri
 
-import java.net.InetAddress
 import java.util.concurrent.ScheduledExecutorService
 
 import org.jmock.lib.concurrent.{DeterministicScheduler, Synchroniser}
@@ -39,7 +38,7 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
 
       context.checking(
         new Expectations() {
-          oneOf (petriClient).reportConductExperiment(Seq(new ConductExperimentReport(InetAddress.getLocalHost.getHostName , 1, "true", 3l)))
+          oneOf (petriClient).reportConductExperiment(Seq(new ConductExperimentReport(HostResolver.getServerName , 1, "true", 3l)))
         }
       )
       reporter.reportToServer()
@@ -55,8 +54,8 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
       context.checking(
         new Expectations() {
           oneOf (petriClient).reportConductExperiment(Seq(
-            new ConductExperimentReport(InetAddress.getLocalHost.getHostName , 1, "true", 2l),
-          new ConductExperimentReport(InetAddress.getLocalHost.getHostName , 1, "false", 1l)))
+            new ConductExperimentReport(HostResolver.getServerName , 1, "true", 2l),
+          new ConductExperimentReport(HostResolver.getServerName , 1, "false", 1l)))
         }
       )
       reporter.reportToServer()
@@ -75,7 +74,7 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
       context.checking(
         new Expectations() {
           exactly(2).of (petriClient).reportConductExperiment(Seq(
-            new ConductExperimentReport(InetAddress.getLocalHost.getHostName , 1, "true", 1l)))
+            new ConductExperimentReport(HostResolver.getServerName , 1, "true", 1l)))
         }
       )
       reporter.reportConductExperiment(1, "true")
@@ -98,8 +97,8 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
       context.checking(
         new Expectations() {
           exactly(1).of (petriClient).reportConductExperiment(Seq(
-            new ConductExperimentReport(InetAddress.getLocalHost.getHostName , 1, "true", 50l),
-            new ConductExperimentReport(InetAddress.getLocalHost.getHostName , 1, "false", 50l)
+            new ConductExperimentReport(HostResolver.getServerName , 1, "true", 50l),
+            new ConductExperimentReport(HostResolver.getServerName , 1, "false", 50l)
           ))
         }
       )

@@ -1,6 +1,6 @@
 package com.wixpress.petri.laboratory;
 
-import com.wixpress.petri.HostResolver;
+import com.wixpress.petri.petri.HostResolver;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;

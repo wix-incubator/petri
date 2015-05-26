@@ -1,6 +1,5 @@
 package com.wixpress.petri.petri
 
-import java.net.InetAddress
 import java.util.concurrent.{TimeUnit, ScheduledExecutorService}
 import java.util.concurrent.atomic.AtomicLong
 
@@ -35,7 +34,7 @@ class ServerMetricsReporter(petriClient: PetriClient, scheduler: ScheduledExecut
 
 
   override def reportToServer() {
-    val hostName: String = InetAddress.getLocalHost.getHostName
+    val hostName: String = HostResolver.getServerName
     val conductExperimentReports: Seq[ConductExperimentReport] = reportsMap.map { case (key, counter) =>
       new ConductExperimentReport(hostName, key.experimentId, key.experimentValue, counter.get())
     }.toSeq

@@ -1,4 +1,4 @@
-package com.wixpress.petri;
+package com.wixpress.petri.petri;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
