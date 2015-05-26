@@ -1,5 +1,6 @@
 package com.wixpress.petri.petri
 
+
 import _root_.util.DBDriver
 import org.joda.time.DateTime
 import org.specs2.matcher.{Matcher, Scope}
@@ -19,14 +20,40 @@ class JdbcMetricsReportsDaoIT extends SpecificationWithJUnit  {
 
   trait Context extends Scope{
     val dbDriver = DBDriver.dbDriver(JDBC_H2_IN_MEM_CONNECTION_STRING)
-    val metricsReportDao = new JdbcMetricsReportsDao (dbDriver.jdbcTemplate)
+    val metricsReportDao = new JdbcMetricsReportsDao (dbDriver.jdbcTemplate, 0l)
     dbDriver.createSchema()
-    dbDriver.createMetricsTableSchema()
     val simpleExperimentReport: ConductExperimentReport = new ConductExperimentReport("myServer", 11, "the value", 3l)
-
+    val anotherSimpleExperimentReport: ConductExperimentReport = new ConductExperimentReport("myServer", 12, "the value", 5l)
   }
 
   "Metrics Reports Dao " should {
+
+    "get single experiment conduction when only 1 experiment reported" in new Context {
+      metricsReportDao.addReports(List(simpleExperimentReport))
+      val experimentConduction = metricsReportDao.getReportedExperimentsSince(scheduledInterval = 500000l).last
+      experimentConduction.experimentId must beEqualTo(simpleExperimentReport.experimentId)
+      experimentConduction.totalConduction must beEqualTo(simpleExperimentReport.count)
+    }
+
+    "get multiple experiment conduction when some experiments reported" in new Context {
+      metricsReportDao.addReports(List(simpleExperimentReport, anotherSimpleExperimentReport))
+      metricsReportDao.addReports(List(anotherSimpleExperimentReport))
+      val experimentConductionList = metricsReportDao.getReportedExperimentsSince(scheduledInterval = 500000l)
+      val simpleExperimentConductTotal = experimentConductionList.filter(exp => exp.experimentId == simpleExperimentReport.experimentId)
+      val anotherSimpleExperimentTotal = experimentConductionList.filter(exp => exp.experimentId == anotherSimpleExperimentReport.experimentId)
+
+      simpleExperimentConductTotal.size must beEqualTo(1)
+      anotherSimpleExperimentTotal.size must beEqualTo(1)
+
+      simpleExperimentConductTotal.last.totalConduction must beEqualTo(simpleExperimentReport.count)
+      anotherSimpleExperimentTotal.last.totalConduction must beEqualTo(anotherSimpleExperimentReport.count * 2)
+    }
+
+    "get empty list when no experiments were reported" in new Context {
+      metricsReportDao.addReports(List(simpleExperimentReport))
+      metricsReportDao.getReportedExperimentsSince(scheduledInterval = 0) must beEmpty
+    }
+
      "Create a single report record successfully" in new Context  {
        
        metricsReportDao.addReports(List(simpleExperimentReport))

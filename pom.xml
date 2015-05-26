@@ -10,8 +10,8 @@
 
     <properties>
         <scala-maven-plugin.version>3.2.0</scala-maven-plugin.version>
-        <scala.version>2.10.4</scala.version>
-        <scala.dependencies.version>2.10</scala.dependencies.version>
+        <scala.version>2.11.6</scala.version>
+        <scala.dependencies.version>2.11</scala.dependencies.version>
 
         <org.springframework.version>4.1.1.RELEASE</org.springframework.version>
         <com.fasterxml.jackson.default.version>2.4.3</com.fasterxml.jackson.default.version>
@@ -23,6 +23,7 @@
         <make-it-easy-version>3.1.0</make-it-easy-version>
         <hamcrest-version>1.3</hamcrest-version>
         <junit-version>4.11</junit-version>
+        <specs2-version>3.6</specs2-version>
     </properties>
 
     <modules>

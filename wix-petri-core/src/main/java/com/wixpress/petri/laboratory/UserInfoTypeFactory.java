@@ -9,9 +9,7 @@ import java.util.UUID;
  */
 public class UserInfoTypeFactory {
 
-    private static final AssignmentStrategyTestGroupSelector selector = new AssignmentStrategyTestGroupSelector();
-
     public static UserInfoType make(UUID uuid) {
-        return (uuid == null) ? new AnonymousUserInfoType(selector) : new RegisteredUserInfoType(selector, uuid);
+        return (uuid == null) ? new AnonymousUserInfoType() : new RegisteredUserInfoType(uuid);
     }
 }

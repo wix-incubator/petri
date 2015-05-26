@@ -3,14 +3,11 @@ package com.wixpress.petri.petri;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
-import com.wixpress.petri.experiments.domain.Experiment;
-import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
-import com.wixpress.petri.experiments.domain.ExperimentSpec;
-import com.wixpress.petri.experiments.domain.ExperimentSpecSnapshot;
+import com.wixpress.petri.experiments.domain.*;
 import org.joda.time.DateTime;
 
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
 
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.notNull;
@@ -28,7 +25,7 @@ import static com.wixpress.petri.petri.PetriRpcServer.HasSpecSnapshot.hasSpecSna
  * @author: talyag
  * @since: 9/9/13
  */
-public class PetriRpcServer implements FullPetriClient, PetriClient {
+public class PetriRpcServer implements FullPetriClient, PetriClient , UserRequestPetriClient, PetriDeveloperApi {
     public static final String SPEC_OWNER_CHANGED_MSG = "Pay attention - Owner of %s has been changed to %s";
     public static final String SPEC_UPDATE_FAILED_MSG = "Failed to update spec [%s]";
     public static final String NON_TERMINATED_EXPERIMENTS_MSG = "Cannot update spec when non-terminated experiments exist on it";
@@ -38,15 +35,17 @@ public class PetriRpcServer implements FullPetriClient, PetriClient {
     private final DeleteEnablingPetriDao<ExperimentSpec, ExperimentSpec> specsDao;
     private final PetriNotifier petriNotifier;
     private final MetricsReportsDao metricsReportsDao;
+    private final UserStateDao userStateDao;
 
     public PetriRpcServer(OriginalIDAwarePetriDao<Experiment, ExperimentSnapshot> experimentsDao, Clock clock,
                           DeleteEnablingPetriDao<ExperimentSpec, ExperimentSpec> specsDao, PetriNotifier petriNotifier,
-                          MetricsReportsDao metricsReportsDao) {
+                          MetricsReportsDao metricsReportsDao, UserStateDao testGroupsDao) {
         this.experimentsDao = experimentsDao;
         this.clock = clock;
         this.specsDao = specsDao;
         this.petriNotifier = petriNotifier;
         this.metricsReportsDao = metricsReportsDao;
+        this.userStateDao = testGroupsDao;
     }
 
     private String printOriginalAndNewSpecs(ExperimentSpec experimentSpec, ExperimentSpec originalSpec) {
@@ -122,6 +121,16 @@ public class PetriRpcServer implements FullPetriClient, PetriClient {
     }
 
     @Override
+    public void saveUserState(UUID userId, String userState) {
+         userStateDao.saveUserState(userId, userState, new DateTime());
+    }
+
+    @Override
+    public String getUserState(UUID userId) {
+        return userStateDao.getUserState(userId);
+    }
+
+    @Override
     public List<ConductExperimentSummary> getExperimentReport(int experimentId) {
         return metricsReportsDao.getReport(experimentId);
     }
@@ -186,6 +195,11 @@ public class PetriRpcServer implements FullPetriClient, PetriClient {
 
     private ExperimentSpec findOriginalSpecByKey(List<ExperimentSpec> existingSpecs, String key) {
         return find(existingSpecs, specHasKey(key), null);
+    }
+
+    @Override
+    public UserState getFullUserState(UUID userGuid) {
+        return userStateDao.getFullUserState(userGuid);
     }
 
 

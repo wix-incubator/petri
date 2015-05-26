@@ -65,7 +65,6 @@ public abstract class BaseTest {
         // TODO: Remove duplication with RPCPetriServerTest
         dbDriver = DBDriver.dbDriver("jdbc:h2:mem:test;IGNORECASE=TRUE");
         dbDriver.createSchema();
-        dbDriver.createMetricsTableSchema();
 
         aPetriConfigFile().delete();
         aPetriConfigFile().

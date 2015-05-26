@@ -1,25 +1,29 @@
 package com.wixpress.petri.laboratory;
 
+import com.google.common.collect.ImmutableMap;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.laboratory.converters.IntegerConverter;
 import com.wixpress.petri.laboratory.converters.StringConverter;
 import com.wixpress.petri.laboratory.dsl.UserInfoMakers;
-import com.wixpress.petri.petri.MetricsReporter;
-import com.wixpress.petri.petri.ReportKey;
-import com.wixpress.petri.petri.SpecDefinition;
+import com.wixpress.petri.petri.*;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.joda.time.DateTime;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import scala.Some;
 
 import java.util.*;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static com.wixpress.petri.experiments.domain.Experiment.InvalidExperiment;
+import static com.wixpress.petri.laboratory.ConductionContextBuilder.newInstance;
 import static com.wixpress.petri.laboratory.EligibilityCriteriaTypes.UserCreationDateCriterion;
 import static com.wixpress.petri.laboratory.UserInfo.userInfoFromNullRequest;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.*;
@@ -29,7 +33,6 @@ import static com.wixpress.petri.laboratory.dsl.UserInfoMakers.UserInfo;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
 
 /**
  * @author sagyr
@@ -38,11 +41,17 @@ import static org.mockito.Mockito.*;
 
 public class TrackableLaboratoryTest {
 
+    @Rule
+    public JUnitRuleMockery context = new JUnitRuleMockery();
+
     public static final String FALLBACK_VALUE = "FALLBACK_VALUE";
     private CachedExperiments experiments;
     private static final UUID SOME_USER_GUID = UUID.fromString("19fc13d9-5943-4a87-82b1-4acb7e5cb039");
+    private static final UUID OTHER_USER_GUID = UUID.fromString("19fc13d9-5943-4a87-82b1-4acb7e5cb041");
     private Maker<com.wixpress.petri.laboratory.UserInfo> aRegisteredUserInfo;
     public static int EXPERIMENT_MAX_TIME_MILLIS = 10;
+    private UserInfo registeredUserInfo;
+
 
     private static final Class TheKey = new SpecDefinition() {
     }.getClass();
@@ -50,10 +59,16 @@ public class TrackableLaboratoryTest {
     private static final Class TheOtherKey = new SpecDefinition() {
     }.getClass();
 
+    private static final String registeredKey = "for registered users";
+
     private final Maker<Experiment> experimentWithWinningFirstGroup = an(Experiment,
             with(id, 1),
             with(key, TheKey.getName()),
             with(testGroups, TEST_GROUPS_WITH_FIRST_ALWAYS_WINNING));
+
+    private final Maker<Experiment> experimentForRegisteredUserWithWinningFirstGroup = experimentWithWinningFirstGroup.but(
+            with(key, registeredKey),
+            with(onlyForLoggedIn, true));
 
     private TrackableLaboratory lab;
     private RamUserInfoStorage userInfoStorage;
@@ -61,6 +76,8 @@ public class TrackableLaboratoryTest {
     private FakeTestGroupAssignmentTracker testGroupAssignmentTracker;
     private FakeErrorHandler laboratoryErrorHandler;
     private FakeMetricsReporter metricsReporter;
+    private UserRequestPetriClient petriClient;
+    private FakePetriTopology petriTopology;
 
     @Before
     public void setUp() throws Exception {
@@ -69,12 +86,16 @@ public class TrackableLaboratoryTest {
         experiments = new CachedExperiments(cache);
         aRegisteredUserInfo = a(UserInfo,
                 with(UserInfoMakers.userId, SOME_USER_GUID));
+        registeredUserInfo = aRegisteredUserInfo.make();
         userInfoStorage = new RamUserInfoStorage();
         testGroupAssignmentTracker = new FakeTestGroupAssignmentTracker();
         laboratoryErrorHandler = new FakeErrorHandler();
         metricsReporter = new FakeMetricsReporter();
+        petriTopology = new FakePetriTopology();
+
+        petriClient = context.mock(UserRequestPetriClient.class);
         lab = new TrackableLaboratory(experiments, testGroupAssignmentTracker, userInfoStorage,
-                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, petriTopology);
     }
 
     public static class FakeErrorHandler implements ErrorHandler {
@@ -106,7 +127,7 @@ public class TrackableLaboratoryTest {
 
     }
 
-    public static class FakeMetricsReporter implements MetricsReporter{
+    public static class FakeMetricsReporter implements MetricsReporter {
 
         Map<ReportKey, Integer> reportMap = new HashMap<>();
 
@@ -120,8 +141,33 @@ public class TrackableLaboratoryTest {
 
         }
 
-        public Map<ReportKey, Integer> getReportMap(){
+        public Map<ReportKey, Integer> getReportMap() {
             return reportMap;
+        }
+    }
+
+    public static class FakePetriTopology implements PetriTopology {
+
+
+        private boolean isWriteStateToServer = true;
+
+        @Override
+        public String getPetriUrl() {
+            return null;
+        }
+
+        @Override
+        public Long getReportsScheduleTimeInMillis() {
+            return 30000l;
+        }
+
+        @Override
+        public boolean isWriteStateToServer() {
+            return isWriteStateToServer;
+        }
+
+        public void setWriteStateToServer(boolean isWriteStateToServer) {
+            this.isWriteStateToServer = isWriteStateToServer;
         }
     }
 
@@ -158,7 +204,7 @@ public class TrackableLaboratoryTest {
     }
 
     private void conductByKeyAndByScopeReturns(String value) {
-        conductByKeyAndByScopeReturns(value, ConductionContextBuilder.newInstance());
+        conductByKeyAndByScopeReturns(value, newInstance());
     }
 
     private void conductByKeyAndByScopeReturns(final String value, ConductionContextBuilder context) {
@@ -191,6 +237,17 @@ public class TrackableLaboratoryTest {
         userInfoStorage.write(infoFromNullRequest);
     }
 
+    private void returnUserStateFromServer(final String state) {
+        returnUserStateFromServer(state, registeredUserInfo.getUserId());
+    }
+
+    private void returnUserStateFromServer(final String state, final UUID userId) {
+        context.checking(new Expectations() {{
+            allowing(petriClient).getUserState(userId);
+            will(returnValue(state));
+        }});
+    }
+
     private Matcher<Assignment> containsTheUsersId() {
         return new TypeSafeMatcher<Assignment>() {
 
@@ -206,6 +263,22 @@ public class TrackableLaboratoryTest {
 
         };
     }
+
+    private Matcher<Assignment> containsNoUserIdAndWinsWith(final int winningGroupId) {
+        return new TypeSafeMatcher<Assignment>() {
+
+            @Override
+            protected boolean matchesSafely(Assignment assignment) {
+                return assignment.getUserInfo().getUserId() == null && assignment.getTestGroup().getId() == winningGroupId;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+            }
+
+        };
+    }
+
 
     Matcher<Throwable> anException(final Class<? extends Throwable> type, final Matcher<String> msg) {
         return new TypeSafeMatcher<Throwable>() {
@@ -300,34 +373,6 @@ public class TrackableLaboratoryTest {
         userInfoStorage.assertAnonymousLogIs("1#1");
     }
 
-    @Test
-    public void customTestGroupDrawerFromConductContextIsUsedWhenProvided() throws Exception {
-        Experiment someExperiment = experimentWithWinningFirstGroup.but(
-                with(testGroups, listOf(
-                        a(TestGroup,
-                                with(value, "123"),
-                                with(groupId, 5),
-                                with(probability, 100)),
-                        a(TestGroup,
-                                with(value, "321"),
-                                with(groupId, 6),
-                                with(probability, 0))
-                ))
-        ).make();
-
-        addExperimentToCache(someExperiment);
-
-        userInfoStorage.write(aRegisteredUserInfo.make());
-
-        TestGroupDrawer customDrawer = mock(TestGroupDrawer.class);
-        when(customDrawer.drawTestGroup(someExperiment)).thenReturn(someExperiment.getTestGroupById(6));
-
-        ConductionContext contextWithCustomKernel = ConductionContextBuilder.newInstance().withTestGroupDrawer(customDrawer);
-
-        assertThat(lab.conductExperiment(TheKey, -1, new IntegerConverter(), contextWithCustomKernel), is(321));
-
-        verify(customDrawer).drawTestGroup(someExperiment);
-    }
 
     @Test
     public void canConductNonStringExperiments() throws Exception {
@@ -493,7 +538,7 @@ public class TrackableLaboratoryTest {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
         lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
-                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, petriTopology);
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
         errorReportWasSent(Matchers.<Throwable>instanceOf(BlowingUpCachedExperiments.CacheExploded.class));
         assertBiLogIsEmpty();
@@ -504,7 +549,7 @@ public class TrackableLaboratoryTest {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
         lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
-                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, petriTopology);
 
         Map<String, String> expected = new HashMap();
         assertThat(lab.conductAllInScope("whatever"), is(expected));
@@ -540,7 +585,6 @@ public class TrackableLaboratoryTest {
         writeUserInfoFromNullRequest();
 
         final Matcher<Throwable> matcher = anException(UnsupportedOperationException.class, containsString("non-http flow"));
-//                ofClass().withMessage(containsString("non-http flow")).matcher();
 
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
         errorReportWasSent(matcher);
@@ -557,19 +601,147 @@ public class TrackableLaboratoryTest {
 
     @Test
     public void appendsToUserLogWhenExperimentIsForRegisteredUsers() throws Exception {
-        final Experiment registeredUsersExperiment = experimentWithWinningFirstGroup.but(
-                with(key, "for registered users"),
-                with(onlyForLoggedIn, true)).make();
+        final Experiment registeredUsersExperiment = experimentForRegisteredUserWithWinningFirstGroup.make();
 
         addExperimentToCache(registeredUsersExperiment);
 
-        userInfoStorage.write(aRegisteredUserInfo.make());
-        lab.conductExperiment("for registered users", "", new StringConverter());
+        userInfoStorage.write(registeredUserInfo);
+        returnUserStateFromServer("");
+        lab.conductExperiment(registeredKey, "", new StringConverter());
 
         userInfoStorage.assertUserExperimentsLog("1#1");
         userInfoStorage.assertAnonymousLogIs("");
     }
 
+    @Test
+    public void conductedExperimentIsConcatenatedToExisting() throws Exception {
+        final Experiment registeredUsersExperiment = experimentForRegisteredUserWithWinningFirstGroup.make();
+        addExperimentToCache(registeredUsersExperiment);
+
+        addExperimentToCache(experimentWithWinningFirstGroup.but(with(id, 3)).make());
+
+        final UserInfo registeredUserInfo = aRegisteredUserInfo.but(with(experimentsLog, "3#2")).make();
+
+        userInfoStorage.write(registeredUserInfo);
+        returnUserStateFromServer("");
+
+        lab.conductExperiment(registeredKey, "", new StringConverter());
+
+        userInfoStorage.assertUserExperimentsLog("3#2|1#1");
+    }
+
+
+    @Test
+    public void doNotReadStateFromServerWhenExperimentIsForRegisteredUsersAndConfigIsOff() throws Exception {
+        addExperimentToCache(experimentForRegisteredUserWithWinningFirstGroup.make());
+        petriTopology.setWriteStateToServer(false);
+
+        userInfoStorage.write(registeredUserInfo);
+        //no expectation allowing reading state from server
+        lab.conductExperiment(registeredKey, "", new StringConverter());
+    }
+
+    @Test
+    public void experimentIsNotConductedButAppendedToLogIfAlreadyInServerForRegisteredUsers() throws Exception {
+        final Experiment registeredUsersExperiment = experimentForRegisteredUserWithWinningFirstGroup.make();
+        addExperimentToCache(registeredUsersExperiment);
+
+        userInfoStorage.write(registeredUserInfo);
+        returnUserStateFromServer("1#2");
+
+        String result = lab.conductExperiment(registeredKey, "", new StringConverter());
+
+        assertThat(result, is(LOSING_VALUE));
+        assertBiLogIsEmpty();
+        assertAnonymousLogIsEmpty();
+        userInfoStorage.assertUserExperimentsLog("1#2");
+    }
+
+
+    @Test
+    public void experimentIsNotReadFromServerForFTAndRegisteredUsers() throws Exception {
+        final Experiment registeredUsersFT = experimentForRegisteredUserWithWinningFirstGroup.but(
+                with(featureToggle, true)).make();
+        addExperimentToCache(registeredUsersFT);
+
+        userInfoStorage.write(registeredUserInfo);
+
+        lab.conductExperiment(registeredKey, "", new StringConverter());
+    }
+
+    @Test
+    public void experimentIsNotReadFromServerForRegisteredUsersWhenCookieExists() throws Exception {
+        final Experiment registeredUsersExperiment = experimentForRegisteredUserWithWinningFirstGroup.make();
+        addExperimentToCache(registeredUsersExperiment);
+
+        final UserInfo registeredUserInfoWithCookie = aRegisteredUserInfo.but(with(experimentsLog, "1#2")).make();
+        userInfoStorage.write(registeredUserInfoWithCookie);
+
+        lab.conductExperiment(registeredKey, "", new StringConverter());
+    }
+
+    @Test
+    public void experimentIsNotReadFromServerWhenCookieExistsEvenWhenOtherFTExistsOnKey() throws Exception {
+        final Experiment registeredUsersExperiment = experimentForRegisteredUserWithWinningFirstGroup.make();
+        final Experiment registeredUsersFT = experimentForRegisteredUserWithWinningFirstGroup.but(with(id, 2), with(featureToggle, true)).make();
+
+        addExperimentToCache(registeredUsersExperiment);
+        addExperimentToCache(registeredUsersFT);
+
+        final UserInfo registeredUserInfo = aRegisteredUserInfo.but(with(experimentsLog, "1#2")).make();
+        userInfoStorage.write(registeredUserInfo);
+
+        lab.conductExperiment(registeredKey, "", new StringConverter());
+    }
+
+    @Test
+    public void experimentIsNotReadFromServerWhenCookieExistsEvenWhenOtherABTestExistsOnKey() throws Exception {
+        final Experiment registeredUsersExperiment = experimentForRegisteredUserWithWinningFirstGroup.make();
+        final Experiment registeredUsersExperiment2 = experimentForRegisteredUserWithWinningFirstGroup.but(with(id, 2)).make();
+
+        addExperimentToCache(registeredUsersExperiment);
+        addExperimentToCache(registeredUsersExperiment2);
+
+        final UserInfo registeredUserInfo = aRegisteredUserInfo.but(with(experimentsLog, "1#2")).make();
+        userInfoStorage.write(registeredUserInfo);
+
+        lab.conductExperiment(registeredKey, "", new StringConverter());
+    }
+
+
+    @Test
+    public void experimentDoesntFailWhenReadingFromServerFails() throws Exception {
+        final Experiment registeredUsersExperiment = experimentForRegisteredUserWithWinningFirstGroup.make();
+        addExperimentToCache(registeredUsersExperiment);
+
+        userInfoStorage.write(registeredUserInfo);
+        context.checking(new Expectations() {{
+            allowing(petriClient).getUserState(registeredUserInfo.getUserId());
+            will(throwException(new NullPointerException()));
+        }});
+        lab.conductExperiment(registeredKey, "", new StringConverter());
+
+        userInfoStorage.assertUserExperimentsLog("1#1");
+        userInfoStorage.assertAnonymousLogIs("");
+
+        final Matcher<Throwable> matcher = Matchers.instanceOf(NullPointerException.class);
+        errorReportWasSent(matcher);
+    }
+
+
+    @Test
+    public void conductByScopeReadsServerStateForRegisteredUsers() throws Exception {
+        final Experiment registeredUserExperimentInEditorScope = experimentForRegisteredUserWithWinningFirstGroup.but(
+                with(scope, "editor")).make();
+        addExperimentToCache(registeredUserExperimentInEditorScope);
+
+        userInfoStorage.write(registeredUserInfo);
+        returnUserStateFromServer("1#2");
+
+        Map<String, String> expected = ImmutableMap.of(registeredKey, LOSING_VALUE);
+        assertThat(lab.conductAllInScope("editor"), is(expected));
+        userInfoStorage.assertUserExperimentsLog("1#2");
+    }
 
     @Test
     public void defaultValuesAreReturnedForRobots() throws Exception {
@@ -593,19 +765,6 @@ public class TrackableLaboratoryTest {
 
         assertThat(lab.conductExperiment(TheKey, "fallback"), is(WINNING_VALUE));
     }
-
-    @Test
-    public void appendsBILogEntryButDoesNotPersistWhenExperimentIsNonPersistent() throws Exception {
-        addExperimentToCache(experimentWithWinningFirstGroup.but(with(persistent, false)).make());
-        userInfoStorage.write(aRegisteredUserInfo.make());
-        lab.conductExperiment(TheKey, FALLBACK_VALUE);
-
-        assertBiLogHasItemThat(allOf(
-                containsTheUsersId()));
-        assertAnonymousLogIsEmpty();
-        assertUserLogIsEmpty();
-    }
-
 
     @Test
     public void whenConductingSeveralExperimentsOnSameKeyFtsHavePrecedence() {
@@ -653,22 +812,6 @@ public class TrackableLaboratoryTest {
     }
 
     @Test
-    public void customTestGroupDrawerFromConductContextIsUsedEvenIfNullUserInfo() throws Exception {
-        Experiment experiment = experimentWithWinningFirstGroup.make();
-
-        addExperimentToCache(experiment);
-        writeUserInfoFromNullRequest();
-
-        TestGroupDrawer customDrawer = mock(TestGroupDrawer.class);
-        when(customDrawer.drawTestGroup(experiment)).thenReturn(experiment.getTestGroupById(2));
-        ConductionContext contextWithCustomKernel = ConductionContextBuilder.newInstance().withTestGroupDrawer(customDrawer);
-
-        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE, contextWithCustomKernel), is(LOSING_VALUE));
-
-        verify(customDrawer).drawTestGroup(experiment);
-    }
-
-    @Test
     public void nullUserInfoCanUseHostFilter() {
         final String host = "some host";
 
@@ -701,14 +844,14 @@ public class TrackableLaboratoryTest {
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
 
         userInfoStorage.write(aRegisteredUserInfo.make());
-        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE, ConductionContextBuilder.newInstance().withCriterionOverride(new StringCriterion())),
+        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE, newInstance().withCriterionOverride(new StringCriterion())),
                 is(WINNING_VALUE));
     }
 
     @Test(expected = NullPointerException.class)
     public void passingNullEligibilityFieldThrowsNPE() throws Exception {
         userInfoStorage.write(aRegisteredUserInfo.make());
-        lab.conductExperiment(TheKey, FALLBACK_VALUE, ConductionContextBuilder.newInstance().withCriterionOverride(null));
+        lab.conductExperiment(TheKey, FALLBACK_VALUE, newInstance().withCriterionOverride(null));
     }
 
     private class StringCriterion implements EligibilityCriterion<String> {
@@ -754,7 +897,7 @@ public class TrackableLaboratoryTest {
         userInfoStorage.write(oldUserInfo);
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
 
-        ConductionContextBuilder context = ConductionContextBuilder.newInstance().withCriterionOverride(new UserCreationDateCriterion(new DateTime()));
+        ConductionContextBuilder context = newInstance().withCriterionOverride(new UserCreationDateCriterion(new DateTime()));
 
         conductByKeyAndByScopeReturns(WINNING_VALUE, context);
     }
@@ -787,4 +930,103 @@ public class TrackableLaboratoryTest {
         noErrorReportsWereSent();
 
     }
+
+    @Test
+    public void persistentKernelFromCustomConductionStrategyIsUsedForConduction() throws Exception {
+        final Experiment experiment = experimentForRegisteredUserWithWinningFirstGroup.make();
+        addExperimentToCache(experiment);
+
+        userInfoStorage.write(aRegisteredUserInfo.make());
+
+        returnUserStateFromServer("", OTHER_USER_GUID);
+        final ConductionStrategy customStrategyWithKernel = context.mock(ConductionStrategy.class);
+        context.checking(new Expectations() {{
+            allowing(customStrategyWithKernel).shouldPersist();
+            will(returnValue(true));
+            allowing(customStrategyWithKernel).persistentKernel();
+            will(returnValue(new Some(OTHER_USER_GUID)));
+            allowing(customStrategyWithKernel).drawTestGroup(experiment);
+            will(returnValue(experiment.getTestGroupById(2)));
+        }});
+        ConductionContext contextWithCustomKernel = newInstance().withConductionStrategy(customStrategyWithKernel);
+
+        assertThat(lab.conductExperiment(registeredKey, "-1", new StringConverter(), contextWithCustomKernel), is(LOSING_VALUE));
+        assertBiLogHasItemThat(allOf(containsTheUsersId()));
+        assertAnonymousLogIsEmpty();
+        assertUserLogIsEmpty();
+        userInfoStorage.assertUserExperimentsLog(OTHER_USER_GUID, "1#2");
+    }
+
+    @Test
+    public void persistentKernelFromCustomConductionStrategyIsUsedToReadFromCookie() throws Exception {
+        final Experiment experiment = experimentForRegisteredUserWithWinningFirstGroup.make();
+        addExperimentToCache(experiment);
+
+        userInfoStorage.write(aRegisteredUserInfo.but(with(otherUserExperimentsLog, new HashMap<UUID, String>() {{
+            put(OTHER_USER_GUID, "1#2");
+        }})).make());
+
+        final ConductionStrategy customStrategyWithKernel = context.mock(ConductionStrategy.class);
+        context.checking(new Expectations() {{
+            allowing(customStrategyWithKernel).persistentKernel();
+            will(returnValue(new Some(OTHER_USER_GUID)));
+        }});
+        ConductionContext contextWithCustomKernel = newInstance().withConductionStrategy(customStrategyWithKernel);
+
+        assertThat(lab.conductExperiment(registeredKey, "-1", new StringConverter(), contextWithCustomKernel), is(LOSING_VALUE));
+        assertBiLogAndAnonAndUserLogsAreEmpty();
+        userInfoStorage.assertUserExperimentsLog(OTHER_USER_GUID, "1#2");
+    }
+
+
+    @Test
+    public void customTestGroupDrawerFromCustomConductionStrategyCanBeUsedWithNoUser() throws Exception {
+        final Experiment experiment = experimentForRegisteredUserWithWinningFirstGroup.make();
+        addExperimentToCache(experiment);
+
+        writeUserInfoFromNullRequest();
+
+        //(no need to allow server state read)
+        final ConductionStrategy customStrategyWithNoKernel = context.mock(ConductionStrategy.class);
+        context.checking(new Expectations() {{
+            allowing(customStrategyWithNoKernel).shouldPersist();
+            will(returnValue(false));
+            allowing(customStrategyWithNoKernel).persistentKernel();
+            will(returnValue(scala.Option.apply(null)));
+            allowing(customStrategyWithNoKernel).drawTestGroup(experiment);
+            will(returnValue(experiment.getTestGroupById(2)));
+        }});
+        ConductionContext contextWithCustomKernel = newInstance().withConductionStrategy(customStrategyWithNoKernel);
+
+        assertThat(lab.conductExperiment(registeredKey, FALLBACK_VALUE, new StringConverter(), contextWithCustomKernel), is(LOSING_VALUE));
+        assertAnonymousLogIsEmpty();
+        assertUserLogIsEmpty();
+        userInfoStorage.assertUserExperimentsLogIsEmpty();
+        assertBiLogHasItemThat(containsNoUserIdAndWinsWith(2));
+    }
+
+    @Test
+    public void appendsBILogEntryButDoesNotPersistWhenCustomConductionStrategySaysSo() throws Exception {
+        final Experiment experiment = experimentWithWinningFirstGroup.make();
+        addExperimentToCache(experiment);
+
+        userInfoStorage.write(aRegisteredUserInfo.make());
+
+        final ConductionStrategy customStrategyWithNoPersistence = context.mock(ConductionStrategy.class);
+        context.checking(new Expectations() {{
+            allowing(customStrategyWithNoPersistence).shouldPersist();
+            will(returnValue(false));
+            allowing(customStrategyWithNoPersistence).persistentKernel();
+            will(returnValue(scala.Option.apply(null)));
+            allowing(customStrategyWithNoPersistence).drawTestGroup(experiment);
+            will(returnValue(experiment.getTestGroupById(2)));
+        }});
+        ConductionContext contextWithCustomKernel = newInstance().withConductionStrategy(customStrategyWithNoPersistence);
+        lab.conductExperiment(TheKey, FALLBACK_VALUE, contextWithCustomKernel);
+
+        assertBiLogHasItemThat(allOf(containsTheUsersId()));
+        assertAnonymousLogIsEmpty();
+        assertUserLogIsEmpty();
+    }
+
 }

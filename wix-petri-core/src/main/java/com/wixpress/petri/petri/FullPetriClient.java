@@ -7,11 +7,13 @@ import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author talyag
  * @since 9/24/14
  */
+//TODO - move this class to petri-server module
 public interface FullPetriClient {
 
     List<Experiment> fetchAllExperiments();
@@ -26,13 +28,11 @@ public interface FullPetriClient {
 
     void addSpecs(List<ExperimentSpec> expectedSpecs);
 
-
     List<Experiment> getHistoryById(int id);
 
     void deleteSpec(String key);
 
     List<ConductExperimentSummary> getExperimentReport(int experimentId);
-
 
     public class PetriException extends RuntimeException {
         public PetriException(Throwable e) {

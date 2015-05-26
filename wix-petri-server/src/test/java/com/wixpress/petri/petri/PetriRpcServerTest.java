@@ -13,9 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.dao.DuplicateKeyException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.*;
@@ -27,6 +25,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.junit.Assert.assertThat;
 
@@ -47,6 +46,7 @@ public class PetriRpcServerTest {
     private PetriNotifier mailService;
     private Clock clock;
     private MetricsReportsDao metricsReportsDao;
+    private UserStateDao userStateDao;
 
 
     private final static Maker<Experiment> experimentMaker = an(Experiment,
@@ -167,7 +167,8 @@ public class PetriRpcServerTest {
         clock = context.mock(Clock.class);
         mailService = context.mock(PetriNotifier.class);
         metricsReportsDao = context.mock(MetricsReportsDao.class);
-        petriRpcServer = new PetriRpcServer(experimentsDao, clock, specsDao, mailService, metricsReportsDao);
+        userStateDao = context.mock(UserStateDao.class);
+        petriRpcServer = new PetriRpcServer(experimentsDao, clock, specsDao, mailService, metricsReportsDao, userStateDao);
 
     }
 
@@ -370,4 +371,39 @@ public class PetriRpcServerTest {
     }
 
 
+    @Test
+    public void  addUserState(){
+        final String state = "1#5";
+        final UUID userGuid = UUID.randomUUID();
+        context.checking(new Expectations() {{
+            oneOf(userStateDao).saveUserState(with(userGuid), with(state), with(any(DateTime.class)));
+        }});
+        petriRpcServer.saveUserState(userGuid, state);
+
+
+    }
+
+    @Test
+    public void getUserState() {
+        final String state = "1#5";
+        final UUID userGuid = UUID.randomUUID();
+        context.checking(new Expectations() {{
+            allowing(userStateDao).getUserState(userGuid);
+            will(returnValue(state));
+        }});
+        assertThat(petriRpcServer.getUserState(userGuid), is(state));
+    }
+
+    @Test
+    public void getFullUserState() {
+        final String state = "1#5";
+        final UUID userGuid = UUID.randomUUID();
+        final DateTime currentDateTime = new DateTime();
+        final UserState userState = new UserState(userGuid, state, currentDateTime);
+        context.checking(new Expectations() {{
+            allowing(userStateDao).getFullUserState(userGuid);
+            will(returnValue(userState));
+        }});
+        assertThat(petriRpcServer.getFullUserState(userGuid), is(userState));
+    }
 }

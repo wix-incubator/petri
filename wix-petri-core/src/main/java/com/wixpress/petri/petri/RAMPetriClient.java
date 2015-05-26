@@ -27,19 +27,21 @@ import static com.wixpress.petri.experiments.domain.ExperimentPredicates.IsActiv
  * Time: 12:55 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RAMPetriClient implements FullPetriClient, PetriClient {
+public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequestPetriClient {
 
     private Map<ExperimentKey, Experiment> experiments = new LinkedHashMap<>();
     private int currentId = 1;
     private Map<String, ExperimentSpec> specs = new TreeMap<String, ExperimentSpec>(String.CASE_INSENSITIVE_ORDER);
     private boolean blowUp = false;
     private List<ConductExperimentReport> reports  = new ArrayList<>();
+    private Map<UUID,String> userStateMap = new HashMap<>();
 
     public synchronized void clearAll() {
         experiments.clear();
         specs.clear();
         currentId = 1;
         reports.clear();
+        userStateMap.clear();
     }
 
     public void setBlowUp(boolean blowUp) {
@@ -207,6 +209,24 @@ public class RAMPetriClient implements FullPetriClient, PetriClient {
         store(conductExperimentReports);
 
     }
+
+    @Override
+    public void saveUserState(UUID userId, String userState) {
+        userStateMap.put(userId, userState);
+    }
+
+
+    @Override
+    public String getUserState(UUID userId) {
+        if(userStateMap.containsKey(userId))
+            return userStateMap.get(userId);
+        else return "";
+    }
+
+    public boolean isUserStateDefined(UUID userId) {
+        return userStateMap.containsKey(userId);
+    }
+
     @Override
     public synchronized List<Experiment> getHistoryById(final int id) {
         return reverse(newLinkedList(filter(experiments.values(), hasID(id))));

@@ -22,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @since: 10/30/13
  */
 public abstract class PetriDaoIT<T, V> {
-    public static final String JDBC_H2_IN_MEM_CONNECTION_STRING = "jdbc:h2:mem:test";
+    public static final String JDBC_H2_IN_MEM_CONNECTION_STRING = "jdbc:h2:mem:test;MODE=MySQL";
 
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
@@ -34,7 +34,7 @@ public abstract class PetriDaoIT<T, V> {
     private void generateSchema() throws SQLException, ClassNotFoundException {
         dbDriver = DBDriver.dbDriver(JDBC_H2_IN_MEM_CONNECTION_STRING);
         dbDriver.createSchema();
-        dbDriver.createMetricsTableSchema();
+
     }
 
     @Before

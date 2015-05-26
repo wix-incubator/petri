@@ -1,5 +1,6 @@
 package com.wixpress.common.petri.e2e;
 
+import com.wixpress.petri.HostResolver;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.petri.ConductExperimentSummary;
 import com.wixpress.petri.util.ConductExperimentSummaryMatcher;
@@ -34,7 +35,7 @@ public class PetriReportsTest extends BaseTest {
         waitForReporter();
         List<ConductExperimentSummary> experimentReport = fullPetriClient.getExperimentReport(experiment.getId());
         assertThat(experimentReport.size(), is(1));
-        assertThat(experimentReport,  contains(ConductExperimentSummaryMatcher.hasSummary(experiment.getId(), "a", 1l)));
+        assertThat(experimentReport,  contains(ConductExperimentSummaryMatcher.hasSummary(HostResolver.getServerName(), experiment.getId(), "a", 1l)));
     }
 
     private void waitForReporter() throws InterruptedException {

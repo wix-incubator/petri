@@ -47,10 +47,11 @@ public class ExperimentMakers {
     public static final Property<Experiment, Boolean> featureToggle = newProperty();
     public static final Property<Experiment, String> creator = newProperty();
     public static final Property<Experiment, String> name = newProperty();
-    public static final Property<Experiment, Boolean> persistent = newProperty();
     public static final Property<Experiment, Boolean> onlyForLoggedIn = newProperty();
     public static final Property<Experiment, String> comment = newProperty();
     public static final Property<Experiment, String> updater = newProperty();
+    public static final Property<Experiment, Integer> conductionLimit = newProperty();
+
 
     public static final DateTime DEFAULT_START_DATE = new DateTime();
     public static final DateTime DEFAULT_END_DATE = DEFAULT_START_DATE.plusYears(1);
@@ -79,10 +80,10 @@ public class ExperimentMakers {
                                     withLinkedId(lookup.valueOf(linkedId, 0)).
                                     withFeatureToggle(lookup.valueOf(featureToggle, false)).
                                     withCreator(lookup.valueOf(creator, "")).
-                                    withPersistent(lookup.valueOf(persistent, true)).
                                     withOnlyForLoggedInUsers(lookup.valueOf(onlyForLoggedIn, false)).
                                     withComment(lookup.valueOf(comment, "")).
                                     withUpdater(lookup.valueOf(updater, "")).
+                                    withConductLimit(lookup.valueOf(conductionLimit, 0)).
                                     build()
                     ).
                     build();
@@ -115,10 +116,10 @@ public class ExperimentMakers {
                                         withLinkedId(lookup.valueOf(linkedId, original.getExperimentSnapshot().linkedId())).
                                         withFeatureToggle(lookup.valueOf(featureToggle, original.isToggle())).
                                         withCreator(lookup.valueOf(creator, original.getCreator())).
-                                        withPersistent(lookup.valueOf(persistent, original.isPersistent())).
                                         withOnlyForLoggedInUsers(lookup.valueOf(onlyForLoggedIn, original.isOnlyForLoggedInUsers())).
                                         withComment(lookup.valueOf(comment, original.getComment())).
                                         withUpdater(lookup.valueOf(updater, original.getUpdater())).
+                                        withConductLimit(lookup.valueOf(conductionLimit, 0)).
                                         build()
                         ).build();
             }

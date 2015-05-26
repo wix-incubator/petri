@@ -1,6 +1,6 @@
 package com.wixpress.petri.laboratory
 
-import com.wixpress.petri.experiments.domain.{TestGroup, Experiment}
+import com.wixpress.petri.experiments.domain.{Experiment, TestGroup}
 
 
 /**
@@ -8,14 +8,13 @@ import com.wixpress.petri.experiments.domain.{TestGroup, Experiment}
  * User: daniels
  * Date: 3/31/14
  */
+@deprecated(message = "use ConductionStrategy instead",since = "5/18/2015")
 trait TestGroupDrawer {
   def drawTestGroup(exp: Experiment): TestGroup
 }
 
 
 
-object RandomTestGroupDrawer extends TestGroupDrawer {
-  def drawTestGroup(exp: Experiment): TestGroup = {
-    new AnonymousTestGroupAssignmentStrategy().getAssignment(exp, null)
-  }
-}
+
+
+

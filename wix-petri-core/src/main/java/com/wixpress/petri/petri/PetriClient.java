@@ -4,6 +4,7 @@ import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author: talyag
@@ -18,5 +19,7 @@ public interface PetriClient {
     void addSpecs(List<ExperimentSpec> expectedSpecs);
 
     void reportConductExperiment( List<ConductExperimentReport> conductExperimentReports);
+
+    void saveUserState(UUID userId, String userState);
 
 }

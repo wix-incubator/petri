@@ -2,16 +2,16 @@ package com.wixpress.petri.laboratory;
 
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
+import scala.Option;
+import scala.Some;
 
 import java.util.UUID;
 
 public class RegisteredUserInfoType implements UserInfoType {
 
-    private final TestGroupSelector selector;
     private final UUID userId;
 
-    public RegisteredUserInfoType(TestGroupSelector selector, UUID userId) {
-        this.selector = selector;
+    public RegisteredUserInfoType(UUID userId) {
         this.userId = userId;
     }
 
@@ -20,11 +20,17 @@ public class RegisteredUserInfoType implements UserInfoType {
     }
 
     public TestGroup drawTestGroup(Experiment exp) {
-
-        return selector.forWixUser(exp, userId);
+        return new GuidTestGroupAssignmentStrategy().getAssignment(exp, userId.toString());
     }
 
-    public String getStorageKey() {
-        return ANONYMOUS_LOG_STORAGE_KEY + "|" + userId;
+    @Override
+    public Option<UUID> persistentKernel() {
+        return new Some(userId);
     }
+
+    @Override
+    public boolean shouldPersist(){
+       return true;
+    }
+
 }

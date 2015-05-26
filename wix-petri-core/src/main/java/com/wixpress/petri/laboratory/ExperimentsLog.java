@@ -20,7 +20,7 @@ public class ExperimentsLog {
     public static ExperimentsLog parse(String runningExperiments) {
         try {
             Map<String, String> experiments = new LinkedHashMap<>();
-            if (runningExperiments.isEmpty())
+            if (runningExperiments == null || runningExperiments.isEmpty())
                 return new ExperimentsLog(experiments);
 
             for (String experiment : runningExperiments.split("\\|")) {
@@ -109,6 +109,10 @@ public class ExperimentsLog {
     public int winningTestGroupId(int experimentId) {
         final String experimentValueAsString = winningGroupId(experimentId);
         return Integer.parseInt(experimentValueAsString);
+    }
+
+    public Map<String, String> getWinningTestGroups() {
+        return experimentsResults;
     }
 
     public ExperimentsLog appendAll(ExperimentsLog other) {

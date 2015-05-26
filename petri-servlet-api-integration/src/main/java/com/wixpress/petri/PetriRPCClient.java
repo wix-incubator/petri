@@ -6,6 +6,7 @@ import com.googlecode.jsonrpc4j.*;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
+import com.wixpress.petri.petri.UserRequestPetriClient;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -47,6 +48,16 @@ public class PetriRPCClient {
         return ProxyUtil.createClientProxy(
                 PetriRPCClient.class.getClassLoader(),
                 PetriClient.class,
+                client);
+    }
+
+    public static UserRequestPetriClient makeUserRequestFor(String serviceUrl) throws MalformedURLException {
+
+        JsonRpcHttpClient client = getJsonRpcHttpClient(serviceUrl);
+
+        return ProxyUtil.createClientProxy(
+                PetriRPCClient.class.getClassLoader(),
+                UserRequestPetriClient.class,
                 client);
     }
 

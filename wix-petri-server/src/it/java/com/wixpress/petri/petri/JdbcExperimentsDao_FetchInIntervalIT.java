@@ -41,7 +41,6 @@ public class JdbcExperimentsDao_FetchInIntervalIT {
     private void generateSchema() throws SQLException, ClassNotFoundException {
         dbDriver = DBDriver.dbDriver(JDBC_H2_IN_MEM_CONNECTION_STRING);
         dbDriver.createSchema();
-        dbDriver.createMetricsTableSchema();
     }
 
     @Before

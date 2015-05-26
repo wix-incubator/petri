@@ -3,9 +3,7 @@ package com.wixpress.petri.laboratory.http;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
 import com.wixpress.petri.laboratory.*;
-import com.wixpress.petri.petri.JodaTimeClock;
-import com.wixpress.petri.petri.PetriClient;
-import com.wixpress.petri.petri.ServerMetricsReporter;
+import com.wixpress.petri.petri.*;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -31,11 +29,11 @@ public class LaboratoryFilter implements Filter {
     public static final String PETRI_USER_INFO_STORAGE = "petri_userInfoStorage";
     public static final String PETRI_LABORATORY = "petri_laboratory";
     private final PetriProperties petriProperties = new PetriProperties();
-    private String petriUrl;
 
-    private static final long SCHEDULE_REPORT_INTERVAL = 300000l;
     private  ServerMetricsReporter metricsReporter ;
     private PetriClient petriClient;
+    private UserRequestPetriClient userRequestPetriClient;
+    private PetriTopology petriTopology;
 
     public LaboratoryFilter() {
     }
@@ -86,7 +84,7 @@ public class LaboratoryFilter implements Filter {
 
         };
 
-        return new TrackableLaboratory(experiments, tracker, storage, errorHandler, 50, metricsReporter);
+        return new TrackableLaboratory(experiments, tracker, storage, errorHandler, 50, metricsReporter, userRequestPetriClient, petriTopology);
     }
 
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
@@ -100,28 +98,49 @@ public class LaboratoryFilter implements Filter {
     }
 
     public void init(FilterConfig filterConfig) throws ServletException {
+        readProperties(filterConfig);
+
+        try {
+            petriClient = PetriRPCClient.makeFor(petriTopology.getPetriUrl());
+            userRequestPetriClient = PetriRPCClient.makeUserRequestFor(petriTopology.getPetriUrl());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        startMetricsReporterScheduler(petriTopology.getReportsScheduleTimeInMillis());
+
+        FilterTypeIdResolver.useDynamicFilterClassLoading();
+    }
+
+    private void readProperties(FilterConfig filterConfig) {
         String laboratoryConfig = filterConfig.getInitParameter("laboratoryConfig");
         InputStream input = filterConfig.getServletContext().getResourceAsStream(laboratoryConfig);
 
         Properties p = petriProperties.fromStream(input);
 
-        petriUrl = p.getProperty("petri.url");
+        final String petriUrl = p.getProperty("petri.url");
+        final Boolean writeStateToServer = Boolean.valueOf(p.getProperty("petri.writeStateToServer", "false"));
+        final String reporterInterval = p.getProperty("reporter.interval");
+        petriTopology = new PetriTopology(){
 
-        try {
-            petriClient = PetriRPCClient.makeFor(petriUrl);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public String getPetriUrl() {
+                return petriUrl;
+            }
 
-        startMetricsReporterScheduler(p);
+            @Override
+            public Long getReportsScheduleTimeInMillis(){
+                long scheduleReportInterval = reporterInterval == null ?  petriTopology.getReportsScheduleTimeInMillis() : Long.parseLong(reporterInterval);
+                return scheduleReportInterval;
+            }
 
-        FilterTypeIdResolver.useDynamicFilterClassLoading();
+            @Override
+            public boolean isWriteStateToServer() {return writeStateToServer;}
+        };
     }
 
-    private void startMetricsReporterScheduler(Properties p) {
-        String reporterInterval = p.getProperty("reporter.interval");
-        long scheduleReportInterval = reporterInterval == null ?  SCHEDULE_REPORT_INTERVAL : Long.parseLong(reporterInterval);
-        metricsReporter = new ServerMetricsReporter(petriClient , Executors.newScheduledThreadPool(5), scheduleReportInterval);
+    private void startMetricsReporterScheduler(Long reportsScheduleTimeInMillis) {
+        metricsReporter = new ServerMetricsReporter(petriClient , Executors.newScheduledThreadPool(5), reportsScheduleTimeInMillis);
         metricsReporter.startScheduler();
     }
 

@@ -1,12 +1,13 @@
 package com.wixpress.petri.petri
 
 import java.net.InetAddress
-import java.util.concurrent.{TimeUnit, ScheduledExecutorService}
+import java.util.concurrent.ScheduledExecutorService
 
+import org.jmock.lib.concurrent.{DeterministicScheduler, Synchroniser}
 import org.jmock.{Expectations, Mockery}
-import org.jmock.lib.concurrent.DeterministicScheduler
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.Scope
+
 import scala.collection.JavaConversions._
 import scala.concurrent._
 import scala.concurrent.duration._
@@ -21,6 +22,8 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
   trait Context extends Scope {
 
     val context = new Mockery()
+    context.setThreadingPolicy(new Synchroniser())
+
     val petriClient = context.mock(classOf[PetriClient])
     var scheduler: ScheduledExecutorService = new DeterministicScheduler()
 
@@ -62,9 +65,9 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
     }
 
     "should not report to server when there are no counts " in new Context {
-
       reporter.reportToServer()
 
+      context.assertIsSatisfied()
     }
 
     "should clear map after sending report   " in new Context {
@@ -85,20 +88,16 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
     }
 
     "should run 100 concurrent writes properly " in new Context {
-      val futures = (1 to 100).map( range => {
-        val experimentValue = range match {
-          case n : Int if n % 2 == 0 => "true"
-          case   _ => "false"
-        }
-        future { reporter.reportConductExperiment(1, experimentValue) }
+      import scala.concurrent.ExecutionContext.Implicits.global
+      val futures = (1 to 100).map( x =>
+        Future( reporter.reportConductExperiment(1, (x % 2 == 0).toString))
+      )
 
-      })
-
-      futures.foreach(Await.result(_, Duration(20, TimeUnit.MILLISECONDS)))
+      Await.result(Future.sequence(futures), 20.0.milliseconds)
 
       context.checking(
         new Expectations() {
-          exactly(2).of (petriClient).reportConductExperiment(Seq(
+          exactly(1).of (petriClient).reportConductExperiment(Seq(
             new ConductExperimentReport(InetAddress.getLocalHost.getHostName , 1, "true", 50l),
             new ConductExperimentReport(InetAddress.getLocalHost.getHostName , 1, "false", 50l)
           ))
@@ -107,6 +106,7 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
 
       reporter.reportToServer()
 
+      context.assertIsSatisfied()
     }
   }
 }

@@ -388,17 +388,6 @@ public class ExperimentTest {
     }
 
     @Test
-    public void terminatesWhenExperimentIsNotOnRegisteredOnlyButNotPersistent() {
-        Experiment nonPersistentOnAnonymous = an(Experiment,
-                with(onlyForLoggedIn, false),
-                with(persistent, false)).make();
-        DateTime now = new DateTime();
-        Experiment result = nonPersistentOnAnonymous.pauseOrTerminateAsOf(now, new ArrayList<Filter>(), new Trigger("should terminate", ""));
-        assertThat(result.getEndDate(), is(now));
-        assertFalse(result.isPaused());
-    }
-
-    @Test
     public void canBeEligibleForNewUsersOnly() {
         Experiment experiment = experimentWithFilters(new NewUsersFilter());
 

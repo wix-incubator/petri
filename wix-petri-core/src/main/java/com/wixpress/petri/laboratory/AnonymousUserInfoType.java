@@ -2,13 +2,13 @@ package com.wixpress.petri.laboratory;
 
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
+import scala.Option;
+
+import java.util.UUID;
 
 public class AnonymousUserInfoType implements UserInfoType {
 
-    private final TestGroupSelector selector;
-
-    public AnonymousUserInfoType(TestGroupSelector selector) {
-        this.selector = selector;
+    public AnonymousUserInfoType() {
     }
 
     public boolean isAnonymous() {
@@ -16,10 +16,17 @@ public class AnonymousUserInfoType implements UserInfoType {
     }
 
     public TestGroup drawTestGroup(Experiment exp) {
-        return selector.forAnonymousUsers(exp);
+        return new AnonymousTestGroupAssignmentStrategy().getAssignment(exp, null);
     }
 
-    public String getStorageKey() {
-        return ANONYMOUS_LOG_STORAGE_KEY;
+
+    @Override
+    public Option<UUID> persistentKernel() {
+        return scala.Option.apply(null); //Scala's None
+    }
+
+    @Override
+    public boolean shouldPersist() {
+        return true;
     }
 }

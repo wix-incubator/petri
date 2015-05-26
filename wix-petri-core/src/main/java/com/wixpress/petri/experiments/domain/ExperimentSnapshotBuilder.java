@@ -40,6 +40,7 @@ public class ExperimentSnapshotBuilder {
     private Boolean onlyForLoggedInUsers = null;
     private String updater = "";
     private String comment = "";
+    private int conductLimit = 0;
 
     private ExperimentSnapshotBuilder() {
     }
@@ -68,7 +69,13 @@ public class ExperimentSnapshotBuilder {
                 withCreator(snapshot.creator()).
                 withFeatureToggle(snapshot.isFeatureToggle()).
                 withPersistent(snapshot.isPersistent()).
-                withOnlyForLoggedInUsers(snapshot.isOnlyForLoggedInUsers());
+                withOnlyForLoggedInUsers(snapshot.isOnlyForLoggedInUsers()).
+                withConductLimit(snapshot.conductLimit());
+    }
+
+    public ExperimentSnapshotBuilder withConductLimit(int conductLimit) {
+        this.conductLimit = conductLimit;
+        return this;
     }
 
     public ExperimentSnapshotBuilder withOriginalId(int originalId) {
@@ -172,7 +179,7 @@ public class ExperimentSnapshotBuilder {
 
     public ExperimentSnapshot build() {
         validate();
-        return new ExperimentSnapshot(key, isFromSpec, creationDate, description, startDate, endDate, assignIdsIfMissing(groups), scope, paused, name, creator, featureToggle, originalId, linkedId, persistent, filters, onlyForLoggedInUsers, comment, updater);
+        return new ExperimentSnapshot(key, isFromSpec, creationDate, description, startDate, endDate, assignIdsIfMissing(groups), scope, paused, name, creator, featureToggle, originalId, linkedId, persistent, filters, onlyForLoggedInUsers, comment, updater, conductLimit);
     }
 
     private List<TestGroup> assignIdsIfMissing(List<TestGroup> groups) {

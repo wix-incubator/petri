@@ -13,7 +13,7 @@ public class ScopeDefinition {
     private final boolean onlyForLoggedInUsers;
 
     /**
-     * Use this if the experiment is always conducted for logged in users - i.e in the dashboard, editor etc.
+     * Use this if the experiment is always conducted for logged in users - i.e in the dashboard, editor etc. (e.g WixEmployees filter)
      */
     public static ScopeDefinition aScopeDefinitionOnlyForLoggedInUsers(String scope) {
         return new ScopeDefinition(scope, true);

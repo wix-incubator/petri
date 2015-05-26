@@ -1,15 +1,20 @@
 package com.wixpress.petri.laboratory;
 
+import com.google.common.collect.ImmutableMap;
 import com.wixpress.petri.experiments.domain.Assignment;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
 import com.wixpress.petri.laboratory.converters.StringConverter;
 import com.wixpress.petri.petri.MetricsReporter;
+import com.wixpress.petri.petri.PetriTopology;
 import com.wixpress.petri.petri.SpecDefinition;
+import com.wixpress.petri.petri.UserRequestPetriClient;
+import scala.Option;
+import scala.Some;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.lang.String.valueOf;
 
 /**
  * @author sagyr
@@ -22,16 +27,21 @@ public class TrackableLaboratory implements Laboratory {
     private final UserInfoStorage userInfoStorage;
     private final TestGroupAssignmentTracker testGroupAssignmentTracker;
     private final ErrorHandler laboratoryErrorHandler;
-    private final MetricsReporter metricsReporter ;
+    private final MetricsReporter metricsReporter;
+    private final UserRequestPetriClient petriClient;
+    private final PetriTopology petriTopology;
 
     public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
-                               ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter) {
+                               ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter,
+                               UserRequestPetriClient petriClient, PetriTopology petriTopology) {
         this.experiments = experiments;
         this.testGroupAssignmentTracker = testGroupAssignmentTracker;
         this.userInfoStorage = userInfoStorage;
         this.laboratoryErrorHandler = laboratoryErrorHandler;
         this.maxConductionTimeMillis = maxConductionTimeMillis;
         this.metricsReporter = metricsReporter;
+        this.petriClient = petriClient;
+        this.petriTopology = petriTopology;
     }
 
     private UserInfo userInfo() {
@@ -72,9 +82,10 @@ public class TrackableLaboratory implements Laboratory {
         try {
             removeExpiredExperiments();
             List<Experiment> experimentsByKey = experiments.findNonExpiredByKey(key);
+            ExistingTestGroups existingTestGroups = getExistingTestGroups(experimentsByKey, context);
 
             for (Experiment experiment : experimentsByKey) {
-                T result = calcExperimentValue(resultConverter, experiment, context);
+                T result = calcExperimentValue(resultConverter, experiment, context, existingTestGroups.get(experiment.getId()));
                 if (result != null) {
                     return result;
                 }
@@ -109,10 +120,12 @@ public class TrackableLaboratory implements Laboratory {
         StringConverter stringResultConverter = new StringConverter();
         HashMap<String, String> results = new HashMap<>();
 
+        ExistingTestGroups existingTestGroups = getExistingTestGroups(experiments, context);
+
         for (Experiment experiment : experiments) {
             String key = experiment.getKey();
             if (!results.containsKey(key)) {
-                String result = calcExperimentValue(stringResultConverter, experiment, context);
+                String result = calcExperimentValue(stringResultConverter, experiment, context, existingTestGroups.get(experiment.getId()));
                 if (result != null) {
                     results.put(key, result);
                 }
@@ -133,21 +146,24 @@ public class TrackableLaboratory implements Laboratory {
         return new ExpiredExperiments(experiments);
     }
 
-    private <T> T calcExperimentValue(TestResultConverter<T> resultConverter, Experiment experiment, ConductionContext context) {
+    private <T> T calcExperimentValue(TestResultConverter<T> resultConverter, Experiment experiment, ConductionContext context, Option<Integer> existingTestGroupID) {
         if (userInfo().isRobot) {
             return null;
         }
         try {
             if (overrideShouldBeUsed(experiment)) {
                 return valueFromOverride(resultConverter, experiment.getKey());
-            } else {
-                TestGroup existingTestGroup = previousValueFromLog(experiment);
-                if (!experiment.isToggle() && existingTestGroup != null) {
-                    userInfoStorage.write(userInfo());
-                    return resultConverter.convert(existingTestGroup.getValue());
-                } else
-                    return valueFromConduct(resultConverter, experiment, context);
             }
+            if (experiment.isToggle()) {
+                return valueFromConduct(resultConverter, experiment, context);
+            }
+
+            if (existingTestGroupID.isDefined()) {
+                TestGroup existingTestGroup  =  experiment.getTestGroupById(existingTestGroupID.get());
+                return resultConverter.convert(existingTestGroup.getValue());
+            } else
+                return valueFromConduct(resultConverter, experiment, context);
+
         } catch (Exception e) {
             reportExperimentException(experiment.getKey(), e);
         }
@@ -161,14 +177,6 @@ public class TrackableLaboratory implements Laboratory {
 
     private <T> T valueFromOverride(TestResultConverter<T> resultConverter, String key) {
         return resultConverter.convert(userInfo().getOverridenExperimentValue(key));
-    }
-
-    private TestGroup previousValueFromLog(Experiment experiment) {
-        if (userInfo().participatesInExperiment(experiment.getId())) {
-            final int testGroupId = userInfo().winningTestGroupID(experiment.getId());
-            return experiment.getTestGroupById(testGroupId);
-        }
-        return null;
     }
 
     private <T> T valueFromConduct(TestResultConverter<T> resultConverter, Experiment experiment, ConductionContext context) {
@@ -188,10 +196,58 @@ public class TrackableLaboratory implements Laboratory {
                     experiment.getId(), assignment.getExecutionTime(), maxConductionTimeMillis);
             laboratoryErrorHandler.handle(message, new SlowExperimentException(experiment), ExceptionType.SlowExperiment);
         }
-        if(assignment.getTestGroup() != null)
-           metricsReporter.reportConductExperiment(experiment.getId(), assignment.getTestGroup().getValue());
+        if (assignment.getTestGroup() != null)
+            metricsReporter.reportConductExperiment(experiment.getId(), assignment.getTestGroup().getValue());
 
     }
 
+    private ExistingTestGroups getExistingTestGroups(List<Experiment> experiments, ConductionContext context) {
+        Option<UUID> persistentKernel = context.conductionStrategyOrFallback(userInfo()).persistentKernel();
+        UUID uid = persistentKernel.isDefined() ? persistentKernel.get() : null;
+
+        Map<String, String> testGroupsFromCookies = userInfo().getWinningExperiments(uid);
+
+        Map<String, String>  testGroupsFromServer = ImmutableMap.of();
+        if(serverStateIsRelevant(experiments, testGroupsFromCookies, uid)) {
+            try {
+                String cookieFromServer = petriClient.getUserState(uid);
+                ExperimentsLog experimentLogFromServer = ExperimentsLog.parse(cookieFromServer).removeWhere(expired());
+                appendServerStateToUserInfo(experimentLogFromServer, uid);
+                testGroupsFromServer = experimentLogFromServer.getWinningTestGroups();
+            } catch(Exception e) {
+                laboratoryErrorHandler.handle(String.format("Unexpected exception while reading user state from server for user %s (user in session is %s) . falling back to cookies", uid, userInfo().getUserId()) , e, ExceptionType.ErrorReadingFromServer);
+            }
+
+        }
+        return new ExistingTestGroups(testGroupsFromCookies, testGroupsFromServer);
+    }
+
+    private boolean serverStateIsRelevant(List<Experiment> experiments, Map<String, String> testGroupsFromCookies, UUID uid) {
+        return petriTopology.isWriteStateToServer() &&
+                uid != null &&
+                atLeastOnePersistentKeyMissingInCookie(experiments, testGroupsFromCookies);
+    }
+
+    private void appendServerStateToUserInfo(ExperimentsLog experimentLogFromServer, UUID uid) {
+        UserInfo updateUserInfo = userInfo().appendUserExperiments(experimentLogFromServer.serialized(), new Some(uid));
+        if (!updateUserInfo.equals(userInfo()))
+            userInfoStorage.write(updateUserInfo);
+    }
+
+    private boolean atLeastOnePersistentKeyMissingInCookie(List<Experiment> experiments, Map<String, String> testGroupsFromCookies) {
+        Set<String> existingKeys = new HashSet<>();
+        Set<String> suspectKeys = new HashSet<>();
+
+        for (Experiment experiment : experiments) {
+            if (experiment.shouldBePersisted()) {
+                String key = experiment.getKey();
+                if (testGroupsFromCookies.containsKey(valueOf(experiment.getId())))
+                    existingKeys.add(key);
+                else
+                    suspectKeys.add(key);
+            }
+        }
+        return !existingKeys.containsAll(suspectKeys);
+    }
 
 }

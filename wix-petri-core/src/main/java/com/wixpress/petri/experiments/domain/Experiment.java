@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Function;
 import com.wixpress.petri.laboratory.ConductionContext;
+import com.wixpress.petri.laboratory.ConductionStrategy;
 import com.wixpress.petri.laboratory.UserInfo;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -139,6 +140,7 @@ public class Experiment {
     }
 
     @JsonIgnore
+    @Deprecated
     public boolean isPersistent() {
         return experimentSnapshot.isPersistent();
     }
@@ -293,10 +295,6 @@ public class Experiment {
             return terminateAsOf(instant, trigger);
         }
 
-        if (!isPersistent()) {
-            return terminateAsOf(instant, trigger);
-        }
-
         //TODO - change this method to be 'if (mustRetainExperienceForAnonUsers) then pause' (?)
         return pause(trigger);
     }
@@ -315,19 +313,24 @@ public class Experiment {
         EligibilityCriteria eligibilityCriteria = new EligibilityCriteria(
                 userInfo, context.additionalEligibilityCriteria(), getStartDate());
 
+        ConductionStrategy conductionStrategy = context.conductionStrategyOrFallback(userInfo);
         if (!isPaused() && isEligible(eligibilityCriteria)) {
             if (isToggle()) {
                 winning = getTestGroupByChunk(0);
             } else {
-                winning = context.testGroupDrawer(userInfo).drawTestGroup(this);
+                winning = conductionStrategy.drawTestGroup(this);
             }
         }
 
-        return new Assignment(context.biAdditions(), userInfo, winning, this, calculateExecutionTime(startTime));
+        return new Assignment(userInfo, conductionStrategy, context.biAdditions(), winning, this, calculateExecutionTime(startTime));
     }
 
     private long calculateExecutionTime(long startTime) {
         return System.currentTimeMillis() - startTime;
+    }
+
+    public boolean shouldBePersisted() {
+        return isOnlyForLoggedInUsers() && !isToggle();
     }
 
     public static class InvalidExperiment extends RuntimeException {

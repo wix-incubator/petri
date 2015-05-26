@@ -1,10 +1,12 @@
 package com.wixpress.petri.laboratory.http;
 
 import com.wixpress.petri.laboratory.ExperimentStateStorage;
+import com.wixpress.petri.laboratory.UserInfoType;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.UUID;
 
 /**
 * Created with IntelliJ IDEA.
@@ -23,12 +25,25 @@ public class CookieExperimentStateStorage implements ExperimentStateStorage {
         this.response = response;
     }
 
-    @Override
-    public void storeExperimentsLog(String key, String experimentsLog) {
+    static public String cookieKeyFor(UUID userId) {
+        return UserInfoType.ANONYMOUS_LOG_STORAGE_KEY + "|" + userId;
+    }
+
+    private void storeExperimentsLog(String key, String experimentsLog) {
         final Cookie cookie = new Cookie(key, experimentsLog);
         cookie.setMaxAge(COOKIE_AGE);
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+    @Override
+    public void storeAnonymousExperimentsLog(String key, String experimentsLog) {
+        storeExperimentsLog(key, experimentsLog);
+    }
+
+    @Override
+    public void storeUserExperimentsLog(UUID userInSessionId, UUID userIdToPersistBy, String experimentsLog) {
+        storeExperimentsLog(cookieKeyFor(userInSessionId), experimentsLog);
     }
 
     @Override

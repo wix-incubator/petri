@@ -27,10 +27,12 @@ case class ExperimentSnapshot(
                                @BooleanBeanProperty featureToggle: Boolean,
                                originalId: Int,
                                linkedId: Int,
-                               @BooleanBeanProperty persistent: Boolean,
+                               @Deprecated @BooleanBeanProperty persistent: Boolean,
                                filters: java.util.List[Filter],
                                @BooleanBeanProperty onlyForLoggedInUsers: Boolean,
-                               comment: String, updater: String //not needed for conductableExperiment
+                               comment: String,
+                               updater: String, //not needed for conductableExperiment
+                               conductLimit: Int
                                ) {
   //not needed for conductableExperiment
 

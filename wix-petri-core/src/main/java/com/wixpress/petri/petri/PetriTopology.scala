@@ -11,4 +11,6 @@ trait PetriTopology {
 
   //TODO Need to be extracted the the common configuration  once it's written
   def getReportsScheduleTimeInMillis: jl.Long = 300000l
+
+  def isWriteStateToServer = true
 }
