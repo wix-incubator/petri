@@ -3,7 +3,6 @@ package dynamic.filters;
 import com.wixpress.petri.experiments.domain.EligibilityCriteria;
 import com.wixpress.petri.experiments.domain.Filter;
 import com.wixpress.petri.experiments.domain.FilterTypeName;
-import org.apache.commons.lang.NotImplementedException;
 
 /**
  * Created by talyas on 2/1/15.
@@ -12,6 +11,6 @@ import org.apache.commons.lang.NotImplementedException;
 public class SomeCustomFilter implements Filter {
     @Override
     public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
-        throw new NotImplementedException("this filter is only used for testing type loading");
+        throw new UnsupportedOperationException("this filter is only used for testing type loading");
     }
 }

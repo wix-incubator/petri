@@ -86,7 +86,6 @@
             <version>1.0.6</version>
         </dependency>
 
-        <!-- TODO - these 2 should move to scope test after next merge -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -101,17 +100,10 @@
 
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-scala_2.10</artifactId>
+            <artifactId>jackson-module-scala_${scala.dependencies.version}</artifactId>
             <version>${com.fasterxml.jackson.default.version}</version>
         </dependency>
 
-
-        <!-- this one should be removed after next merge -->
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.5</version>
-        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -315,7 +307,6 @@
                                 <include>**/ObjectMapperFactory.class</include>
                                 <include>**/TimeZoneAwareDateTimeDeserializer.class</include>
                                 <include>**/LogDriver.class</include>
-                                <include>**/jackson/*.class</include>
                             </includes>
                         </configuration>
                     </execution>
