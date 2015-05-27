@@ -27,4 +27,10 @@ public class RAMPetriClientTest extends PetriClientContractTest {
     protected PetriClient petriClient() {
         return ramPetriClient;
     }
+
+    @Override
+    protected UserRequestPetriClient synchPetriClient() {
+        return ramPetriClient;
+    }
+
 }

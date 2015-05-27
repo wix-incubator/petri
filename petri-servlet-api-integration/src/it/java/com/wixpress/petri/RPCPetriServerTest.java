@@ -3,6 +3,7 @@ package com.wixpress.petri;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.PetriClientContractTest;
+import com.wixpress.petri.petri.UserRequestPetriClient;
 import org.junit.*;
 import util.DBDriver;
 
@@ -22,6 +23,7 @@ public class RPCPetriServerTest extends PetriClientContractTest {
 
     private final FullPetriClient fullPetriClient;
     private final PetriClient petriClient;
+    private final UserRequestPetriClient userRequestPetriClient;
     private static DBDriver dbDriver;
 
     @BeforeClass
@@ -49,6 +51,7 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     public RPCPetriServerTest() throws Exception{
         fullPetriClient = PetriRPCClient.makeFullClientFor("http://localhost:9011/petri/full_api");
         petriClient = PetriRPCClient.makeFor("http://localhost:9011/petri/api");
+        userRequestPetriClient = PetriRPCClient.makeUserRequestFor("http://localhost:9011/petri/user_request_api");
     }
 
     @Before
@@ -64,6 +67,11 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     @Override
     protected PetriClient petriClient() {
         return petriClient;
+    }
+
+    @Override
+    protected UserRequestPetriClient synchPetriClient() {
+        return userRequestPetriClient;
     }
 
     @Test(expected = Exception.class)

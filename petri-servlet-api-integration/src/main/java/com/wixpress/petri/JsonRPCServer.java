@@ -3,6 +3,7 @@ package com.wixpress.petri;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
+import com.wixpress.petri.petri.UserRequestPetriClient;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -27,6 +28,7 @@ public class JsonRPCServer {
 
         context.addServlet(new ServletHolder(new JsonRPCServlet(serviceImpl,objectMapper, FullPetriClient.class)),"/petri/full_api");
         context.addServlet(new ServletHolder(new JsonRPCServlet(serviceImpl,objectMapper, PetriClient.class)),"/petri/api");
+        context.addServlet(new ServletHolder(new JsonRPCServlet(serviceImpl,objectMapper, UserRequestPetriClient.class)),"/petri/user_request_api");
 
     }
 

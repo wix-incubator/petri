@@ -1,10 +1,12 @@
 package com.wixpress.petri.petri;
 
 
+import com.google.common.collect.ImmutableList;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.laboratory.dsl.TestGroupMakers;
+import com.wixpress.petri.util.ConductExperimentSummaryMatcher;
 import org.joda.time.DateTime;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,6 +14,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.natpryce.makeiteasy.MakeItEasy.an;
 import static com.natpryce.makeiteasy.MakeItEasy.with;
@@ -71,6 +74,9 @@ public abstract class PetriClientContractTest {
     protected abstract FullPetriClient fullPetriClient();
 
     protected abstract PetriClient petriClient();
+
+    protected abstract UserRequestPetriClient synchPetriClient();
+
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -218,6 +224,29 @@ public abstract class PetriClientContractTest {
 
         fullPetriClient().deleteSpec(experimentSpec.getKey());
         assertThat(fullPetriClient().fetchSpecs(), is(empty()));
+    }
+
+    @Test
+    public void conductExperimentIsReported() throws InterruptedException {
+
+        int experimentId = 12;
+        List<ConductExperimentReport> conductedExperiments = ImmutableList.of(new ConductExperimentReport("localhost", experimentId, "true", 3l));
+        petriClient().reportConductExperiment(conductedExperiments);
+
+        List<ConductExperimentSummary> experimentSummary = fullPetriClient().getExperimentReport(experimentId);
+        assertThat(experimentSummary.size(), is(1));
+        assertThat(experimentSummary, contains(ConductExperimentSummaryMatcher.hasSummary("localhost", experimentId, "true", 3l)));
+
+    }
+
+    @Test
+    public void userTestGroupsAreSaved() {
+
+        String cookieValue = "1#5";
+        UUID userGuid = UUID.randomUUID();
+        petriClient().saveUserState(userGuid, cookieValue);
+
+        assertThat(synchPetriClient().getUserState(userGuid),is(cookieValue));
     }
 
 
