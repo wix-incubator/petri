@@ -6,11 +6,17 @@ import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.*;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.mail.internet.InternetAddress;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
 * Created with IntelliJ IDEA.
@@ -23,6 +29,9 @@ class PetriServerFactory {
     private final DBConfig dbConfig;
     private final int port;
     private final static Long lookBackForReportsDelta = 30000l;
+    private MetricsReportsDao metricsReportsDao;
+    private OriginalIDAwarePetriDao<Experiment, ExperimentSnapshot> experimentsDao;
+    private PetriNotifier notifier;
 
     public PetriServerFactory(int port, DBConfig dbConfig) {
         this.dbConfig = dbConfig;
@@ -39,15 +48,22 @@ class PetriServerFactory {
         ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
         MappingErrorHandler mappingErrorHandler = new ConsoleMappingErrorHandler();
         PetriMapper experimentMapper = new ExperimentMapper(objectMapper,mappingErrorHandler);
-        OriginalIDAwarePetriDao<Experiment, ExperimentSnapshot> experimentsDao = new JdbcExperimentsDao(jdbcTemplate, experimentMapper);
+        experimentsDao = new JdbcExperimentsDao(jdbcTemplate, experimentMapper);
         Clock clock = new JodaTimeClock();
         PetriMapper specMapper = new SpecMapper(objectMapper,mappingErrorHandler);
         DeleteEnablingPetriDao<ExperimentSpec, ExperimentSpec> specsDao = new JdbcSpecsDao(jdbcTemplate,specMapper);
-        PetriNotifier notifier = new NoopPetriNotifier();
-        MetricsReportsDao metricsReportaDao = new JdbcMetricsReportsDao(jdbcTemplate, lookBackForReportsDelta);
+        notifier = new NoopPetriNotifier();
+        metricsReportsDao = new JdbcMetricsReportsDao(jdbcTemplate, lookBackForReportsDelta);
         UserStateDao userStateDao = new JdbcUserStateDao(jdbcTemplate);
-        PetriRpcServer petri = new PetriRpcServer(experimentsDao,clock,specsDao,notifier, metricsReportaDao, userStateDao);
+        PetriRpcServer petri = new PetriRpcServer(experimentsDao,clock,specsDao, notifier, metricsReportsDao, userStateDao);
         return new JsonRPCServer(petri, objectMapper, port);
+    }
+
+    public ConductionKeeper makeConductionKeeper(int conductionLimitIntervalInMillis){
+        return new ConductionKeeper(
+                new JodaTimeClock(), metricsReportsDao, experimentsDao,
+                new ScheduledThreadPoolExecutor(1), conductionLimitIntervalInMillis,
+                notifier, defaultMailRecipients());
     }
 
     private static class NoopPetriNotifier implements PetriNotifier {
@@ -60,6 +76,11 @@ class PetriServerFactory {
         public void notify(String title, String message, MailRecipients recipients, InternetAddress from) {
 
         }
+    }
+
+    private static MailRecipients defaultMailRecipients(){
+        return new MailRecipients(Collections.<InternetAddress>emptySet(), Collections.<InternetAddress>emptySet());
+
     }
 
     private static class ConsoleMappingErrorHandler implements MappingErrorHandler {

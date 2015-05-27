@@ -1,16 +1,18 @@
 package com.wixpress.petri;
 
-import com.wixpress.petri.petri.FullPetriClient;
-import com.wixpress.petri.petri.PetriClient;
-import com.wixpress.petri.petri.PetriClientContractTest;
-import com.wixpress.petri.petri.UserRequestPetriClient;
+import com.google.common.collect.ImmutableList;
+import com.wixpress.petri.experiments.domain.Experiment;
+import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
+import com.wixpress.petri.petri.*;
 import org.junit.*;
 import util.DBDriver;
 
 import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.util.List;
 
 import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created with IntelliJ IDEA.
@@ -84,5 +86,25 @@ public class RPCPetriServerTest extends PetriClientContractTest {
         dbDriver.dropTables();
         // should cause an exception on the server that is not serializable
         petriClient.fetchActiveExperiments();
+    }
+
+    @Test
+    public void pauseExperimentWhenReachedConductionLimit() throws InterruptedException {
+        ExperimentSnapshotBuilder experimentWithConductionLimit = anActiveSnapshot.withConductLimit(2);
+        Experiment experiment = addExperimentWithKey(experimentWithConductionLimit);
+
+        List<ConductExperimentReport> conductedExperiments = ImmutableList.of(new ConductExperimentReport("localhost", experiment.getId(), "true", 3l));
+        petriClient().reportConductExperiment(conductedExperiments);
+
+        int attempts = 0;
+        while(!petriClient().fetchActiveExperiments().get(0).isPaused() && attempts < 10){
+            Thread.sleep(5000l); attempts++;
+        }
+
+        assertTrue(petriClient().fetchActiveExperiments().get(0).isPaused());
+
+        //TODO - once PetriNotifier is implemented properly by sending emails or something, add test for the title and recipients
+        //String expectedTitle = "Experiment "+ experiment.getName() + " id:" + experiment.getId() + " paused due to conduction limit reach";
+        //assert something on recipients
     }
 }

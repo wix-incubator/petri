@@ -19,6 +19,7 @@ public class PetriConfigFile {
     private String url = "";
     private int port = 9090;
     private final File properties = new File("petri.properties");
+    private int conductionLimitIntervalInMillis = 5000;
 
     PetriConfigFile() {
     }
@@ -54,6 +55,7 @@ public class PetriConfigFile {
         config.setProperty("db.password", password);
         config.setProperty("db.url", url);
         config.setProperty("server.port", port);
+        config.setProperty("server.conductionLimitIntervalInMillis", conductionLimitIntervalInMillis);
         config.save();
     }
 

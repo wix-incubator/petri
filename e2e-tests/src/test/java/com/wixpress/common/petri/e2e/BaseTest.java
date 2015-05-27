@@ -4,7 +4,6 @@ import com.wixpress.petri.Main;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
 import com.wixpress.petri.experiments.domain.TestGroup;
-import com.wixpress.petri.laboratory.http.LaboratoryFilter;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.test.SampleAppRunner;
