@@ -1,18 +1,21 @@
 package com.wixpress.petri.laboratory;
 
 
-import com.wixpress.petri.experiments.domain.Experiment;
+import com.google.common.collect.ImmutableMap;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.util.RepeatRule;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.*;
 import static com.wixpress.petri.laboratory.dsl.TestGroupMakers.*;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -21,7 +24,7 @@ import static org.junit.Assert.assertThat;
  */
 public class GuidTestGroupAssignmentStrategyTest {
 
-    public static final Experiment experiment = an(ExperimentMakers.Experiment,
+    public static final com.wixpress.petri.experiments.domain.Experiment experiment = an(ExperimentMakers.Experiment,
             with(id, 1),
             with(key, "someKey"),
             with(scope, "someScope"),
@@ -34,7 +37,7 @@ public class GuidTestGroupAssignmentStrategyTest {
                             with(value, "NEW"))
             ))
     ).make();
-    public static final Experiment experimentWithOriginalId = an(ExperimentMakers.Experiment,
+    public static final com.wixpress.petri.experiments.domain.Experiment experimentWithOriginalId = an(ExperimentMakers.Experiment,
             with(id, 2),
             with(originalId, experiment.getId()),
             with(key, "someKey"),
@@ -48,7 +51,7 @@ public class GuidTestGroupAssignmentStrategyTest {
                             with(value, "NEW"))
             ))
     ).make();
-    public static final Experiment linkedExperiment = an(ExperimentMakers.Experiment,
+    public static final com.wixpress.petri.experiments.domain.Experiment linkedExperiment = an(ExperimentMakers.Experiment,
             with(id, 13),
             with(originalId, 11),
             with(linkedId, 1),
@@ -63,6 +66,22 @@ public class GuidTestGroupAssignmentStrategyTest {
                             with(value, "NEW"))
             ))
     ).make();
+
+    private com.wixpress.petri.experiments.domain.Experiment experimentWithRandomId() {
+        return an(ExperimentMakers.Experiment,
+                with(id, random()),
+                with(key, "someKey"),
+                with(scope, "someScope"),
+                with(testGroups, listOf(
+                        a(TestGroup,
+                                with(probability, 80),
+                                with(value, "OLD")),
+                        a(TestGroup,
+                                with(probability, 20),
+                                with(value, "NEW"))
+                ))
+        ).make();
+    }
 
     @Rule
     public RepeatRule repeatRule = new RepeatRule();
@@ -103,7 +122,46 @@ public class GuidTestGroupAssignmentStrategyTest {
         }
     }
 
+    @RepeatRule.Repeat(times = 100)
+    @Test
+    public void usersAreDistributedCorrectlyForASingleExperiment() {
+        Map<String, AtomicInteger> assignments = ImmutableMap.of("OLD", new AtomicInteger(), "NEW", new AtomicInteger());
+        GuidTestGroupAssignmentStrategy strategy = new GuidTestGroupAssignmentStrategy();
+
+        for (int j = 0; j < 10000; j++) {
+            String guid = randomGuid();
+            String toss = strategy.getAssignment(experiment, guid).getValue();
+            assignments.get(toss).incrementAndGet();
+        }
+
+        assertThat(assignments.get("NEW").get(), allOf(greaterThan(1800), lessThan(2200)));
+        assertThat(assignments.get("OLD").get(), allOf(greaterThan(7800), lessThan(8200)));
+    }
+
+    @RepeatRule.Repeat(times = 100)
+    @Test
+    public void experimentsAreDistributesIndependentlyForASpecificUser() {
+        Map<String, AtomicInteger> assignments = ImmutableMap.of("OLD", new AtomicInteger(), "NEW", new AtomicInteger());
+        GuidTestGroupAssignmentStrategy strategy = new GuidTestGroupAssignmentStrategy();
+        String guid = randomGuid();
+
+        for (int j = 0; j < 10000; j++) {
+            String toss = strategy.getAssignment(experimentWithRandomId(), guid).getValue();
+            assignments.get(toss).incrementAndGet();
+        }
+
+
+        assertThat(assignments.get("NEW").get(), allOf(greaterThan(1500), lessThan(2500)));
+        assertThat(assignments.get("OLD").get(), allOf(greaterThan(7500), lessThan(8500)));
+    }
+
+    private int random() {
+        return (new Random()).nextInt(100000);
+    }
+
     private String randomGuid() {
         return UUID.randomUUID().toString();
     }
+
+
 }
