@@ -21,6 +21,8 @@ import java.util.HashMap;
 */
 public class PetriRPCClient {
 
+    private static final int userStateReadTimeoutMillis = 2000;
+
     public static JsonRpcHttpClient getJsonRpcHttpClient(String serviceUrl) throws MalformedURLException {
         final ObjectMapper mapper = ObjectMapperFactory.makeObjectMapper();
         JsonRpcHttpClient client = new JsonRpcHttpClient(mapper,
@@ -33,7 +35,7 @@ public class PetriRPCClient {
 
     public static FullPetriClient makeFullClientFor(String serviceUrl) throws MalformedURLException {
 
-        JsonRpcHttpClient client = getJsonRpcHttpClient(serviceUrl);
+        JsonRpcHttpClient client = getJsonRpcHttpClient(serviceUrl+"/full_api");
 
         return ProxyUtil.createClientProxy(
                 PetriRPCClient.class.getClassLoader(),
@@ -43,7 +45,7 @@ public class PetriRPCClient {
 
     public static PetriClient makeFor(String serviceUrl) throws MalformedURLException {
 
-        JsonRpcHttpClient client = getJsonRpcHttpClient(serviceUrl);
+        JsonRpcHttpClient client = getJsonRpcHttpClient(serviceUrl+"/api");
 
         return ProxyUtil.createClientProxy(
                 PetriRPCClient.class.getClassLoader(),
@@ -53,7 +55,9 @@ public class PetriRPCClient {
 
     public static UserRequestPetriClient makeUserRequestFor(String serviceUrl) throws MalformedURLException {
 
-        JsonRpcHttpClient client = getJsonRpcHttpClient(serviceUrl);
+        JsonRpcHttpClient client = getJsonRpcHttpClient(serviceUrl + "/user_request_api");
+        client.setReadTimeoutMillis(userStateReadTimeoutMillis);
+        client.setConnectionTimeoutMillis(userStateReadTimeoutMillis);
 
         return ProxyUtil.createClientProxy(
                 PetriRPCClient.class.getClassLoader(),

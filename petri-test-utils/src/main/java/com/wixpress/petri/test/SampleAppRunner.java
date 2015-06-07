@@ -2,7 +2,6 @@ package com.wixpress.petri.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wixpress.common.petri.testutils.ServerRunner;
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -35,17 +34,38 @@ public class SampleAppRunner {
     }
 
     public SampleAppRunner(int port, String pathToWebapp){
-        this(port, pathToWebapp, 0);
+        this(port, pathToWebapp, 0, false);
     }
 
-    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval){
+    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState) {
         this.port = port;
         this.sampleAppServer = new ServerRunner(port, pathToWebapp);
         this.client = HttpClientBuilder.create().build();
 
-        if (reporterInterval != 0){
+        if (reporterInterval != 0) {
             addReportingIntervalToProperties(pathToWebapp, reporterInterval);
         }
+        addServerSideToProperties(pathToWebapp, useServerSideState);
+    }
+
+    private void addServerSideToProperties(String pathToWebapp, boolean useServerSideState) {
+        File properties = new File(pathToWebapp + "/WEB-INF/laboratory.properties");
+        try {
+            properties.createNewFile();
+            PropertiesConfiguration config = new PropertiesConfiguration(properties);
+            config.setProperty("petri.writeStateToServer", useServerSideState);
+            config.save();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static SampleAppRunner SampleAppRunnerWithServerSideStateOff(int port) {
+        return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, false);
+    }
+
+    public static SampleAppRunner SampleAppRunnerWithServerSideStateOn(int port) {
+        return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, true);
     }
 
     private void addReportingIntervalToProperties(String pathToWebapp, int reporterInterval) {
@@ -84,8 +104,16 @@ public class SampleAppRunner {
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
 
-    // TODO: Remove duplication
+    public String conductExperimentByUserWithNoPreviousCookies(String key, String fallback, UUID uuid) throws IOException {
+        return conductExperimentByUser(key, fallback, uuid, true);
+    }
+
     public String conductExperimentByUser(String key, String fallback, UUID uuid) throws IOException {
+        return conductExperimentByUser(key, fallback, uuid, false);
+    }
+
+    // TODO: Remove duplication
+    private String conductExperimentByUser(String key, String fallback, UUID uuid, boolean freshClient) throws IOException {
         String uri = "http://localhost:" +
                 port +
                 "/conductExperiment?key=" +
@@ -95,9 +123,11 @@ public class SampleAppRunner {
                 "&fallback=" +
                 fallback;
         HttpGet request  = new HttpGet(uri);
-        HttpResponse response = client.execute(request);
+        HttpClient clientToUse = freshClient ? newClient() : client;
+        HttpResponse response = clientToUse.execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
+
 
     public String conductExperimentWithCustomContext(String key, String fallback) throws IOException {
         String uri = "http://localhost:" +
@@ -115,6 +145,7 @@ public class SampleAppRunner {
         HttpResponse response = newClient().execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
+
 
 
 }

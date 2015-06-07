@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static com.wixpress.petri.test.TestBuilders.experimentWithFirstWinning;
 import static java.lang.Thread.sleep;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
@@ -28,7 +29,7 @@ public class PetriReportsTest extends BaseTest {
     @Test
     public void reportsASingleExperiment() throws Exception {
         addSpec("THE_KEY");
-        Experiment experiment = fullPetriClient.insertExperiment(experimentWithFirstWinning("THE_KEY"));
+        Experiment experiment = fullPetriClient.insertExperiment(experimentWithFirstWinning("THE_KEY").build());
 
         sampleAppRunner.conductExperiment("THE_KEY", "FALLBACK_VALUE");
 

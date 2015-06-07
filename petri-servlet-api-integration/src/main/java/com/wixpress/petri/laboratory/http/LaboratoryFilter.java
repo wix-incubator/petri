@@ -55,7 +55,7 @@ public class LaboratoryFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) req;
-        UserInfoStorage storage = userInfoStorage(httpServletRequest);
+        RequestScopedUserInfoStorage storage = userInfoStorage(httpServletRequest);
 
         Laboratory laboratory = laboratory(storage);
 
@@ -67,8 +67,12 @@ public class LaboratoryFilter implements Filter {
 
         chain.doFilter(req, response);
 
-        final UserInfo ui = storage.read();
-        ui.saveExperimentState(new CookieExperimentStateStorage(response));
+        final UserInfo userInfo = storage.read();
+        final UserInfo originalUserInfo = storage.readOriginal();
+        userInfo.saveExperimentState(new CookieExperimentStateStorage(response), originalUserInfo);
+        if(petriTopology.isWriteStateToServer()) {
+            userInfo.saveExperimentState(new ServerStateExperimentStateStorage(petriClient), originalUserInfo);
+        }
         resp.getOutputStream().write(baos.toByteArray());
     }
 
@@ -119,8 +123,9 @@ public class LaboratoryFilter implements Filter {
         Properties p = petriProperties.fromStream(input);
 
         final String petriUrl = p.getProperty("petri.url");
+        //off by default so as not to incur overhead without users being explicitly aware of it
         final Boolean writeStateToServer = Boolean.valueOf(p.getProperty("petri.writeStateToServer", "false"));
-        final String reporterInterval = p.getProperty("reporter.interval");
+        final String reporterInterval = p.getProperty("reporter.interval", "300000");
         petriTopology = new PetriTopology(){
 
             @Override
@@ -130,7 +135,7 @@ public class LaboratoryFilter implements Filter {
 
             @Override
             public Long getReportsScheduleTimeInMillis(){
-                long scheduleReportInterval = reporterInterval == null ?  petriTopology.getReportsScheduleTimeInMillis() : Long.parseLong(reporterInterval);
+                long scheduleReportInterval = Long.parseLong(reporterInterval);
                 return scheduleReportInterval;
             }
 

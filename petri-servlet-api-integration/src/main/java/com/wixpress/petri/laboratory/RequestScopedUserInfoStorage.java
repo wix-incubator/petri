@@ -9,12 +9,12 @@ package com.wixpress.petri.laboratory;
 *
 */
 public class RequestScopedUserInfoStorage implements UserInfoStorage {
-    private final UserInfoExtractor extractor;
+    private final UserInfo originalInstance;
     private UserInfo storedInstance = null;
 
 
     public RequestScopedUserInfoStorage(UserInfoExtractor extractor) {
-        this.extractor = extractor;
+        this.originalInstance = extractor.extract();
     }
 
     @Override
@@ -25,6 +25,10 @@ public class RequestScopedUserInfoStorage implements UserInfoStorage {
     @Override
     public UserInfo read() {
         final UserInfo userInfo = storedInstance;
-        return userInfo == null ? extractor.extract() : userInfo;
+        return userInfo == null ? originalInstance : userInfo;
+    }
+
+    public UserInfo readOriginal() {
+        return originalInstance;
     }
 }

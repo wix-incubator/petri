@@ -51,9 +51,10 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     }
 
     public RPCPetriServerTest() throws Exception{
-        fullPetriClient = PetriRPCClient.makeFullClientFor("http://localhost:9011/petri/full_api");
-        petriClient = PetriRPCClient.makeFor("http://localhost:9011/petri/api");
-        userRequestPetriClient = PetriRPCClient.makeUserRequestFor("http://localhost:9011/petri/user_request_api");
+        String serviceUrl = "http://localhost:9011/petri";
+        fullPetriClient = PetriRPCClient.makeFullClientFor(serviceUrl);
+        petriClient = PetriRPCClient.makeFor(serviceUrl);
+        userRequestPetriClient = PetriRPCClient.makeUserRequestFor(serviceUrl);
     }
 
     @Before
