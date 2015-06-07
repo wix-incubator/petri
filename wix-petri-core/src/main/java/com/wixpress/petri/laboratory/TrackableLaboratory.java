@@ -202,8 +202,8 @@ public class TrackableLaboratory implements Laboratory {
     }
 
     private ExistingTestGroups getExistingTestGroups(List<Experiment> experiments, ConductionContext context) {
-        Option<UUID> persistentKernel = context.conductionStrategyOrFallback(userInfo()).persistentKernel();
-        UUID uid = persistentKernel.isDefined() ? persistentKernel.get() : null;
+        Option<UUID> uidToPersistBy = context.conductionStrategyOrFallback(userInfo()).persistentKernel();
+        UUID uid = uidToPersistBy.isDefined() ? uidToPersistBy.get() : null;
 
         Map<String, String> testGroupsFromCookies = userInfo().getWinningExperiments(uid);
 

@@ -310,10 +310,10 @@ public class Experiment {
     public Assignment conduct(ConductionContext context, UserInfo userInfo) {
         long startTime = System.currentTimeMillis();
         TestGroup winning = null;
-        EligibilityCriteria eligibilityCriteria = new EligibilityCriteria(
-                userInfo, context.additionalEligibilityCriteria(), getStartDate());
-
         ConductionStrategy conductionStrategy = context.conductionStrategyOrFallback(userInfo);
+        EligibilityCriteria eligibilityCriteria = new EligibilityCriteria(
+                userInfo, conductionStrategy, context.additionalEligibilityCriteria(), getStartDate());
+
         if (!isPaused() && isEligible(eligibilityCriteria)) {
             if (isToggle()) {
                 winning = getTestGroupByChunk(0);

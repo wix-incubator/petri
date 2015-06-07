@@ -1,8 +1,11 @@
 package com.wixpress.petri.experiments.domain;
 
+import com.wixpress.petri.laboratory.ConductionStrategy;
+import com.wixpress.petri.laboratory.EligibilityCriteriaTypes;
 import com.wixpress.petri.laboratory.EligibilityCriterion;
 import com.wixpress.petri.laboratory.UserInfo;
 import org.joda.time.DateTime;
+import scala.Option;
 
 import java.util.UUID;
 
@@ -25,16 +28,23 @@ public class EligibilityCriteria {
     private final String userAgent;
 
     public EligibilityCriteria(UserInfo userInfo, AdditionalEligibilityCriteria additionalCriteria, DateTime experimentStartDate) {
+        this(userInfo, userInfo, additionalCriteria, experimentStartDate);
+    }
+
+    public EligibilityCriteria(UserInfo userInfo, ConductionStrategy conductionStrategy, AdditionalEligibilityCriteria additionalCriteria, DateTime experimentStartDate) {
+        this.experimentStartDate = experimentStartDate;
         this.additionalCriteria = additionalCriteria;
+
+        Option<UUID> userInSession = scala.Option.apply(userInfo.getUserId());
+        Option<UUID> userRepresentedForFlow = conductionStrategy.getUserIdRepresentedForFlow(userInSession);
+        this.userId = userRepresentedForFlow.isDefined() ? userRepresentedForFlow.get() : null;
+        this.isAnonymous = userRepresentedForFlow.isEmpty();
 
         this.userCreationDate = overrideCriterionOrElse(UserCreationDateCriterion.class, userInfo.dateCreated);
         this.language = overrideCriterionOrElse(LanguageCriterion.class, userInfo.language);
+        this.country = overrideCriterionOrElse(EligibilityCriteriaTypes.CountryCriterion.class, userInfo.country);
 
-        this.experimentStartDate = experimentStartDate;
-        this.userId = userInfo.getUserId();
-        this.isAnonymous = userInfo.isAnonymous();
         this.isRecurringUser = userInfo.isRecurringUser;
-        this.country = userInfo.country;
         this.host = userInfo.host;
         this.email = userInfo.email;
         this.userAgent = userInfo.userAgent;

@@ -17,6 +17,7 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import scala.Option;
 import scala.Some;
 
 import java.util.*;
@@ -248,20 +249,24 @@ public class TrackableLaboratoryTest {
         }});
     }
 
-    private Matcher<Assignment> containsTheUsersId() {
+    private Matcher<Assignment> containsAUserId(final UUID uid) {
         return new TypeSafeMatcher<Assignment>() {
 
             @Override
             protected boolean matchesSafely(Assignment assignment) {
-                return assignment.getUserInfo().getUserId().equals(SOME_USER_GUID);
+                return assignment.getUserInfo().getUserId().equals(uid);
             }
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("an Assignment with user id " + SOME_USER_GUID);
+                description.appendText("an Assignment with user id " + uid);
             }
 
         };
+    }
+
+    private Matcher<Assignment> containsTheUsersId() {
+        return containsAUserId(SOME_USER_GUID);
     }
 
     private Matcher<Assignment> containsNoUserIdAndWinsWith(final int winningGroupId) {
@@ -945,6 +950,8 @@ public class TrackableLaboratoryTest {
             will(returnValue(true));
             allowing(customStrategyWithKernel).persistentKernel();
             will(returnValue(new Some(OTHER_USER_GUID)));
+            allowing(customStrategyWithKernel).getUserIdRepresentedForFlow(with(any(Option.class)));
+            will(returnValue(new Some(OTHER_USER_GUID)));
             allowing(customStrategyWithKernel).drawTestGroup(experiment);
             will(returnValue(experiment.getTestGroupById(2)));
         }});
@@ -993,6 +1000,8 @@ public class TrackableLaboratoryTest {
             will(returnValue(false));
             allowing(customStrategyWithNoKernel).persistentKernel();
             will(returnValue(scala.Option.apply(null)));
+            allowing(customStrategyWithNoKernel).getUserIdRepresentedForFlow(with(any(Option.class)));
+            will(returnValue(scala.Option.apply(null)));
             allowing(customStrategyWithNoKernel).drawTestGroup(experiment);
             will(returnValue(experiment.getTestGroupById(2)));
         }});
@@ -1018,6 +1027,8 @@ public class TrackableLaboratoryTest {
             will(returnValue(false));
             allowing(customStrategyWithNoPersistence).persistentKernel();
             will(returnValue(scala.Option.apply(null)));
+            allowing(customStrategyWithNoPersistence).getUserIdRepresentedForFlow(with(any(Option.class)));
+            will(returnValue(scala.Option.apply(null)));
             allowing(customStrategyWithNoPersistence).drawTestGroup(experiment);
             will(returnValue(experiment.getTestGroupById(2)));
         }});
@@ -1028,5 +1039,115 @@ public class TrackableLaboratoryTest {
         assertAnonymousLogIsEmpty();
         assertUserLogIsEmpty();
     }
+
+    private ConductionContext conductionContextByOtherUser(final Experiment exp, final UUID userGuid) {
+        final ConductionStrategy strategy = context.mock(ConductionStrategy.class);
+
+        context.checking(new Expectations() {{
+            allowing(strategy).persistentKernel();
+            will(returnValue(new Some(userGuid)));
+            allowing(strategy).shouldPersist();
+            allowing(strategy).getUserIdRepresentedForFlow(with(any(Option.class)));
+            will(returnValue(new Some(userGuid)));
+            allowing(strategy).drawTestGroup(exp);
+            will(returnValue(exp.getTestGroupById(1)));
+        }});
+        return newInstance().withConductionStrategy(strategy);
+    }
+
+
+
+    @Test
+    public void userIdCanBeUsedFromConductionStrategyForIncludeSpecificUserIdFilterToo() throws Exception {
+        Experiment experimentOnSomeUser = experimentWithWinningFirstGroup.but(
+                with(filters, new ArrayList<Filter>() {{
+                    add(new IncludeUserIdsFilter(OTHER_USER_GUID));
+                }})
+        ).make();
+        addExperimentToCache(experimentOnSomeUser);
+
+        UserInfo someUserInfo = aRegisteredUserInfo.make();
+        userInfoStorage.write(someUserInfo);
+
+        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE,
+                        conductionContextByOtherUser(experimentOnSomeUser, OTHER_USER_GUID)),
+                is(WINNING_VALUE));
+    }
+
+    @Test
+    public void userIdCanBeUsedFromConductionStrategyForRegisteredUsersFilterTooEvenIfNoUserInSession() throws Exception {
+        Experiment experimentOnSomeUser = experimentForRegisteredUserWithWinningFirstGroup.but(
+                with(filters, new ArrayList<Filter>() {{
+                    add(new RegisteredUsersFilter());
+                }})
+        ).make();
+        addExperimentToCache(experimentOnSomeUser);
+
+        userInfoStorage.write(AnonymousUserInfo.make());
+        //no user in session but because we want to conduct by user state is still searched
+        //(which is cool, it means even if behind queue/offline/any other scenario where no http request db state is still used)
+        returnUserStateFromServer("", OTHER_USER_GUID);
+
+        assertThat(lab.conductExperiment(registeredKey, FALLBACK_VALUE, new StringConverter(),
+                        conductionContextByOtherUser(experimentOnSomeUser, OTHER_USER_GUID)),
+                is(WINNING_VALUE));
+    }
+
+    //some strategy that doesnt represent a user (for example conducting by site id)
+    //TODO - implemented as a hand rolled stub instead of a mock like other tests on conductionStrategy because we need to capture the argument userInSession and its too annoying with jmock
+    //decide if they should all be mocks or stubs and consolidate
+    private ConductionContext conductionContextBySiteId(final UUID siteId) {
+        ConductionStrategy strategy = new ConductionStrategy() {
+            @Override
+            public Option<UUID> persistentKernel() {
+                return new Some<>(siteId);
+            }
+
+            @Override
+            public boolean shouldPersist() {
+                return true;
+            }
+
+            @Override
+            public Option<UUID> getUserIdRepresentedForFlow(Option<UUID> userInSession) {
+                return  userInSession;
+            }
+
+            @Override
+            public TestGroup drawTestGroup(Experiment exp) {
+                return exp.getTestGroupById(1);
+            }
+        };
+
+        return newInstance().withConductionStrategy(strategy);
+
+    }
+
+    @Test
+    public void registeredUsersFilterWorksEvenWhenConductionStrategyHasAnIdThatDoesNotRepresentUsers() throws Exception {
+        Experiment experimentOnSomeUser = experimentForRegisteredUserWithWinningFirstGroup.but(
+                with(filters, new ArrayList<Filter>() {{
+                    add(new RegisteredUsersFilter());
+                }})
+        ).make();
+        addExperimentToCache(experimentOnSomeUser);
+
+        UUID siteId = UUID.randomUUID();
+        returnUserStateFromServer("", siteId);
+
+        ConductionContext conductionContextBySiteId = conductionContextBySiteId(siteId);
+
+        userInfoStorage.write(AnonymousUserInfo.make());
+        assertThat(lab.conductExperiment(registeredKey, FALLBACK_VALUE, new StringConverter(),
+                        conductionContextBySiteId),
+                is(FALLBACK_VALUE));
+
+        userInfoStorage.write(aRegisteredUserInfo.make());
+        assertThat(lab.conductExperiment(registeredKey, FALLBACK_VALUE, new StringConverter(),
+                        conductionContextBySiteId),
+                is(WINNING_VALUE));
+    }
+
+
 
 }

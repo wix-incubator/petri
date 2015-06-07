@@ -4,7 +4,6 @@ import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
 import org.joda.time.DateTime;
 import scala.Option;
-import scala.Some;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,6 +96,11 @@ public class UserInfo implements ConductionStrategy {
     @Override
     public boolean shouldPersist() {
         return type.shouldPersist();
+    }
+
+    @Override
+    public Option<UUID> getUserIdRepresentedForFlow(Option<UUID> userInSession) {
+        return type.getUserIdRepresentedForFlow(userInSession);
     }
 
     public TestGroup drawTestGroup(Experiment exp) {

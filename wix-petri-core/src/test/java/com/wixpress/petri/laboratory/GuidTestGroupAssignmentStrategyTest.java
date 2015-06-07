@@ -2,14 +2,13 @@ package com.wixpress.petri.laboratory;
 
 
 import com.google.common.collect.ImmutableMap;
+import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.util.RepeatRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
@@ -24,7 +23,7 @@ import static org.junit.Assert.assertThat;
  */
 public class GuidTestGroupAssignmentStrategyTest {
 
-    public static final com.wixpress.petri.experiments.domain.Experiment experiment = an(ExperimentMakers.Experiment,
+    public static final Experiment experiment = an(ExperimentMakers.Experiment,
             with(id, 1),
             with(key, "someKey"),
             with(scope, "someScope"),
@@ -37,7 +36,7 @@ public class GuidTestGroupAssignmentStrategyTest {
                             with(value, "NEW"))
             ))
     ).make();
-    public static final com.wixpress.petri.experiments.domain.Experiment experimentWithOriginalId = an(ExperimentMakers.Experiment,
+    public static final Experiment experimentWithOriginalId = an(ExperimentMakers.Experiment,
             with(id, 2),
             with(originalId, experiment.getId()),
             with(key, "someKey"),
@@ -51,7 +50,7 @@ public class GuidTestGroupAssignmentStrategyTest {
                             with(value, "NEW"))
             ))
     ).make();
-    public static final com.wixpress.petri.experiments.domain.Experiment linkedExperiment = an(ExperimentMakers.Experiment,
+    public static final Experiment linkedExperiment = an(ExperimentMakers.Experiment,
             with(id, 13),
             with(originalId, 11),
             with(linkedId, 1),
@@ -67,7 +66,7 @@ public class GuidTestGroupAssignmentStrategyTest {
             ))
     ).make();
 
-    private com.wixpress.petri.experiments.domain.Experiment experimentWithRandomId() {
+    private Experiment experimentWithRandomId() {
         return an(ExperimentMakers.Experiment,
                 with(id, random()),
                 with(key, "someKey"),
