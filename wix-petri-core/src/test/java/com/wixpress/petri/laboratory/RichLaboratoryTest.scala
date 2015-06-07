@@ -53,7 +53,7 @@ class RichLaboratoryTest extends SpecificationWithJUnit with Mockito {
         case "x" => 2
       }
       
-      x() must be_===(1)
+      x((): Unit) must be_===(1)
     }
 
     "fallback for complete function" in new ctx {
@@ -63,7 +63,7 @@ class RichLaboratoryTest extends SpecificationWithJUnit with Mockito {
         case _ => 2
       }
 
-      x() must be_===(1)
+      x((): Unit) must be_===(1)
     }
 
     "execute defined branch for complete function" in new ctx {
@@ -73,7 +73,7 @@ class RichLaboratoryTest extends SpecificationWithJUnit with Mockito {
         case _ => 2
       }
 
-      x() must be_===(2)
+      x((): Unit) must be_===(2)
     }
 
     "execute defined branch" in new ctx {
@@ -84,7 +84,7 @@ class RichLaboratoryTest extends SpecificationWithJUnit with Mockito {
         case "x" => 2
       }
 
-      x() must be_===(2)
+      x((): Unit) must be_===(2)
     }
 
     "explode with exception" in new ctx {
@@ -94,7 +94,7 @@ class RichLaboratoryTest extends SpecificationWithJUnit with Mockito {
         case "x" => throw new RuntimeException
       }
 
-      x() must throwA[RuntimeException]
+      x((): Unit) must throwA[RuntimeException]
     }
   }
 }
