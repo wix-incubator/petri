@@ -5,14 +5,13 @@ import java.util.UUID
 import com.wixpress.petri.experiments.domain.{TestGroup, Experiment}
 
 /**
- * Created by talyag on 5/13/15.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 trait ConductionStrategy {
 
   /**
-  use None if you do not want persistence (cookies etc.)
-  otherwise define the key (normally the same as used for conduction)
-   **/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
   def persistentKernel(): Option[UUID]
   def shouldPersist(): Boolean = persistentKernel().isDefined
   def getUserIdRepresentedForFlow(userInSession: Option[UUID]): Option[UUID] = persistentKernel()

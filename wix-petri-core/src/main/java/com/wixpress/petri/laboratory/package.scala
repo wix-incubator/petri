@@ -7,9 +7,7 @@ import com.wixpress.petri.petri.SpecDefinition
 
 
 /**
- * Created with IntelliJ IDEA.
- * User: daniels
- * Date: 2/16/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 package object laboratory {
 

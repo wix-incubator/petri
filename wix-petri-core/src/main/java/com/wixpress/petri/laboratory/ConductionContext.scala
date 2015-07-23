@@ -4,9 +4,7 @@ import com.wixpress.petri.experiments.domain.AdditionalEligibilityCriteria
 
 
 /**
- * Created with IntelliJ IDEA.
- * User: daniels
- * Date: 3/31/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 
 

@@ -5,8 +5,7 @@ import com.wixpress.petri.experiments.domain.Filter;
 import com.wixpress.petri.experiments.domain.FilterTypeName;
 
 /**
- * @author talyag
- * @since 9/9/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 @FilterTypeName("additionalFilter")
 public class AdditionalFilter implements Filter {

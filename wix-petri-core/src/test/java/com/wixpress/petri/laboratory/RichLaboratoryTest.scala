@@ -7,9 +7,7 @@ import org.specs2.specification.Scope
 import com.wixpress.petri.laboratory.ExperimentOutcome.UndefinedFallback
 
 /**
- * Created with IntelliJ IDEA.
- * User: daniels
- * Date: 2/16/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 class RichLaboratoryTest extends SpecificationWithJUnit with Mockito {
  

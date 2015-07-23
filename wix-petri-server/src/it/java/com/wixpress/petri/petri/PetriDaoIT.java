@@ -18,8 +18,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * @author: talyag
- * @since: 10/30/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public abstract class PetriDaoIT<T, V> {
     public static final String JDBC_H2_IN_MEM_CONNECTION_STRING = "jdbc:h2:mem:test;MODE=MySQL";

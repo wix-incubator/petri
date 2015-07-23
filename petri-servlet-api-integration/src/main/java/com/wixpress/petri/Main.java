@@ -8,11 +8,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import static com.wixpress.petri.DBConfig.makeDBConfig;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 9/7/14
- * Time: 12:30 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class Main {
     public static void main(String... args) {

@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
- * @author sagyr
- * @since 10/2/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
-
 @Controller
 @RequestMapping("/")
 public class SpecsSynchronizerController {

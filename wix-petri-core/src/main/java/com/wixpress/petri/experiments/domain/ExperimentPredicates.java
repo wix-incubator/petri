@@ -4,8 +4,7 @@ import com.google.common.base.Predicate;
 import org.joda.time.DateTime;
 
 /**
- * @author: talyag
- * @since: 12/29/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExperimentPredicates {
     public static class IsActivePredicate implements Predicate<Experiment> {

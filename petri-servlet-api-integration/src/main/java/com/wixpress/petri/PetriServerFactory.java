@@ -19,12 +19,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 9/9/14
-* Time: 5:17 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 class PetriServerFactory {
     private final DBConfig dbConfig;
     private final int port;

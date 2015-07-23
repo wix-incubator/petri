@@ -10,12 +10,8 @@ import org.joda.time.DateTimeZone;
 import java.io.IOException;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 7/7/14
-* Time: 1:50 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class TimeZoneAwareDateTimeDeserializer extends StdScalarDeserializer<DateTime>
 {
     public TimeZoneAwareDateTimeDeserializer()

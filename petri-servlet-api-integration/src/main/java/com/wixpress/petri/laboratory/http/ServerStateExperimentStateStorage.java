@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.concurrent.*;
 
 /**
- * Created by talyag on 6/4/15.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ServerStateExperimentStateStorage implements ExperimentStateStorage {
     private static final Logger logger = LoggerFactory.getLogger(ServerStateExperimentStateStorage.class);

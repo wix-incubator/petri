@@ -3,8 +3,7 @@ package com.wixpress.petri.laboratory;
 import com.wixpress.petri.experiments.domain.Experiment;
 
 /**
- * @author sagyr
- * @since 8/8/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExpiredExperiments implements ExperimentsLog.Predicate {
     private Experiments experiments;

@@ -1,8 +1,7 @@
 package com.wixpress.petri.laboratory;
 
 /**
- * @author talyag
- * @since 9/3/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface EligibilityCriterion<T> {
     T getValue();

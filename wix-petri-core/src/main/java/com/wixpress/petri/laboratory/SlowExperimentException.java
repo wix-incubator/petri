@@ -4,12 +4,8 @@ package com.wixpress.petri.laboratory;
 import com.wixpress.petri.experiments.domain.Experiment;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 6/24/14
-* Time: 6:47 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 
 public class SlowExperimentException extends RuntimeException {
 

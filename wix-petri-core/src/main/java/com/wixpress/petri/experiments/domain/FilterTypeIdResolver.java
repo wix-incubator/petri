@@ -9,8 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author: talyag
- * @since: 11/27/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class FilterTypeIdResolver implements TypeIdResolver {
 

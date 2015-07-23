@@ -8,8 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author talyag
- * @since 9/9/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExtendedFilterTypesIds {
     private static Map<String, Class<? extends Filter>> extendedFilterTypeIds = new ConcurrentHashMap<>();

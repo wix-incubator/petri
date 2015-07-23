@@ -4,10 +4,8 @@ import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
 
 /**
- * @author alex
- * @since 8/21/11 5:12 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
-
 public abstract class TestGroupAssignmentStrategy {
 
     public TestGroup getAssignment(Experiment experiment, String kernel) {

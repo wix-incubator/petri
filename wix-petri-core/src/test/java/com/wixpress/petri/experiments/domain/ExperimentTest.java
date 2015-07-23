@@ -30,8 +30,7 @@ import static org.junit.Assert.*;
 
 
 /**
- * @author sagyr
- * @since 9/16/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExperimentTest {
 

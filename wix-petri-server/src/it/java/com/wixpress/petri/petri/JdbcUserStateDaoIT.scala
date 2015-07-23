@@ -8,9 +8,7 @@ import org.specs2.matcher.Scope
 import org.specs2.mutable.SpecificationWithJUnit
 
 /**
- * User: Dalias
- * Date: 12/10/14
- * Time: 4:45 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 class JdbcUserStateDaoIT extends SpecificationWithJUnit  {
   sequential

@@ -13,8 +13,7 @@ import static com.wixpress.petri.experiments.domain.AggregateFilter.IsNotFilter.
 
 
 /**
- * @author: talyag
- * @since: 5/16/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class AggregateFilter implements Filter {
     private final Filter aggregate;

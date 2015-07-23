@@ -3,9 +3,7 @@ package com.wixpress.petri.laboratory
 import java.{util => ju}
 
 /**
- * User: Dalias
- * Date: 2/22/15
- * Time: 5:20 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 case class ExistingTestGroups( testGroupsFromCookies: ju.Map[String,String],  testGroupsFromServer: ju.Map[String,String]) {
 

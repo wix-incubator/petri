@@ -3,8 +3,7 @@ package com.wixpress.petri.petri
 import java.{lang=>jl}
 
 /**
- * @author shaiyallin
- * @since 6/12/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 trait PetriTopology {
   def getPetriUrl: String

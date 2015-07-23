@@ -22,8 +22,7 @@ import static com.wixpress.petri.experiments.domain.ExperimentPredicates.SpecHas
 import static com.wixpress.petri.petri.PetriRpcServer.HasSpecSnapshot.hasSpecSnapshot;
 
 /**
- * @author: talyag
- * @since: 9/9/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class PetriRpcServer implements FullPetriClient, PetriClient , UserRequestPetriClient, PetriDeveloperApi {
     public static final String SPEC_OWNER_CHANGED_MSG = "Pay attention - Owner of %s has been changed to %s";

@@ -10,9 +10,7 @@ import org.springframework.jdbc.core.{JdbcTemplate, RowMapper}
 import scala.collection.JavaConversions._
 
 /**
- * User: Dalias
- * Date: 12/10/14
- * Time: 4:30 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 trait MetricsReportsDao {
   def getReport(experimentId: Int): ju.List[ConductExperimentSummary]

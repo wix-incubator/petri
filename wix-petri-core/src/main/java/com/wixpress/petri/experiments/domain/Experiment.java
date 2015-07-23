@@ -20,8 +20,7 @@ import static com.google.common.collect.Iterables.tryFind;
 import static com.google.common.collect.Lists.newArrayList;
 
 /**
- * @author alex
- * @since 8/17/11 12:54 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 
 @JsonDeserialize(builder = ExperimentBuilder.class)

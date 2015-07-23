@@ -13,11 +13,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author sagyr
- * @since 9/3/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
-
-
 public class UserInfoTest {
 
     public static final UUID USER_ID = UUID.randomUUID();

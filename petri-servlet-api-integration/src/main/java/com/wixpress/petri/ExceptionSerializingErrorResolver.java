@@ -9,12 +9,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 10/2/14
-* Time: 4:05 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class ExceptionSerializingErrorResolver extends DefaultErrorResolver {
     private final ObjectMapper objectMapper;
 

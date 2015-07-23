@@ -14,8 +14,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @author sagyr
- * @since 8/8/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExpiredExperimentsTest {
 

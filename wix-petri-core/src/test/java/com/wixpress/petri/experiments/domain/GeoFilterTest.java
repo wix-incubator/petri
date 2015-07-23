@@ -13,8 +13,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author: talyag
- * @since: 12/9/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class GeoFilterTest {
 

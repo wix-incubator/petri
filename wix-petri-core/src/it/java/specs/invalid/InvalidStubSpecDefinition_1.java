@@ -5,13 +5,11 @@ import com.wixpress.petri.petri.SpecDefinition;
 import static java.util.Arrays.asList;
 
 /**
- * @author sagyr
- * @since 10/6/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 
 /**
- * This is an example of an invalid spec definition.
- * It is invalid because it is not a public class
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 class InvalidStubSpecDefinition_1 extends SpecDefinition {
 

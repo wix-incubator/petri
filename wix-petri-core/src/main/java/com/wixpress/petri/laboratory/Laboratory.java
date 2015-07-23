@@ -5,11 +5,7 @@ import com.wixpress.petri.petri.SpecDefinition;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 8/18/13
- * Time: 1:23 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface Laboratory {
     String conductExperiment(Class<? extends SpecDefinition> experimentKey, String fallbackValue);

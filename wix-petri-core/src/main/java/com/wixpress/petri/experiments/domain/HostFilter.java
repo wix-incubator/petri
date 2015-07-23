@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: itayk
- * Date: 22/07/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class HostFilter implements Filter {
 

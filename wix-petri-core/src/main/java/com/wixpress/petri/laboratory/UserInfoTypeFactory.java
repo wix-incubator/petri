@@ -4,8 +4,7 @@ import java.util.UUID;
 
 
 /**
- * @author sagyr
- * @since 11/19/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class UserInfoTypeFactory {
 

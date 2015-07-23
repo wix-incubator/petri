@@ -18,8 +18,7 @@ import static com.wixpress.petri.experiments.domain.ExperimentBuilder.anExperime
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.anExperimentSnapshot;
 
 /**
- * @author sagyr
- * @since 8/6/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExperimentMakers {
 

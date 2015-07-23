@@ -9,9 +9,7 @@ import org.specs2.mutable.SpecificationWithJUnit
 import scala.collection.JavaConversions._
 
 /**
- * User: Dalias
- * Date: 12/10/14
- * Time: 4:45 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 class JdbcMetricsReportsDaoIT extends SpecificationWithJUnit  {
   sequential

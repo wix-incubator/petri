@@ -11,11 +11,7 @@ import static com.wixpress.petri.laboratory.http.LaboratoryFilter.PETRI_LABORATO
 import static com.wixpress.petri.laboratory.http.LaboratoryFilter.PETRI_USER_INFO_STORAGE;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 8/27/14
- * Time: 2:29 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 @Configuration
 public class LaboratoryConfig {

@@ -3,9 +3,7 @@ package com.wixpress.petri.laboratory
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 /**
- * Created with IntelliJ IDEA.
- * User: daniels
- * Date: 3/31/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 trait BIAdditions {
   def contributeToBi(contributor: BIContributor): Unit

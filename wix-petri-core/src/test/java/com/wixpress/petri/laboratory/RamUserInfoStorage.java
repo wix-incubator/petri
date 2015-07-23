@@ -8,12 +8,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 7/16/14
-* Time: 4:27 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class RamUserInfoStorage implements UserInfoStorage {
     private UserInfo info = null;
 

@@ -10,12 +10,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 8/6/14
-* Time: 2:34 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class LogDriver {
 
     private final File logFile;

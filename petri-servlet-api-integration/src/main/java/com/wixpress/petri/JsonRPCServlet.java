@@ -11,11 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 10/2/14
- * Time: 3:46 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class JsonRPCServlet extends HttpServlet {
 

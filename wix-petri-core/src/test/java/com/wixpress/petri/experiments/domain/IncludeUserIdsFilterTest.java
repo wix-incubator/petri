@@ -19,11 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created with IntelliJ IDEA.
- * User: uri
- * Date: 4/23/14
- * Time: 5:31 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class IncludeUserIdsFilterTest {
 

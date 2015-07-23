@@ -13,11 +13,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created with IntelliJ IDEA.
- * User: uri
- * Date: 4/27/14
- * Time: 3:47 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class NotFilterTest {
 

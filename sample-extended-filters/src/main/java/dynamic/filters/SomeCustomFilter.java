@@ -5,7 +5,7 @@ import com.wixpress.petri.experiments.domain.Filter;
 import com.wixpress.petri.experiments.domain.FilterTypeName;
 
 /**
- * Created by talyas on 2/1/15.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 @FilterTypeName("SomeCustomFilter")
 public class SomeCustomFilter implements Filter {

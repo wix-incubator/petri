@@ -9,8 +9,7 @@ import static com.wixpress.petri.experiments.domain.ScopeDefinition.aScopeDefini
 import static java.util.Arrays.asList;
 
 /**
- * @author sagyr
- * @since 10/6/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ValidStubSpecDefinition_1 extends SpecDefinition {
 

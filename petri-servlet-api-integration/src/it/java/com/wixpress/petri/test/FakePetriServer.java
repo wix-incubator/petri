@@ -13,12 +13,8 @@ import static com.wixpress.petri.experiments.jackson.ObjectMapperFactory.makeObj
 import static java.util.Arrays.asList;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 9/2/14
-* Time: 11:54 AM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class FakePetriServer {
     private final JsonRPCServer petriServer;
     private final int port;

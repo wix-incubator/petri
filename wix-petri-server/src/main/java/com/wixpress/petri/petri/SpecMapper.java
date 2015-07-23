@@ -8,8 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * @author: talyag
- * @since: 9/30/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class SpecMapper extends JsonPetriMapper<ExperimentSpec> {
 

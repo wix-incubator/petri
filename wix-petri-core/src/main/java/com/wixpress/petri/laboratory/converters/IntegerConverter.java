@@ -4,9 +4,8 @@ package com.wixpress.petri.laboratory.converters;
 import com.wixpress.petri.laboratory.TestResultConverter;
 
 /**
-* @author sagyr
-* @since 10/20/13
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 
 public class IntegerConverter implements TestResultConverter<Integer> {
 

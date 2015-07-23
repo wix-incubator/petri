@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author: talyag
- * @since: 9/10/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface PetriClient {
 

@@ -13,8 +13,7 @@ import static com.natpryce.makeiteasy.Property.newProperty;
 import static java.util.Arrays.asList;
 
 /**
- * @author sagyr
- * @since 8/6/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class TestGroupMakers {
     public static final Property<TestGroup, String> value = newProperty();

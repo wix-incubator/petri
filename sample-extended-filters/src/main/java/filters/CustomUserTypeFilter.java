@@ -8,7 +8,7 @@ import com.wixpress.petri.laboratory.EligibilityCriteriaTypes.CustomContextCrite
 import java.util.Map;
 
 /**
- * Created by talyas on 2/1/15.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 @FilterTypeName("UserType")
 public class CustomUserTypeFilter implements Filter {

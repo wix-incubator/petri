@@ -11,13 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 8/27/14
- * Time: 4:28 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
-
 @Controller
 public class TestAppController {
 

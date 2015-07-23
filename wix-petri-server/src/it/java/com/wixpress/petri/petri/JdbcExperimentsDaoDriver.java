@@ -10,8 +10,7 @@ import util.DBDriver;
 import static java.util.Arrays.asList;
 
 /**
- * @author: talyag
- * @since: 2/2/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class JdbcExperimentsDaoDriver {
 

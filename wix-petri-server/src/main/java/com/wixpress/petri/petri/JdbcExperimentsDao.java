@@ -20,8 +20,7 @@ import static com.wixpress.petri.petri.FullPetriClient.PetriException;
 import static com.wixpress.petri.petri.FullPetriClient.UpdateFailed;
 
 /**
- * @author: talyag
- * @since: 9/15/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class JdbcExperimentsDao extends JdbcPetriDao<Experiment, ExperimentSnapshot> implements OriginalIDAwarePetriDao<Experiment, ExperimentSnapshot> {
 

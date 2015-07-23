@@ -12,9 +12,7 @@ import scala.concurrent._
 import scala.concurrent.duration._
 
 /**
- * User: Dalias
- * Date: 12/30/14
- * Time: 11:32 AM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 class ServerMetricsReporterTest extends SpecificationWithJUnit  {
 

@@ -8,8 +8,7 @@ import org.joda.time.DateTime;
 import java.util.List;
 
 /**
- * @author: talyag
- * @since: 9/29/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 @JsonDeserialize(builder = SpecDefinition.ExperimentSpecBuilder.class)
 public class ExperimentSpec {

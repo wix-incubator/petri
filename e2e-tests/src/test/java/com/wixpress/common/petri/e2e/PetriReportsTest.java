@@ -14,16 +14,9 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 8/21/14
- * Time: 12:10 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
-
-
 public class PetriReportsTest extends BaseTest {
 
     @Test

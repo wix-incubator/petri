@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * @author: talyag
- * @since: 5/15/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ConstantFilter implements Filter {
 

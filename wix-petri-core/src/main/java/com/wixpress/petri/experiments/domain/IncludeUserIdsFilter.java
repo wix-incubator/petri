@@ -10,11 +10,7 @@ import java.util.UUID;
 import static java.util.Arrays.asList;
 
 /**
- * Created with IntelliJ IDEA.
- * User: uri
- * Date: 4/23/14
- * Time: 4:09 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class IncludeUserIdsFilter implements Filter {
 

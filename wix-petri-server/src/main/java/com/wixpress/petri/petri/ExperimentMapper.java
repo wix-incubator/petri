@@ -11,8 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * @author: talyag
- * @since: 9/24/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExperimentMapper extends JsonPetriMapper<Experiment> {
 

@@ -15,8 +15,7 @@ import static org.junit.Assert.assertThat;
 
 
 /**
- * @author sagyr
- * @since 10/6/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ClasspathSpecDefinitionsIT {
 

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by talyas on 2/2/15.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class DynamicFilterLoader {
 

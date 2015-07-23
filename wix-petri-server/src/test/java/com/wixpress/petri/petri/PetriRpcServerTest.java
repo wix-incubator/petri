@@ -30,8 +30,7 @@ import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author: talyag
- * @since: 9/15/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class PetriRpcServerTest {
 

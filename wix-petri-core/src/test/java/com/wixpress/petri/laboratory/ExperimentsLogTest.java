@@ -8,8 +8,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author sagyr
- * @since 8/7/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExperimentsLogTest {
 

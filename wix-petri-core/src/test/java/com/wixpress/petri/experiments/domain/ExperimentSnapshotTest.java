@@ -20,8 +20,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author sagyr
- * @since 9/16/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExperimentSnapshotTest {
 

@@ -27,12 +27,8 @@ import static org.junit.Assert.assertThat;
 
 
 /**
- * User: Dalias
- * Date: 8/7/14
- * Time: 6:45 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
-
-
 public class UserInfoExtractorIT {
 
     private static final SampleAppRunner testAppRunner = new SampleAppRunner(9002);
