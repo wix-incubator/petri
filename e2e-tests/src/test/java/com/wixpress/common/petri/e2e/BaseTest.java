@@ -17,9 +17,7 @@ import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
 import static java.util.Arrays.asList;
 
 /**
- * User: Dalias
- * Date: 2/8/15
- * Time: 8:57 AM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public abstract class BaseTest {
 

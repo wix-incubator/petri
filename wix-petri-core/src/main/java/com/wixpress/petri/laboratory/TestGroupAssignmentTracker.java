@@ -3,11 +3,7 @@ package com.wixpress.petri.laboratory;
 import com.wixpress.petri.experiments.domain.Assignment;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 8/13/13
- * Time: 11:34 AM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface TestGroupAssignmentTracker {
 

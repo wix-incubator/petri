@@ -3,8 +3,7 @@ package specs.abstracts;
 import com.wixpress.petri.petri.SpecDefinition;
 
 /**
- * @author talyag
- * @since 25/8/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public abstract class AbstractStubSpecDefinition_1 extends SpecDefinition {
 

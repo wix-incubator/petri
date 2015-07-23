@@ -1,13 +1,8 @@
 package com.wixpress.petri.laboratory;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 10/6/14
-* Time: 4:01 PM
-* This class is mutable and therefore a new instance should be generated for every HttpRequest.
-*
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class RequestScopedUserInfoStorage implements UserInfoStorage {
     private final UserInfo originalInstance;
     private UserInfo storedInstance = null;

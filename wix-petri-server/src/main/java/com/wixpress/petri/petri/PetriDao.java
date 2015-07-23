@@ -6,8 +6,7 @@ import org.joda.time.DateTime;
 import java.util.List;
 
 /**
- * @author: talyag
- * @since: 9/30/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface PetriDao<T, V> {
     List<T> fetch();

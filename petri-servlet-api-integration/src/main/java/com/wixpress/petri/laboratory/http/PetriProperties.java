@@ -5,9 +5,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
-* User: itayk
-* Date: 06/11/14
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class PetriProperties {
 
     public Properties fromStream(InputStream input) {

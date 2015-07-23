@@ -1,8 +1,7 @@
 package com.wixpress.petri.petri;
 
 /**
- * @author: talyag
- * @since: 9/15/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface DeleteEnablingPetriDao<T, V> extends PetriDao<T, V> {
 

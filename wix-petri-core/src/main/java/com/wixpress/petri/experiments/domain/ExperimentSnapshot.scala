@@ -6,8 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
 /**
- * @author: talyag
- * @since: 7/3/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 
 

@@ -11,7 +11,7 @@ import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.an
 import static java.util.Arrays.asList;
 
 /**
- * Created by talyag on 6/7/15.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class TestBuilders {
     public static SpecDefinition.ExperimentSpecBuilder abSpecBuilder(String key) {

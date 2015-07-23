@@ -10,12 +10,8 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 9/2/14
-* Time: 11:54 AM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class JsonRPCServer {
     private final Server server;
 

@@ -4,9 +4,7 @@ import com.wixpress.petri.petri.ConductExperimentSummary
 import org.hamcrest.{Description, Matcher, TypeSafeMatcher}
 
 /**
- * User: Dalias
- * Date: 1/6/15
- * Time: 2:51 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 object ConductExperimentSummaryMatcher {
 

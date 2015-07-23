@@ -17,9 +17,8 @@ import static com.wixpress.petri.laboratory.dsl.TestGroupMakers.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-/**
- * @author: talyag
- * @since: 12/31/13
+/** 
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class GuidTestGroupAssignmentStrategyTest {
 

@@ -3,8 +3,7 @@ package com.wixpress.petri.laboratory;
 import java.util.Random;
 
 /**
- * @author alex
- * @since 8/22/11 4:41 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 
 public class AnonymousTestGroupAssignmentStrategy extends TestGroupAssignmentStrategy {

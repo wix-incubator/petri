@@ -4,11 +4,7 @@ import com.wixpress.petri.experiments.domain.EligibilityCriteria;
 import com.wixpress.petri.experiments.domain.Filter;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 7/16/14
- * Time: 4:29 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class BlowingUpFilter implements Filter {
     @Override

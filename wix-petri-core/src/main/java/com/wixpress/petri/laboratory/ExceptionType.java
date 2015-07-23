@@ -1,9 +1,7 @@
 package com.wixpress.petri.laboratory;
 
 /**
- * User: Dalias
- * Date: 11/23/14
- * Time: 4:41 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public enum ExceptionType {
     SpecScannerException , ExceptionReadingRequest, SlowExperiment, ErrorConductingExperiment, MalformedExperimentLog,

@@ -12,12 +12,8 @@ import org.joda.time.DateTime;
 import java.util.TimeZone;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 7/7/14
-* Time: 1:51 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class ObjectMapperFactory {
 
     private static final String MODULE_NAME = JodaModule.class.getName();

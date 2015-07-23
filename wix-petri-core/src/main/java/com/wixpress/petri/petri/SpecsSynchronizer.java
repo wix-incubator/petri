@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author sagyr
- * @since 10/3/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class SpecsSynchronizer {
 

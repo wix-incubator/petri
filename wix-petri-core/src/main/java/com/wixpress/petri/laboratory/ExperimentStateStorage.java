@@ -4,11 +4,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 3/10/14
- * Time: 11:23 AM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface ExperimentStateStorage {
     void storeAnonymousExperimentsLog(String key, String experimentsLog);

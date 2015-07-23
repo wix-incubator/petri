@@ -8,9 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.{JdbcTemplate, RowMapper}
 
 /**
- * User: Dalias
- * Date: 12/10/14
- * Time: 4:30 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 trait UserStateDao {
   def getUserState( userId: UUID): String

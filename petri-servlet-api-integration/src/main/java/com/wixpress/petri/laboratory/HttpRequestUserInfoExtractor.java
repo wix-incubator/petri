@@ -11,9 +11,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * User: Dalias
- * Date: 8/14/14
- * Time: 3:44 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
 

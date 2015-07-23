@@ -7,8 +7,7 @@ import static com.wixpress.petri.experiments.domain.IsEligibleFilter.isEligibleF
 import static java.util.Arrays.asList;
 
 /**
- * @author: talyag
- * @since: 12/11/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class AndFilter implements Filter {
 

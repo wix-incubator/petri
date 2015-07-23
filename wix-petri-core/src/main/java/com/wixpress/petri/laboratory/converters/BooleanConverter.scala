@@ -1,9 +1,3 @@
-/*      __ __ _____  __                                              *\
-**     / // // /_/ |/ /          Wix                                 **
-**    / // // / /|   /           (c) 2006-2013, Wix LTD.             **
-**   / // // / //   |            http://www.wix.com/                 **
-**   \__/|__/_//_/| |                                                **
-\*                |/                                                 */
 package com.wixpress.petri.laboratory.converters
 
 

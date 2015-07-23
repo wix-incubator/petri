@@ -11,8 +11,7 @@ import java.util.Set;
 import static java.lang.String.format;
 
 /**
- * @author: talyag
- * @since: 12/4/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 //TODO - move to Scala. save a snapshot instance instead of all members.
 // aCopyOf wil call buildFrom(snapshot)

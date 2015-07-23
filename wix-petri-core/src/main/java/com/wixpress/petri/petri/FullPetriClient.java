@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * @author talyag
- * @since 9/24/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 //TODO - move this class to petri-server module
 public interface FullPetriClient {

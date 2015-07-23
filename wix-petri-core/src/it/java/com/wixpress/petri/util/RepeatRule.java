@@ -9,9 +9,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
-* @author sagyr
-* @since 11/3/13
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class RepeatRule implements TestRule {
 
     @Retention( RetentionPolicy.RUNTIME )

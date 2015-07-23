@@ -7,8 +7,7 @@ import java.util.List;
 import static com.google.common.collect.Iterables.find;
 
 /**
- * @author: talyag
- * @since: 5/27/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class FiltersValidator {
 

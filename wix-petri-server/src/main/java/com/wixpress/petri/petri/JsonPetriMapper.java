@@ -7,8 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 
 /**
- * @author: talyag
- * @since: 10/1/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public abstract class JsonPetriMapper<T> implements PetriMapper<T> {
 

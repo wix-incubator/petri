@@ -3,10 +3,8 @@ package com.wixpress.petri.experiments.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * @author alex
- * @since 8/17/11 12:53 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TestGroup {
     int id;

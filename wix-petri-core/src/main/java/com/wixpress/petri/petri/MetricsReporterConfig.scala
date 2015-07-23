@@ -1,8 +1,6 @@
 package com.wixpress.petri.petri
 
 /**
- * User: Dalias
- * Date: 1/7/15
- * Time: 4:43 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
  case class MetricsReporterConfig(reportsScheduleTimeInMillis: java.lang.Long)

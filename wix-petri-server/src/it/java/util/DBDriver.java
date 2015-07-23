@@ -12,8 +12,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * @author: talyag
- * @since: 9/15/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class DBDriver {
 

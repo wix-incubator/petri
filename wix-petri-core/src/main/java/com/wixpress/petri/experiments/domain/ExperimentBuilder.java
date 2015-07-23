@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.joda.time.DateTime;
 
 /**
- * @author: talyag
- * @since: 12/4/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExperimentBuilder {

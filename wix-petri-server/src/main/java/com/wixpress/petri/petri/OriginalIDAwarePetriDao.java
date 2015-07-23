@@ -3,8 +3,7 @@ package com.wixpress.petri.petri;
 import java.util.List;
 
 /**
- * @author: talyag
- * @since: 9/15/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface OriginalIDAwarePetriDao<T, V> extends HistoryAwarePetriDao<T, V> {
 

@@ -1,8 +1,7 @@
 package com.wixpress.petri.experiments.domain;
 
 /**
- * @author: talyag
- * @since: 11/26/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class RegisteredUsersFilter implements Filter {
 

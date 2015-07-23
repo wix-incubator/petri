@@ -15,8 +15,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.core.Is.is;
 
 /**
- * @author: talyag
- * @since: 9/20/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class JdbcSpecsDaoIT extends PetriDaoIT<ExperimentSpec, ExperimentSpec> {
 

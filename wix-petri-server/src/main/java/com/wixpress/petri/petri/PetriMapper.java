@@ -6,8 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.jdbc.core.RowMapper;
 
 /**
- * @author: talyag
- * @since: 10/30/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface PetriMapper<T> extends RowMapper<T> {
     <T> String serialize(T obj) throws JsonProcessingException;

@@ -6,11 +6,7 @@ import org.junit.Test;
 import static com.natpryce.makeiteasy.MakeItEasy.an;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 4/8/14
- * Time: 2:38 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ExperimentBuilderTest {
 

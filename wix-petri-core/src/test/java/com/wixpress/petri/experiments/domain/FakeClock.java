@@ -4,11 +4,7 @@ import com.wixpress.petri.petri.Clock;
 import org.joda.time.DateTime;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 7/7/14
- * Time: 6:16 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class FakeClock implements Clock {
     private DateTime now;

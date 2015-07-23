@@ -18,8 +18,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * @author: dalias
- * @since: 9/9/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class UserAgentRegexFilterTest {
 

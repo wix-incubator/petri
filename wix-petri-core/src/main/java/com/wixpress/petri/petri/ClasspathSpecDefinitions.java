@@ -13,8 +13,7 @@ import java.util.List;
 import static com.google.common.collect.Iterables.filter;
 
 /**
- * @author sagyr
- * @since 10/3/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class ClasspathSpecDefinitions implements SpecDefinitions {
 

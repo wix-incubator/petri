@@ -17,12 +17,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 9/2/14
-* Time: 11:55 AM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class SampleAppRunner {
     public static final String DEFAULT_PATH_TO_WEBAPP = ServerRunner.class.getResource("/").getPath() + "../../src/it/webapp";
     private final ServerRunner sampleAppServer;

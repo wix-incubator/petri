@@ -4,12 +4,8 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 8/27/14
-* Time: 4:09 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class ServerRunner {
 
     private final Server server;

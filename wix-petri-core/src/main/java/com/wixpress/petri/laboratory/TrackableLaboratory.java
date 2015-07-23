@@ -17,8 +17,7 @@ import java.util.*;
 import static java.lang.String.valueOf;
 
 /**
- * @author sagyr
- * @since 8/7/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class TrackableLaboratory implements Laboratory {
 

@@ -3,8 +3,7 @@ package com.wixpress.petri.laboratory
 import org.joda.time.DateTime
 
 /**
- * @author talyag
- * @since 9/20/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 object EligibilityCriteriaTypes {
 

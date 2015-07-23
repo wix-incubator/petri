@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Created by talyag on 4/6/15.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class HostResolver {
 

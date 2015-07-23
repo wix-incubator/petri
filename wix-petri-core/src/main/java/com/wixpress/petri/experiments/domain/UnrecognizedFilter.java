@@ -1,8 +1,7 @@
 package com.wixpress.petri.experiments.domain;
 
 /**
- * @author: talyag
- * @since: 5/25/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class UnrecognizedFilter implements Filter {
 

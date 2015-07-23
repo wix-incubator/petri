@@ -6,8 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author talyag
- * @since 9/3/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class AdditionalEligibilityCriteria {
 

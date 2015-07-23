@@ -20,8 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 /**
- * @author: talyag
- * @since: 9/20/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class JdbcExperimentsDaoIT extends PetriDaoIT<Experiment, ExperimentSnapshot> {
 

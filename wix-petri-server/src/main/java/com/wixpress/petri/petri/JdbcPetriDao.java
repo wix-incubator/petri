@@ -11,8 +11,7 @@ import static com.wixpress.petri.petri.FullPetriClient.CreateFailed;
 import static com.wixpress.petri.petri.FullPetriClient.CreateFailedData;
 
 /**
- * @author: talyag
- * @since: 10/30/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public abstract class JdbcPetriDao<T, V> implements PetriDao<T, V> {
     protected final JdbcTemplate jdbcTemplate;

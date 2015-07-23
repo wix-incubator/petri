@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author talyag
- * @since 9/20/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class FiltersExtender {
     private static final Logger logger = LoggerFactory.getLogger(FiltersExtender.class);

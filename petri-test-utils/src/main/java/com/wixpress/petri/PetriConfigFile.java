@@ -7,12 +7,8 @@ import java.io.File;
 import java.io.IOException;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 9/9/14
-* Time: 6:37 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class PetriConfigFile {
     private String username = "";
     private String password = "";

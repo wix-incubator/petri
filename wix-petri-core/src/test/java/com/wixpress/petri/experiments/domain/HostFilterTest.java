@@ -13,9 +13,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created with IntelliJ IDEA.
- * User: itayk
- * Date: 22/07/14
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class HostFilterTest {
 

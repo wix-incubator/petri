@@ -3,11 +3,7 @@ package com.wixpress.petri;
 import static java.lang.String.format;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 11/27/14
- * Time: 3:23 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class NonSerializableServerException extends RuntimeException {
     public NonSerializableServerException(String exceptionTypeName, String serializedException) {

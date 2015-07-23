@@ -3,9 +3,7 @@ package com.wixpress.petri.petri;
 import java.util.UUID;
 
 /**
- * User: Dalias
- * Date: 3/22/15
- * Time: 12:00 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface PetriDeveloperApi {
 

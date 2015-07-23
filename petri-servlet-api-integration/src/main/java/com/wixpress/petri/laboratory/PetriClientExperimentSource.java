@@ -7,12 +7,8 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 9/2/14
-* Time: 12:17 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class PetriClientExperimentSource implements CachedExperiments.ExperimentsSource {
     private final PetriClient petriProxy;
 

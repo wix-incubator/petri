@@ -6,9 +6,7 @@ import scala.collection.JavaConversions._
 import java.{util => ju}
 
 /**
- * User: Dalias
- * Date: 9/16/14
- * Time: 9:48 AM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 case class UserAgentRegexFilter(@JsonProperty("includeRegexes") includeUserAgentRegexes: ju.List[String],
                                 @JsonProperty("excludeRegexes") excludeUserAgentRegexes: ju.List[String]) extends Filter {

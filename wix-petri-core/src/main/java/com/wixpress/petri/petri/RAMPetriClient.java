@@ -21,11 +21,7 @@ import static com.wixpress.petri.experiments.domain.ExperimentPredicates.HasID.h
 import static com.wixpress.petri.experiments.domain.ExperimentPredicates.IsActivePredicate.isActiveNow;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 1/15/14
- * Time: 12:55 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequestPetriClient {
 

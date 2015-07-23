@@ -7,9 +7,7 @@ import scala.collection.JavaConversions._
 import scala.collection.concurrent.TrieMap
 
 /**
- * User: Dalias
- * Date: 12/7/14
- * Time: 3:32 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 
 trait MetricsReporter {

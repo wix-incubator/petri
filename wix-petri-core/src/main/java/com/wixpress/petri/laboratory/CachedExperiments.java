@@ -18,8 +18,7 @@ import static com.wixpress.petri.experiments.domain.ExperimentPredicates.IsInSco
 import static com.wixpress.petri.experiments.domain.ExperimentPredicates.IsNotTerminated.isNotTerminated;
 
 /**
- * @author sagyr
- * @since 8/6/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class CachedExperiments implements Experiments {
 

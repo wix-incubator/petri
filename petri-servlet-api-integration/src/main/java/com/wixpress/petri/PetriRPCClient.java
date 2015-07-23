@@ -13,12 +13,8 @@ import java.net.URL;
 import java.util.HashMap;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 9/1/14
-* Time: 2:25 PM
-* To change this template use File | Settings | File Templates.
-*/
+ * Petri - (c) Wix LTD. http://www.wix.com
+ */
 public class PetriRPCClient {
 
     private static final int userStateReadTimeoutMillis = 2000;

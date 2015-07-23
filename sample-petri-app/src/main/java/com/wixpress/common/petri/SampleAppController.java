@@ -17,13 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 8/25/14
- * Time: 1:30 PM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
-
 @Controller
 public class SampleAppController {
 

@@ -5,11 +5,7 @@ import com.wixpress.petri.experiments.domain.Experiment;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 8/21/13
- * Time: 11:47 AM
- * To change this template use File | Settings | File Templates.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public interface Experiments {
     List<Experiment> findNonExpiredByKey(String key);

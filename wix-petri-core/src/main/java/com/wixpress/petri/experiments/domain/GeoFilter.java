@@ -6,8 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * @author: talyag
- * @since: 11/26/13
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class GeoFilter implements Filter {
 

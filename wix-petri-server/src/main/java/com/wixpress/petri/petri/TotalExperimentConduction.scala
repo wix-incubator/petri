@@ -1,6 +1,6 @@
 package com.wixpress.petri.petri
 
 /**
- * Created by Nimrod_Lahav on 4/12/15.
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 case class TotalExperimentConduction(experimentId: Int, totalConduction: BigInt)

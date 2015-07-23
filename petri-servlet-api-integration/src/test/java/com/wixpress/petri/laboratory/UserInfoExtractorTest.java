@@ -12,9 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * User: Dalias
- * Date: 8/14/14
- * Time: 3:45 PM
+ * Petri - (c) Wix LTD. http://www.wix.com
  */
 public class UserInfoExtractorTest {
 
