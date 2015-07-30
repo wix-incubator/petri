@@ -29,7 +29,7 @@
     <modules>
         <module>wix-petri-core</module>
         <module>petri-servlet-api-integration</module>
-        <module>wix-petri-server</module>
+        <module>petri-server-core</module>
         <module>sample-petri-app</module>
         <module>petri-test-utils</module>
         <module>sample-extended-filters</module>
