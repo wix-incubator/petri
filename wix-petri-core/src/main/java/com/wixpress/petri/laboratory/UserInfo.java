@@ -4,6 +4,7 @@ import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
 import org.joda.time.DateTime;
 import scala.Option;
+import scala.Some;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,20 +15,22 @@ import static com.wixpress.petri.laboratory.UserInfoType.ANONYMOUS_LOG_STORAGE_K
 public class UserInfo implements ConductionStrategy {
 
     private static final DateTime BEGINNING_OF_TIME = new DateTime(0);
+    private static final HashMap<UUID, String> emptyOtherUsersExperimentsLogs = new HashMap<UUID, String>();
 
     public static UserInfo userInfoFromNullRequest(String host) {
         return new UserInfo("", (UUID) null, null, "", "", "",
-                new NullUserInfoType(), "", "", BEGINNING_OF_TIME, "", "", false, new HashMap<String, String>(), false, host, new HashMap<UUID, String>());
+                new NullUserInfoType(), "", "", BEGINNING_OF_TIME, "", "", false, new HashMap<String, String>(), false, host, emptyOtherUsersExperimentsLogs, emptyOtherUsersExperimentsLogs);
     }
 
     private static UserInfo userInfoWithNoExperimentsLogs() {
         return new UserInfo("", (UUID) null, null, "", "", "",
-                new NullUserInfoType(), "", "", BEGINNING_OF_TIME, "", "", false, new HashMap<String, String>(), false, "n/a", new HashMap<UUID, String>());
+                new NullUserInfoType(), "", "", BEGINNING_OF_TIME, "", "", false, new HashMap<String, String>(), false, "n/a", emptyOtherUsersExperimentsLogs, emptyOtherUsersExperimentsLogs);
     }
 
     public final String experimentsLog;
     public final String anonymousExperimentsLog;
     public final Map<UUID, String> otherUsersExperimentsLogs;
+    public final Map<UUID, String> potentialOtherUserExperimentsLogFromCookies;
     private final UserInfoType type;
     public final UUID clientId;
     public final String ip;
@@ -43,13 +46,14 @@ public class UserInfo implements ConductionStrategy {
     public final boolean isRobot;
     public final String host;
 
+    //keeping a simple version for clients that are no interested in parsing/passing values of users other than the user in session
     public UserInfo(String experimentsLog, UUID userId, UUID clientId, String ip, String url, String userAgent, UserInfoType userInfoType, String language, String country, DateTime userCreationDate, String email, String anonymousExperimentsLog, boolean isRecurring, Map<String, String> experimentOverrides, boolean isRobot, String host) {
         this(experimentsLog, userId, clientId, ip, url, userAgent, userInfoType,
                 language, country, userCreationDate, email, anonymousExperimentsLog, isRecurring,
-                experimentOverrides, isRobot, host, new HashMap<UUID, String>());
+                experimentOverrides, isRobot, host, new HashMap<UUID, String>(), new HashMap<UUID, String>());
     }
 
-    public UserInfo(String experimentsLog, UUID userId, UUID clientId, String ip, String url, String userAgent, UserInfoType type, String language, String country, DateTime dateCreated, String email, String anonymousExperimentsLog, boolean isRecurringUser, Map<String, String> experimentOverrides, boolean robot, String host, Map<UUID, String> otherUsersExperimentsLogs) {
+    public UserInfo(String experimentsLog, UUID userId, UUID clientId, String ip, String url, String userAgent, UserInfoType type, String language, String country, DateTime dateCreated, String email, String anonymousExperimentsLog, boolean isRecurringUser, Map<String, String> experimentOverrides, boolean robot, String host, Map<UUID, String> otherUsersExperimentsLogs, Map<UUID, String> potentialOtherUserExperimentsLogFromCookies) {
         this.experimentsLog = experimentsLog;
         this.userId = userId;
         this.type = type;
@@ -67,6 +71,7 @@ public class UserInfo implements ConductionStrategy {
         this.isRobot = robot;
         this.host = host;
         this.otherUsersExperimentsLogs = otherUsersExperimentsLogs;
+        this.potentialOtherUserExperimentsLogFromCookies = potentialOtherUserExperimentsLogFromCookies;
     }
 
 
@@ -76,6 +81,7 @@ public class UserInfo implements ConductionStrategy {
                 "anonymousExperimentsLog='" + anonymousExperimentsLog + '\'' +
                 ", experimentsLog='" + experimentsLog + '\'' +
                 ", otherUserExperimentsLog='" + otherUsersExperimentsLogs + '\'' +
+                ", potentialOtherUserExperimentsLogFromCookies='" + potentialOtherUserExperimentsLogFromCookies + '\'' +
                 '}';
     }
 
@@ -161,17 +167,17 @@ public class UserInfo implements ConductionStrategy {
     }
 
     public UserInfo setExperiments(ExperimentsLog experiments) {
-        return new UserInfo(experiments.serialized(), userId, clientId, ip, url, userAgent, type, language, country, dateCreated, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host, otherUsersExperimentsLogs);
+        return new UserInfo(experiments.serialized(), userId, clientId, ip, url, userAgent, type, language, country, dateCreated, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host, otherUsersExperimentsLogs, potentialOtherUserExperimentsLogFromCookies);
     }
 
     private UserInfo setOtherUserExperiments(UUID uuid, ExperimentsLog otherUserExperimentsLog) {
         HashMap<UUID, String> otherUserExperimentsLogAppended = new HashMap<>(otherUsersExperimentsLogs);
         otherUserExperimentsLogAppended.put(uuid, otherUserExperimentsLog.serialized());
-        return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, type, language, country, dateCreated, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host, otherUserExperimentsLogAppended);
+        return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, type, language, country, dateCreated, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host, otherUserExperimentsLogAppended, potentialOtherUserExperimentsLogFromCookies);
     }
 
     public UserInfo setAnonymousExperiments(ExperimentsLog experiments) {
-        return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, type, language, country, dateCreated, email, experiments.serialized(), isRecurringUser, experimentOverrides, isRobot, host, otherUsersExperimentsLogs);
+        return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, type, language, country, dateCreated, email, experiments.serialized(), isRecurringUser, experimentOverrides, isRobot, host, otherUsersExperimentsLogs, potentialOtherUserExperimentsLogFromCookies);
     }
 
     //note - not dealing with removing otherUsers experiments as these are persisted as session cookies so no need
@@ -232,6 +238,14 @@ public class UserInfo implements ConductionStrategy {
          return  allExperiments(uid).getWinningTestGroups();
     }
 
+    public UserInfo addRelevantUserLogToContext(UUID uid) {
+        String relevantLogsFromExistingCookies = potentialOtherUserExperimentsLogFromCookies.get(uid);
+        if (relevantLogsFromExistingCookies != null && !relevantLogsFromExistingCookies.isEmpty())
+            return appendOtherUserExperiments(relevantLogsFromExistingCookies, uid);
+        else
+            return this;
+    }
+
     public UserInfo appendAnonymousExperiments(String anonymousLog) {
         ExperimentsLog localAnonLogToAdd = ExperimentsLog.parse(anonymousLog);
         ExperimentsLog existingAnonLog = ExperimentsLog.parse(anonymousExperimentsLog);
@@ -261,7 +275,6 @@ public class UserInfo implements ConductionStrategy {
         ExperimentsLog existingUserLog = ExperimentsLog.parse(otherUsersExperimentsLogs.get(uuid));
         return setOtherUserExperiments(uuid, existingUserLog.appendAll(localUserLogToAdd));
     }
-
 
 
 }

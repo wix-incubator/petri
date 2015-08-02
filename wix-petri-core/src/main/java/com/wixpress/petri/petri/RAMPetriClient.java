@@ -33,8 +33,8 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
     private int currentId = 1;
     private Map<String, ExperimentSpec> specs = new TreeMap<String, ExperimentSpec>(String.CASE_INSENSITIVE_ORDER);
     private boolean blowUp = false;
-    private List<ConductExperimentReport> reports  = new ArrayList<>();
-    private Map<UUID,String> userStateMap = new HashMap<>();
+    private List<ConductExperimentReport> reports = new ArrayList<>();
+    private Map<UUID, String> userStateMap = new HashMap<>();
 
     public synchronized void clearAll() {
         experiments.clear();
@@ -218,7 +218,7 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
 
     @Override
     public String getUserState(UUID userId) {
-        if(userStateMap.containsKey(userId))
+        if (userStateMap.containsKey(userId))
             return userStateMap.get(userId);
         else return "";
     }
@@ -252,28 +252,16 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
     }
 
     public ConductExperimentReport getConductExperimentReport(int id) {
-           for(ConductExperimentReport report : reports){
-               if(report.experimentId() ==  id )
-                   return report;
-           }
+        for (ConductExperimentReport report : reports) {
+            if (report.experimentId() == id)
+                return report;
+        }
         return null;
-     }
+    }
 
     private void store(ExperimentSpec expectedSpec) {
         specs.put(expectedSpec.getKey(), expectedSpec);
     }
 
-
-
-    public synchronized void addDirectly(Experiment e) {
-        store(e);
-        //TODO - rethink this method - is it really a good idea?
-        // if so then how do we want to handle the id generation?
-        nextID();
-    }
-
-    public synchronized void addDirectly(ExperimentSpec experimentSpec) {
-        store(experimentSpec);
-    }
 
 }

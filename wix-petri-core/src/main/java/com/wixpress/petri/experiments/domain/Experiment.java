@@ -140,7 +140,6 @@ public class Experiment {
     }
 
     @JsonIgnore
-    @Deprecated
     public boolean isPersistent() {
         return experimentSnapshot.isPersistent();
     }
@@ -291,11 +290,10 @@ public class Experiment {
     }
 
     public Experiment pauseOrTerminateAsOf(DateTime instant, List<Filter> newFilters, Trigger trigger) {
-        if (canRelyOnPreviouslyConductedUid(newFilters)) {
+        if (canRelyOnPreviouslyConductedUid(newFilters) || !isPersistent()) {
             return terminateAsOf(instant, trigger);
         }
 
-        //TODO - change this method to be 'if (mustRetainExperienceForAnonUsers) then pause' (?)
         return pause(trigger);
     }
 
@@ -330,7 +328,7 @@ public class Experiment {
     }
 
     public boolean shouldBePersisted() {
-        return isOnlyForLoggedInUsers() && !isToggle();
+        return !isToggle() && isPersistent();
     }
 
     public static class InvalidExperiment extends RuntimeException {

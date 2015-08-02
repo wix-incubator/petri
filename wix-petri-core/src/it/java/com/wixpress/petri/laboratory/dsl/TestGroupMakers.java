@@ -75,11 +75,4 @@ public class TestGroupMakers {
                     with(probability, 50)).
                     make());
 
-    public static final List<TestGroup> BOOLEAN_TEST_GROUPS_WITH_TRUE_ALWAYS_WINNING = asList(
-            a(TestGroup,
-                    with(probability, 100),
-                    with(value, "true")).make(),
-            a(TestGroup,
-                    with(probability, 0),
-                    with(value, "false")).make());
 }

@@ -98,9 +98,7 @@ public abstract class SpecDefinition {
         /**
          * @param persistent whether conduction value should be persisted (by cookies or other method)
          *                   default is true
-         *                   deprecated - use conduction stratgeies on call site on Laboratory instead
          */
-        @Deprecated
         public ExperimentSpecBuilder withPersistent(boolean persistent) {
             this.persistent = persistent;
             return this;

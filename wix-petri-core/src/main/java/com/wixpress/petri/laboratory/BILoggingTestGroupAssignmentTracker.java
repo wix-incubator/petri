@@ -32,10 +32,12 @@ public class BILoggingTestGroupAssignmentTracker implements TestGroupAssignmentT
 
         ObjectNode node = JsonNodeFactory.instance.objectNode();
 
+        String uid = userInfo.getUserId() != null ? userInfo.getUserId().toString() : null;
         node
                 .put("date", clock.getCurrentDateTime().toString(ISODateTimeFormat.dateTime()))
                 .put("cuid", clientId != null ? clientId.toString() : null)
-                .put("uuid", userInfo.getUserId() != null ? userInfo.getUserId().toString() : null)
+                .put("uuid", uid)
+                .put("logged_session_uuid", uid)
                 .put("label_id", experimentId * 10000 + testGroupId)
                 .put("ip", userInfo.ip)
                 .put("url", userInfo.url)

@@ -16,6 +16,13 @@ object BIAdditions {
   val Empty = new BIAdditions {
     def contributeToBi(contributor: BIContributor): Unit = Unit
   }
+
+  def merge(additions: BIAdditions, moreAdditions: BIAdditions) = new BIAdditions {
+    override def contributeToBi(contributor: BIContributor): Unit = {
+      additions.contributeToBi(contributor)
+      moreAdditions.contributeToBi(contributor)
+    }
+  }
 }
 
 trait BIContributor {

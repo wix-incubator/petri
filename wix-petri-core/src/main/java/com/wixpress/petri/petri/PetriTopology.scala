@@ -9,8 +9,7 @@ import java.{lang=>jl}
 trait PetriTopology {
   def getPetriUrl: String
 
-  //TODO Need to be extracted the the common configuration  once it's written
-  def getReportsScheduleTimeInMillis: jl.Long = 300000l
+  def getReportsScheduleTimeInMillis: jl.Long = 30000l
 
   def isWriteStateToServer = true
 }

@@ -26,6 +26,13 @@ public class AdditionalEligibilityCriteria {
         return this;
     }
 
+    public static AdditionalEligibilityCriteria merge(AdditionalEligibilityCriteria criteria, AdditionalEligibilityCriteria moreCriteria){
+        for (EligibilityCriterion criterion : moreCriteria.criteria.values()){
+            criteria = criteria.withCriterion(criterion);
+        }
+        return criteria;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

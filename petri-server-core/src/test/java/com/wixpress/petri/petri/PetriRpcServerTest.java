@@ -24,9 +24,7 @@ import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.anEx
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.stringContainsInOrder;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -139,7 +137,7 @@ public class PetriRpcServerTest {
             oneOf(mailService).notify(
                     with(stringContainsInOrder(asList(theUpdatedSpec.getKey(), NON_TERMINATED_EXPERIMENTS_MSG))),
                     with(stringContainsInOrder(asList(theOriginalSpec.toString(), theUpdatedSpec.toString()))),
-                    with(containsString(theUpdatedSpec.getOwner())));
+                    with(arrayContaining(containsString(theUpdatedSpec.getOwner()))));
         }};
     }
 
@@ -148,7 +146,7 @@ public class PetriRpcServerTest {
             oneOf(specsDao).update(with(theUpdatedSpec), with(updateTime));
             oneOf(mailService).notify(with(String.format(SPEC_OWNER_CHANGED_MSG, theUpdatedSpec.getKey(), theUpdatedSpec.getOwner())),
                     with(any(String.class)),
-                    with(originalOwner));
+                    with(arrayContaining(originalOwner)));
         }};
     }
 
@@ -156,7 +154,7 @@ public class PetriRpcServerTest {
         return new Expectations() {{
             oneOf(mailService).notify(with(String.format(SPEC_UPDATE_FAILED_MSG, failedSpec.getKey())),
                     with(any(String.class)),
-                    with(failedSpec.getOwner()));
+                    with(arrayContaining(failedSpec.getOwner())));
         }};
     }
 

@@ -81,6 +81,23 @@ public class ExperimentPredicates {
         }
     }
 
+    public static class IssNotExperimentWithId implements Predicate<Experiment> {
+        private final int id;
+
+        public IssNotExperimentWithId(int id) {
+            this.id = id;
+        }
+
+        @Override
+        public boolean apply(Experiment input) {
+            return input.getId() != id;
+        }
+
+        public static IssNotExperimentWithId isNotExperimentWithId(int id) {
+            return new IssNotExperimentWithId(id);
+        }
+    }
+
     public static class HasKey implements Predicate<Experiment> {
 
         private final String key;

@@ -26,17 +26,21 @@ public class TrackableLaboratory implements Laboratory {
     private final Experiments experiments;
     private final UserInfoStorage userInfoStorage;
     private final TestGroupAssignmentTracker testGroupAssignmentTracker;
+    private final PetriConductionContextRetriever petriConductionContextRetriever;
     private final ErrorHandler laboratoryErrorHandler;
     private final MetricsReporter metricsReporter;
     private final UserRequestPetriClient petriClient;
     private final PetriTopology petriTopology;
 
+
     public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
+                               PetriConductionContextRetriever petriConductionContextRetriever,
                                ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter,
                                UserRequestPetriClient petriClient, PetriTopology petriTopology) {
         this.experiments = experiments;
         this.testGroupAssignmentTracker = testGroupAssignmentTracker;
         this.userInfoStorage = userInfoStorage;
+        this.petriConductionContextRetriever = petriConductionContextRetriever;
         this.laboratoryErrorHandler = laboratoryErrorHandler;
         this.maxConductionTimeMillis = maxConductionTimeMillis;
         this.metricsReporter = metricsReporter;
@@ -44,8 +48,19 @@ public class TrackableLaboratory implements Laboratory {
         this.petriTopology = petriTopology;
     }
 
+    public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
+                               ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter,
+                               UserRequestPetriClient petriClient, PetriTopology petriTopology) {
+        this(experiments, testGroupAssignmentTracker, userInfoStorage, new DefaultConductionContextRetriever(), laboratoryErrorHandler, maxConductionTimeMillis, metricsReporter, petriClient, petriTopology);
+
+    }
+
     private UserInfo userInfo() {
         return userInfoStorage.read();
+    }
+
+    private ConductionContext conductionContext(ConductionContext explicitlyProvidedContext) {
+        return petriConductionContextRetriever.read(explicitlyProvidedContext);
     }
 
     private void reportExperimentException(String experimentKey, Throwable cause) {
@@ -64,7 +79,7 @@ public class TrackableLaboratory implements Laboratory {
 
     @Override
     public <T> T conductExperiment(Class<? extends SpecDefinition> experimentKey, T fallbackValue, TestResultConverter<T> resultConverter) {
-        return conductExperiment(experimentKey.getName(), fallbackValue, resultConverter, ConductionContextBuilder.newInstance());
+        return conductExperiment(experimentKey.getName(), fallbackValue, resultConverter);
     }
 
     @Override
@@ -74,18 +89,19 @@ public class TrackableLaboratory implements Laboratory {
 
     @Override
     public <T> T conductExperiment(String key, T fallbackValue, TestResultConverter<T> resultConverter) {
-        return conductExperiment(key, fallbackValue, resultConverter, ConductionContextBuilder.newInstance());
+        return conductExperiment(key, fallbackValue, resultConverter, null);
     }
 
     @Override
     public <T> T conductExperiment(String key, T fallbackValue, TestResultConverter<T> resultConverter, ConductionContext context) {
         try {
+            ConductionContext mergedContext = conductionContext(context);
             removeExpiredExperiments();
             List<Experiment> experimentsByKey = experiments.findNonExpiredByKey(key);
-            ExistingTestGroups existingTestGroups = getExistingTestGroups(experimentsByKey, context);
+            ExistingTestGroups existingTestGroups = getExistingTestGroups(experimentsByKey, mergedContext);
 
             for (Experiment experiment : experimentsByKey) {
-                T result = calcExperimentValue(resultConverter, experiment, context, existingTestGroups.get(experiment.getId()));
+                T result = calcExperimentValue(resultConverter, experiment, mergedContext, existingTestGroups.get(experiment.getId()));
                 if (result != null) {
                     return result;
                 }
@@ -101,14 +117,15 @@ public class TrackableLaboratory implements Laboratory {
 
     @Override
     public Map<String, String> conductAllInScope(String scope) {
-        return conductAllInScope(scope, ConductionContextBuilder.newInstance());
+        return conductAllInScope(scope, null);
     }
 
     @Override
     public Map<String, String> conductAllInScope(String scope, ConductionContext context) {
         try {
+            ConductionContext mergedContext = conductionContext(context);
             removeExpiredExperiments();
-            return conductAll(experiments.findNonExpiredByScope(scope), context);
+            return conductAll(experiments.findNonExpiredByScope(scope), mergedContext);
         } catch (Throwable e) {
             laboratoryErrorHandler.handle("Unexpected exception while conducting all experiments for scope - " + scope, e, ExceptionType.ErrorConductingExperiment);
             return new HashMap<>();
@@ -205,6 +222,8 @@ public class TrackableLaboratory implements Laboratory {
         Option<UUID> uidToPersistBy = context.conductionStrategyOrFallback(userInfo()).persistentKernel();
         UUID uid = uidToPersistBy.isDefined() ? uidToPersistBy.get() : null;
 
+        updateUserInfoWithRelevantLogsFromCookie(uid);
+
         Map<String, String> testGroupsFromCookies = userInfo().getWinningExperiments(uid);
 
         Map<String, String>  testGroupsFromServer = ImmutableMap.of();
@@ -220,6 +239,12 @@ public class TrackableLaboratory implements Laboratory {
 
         }
         return new ExistingTestGroups(testGroupsFromCookies, testGroupsFromServer);
+    }
+
+    private void updateUserInfoWithRelevantLogsFromCookie(UUID uid) {
+        UserInfo updateUserInfoWithRelevantLogsFromCookie = userInfo().addRelevantUserLogToContext(uid);
+        if (!updateUserInfoWithRelevantLogsFromCookie.equals(userInfo()))
+                userInfoStorage.write(updateUserInfoWithRelevantLogsFromCookie);
     }
 
     private boolean serverStateIsRelevant(List<Experiment> experiments, Map<String, String> testGroupsFromCookies, UUID uid) {
@@ -239,7 +264,7 @@ public class TrackableLaboratory implements Laboratory {
         Set<String> suspectKeys = new HashSet<>();
 
         for (Experiment experiment : experiments) {
-            if (experiment.shouldBePersisted()) {
+            if (experiment.shouldBePersisted() && experiment.isOnlyForLoggedInUsers()) {
                 String key = experiment.getKey();
                 if (testGroupsFromCookies.containsKey(valueOf(experiment.getId())))
                     existingKeys.add(key);

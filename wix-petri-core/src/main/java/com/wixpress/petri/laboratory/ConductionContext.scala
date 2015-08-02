@@ -12,9 +12,27 @@ import com.wixpress.petri.experiments.domain.AdditionalEligibilityCriteria
 
 trait ConductionContext{
 
-  def conductionStrategyOrFallback(fallback: ConductionStrategy): ConductionStrategy
   def additionalEligibilityCriteria(): AdditionalEligibilityCriteria
   def biAdditions(): BIAdditions
+  def customConductionStrategy() : Option[ConductionStrategy]
+
+  def conductionStrategyOrFallback(fallback: ConductionStrategy): ConductionStrategy
+}
+
+object ConductionContext {
+
+  def mergeSecondWins(first: ConductionContext, second: ConductionContext) = {
+    ConductionContextBuilder(
+      biAdditions = BIAdditions.merge(first.biAdditions, second.biAdditions),
+
+      additionalEligibilityCriteria = AdditionalEligibilityCriteria.merge(first.additionalEligibilityCriteria, second.additionalEligibilityCriteria),
+
+      customConductionStrategy = second.customConductionStrategy match {
+        case Some(cs) => second.customConductionStrategy
+        case None => first.customConductionStrategy
+      }
+    )
+  }
 }
 
 object ConductionContextBuilder {
