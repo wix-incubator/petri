@@ -93,6 +93,7 @@ public class BILoggingTestGroupAssignmentTrackerTest {
                 "date",
                 "cuid",
                 "uuid",
+                "logged_session_uuid",
                 "label_id",
                 "ip",
                 "url",
@@ -163,10 +164,12 @@ public class BILoggingTestGroupAssignmentTrackerTest {
 
         biLogger.newAssignment(userInfo, testGroupId, experiment);
 
+        Object uid = userInfo.getUserId().toString();
         assertThat(biReportLine(), allOf(
                 hasEntry("date", (Object) theTime.toString(ISODateTimeFormat.dateTime())),
                 hasEntry("cuid", (Object) userInfo.clientId.toString()),
-                hasEntry("uuid", (Object) userInfo.getUserId().toString()),
+                hasEntry("uuid", uid),
+                hasEntry("logged_session_uuid", uid),
                 hasEntry("label_id", (Object) (experiment.getId() * 10000 + testGroupId)),
                 hasEntry("ip", (Object) userInfo.ip),
                 hasEntry("url", (Object) userInfo.url),

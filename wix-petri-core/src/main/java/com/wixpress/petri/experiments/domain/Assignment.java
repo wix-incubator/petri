@@ -11,6 +11,7 @@ public class Assignment {
     private final int experimentId;
     private final String experimentScope;
     private final boolean isOnlyForLoggedInUsers;
+    private final boolean isPersistent;
     private final long executionTime;
 
     //TODO - extract the field copying of the experiment to a builder
@@ -23,6 +24,7 @@ public class Assignment {
         this.isToggle = experiment.isToggle();
         this.experimentId = experiment.getId();
         this.experimentScope = experiment.getScope();
+        this.isPersistent = experiment.isPersistent();
         this.isOnlyForLoggedInUsers = experiment.isOnlyForLoggedInUsers();
     }
 
@@ -62,9 +64,8 @@ public class Assignment {
 
             testGroupAssignmentTracker.newAssignment(this);
 
-            String logToAppend = ExperimentsLog.empty().appendExperiment(experimentId, testGroup.getId()).serialized();
-
-            if (conductionStrategy.shouldPersist()) {
+            if (conductionStrategy.shouldPersist() && isPersistent) {
+                String logToAppend = ExperimentsLog.empty().appendExperiment(experimentId, testGroup.getId()).serialized();
                 if (isOnlyForLoggedInUsers) {
                     userInfoStorage.write(userInfo.appendUserExperiments(logToAppend, conductionStrategy.persistentKernel()));
                 } else

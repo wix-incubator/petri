@@ -6,16 +6,13 @@ import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.*;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.mail.internet.InternetAddress;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
@@ -63,17 +60,17 @@ class PetriServerFactory {
         return new ConductionKeeper(
                 new JodaTimeClock(), metricsReportsDao, experimentsDao,
                 new ScheduledThreadPoolExecutor(1), conductionLimitIntervalInMillis,
-                notifier, defaultMailRecipients());
+                notifier);
     }
 
     private static class NoopPetriNotifier implements PetriNotifier {
         @Override
-        public void notify(String title, String message, String user) {
-            // do nothing...
+        public void notify(String title, String message, String... users) {
+
         }
 
         @Override
-        public void notify(String title, String message, MailRecipients recipients, InternetAddress from) {
+        public void notify(String title, String message, InternetAddress from, Boolean notifyCaptain, List<String> recipients) {
 
         }
     }

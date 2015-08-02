@@ -27,7 +27,7 @@ case class ExperimentSnapshot(
                                @BooleanBeanProperty featureToggle: Boolean,
                                originalId: Int,
                                linkedId: Int,
-                               @Deprecated @BooleanBeanProperty persistent: Boolean,
+                               @BooleanBeanProperty persistent: Boolean,
                                filters: java.util.List[Filter],
                                @BooleanBeanProperty onlyForLoggedInUsers: Boolean,
                                comment: String,

@@ -733,6 +733,18 @@ public class TrackableLaboratoryTest {
         errorReportWasSent(matcher);
     }
 
+    @Test
+    public void experimentIsNotReadFromServerForNotPersistedAndRegisteredUsers() throws Exception {
+        final Experiment registeredUsersExperiment = experimentForRegisteredUserWithWinningFirstGroup.but(
+                with(persistent, false)).make();
+        addExperimentToCache(registeredUsersExperiment);
+
+        userInfoStorage.write(registeredUserInfo);
+
+        lab.conductExperiment(registeredKey, "", new StringConverter());
+    }
+
+
 
     @Test
     public void conductByScopeReadsServerStateForRegisteredUsers() throws Exception {
@@ -769,6 +781,18 @@ public class TrackableLaboratoryTest {
         userInfoStorage.write(AnonymousUserInfo.but(with(anonymousExperimentsLog, "1#2")).make());
 
         assertThat(lab.conductExperiment(TheKey, "fallback"), is(WINNING_VALUE));
+    }
+
+    @Test
+    public void appendsBILogEntryButDoesNotPersistWhenExperimentIsNonPersistent() throws Exception {
+        addExperimentToCache(experimentWithWinningFirstGroup.but(with(persistent, false)).make());
+        userInfoStorage.write(aRegisteredUserInfo.make());
+        lab.conductExperiment(TheKey, FALLBACK_VALUE);
+
+        assertBiLogHasItemThat(allOf(
+                containsTheUsersId()));
+        assertAnonymousLogIsEmpty();
+        assertUserLogIsEmpty();
     }
 
     @Test

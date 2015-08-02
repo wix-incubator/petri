@@ -49,7 +49,6 @@ class ServerMetricsReporter(petriClient: PetriClient, scheduler: ScheduledExecut
   }
 
   def stopScheduler() {
-    reportToServer()
     scheduler.shutdown()
   }
 

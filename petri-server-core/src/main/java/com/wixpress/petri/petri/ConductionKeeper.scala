@@ -5,14 +5,11 @@ import javax.mail.internet.InternetAddress
 import com.wixpress.petri.experiments.domain.{Experiment, Trigger}
 import scala.collection.JavaConversions._
 
-import scala.util.{Failure, Success, Try}
-
 class ConductionKeeper(clock: Clock, metricsReportsDao: MetricsReportsDao,
                        experimentsDao: ExperimentsDao,
                        scheduler: ScheduledExecutorService,
                        scheduledInterval: Long,
-                       notifier: PetriNotifier,
-                       recipients: MailRecipients){
+                       notifier: PetriNotifier){
 
   val triggerMessage = "Experiment paused due to conduction limit reach"
   val triggerOwner = "Conduction Keeper"
@@ -38,7 +35,7 @@ class ConductionKeeper(clock: Clock, metricsReportsDao: MetricsReportsDao,
       val experiment = pauseCandidate.experiment
       val pausedExperiment = experiment.pause(pauseTrigger)
       updateExperimentInRepo(pausedExperiment)
-      notifier.notify(notifyMessage.title, notifyMessage.message, notifyMessage.mailRecipients, mailFromField)
+      notifier.notify(notifyMessage.title, notifyMessage.message, mailFromField, true, Seq(notifyMessage.updaterEmail))
     }
 
   }
@@ -64,16 +61,10 @@ class ConductionKeeper(clock: Clock, metricsReportsDao: MetricsReportsDao,
     val limit = pausedCandidate.experiment.getExperimentSnapshot.conductLimit
     val message = s"Experiment:$name id:$id conduction:$total limit:$limit" //TODO move outside
     val title = s"Experiment $name id:$id paused due to conduction limit reach"
-    val updater = pausedCandidate.experiment.getUpdater
 
-    val mailRecipients = Try(new InternetAddress(updater)) match {
-      case Success(updaterEmail) => recipients.copy(to = recipients.to + updaterEmail)
-      case Failure(ex) => recipients
-     }
-
-    NotifyMessage(message, title, mailRecipients)
+    NotifyMessage(message, title, pausedCandidate.experiment.getUpdater)
   }
 
 
-  case class NotifyMessage(message: String, title: String, mailRecipients: MailRecipients)
+  case class NotifyMessage(message: String, title: String, updaterEmail: String)
 }

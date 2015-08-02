@@ -14,8 +14,8 @@ import org.joda.time.DateTime
 import org.specs2.matcher.ThrownExpectations
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.Scope
-import scala.collection.JavaConverters._
 import com.wixpress.common.specs2.JMock
+import scala.collection.JavaConversions._
 
 
 class ConductionKeeperTest extends SpecificationWithJUnit with JMock {
@@ -89,15 +89,14 @@ class ConductionKeeperTest extends SpecificationWithJUnit with JMock {
       val limit = experiment.getExperimentSnapshot.conductLimit
       val message = s"Experiment:$name id:$id conduction:$total limit:$limit"
       val title = s"Experiment $name id:$id paused due to conduction limit reach"
-      val mailRecipients: MailRecipients = buildRecipients(experiment.getUpdater)
       checking {
-        oneOf(notifier).notify(title, message, mailRecipients, new InternetAddress("petri@wix.com"))
+        oneOf(notifier).notify(title, message, new InternetAddress("petri@wix.com"),true, Seq(experiment.getUpdater) )
       }
     }
 
-    def assumingExperimentRepoContains(returnList: List[Experiment]) = {
+    def assumingExperimentRepoContains(returnList: java.util.List[Experiment]) = {
       checking {
-        oneOf(experimentsDao).fetch() willReturn returnList.asJava
+        oneOf(experimentsDao).fetch() willReturn returnList
       }
     }
 
@@ -129,7 +128,7 @@ class ConductionKeeperTest extends SpecificationWithJUnit with JMock {
     val recipients: MailRecipients = new MailRecipients(Set(new InternetAddress("r1@wix.com")), Set(new InternetAddress("r2@wix.com")))
     val experimentsDao: OriginalIDAwarePetriDao[Experiment, ExperimentSnapshot] = mock[ExperimentsDao]
     var scheduler: DeterministicScheduler = new DeterministicScheduler()
-    val conductionKeeper = new ConductionKeeper(clock, metricsReportsDao, experimentsDao, scheduler, schedulerInterval, notifier, recipients)
+    val conductionKeeper = new ConductionKeeper(clock, metricsReportsDao, experimentsDao, scheduler, schedulerInterval, notifier)
 
     val someCreator = "some1@wix.com"
     val someUpdater = "some2@wix.com"

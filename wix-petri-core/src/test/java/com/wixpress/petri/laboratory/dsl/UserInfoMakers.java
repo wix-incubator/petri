@@ -25,6 +25,7 @@ public class UserInfoMakers {
 
     public static final Property<UserInfo, String> experimentsLog = newProperty();
     public static final Property<UserInfo, HashMap<UUID, String>> otherUserExperimentsLog = newProperty();
+    public static final Property<UserInfo, HashMap<UUID, String>> potentialOtherUserExperimentsLogFromCookies = newProperty();
     public static final Property<UserInfo, UUID> userId = newProperty();
     public static final Property<UserInfo, UUID> clientId = newProperty();
     public static final Property<UserInfo, String> ip = newProperty();
@@ -63,6 +64,7 @@ public class UserInfoMakers {
             final Boolean robot = lookup.valueOf(UserInfoMakers.robot, false);
             final String host = lookup.valueOf(UserInfoMakers.host, "");
             final HashMap<UUID, String> otherUserExperimentsLog = lookup.valueOf(UserInfoMakers.otherUserExperimentsLog, new HashMap<UUID, String>());
+            final HashMap<UUID, String> potentialOtherUserExperimentsLogFromCookies = lookup.valueOf(UserInfoMakers.potentialOtherUserExperimentsLogFromCookies, new HashMap<UUID, String>());
 
             return new UserInfo(experimentsLog, userId, clientId,
                     ip, url, userAgent,
@@ -70,7 +72,7 @@ public class UserInfoMakers {
                     country,
                     dateCreated, email,
                     anonymousExperimentsLog, recurringUser,
-                    experimentOverrides, robot, host, otherUserExperimentsLog);
+                    experimentOverrides, robot, host, otherUserExperimentsLog, potentialOtherUserExperimentsLogFromCookies);
         }
     };
 
