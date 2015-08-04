@@ -18,7 +18,7 @@
 
         <dependency>
             <groupId>com.wixpress.common</groupId>
-            <artifactId>petri-servlet-api-integration</artifactId>
+            <artifactId>laboratory-servlet-api-integration</artifactId>
             <version>1.19.0-SNAPSHOT</version>
         </dependency>
 

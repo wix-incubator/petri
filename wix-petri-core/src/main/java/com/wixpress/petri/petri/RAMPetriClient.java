@@ -82,7 +82,7 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
     @Override
     public synchronized List<Experiment> fetchActiveExperiments() {
         if (blowUp) {
-            throw new NullPointerException();
+            throw new FetchActiveExperimentsException("");
         }
         return newArrayList(filter(fetchAllExperiments(), isActiveNow()));
     }
@@ -240,7 +240,6 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
 
     @Override
     public List<ConductExperimentSummary> getExperimentReport(int experimentId) {
-
         ConductExperimentReport report = getConductExperimentReport(experimentId);
         return ImmutableList.of(new ConductExperimentSummary(report.serverName(), report.experimentId(), report.experimentValue(),
                 report.count(), report.count(), new DateTime()));
@@ -263,5 +262,10 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
         specs.put(expectedSpec.getKey(), expectedSpec);
     }
 
+    class FetchActiveExperimentsException extends RuntimeException{
+        public FetchActiveExperimentsException(String message) {
+            super(message);
+        }
+    }
 
 }
