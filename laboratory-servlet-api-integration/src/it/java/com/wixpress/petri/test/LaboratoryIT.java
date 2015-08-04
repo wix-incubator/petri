@@ -1,7 +1,10 @@
 package com.wixpress.petri.test;
 
+import com.wixpress.petri.NonSerializableServerException;
+import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
+import com.wixpress.petri.fakeserver.FakePetriServer;
 import com.wixpress.petri.util.ConductExperimentSummaryMatcher;
 import org.junit.After;
 import org.junit.Before;
@@ -9,6 +12,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.util.UUID;
 
@@ -50,9 +54,16 @@ public class LaboratoryIT {
     }
 
     private void assertConductExperimentReported(Experiment experiment) throws UnknownHostException, InterruptedException {
-        sleep(20);
+        sleep(10000);
+        System.out.println(petri.getConductExperimentReport(experiment.getId()));
         assertThat(petri.getConductExperimentReport(experiment.getId()),
                 contains(ConductExperimentSummaryMatcher.hasSummary(InetAddress.getLocalHost().getHostName(), experiment.getId(), "a", 1l)));
+    }
+
+    @Test(expected = NonSerializableServerException.class)
+    public void throwsSpecialExceptionIfServerExceptionIsNotSerializable() throws MalformedURLException {
+        petri.failNextReuqest();
+        PetriRPCClient.makeFor("http://localhost:" + PETRI_PORT + "/petri").fetchActiveExperiments();
     }
 
     @Test

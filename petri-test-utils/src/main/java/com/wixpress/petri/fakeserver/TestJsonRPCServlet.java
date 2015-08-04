@@ -1,8 +1,7 @@
-package com.wixpress.petri;
+package com.wixpress.petri.fakeserver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.googlecode.jsonrpc4j.JsonRpcServer;
-
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,13 +16,13 @@ import java.io.IOException;
  * Time: 3:46 PM
  * To change this template use File | Settings | File Templates.
  */
-public class JsonRPCServlet extends HttpServlet {
+public class TestJsonRPCServlet extends HttpServlet {
 
     private final JsonRpcServer rpcServer;
 
-    public JsonRPCServlet(Object rpc, final ObjectMapper objectMapper, Class<?> remoteInterface) {
+    public TestJsonRPCServlet(Object rpc, final ObjectMapper objectMapper, Class<?> remoteInterface) {
         rpcServer = new JsonRpcServer(objectMapper,rpc, remoteInterface);
-        rpcServer.setErrorResolver(new ExceptionSerializingErrorResolver(objectMapper));
+        //rpcServer.setErrorResolver(new TestExceptionSerializingErrorResolver(objectMapper));
     }
 
     @Override

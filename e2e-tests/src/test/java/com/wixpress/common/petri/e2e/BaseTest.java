@@ -1,6 +1,5 @@
 package com.wixpress.common.petri.e2e;
 
-import com.wixpress.petri.Main;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
@@ -14,6 +13,7 @@ import util.DBDriver;
 import java.net.MalformedURLException;
 
 import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
+import com.wixpress.petri.Main;
 import static java.util.Arrays.asList;
 
 /**

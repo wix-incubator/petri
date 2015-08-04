@@ -4,7 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
 import com.wixpress.petri.petri.*;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import util.DBDriver;
 
 import java.net.MalformedURLException;
@@ -80,13 +83,6 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     @Test(expected = Exception.class)
     public void respondsWithErrorForIrrelevantURLs() throws MalformedURLException {
         PetriRPCClient.makeFullClientFor("http://localhost:9011/SOME_OTHER_SERVICE").fetchSpecs();
-    }
-
-    @Test(expected = NonSerializableServerException.class)
-    public void throwsSpecialExceptionIfServerExceptionIsNotSerializable() {
-        dbDriver.dropTables();
-        // should cause an exception on the server that is not serializable
-        petriClient.fetchActiveExperiments();
     }
 
     @Test

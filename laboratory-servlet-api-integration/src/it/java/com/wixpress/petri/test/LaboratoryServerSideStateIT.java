@@ -1,5 +1,6 @@
 package com.wixpress.petri.test;
 
+import com.wixpress.petri.fakeserver.FakePetriServer;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
 import org.junit.After;
@@ -11,9 +12,7 @@ import java.util.UUID;
 
 import static com.wixpress.petri.test.SampleAppRunner.SampleAppRunnerWithServerSideStateOff;
 import static com.wixpress.petri.test.SampleAppRunner.SampleAppRunnerWithServerSideStateOn;
-import static com.wixpress.petri.test.TestBuilders.abSpecBuilder;
-import static com.wixpress.petri.test.TestBuilders.experimentOnRegisteredWithFirstWinning;
-import static com.wixpress.petri.test.TestBuilders.updateExperimentState;
+import static com.wixpress.petri.test.TestBuilders.*;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 

@@ -1,11 +1,11 @@
-package com.wixpress.petri.test;
+package com.wixpress.petri.fakeserver;
 
-import com.wixpress.petri.PetriRPCClient;
-import com.wixpress.petri.JsonRPCServer;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentBuilder;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
-import com.wixpress.petri.petri.*;
+import com.wixpress.petri.petri.ConductExperimentSummary;
+import com.wixpress.petri.petri.RAMPetriClient;
+import com.wixpress.petri.petri.SpecDefinition;
 
 import java.util.List;
 
@@ -20,20 +20,16 @@ import static java.util.Arrays.asList;
 * To change this template use File | Settings | File Templates.
 */
 public class FakePetriServer {
-    private final JsonRPCServer petriServer;
-    private final int port;
-    private FullPetriClient petriClient;
+    private final TestJsonRPCServer petriServer;
+    private RAMPetriClient petriClient;
 
     public FakePetriServer(int port){
-        petriServer = new JsonRPCServer(new RAMPetriClient(), makeObjectMapper(), port);
-        this.port = port;
+        petriClient = new RAMPetriClient();
+        petriServer = new TestJsonRPCServer(petriClient, makeObjectMapper(), port);
     }
 
     public void start() throws Exception {
         petriServer.start();
-        petriClient = PetriRPCClient.makeFullClientFor("http://localhost:" +
-                port +
-                "/petri");
     }
 
     public void stop() throws Exception {
@@ -55,4 +51,11 @@ public class FakePetriServer {
     public List<ConductExperimentSummary> getConductExperimentReport(int experimentId) {
         return petriClient.getExperimentReport(experimentId);
     }
+
+    public void failNextReuqest(){
+        petriClient.setBlowUp(true);
+    }
+
+
+
 }

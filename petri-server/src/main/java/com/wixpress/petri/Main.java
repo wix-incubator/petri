@@ -1,8 +1,6 @@
 package com.wixpress.petri;
 
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
-import com.wixpress.petri.petri.ConductionKeeper;
-import com.wixpress.petri.petri.JodaTimeClock;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import static com.wixpress.petri.DBConfig.makeDBConfig;
