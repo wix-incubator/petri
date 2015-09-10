@@ -1,6 +1,7 @@
 package com.wixpress.petri;
 
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 import static com.wixpress.petri.DBConfig.makeDBConfig;
@@ -15,38 +16,69 @@ import static com.wixpress.petri.DBConfig.makeDBConfig;
 public class Main {
     public static void main(String... args) {
         try {
-            PropertiesConfiguration config = new PropertiesConfiguration("petri.properties");
+            createPetriServer().start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    private static PropertiesConfiguration getPropertiesConfiguration() throws ConfigurationException {
+        return new PropertiesConfiguration("petri.properties");
+    }
+
+    private PropertiesConfiguration config;
+
+    public static Main createPetriServer() throws ConfigurationException {
+        return new Main(getPropertiesConfiguration());
+    }
+
+
+    public Main(PropertiesConfiguration config) {
+        this.config = config;
+    }
+
+    private JsonRPCServer rpcServer;
+
+    public void start() {
+        try {
             FilterTypeIdResolver.useDynamicFilterClassLoading();
 
-            PetriServerFactory petriServerFactory = new PetriServerFactory(port(config), dbConfig(config));
+            PetriServerFactory petriServerFactory = new PetriServerFactory(port(), dbConfig());
 
-            JsonRPCServer rpcServer = petriServerFactory.makePetriServer();
+            rpcServer = petriServerFactory.makePetriServer();
             rpcServer.start();
 
-            petriServerFactory.makeConductionKeeper(conductionLimitIntervalInMillis(config));
+            petriServerFactory.makeConductionKeeper(conductionLimitIntervalInMillis());
 
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 
-    private static int port(PropertiesConfiguration config) {
+    public void stop() throws Exception {
+        rpcServer.stop();
+    }
+
+
+
+    private int port() {
         return config.getInt("server.port");
     }
 
-    private static int conductionLimitIntervalInMillis(PropertiesConfiguration config){
+    private int conductionLimitIntervalInMillis() {
         return config.getInt("server.conductionLimitIntervalInMillis", 150000);
     }
 
 
-    private static DBConfig dbConfig(PropertiesConfiguration config) {
-        final String username =  config.getString("db.username");
+    private DBConfig dbConfig() {
+        final String username = config.getString("db.username");
         final String password = config.getString("db.password");
-        final String url = config.getString("db.url");
+        final String url = getDatabaseUrl();
         return makeDBConfig(username, password, url);
     }
 
-
+    public String getDatabaseUrl() {
+        return config.getString("db.url");
+    }
 
 }
