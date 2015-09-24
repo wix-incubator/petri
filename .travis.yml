@@ -2,6 +2,7 @@ language: java
 before_install:
     - export TZ=UTC
 script: mvn clean verify
+sudo: false
 notifications:
   email:
     - talyag@wix.com
