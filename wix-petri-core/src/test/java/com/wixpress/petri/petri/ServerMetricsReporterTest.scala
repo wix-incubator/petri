@@ -86,9 +86,9 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
       context.assertIsSatisfied()
     }
 
-    "should run 100 concurrent writes properly " in new Context {
+    "should run 20 concurrent writes properly " in new Context {
       import scala.concurrent.ExecutionContext.Implicits.global
-      val futures = (1 to 100).map( x =>
+      val futures = (1 to 20).map( x =>
         Future( reporter.reportConductExperiment(1, (x % 2 == 0).toString))
       )
 
@@ -97,8 +97,8 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
       context.checking(
         new Expectations() {
           exactly(1).of (petriClient).reportConductExperiment(Seq(
-            new ConductExperimentReport(HostResolver.getServerName , 1, "true", 50l),
-            new ConductExperimentReport(HostResolver.getServerName , 1, "false", 50l)
+            new ConductExperimentReport(HostResolver.getServerName , 1, "true", 10l),
+            new ConductExperimentReport(HostResolver.getServerName , 1, "false", 10l)
           ))
         }
       )
