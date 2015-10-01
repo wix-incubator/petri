@@ -92,7 +92,7 @@ class ServerMetricsReporterTest extends SpecificationWithJUnit  {
         Future( reporter.reportConductExperiment(1, (x % 2 == 0).toString))
       )
 
-      Await.result(Future.sequence(futures), 20.0.milliseconds)
+      Await.result(Future.sequence(futures), 1000.0.milliseconds)
 
       context.checking(
         new Expectations() {
