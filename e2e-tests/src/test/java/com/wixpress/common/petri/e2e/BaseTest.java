@@ -1,6 +1,7 @@
 package com.wixpress.common.petri.e2e;
 
 import com.wixpress.petri.PetriRPCClient;
+import com.wixpress.petri.petri.DBDriver;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.test.SampleAppRunner;
@@ -8,7 +9,6 @@ import com.wixpress.petri.test.TestBuilders;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import util.DBDriver;
 
 import java.net.MalformedURLException;
 

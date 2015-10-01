@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.wixpress.petri.petri.SpecDefinition;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.util.List;
 
@@ -57,8 +58,20 @@ public class ExperimentSpec {
         return experimentSpecSnapshot.isPersistent();
     }
 
+    public boolean hasSameKey(String otherKey) {
+        return getKey().equalsIgnoreCase(otherKey);
+    }
+
     public ExperimentSpec setCreationDate(DateTime creationDate) {
-        return new ExperimentSpec(experimentSpecSnapshot.getKey(), experimentSpecSnapshot.getOwner(), experimentSpecSnapshot.getTestGroups(), creationDate, experimentSpecSnapshot.getScopes(), this.updateDate, experimentSpecSnapshot.isPersistent());
+        return new ExperimentSpec(
+                experimentSpecSnapshot.getKey(),
+                experimentSpecSnapshot.getOwner(),
+                experimentSpecSnapshot.getTestGroups(),
+                creationDate.withZone(DateTimeZone.UTC),
+                experimentSpecSnapshot.getScopes(),
+                this.updateDate,
+                experimentSpecSnapshot.isPersistent()
+        );
     }
 
     @Override

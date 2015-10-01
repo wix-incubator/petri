@@ -26,7 +26,7 @@ class ConductionKeeper(clock: Clock, metricsReportsDao: MetricsReportsDao,
 
   def pauseExperimentIfConductionLimitReached(): Unit = {
     val lastReportedExperimentConduction = metricsReportsDao.getReportedExperimentsSince(scheduledInterval)
-    val allExperiments = experimentsDao.fetch().toList
+    val allExperiments = experimentsDao.fetch()
 
     val experimentsToPause = getPauseCandidates(lastReportedExperimentConduction, allExperiments)
 
@@ -45,7 +45,7 @@ class ConductionKeeper(clock: Clock, metricsReportsDao: MetricsReportsDao,
   }
 
   private def getPauseCandidates(lastReportedExperimentsConduction: List[TotalExperimentConduction],
-                                                    allExperiments: List[Experiment]) :List[PauseCandidate] =  {
+                                                    allExperiments: Seq[Experiment]) :List[PauseCandidate] =  {
 
     lastReportedExperimentsConduction
       .map(x=> PauseCandidate(x, allExperiments.find(exp => exp.getId == x.experimentId).get))

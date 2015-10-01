@@ -94,7 +94,7 @@ class ConductionKeeperTest extends SpecificationWithJUnit with JMock {
       }
     }
 
-    def assumingExperimentRepoContains(returnList: java.util.List[Experiment]) = {
+    def assumingExperimentRepoContains(returnList: Seq[Experiment]) = {
       checking {
         oneOf(experimentsDao).fetch() willReturn returnList
       }
@@ -126,7 +126,7 @@ class ConductionKeeperTest extends SpecificationWithJUnit with JMock {
     val clock: Clock = mock[Clock]
     val notifier: PetriNotifier = mock[PetriNotifier]
     val recipients: MailRecipients = new MailRecipients(Set(new InternetAddress("r1@wix.com")), Set(new InternetAddress("r2@wix.com")))
-    val experimentsDao: OriginalIDAwarePetriDao[Experiment, ExperimentSnapshot] = mock[ExperimentsDao]
+    val experimentsDao = mock[ExperimentsDao]
     var scheduler: DeterministicScheduler = new DeterministicScheduler()
     val conductionKeeper = new ConductionKeeper(clock, metricsReportsDao, experimentsDao, scheduler, schedulerInterval, notifier)
 
