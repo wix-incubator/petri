@@ -9,6 +9,7 @@ import com.wixpress.petri.laboratory.UserInfo;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.laboratory.dsl.UserInfoMakers;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -35,7 +36,7 @@ import static org.junit.Assert.*;
  */
 public class ExperimentTest {
 
-    private static final DateTime NOW = new DateTime();
+    private static final DateTime NOW = DateTime.now(DateTimeZone.UTC);
     private static final UUID SOME_USER_GUID = UUID.fromString("19fc13d9-5943-4a87-82b1-4acb7e5cb039");
     private static final UUID ANOTHER_USER_GUID = UUID.fromString("19fc13d9-5943-4a87-82b1-4acb7e5cb038");
 
@@ -372,7 +373,7 @@ public class ExperimentTest {
     @Test
     public void terminatesWhenExperimentIsOnRegisteredOnly() {
         Experiment experimentOnRegistered = an(Experiment, with(onlyForLoggedIn, true)).make();
-        DateTime now = new DateTime();
+        DateTime now = DateTime.now(DateTimeZone.UTC);
         Experiment result = experimentOnRegistered.pauseOrTerminateAsOf(now, new ArrayList<Filter>(), new Trigger("should terminate", ""));
         assertThat(result.getEndDate(), is(now));
         assertFalse(result.isPaused());
@@ -392,7 +393,7 @@ public class ExperimentTest {
         Experiment nonPersistentOnAnonymous = an(Experiment,
                 with(onlyForLoggedIn, false),
                 with(persistent, false)).make();
-        DateTime now = new DateTime();
+        DateTime now = DateTime.now(DateTimeZone.UTC);
         Experiment result = nonPersistentOnAnonymous.pauseOrTerminateAsOf(now, new ArrayList<Filter>(), new Trigger("should terminate", ""));
         assertThat(result.getEndDate(), is(now));
         assertFalse(result.isPaused());

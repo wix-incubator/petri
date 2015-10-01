@@ -11,7 +11,6 @@ import org.joda.time.DateTimeZone;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import static com.natpryce.makeiteasy.Property.newProperty;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.anExperiment;
@@ -22,11 +21,6 @@ import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.an
  * @since 8/6/13
  */
 public class ExperimentMakers {
-
-    static {
-        DateTimeZone.setDefault(DateTimeZone.UTC);
-        TimeZone.setDefault(DateTimeZone.UTC.toTimeZone());
-    }
 
     public static final Property<Experiment, String> key = newProperty();
     public static final Property<Experiment, Boolean> fromSpec = newProperty();
@@ -54,9 +48,9 @@ public class ExperimentMakers {
     public static final Property<Experiment, Integer> conductionLimit = newProperty();
 
 
-    public static final DateTime DEFAULT_START_DATE = new DateTime();
+    public static final DateTime DEFAULT_START_DATE = DateTime.now(DateTimeZone.UTC);
     public static final DateTime DEFAULT_END_DATE = DEFAULT_START_DATE.plusYears(1);
-    public static final DateTime DEFAULT_CREATION_DATE = new DateTime();
+    public static final DateTime DEFAULT_CREATION_DATE = DateTime.now(DateTimeZone.UTC);
     public static final Instantiator<Experiment> Experiment = new Instantiator<Experiment>() {
 
         @Override

@@ -199,6 +199,11 @@ public class Experiment {
         return (getEndDate().isEqual(getStartDate())) || getEndDate().isBeforeNow();
     }
 
+    @JsonIgnore
+    public boolean hasSameKey(String otherKey) {
+        return getKey().equalsIgnoreCase(otherKey);
+    }
+
     public boolean containsValue(String value) {
         for (TestGroup testGroup : getGroups()) {
             if (testGroup.getValue().equals(value)) {

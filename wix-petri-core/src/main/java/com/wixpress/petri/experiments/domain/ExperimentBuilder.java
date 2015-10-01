@@ -2,6 +2,7 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 /**
  * @author: talyag
@@ -31,7 +32,7 @@ public class ExperimentBuilder {
     }
 
     public ExperimentBuilder withLastUpdated(DateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
+        this.lastUpdated = lastUpdated.withZone(DateTimeZone.UTC);
         return this;
     }
 

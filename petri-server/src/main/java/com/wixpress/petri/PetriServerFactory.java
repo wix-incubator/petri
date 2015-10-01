@@ -27,7 +27,7 @@ class PetriServerFactory {
     private final int port;
     private final static Long lookBackForReportsDelta = 30000l;
     private MetricsReportsDao metricsReportsDao;
-    private OriginalIDAwarePetriDao<Experiment, ExperimentSnapshot> experimentsDao;
+    private ExperimentsDao experimentsDao;
     private PetriNotifier notifier;
 
     public PetriServerFactory(int port, DBConfig dbConfig) {
@@ -48,7 +48,7 @@ class PetriServerFactory {
         experimentsDao = new JdbcExperimentsDao(jdbcTemplate, experimentMapper);
         Clock clock = new JodaTimeClock();
         PetriMapper specMapper = new SpecMapper(objectMapper,mappingErrorHandler);
-        DeleteEnablingPetriDao<ExperimentSpec, ExperimentSpec> specsDao = new JdbcSpecsDao(jdbcTemplate,specMapper);
+        SpecsDao specsDao = new JdbcSpecsDao(jdbcTemplate,specMapper);
         notifier = new NoopPetriNotifier();
         metricsReportsDao = new JdbcMetricsReportsDao(jdbcTemplate, lookBackForReportsDelta);
         UserStateDao userStateDao = new JdbcUserStateDao(jdbcTemplate);
