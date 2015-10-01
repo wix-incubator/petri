@@ -1,7 +1,5 @@
 package com.wixpress.petri.petri
 
-
-import _root_.util.DBDriver
 import org.joda.time.DateTime
 import org.specs2.matcher.{Matcher, Scope}
 import org.specs2.mutable.SpecificationWithJUnit

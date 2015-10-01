@@ -2,6 +2,7 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,17 +20,17 @@ import static java.lang.String.format;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExperimentSnapshotBuilder {
 
-    private static final DateTime UKNOWN_TIME = new DateTime(0);
+    private static final DateTime UNKNOWN_TIME = new DateTime(0, DateTimeZone.UTC);
 
     private String key = "";
     private boolean isFromSpec = true;
-    private DateTime creationDate = UKNOWN_TIME;
+    private DateTime creationDate = UNKNOWN_TIME;
     private String scope = "";
     private List<TestGroup> groups = new ArrayList<>();
     private String description = "";
     private String name = "";
-    private DateTime startDate = UKNOWN_TIME;
-    private DateTime endDate = UKNOWN_TIME;
+    private DateTime startDate = UNKNOWN_TIME;
+    private DateTime endDate = UNKNOWN_TIME;
     private List<Filter> filters = new ArrayList<>();
     private boolean paused = false;
     private String creator = "";
@@ -99,7 +100,7 @@ public class ExperimentSnapshotBuilder {
     }
 
     public ExperimentSnapshotBuilder withCreationDate(DateTime creationDate) {
-        this.creationDate = creationDate;
+        this.creationDate = creationDate.withZone(DateTimeZone.UTC);
         return this;
     }
 
@@ -124,12 +125,12 @@ public class ExperimentSnapshotBuilder {
     }
 
     public ExperimentSnapshotBuilder withStartDate(DateTime startDate) {
-        this.startDate = startDate;
+        this.startDate = startDate.withZone(DateTimeZone.UTC);
         return this;
     }
 
     public ExperimentSnapshotBuilder withEndDate(DateTime endDate) {
-        this.endDate = endDate;
+        this.endDate = endDate.withZone(DateTimeZone.UTC);
         return this;
     }
 

@@ -2,7 +2,6 @@ package com.wixpress.petri.petri
 
 import java.util.UUID
 
-import _root_.util.DBDriver
 import org.joda.time.DateTime
 import org.specs2.matcher.Scope
 import org.specs2.mutable.SpecificationWithJUnit

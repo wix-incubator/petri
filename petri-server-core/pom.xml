@@ -266,7 +266,7 @@
                         <configuration>
                             <includes>
                                 <include>**/PetriClientContractTest.class</include>
-                                <include>**/DBDriver.class</include>
+                                <include>**/DBDriver*.class</include>
                             </includes>
                         </configuration>
                     </execution>

@@ -108,7 +108,7 @@ public class ExperimentPredicates {
 
         @Override
         public boolean apply(Experiment input) {
-            return input.getKey().equalsIgnoreCase(key);
+            return input.hasSameKey(key);
         }
 
         public static HasKey hasKey(String key) {
@@ -152,7 +152,7 @@ public class ExperimentPredicates {
 
         @Override
         public boolean apply(ExperimentSpec input) {
-            return input.getKey().equalsIgnoreCase(key);
+            return input.hasSameKey(key);
         }
 
         public static SpecHasKey specHasKey(String key) {
