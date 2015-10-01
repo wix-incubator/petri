@@ -8,6 +8,7 @@ import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.jmock.internal.ExpectationBuilder;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,8 +40,8 @@ public class PetriRpcServerTest {
     private final static DateTime currentTime = new DateTime();
 
     private PetriRpcServer petriRpcServer;
-    private OriginalIDAwarePetriDao experimentsDao;
-    private DeleteEnablingPetriDao specsDao;
+    private ExperimentsDao experimentsDao;
+    private SpecsDao specsDao;
     private PetriNotifier mailService;
     private Clock clock;
     private MetricsReportsDao metricsReportsDao;
@@ -74,14 +75,21 @@ public class PetriRpcServerTest {
     private void assumingDaoContainsExperiments(final List<Experiment> result) {
         context.checking(new Expectations() {{
             allowing(experimentsDao).fetch();
-            will(returnValue(result));
+            will(returnValue(scala.collection.JavaConverters.asScalaBufferConverter(result).asScala()));
+        }});
+    }
+
+    private void assumingDaoContainsActiveExperiments(final List<Experiment> result) {
+        context.checking(new Expectations() {{
+            allowing(experimentsDao).fetchBetweenStartEndDates(with(any(DateTime.class)));
+            will(returnValue(scala.collection.JavaConverters.asScalaBufferConverter(result).asScala()));
         }});
     }
 
     private void assumingDaoContainsSpecs(final List<ExperimentSpec> result) {
         context.checking(new Expectations() {{
             allowing(specsDao).fetch();
-            will(returnValue(result));
+            will(returnValue(scala.collection.JavaConverters.asScalaBufferConverter(result).asScala()));
         }});
     }
 
@@ -135,7 +143,7 @@ public class PetriRpcServerTest {
             never(specsDao).update(with(any(ExperimentSpec.class)), with(any(DateTime.class)));
             never(specsDao).add(with(any(ExperimentSpec.class)));
             oneOf(mailService).notify(
-                    with(stringContainsInOrder(asList(theUpdatedSpec.getKey(), NON_TERMINATED_EXPERIMENTS_MSG))),
+                    with(stringContainsInOrder(asList(theUpdatedSpec.getKey(), printNonTerminatedExperimentsMsg()))),
                     with(stringContainsInOrder(asList(theOriginalSpec.toString(), theUpdatedSpec.toString()))),
                     with(arrayContaining(containsString(theUpdatedSpec.getOwner()))));
         }};
@@ -144,7 +152,7 @@ public class PetriRpcServerTest {
     private Expectations specIsUpdatedAndEmailIsSent(final ExperimentSpec theUpdatedSpec, final DateTime updateTime, final String originalOwner) {
         return new Expectations() {{
             oneOf(specsDao).update(with(theUpdatedSpec), with(updateTime));
-            oneOf(mailService).notify(with(String.format(SPEC_OWNER_CHANGED_MSG, theUpdatedSpec.getKey(), theUpdatedSpec.getOwner())),
+            oneOf(mailService).notify(with(printSpecOwnerChangedMsg(theUpdatedSpec.getKey(), theUpdatedSpec.getOwner())),
                     with(any(String.class)),
                     with(arrayContaining(originalOwner)));
         }};
@@ -152,7 +160,7 @@ public class PetriRpcServerTest {
 
     private ExpectationBuilder emailIsSent(final ExperimentSpec failedSpec) {
         return new Expectations() {{
-            oneOf(mailService).notify(with(String.format(SPEC_UPDATE_FAILED_MSG, failedSpec.getKey())),
+            oneOf(mailService).notify(with(printSpecUpdateFailedMsg(failedSpec.getKey())),
                     with(any(String.class)),
                     with(arrayContaining(failedSpec.getOwner())));
         }};
@@ -160,8 +168,8 @@ public class PetriRpcServerTest {
 
     @Before
     public void setUp() throws Exception {
-        experimentsDao = context.mock(OriginalIDAwarePetriDao.class);
-        specsDao = context.mock(DeleteEnablingPetriDao.class);
+        experimentsDao = context.mock(ExperimentsDao.class);
+        specsDao = context.mock(SpecsDao.class);
         clock = context.mock(Clock.class);
         mailService = context.mock(PetriNotifier.class);
         metricsReportsDao = context.mock(MetricsReportsDao.class);
@@ -172,7 +180,7 @@ public class PetriRpcServerTest {
 
     @Test
     public void activeReturnsNoneWhenAllTestsAreExpired() throws Exception {
-        assumingDaoContainsExperiments(asList(expiredExperiment.make()));
+        assumingDaoContainsActiveExperiments(asList(expiredExperiment.make()));
         assumingTimeSourceReturnsNow();
         assertThat(petriRpcServer.fetchActiveExperiments(), is(empty()));
     }
@@ -180,14 +188,21 @@ public class PetriRpcServerTest {
 
     @Test
     public void activeReturnsNoneWhenAllTestsAreFuture() throws Exception {
-        assumingDaoContainsExperiments(asList(futureExperiment.make()));
+        assumingDaoContainsActiveExperiments(asList(futureExperiment.make()));
         assumingTimeSourceReturnsNow();
         assertThat(petriRpcServer.fetchActiveExperiments(), is(empty()));
     }
 
     @Test
     public void activeReturnsActiveExperiments() throws Exception {
-        assumingDaoContainsExperiments(asList(futureExperiment.make(), activeExperiment.make()));
+        assumingDaoContainsActiveExperiments(asList(futureExperiment.make(), activeExperiment.make()));
+        assumingTimeSourceReturnsNow();
+        assertThat(petriRpcServer.fetchActiveExperiments(), is(asList(activeExperiment.make())));
+    }
+
+    @Test
+    public void fetchActiveFiltersIllegalExperiments() {
+        assumingDaoContainsActiveExperiments(asList(activeExperiment.make(), null));
         assumingTimeSourceReturnsNow();
         assertThat(petriRpcServer.fetchActiveExperiments(), is(asList(activeExperiment.make())));
     }
@@ -202,13 +217,6 @@ public class PetriRpcServerTest {
     public void fetchFiltersIllegalExperiments() {
         assumingDaoContainsExperiments(asList(activeExperiment.make(), null));
         assertThat(petriRpcServer.fetchAllExperiments(), is(asList(activeExperiment.make())));
-    }
-
-    @Test
-    public void fetchActiveFiltersIllegalExperiments() {
-        assumingDaoContainsExperiments(asList(activeExperiment.make(), null));
-        assumingTimeSourceReturnsNow();
-        assertThat(petriRpcServer.fetchActiveExperiments(), is(asList(activeExperiment.make())));
     }
 
     @Test
@@ -375,6 +383,8 @@ public class PetriRpcServerTest {
         final UUID userGuid = UUID.randomUUID();
         context.checking(new Expectations() {{
             oneOf(userStateDao).saveUserState(with(userGuid), with(state), with(any(DateTime.class)));
+            oneOf(clock).getCurrentDateTime();
+            will(returnValue(DateTime.now(DateTimeZone.UTC)));
         }});
         petriRpcServer.saveUserState(userGuid, state);
 

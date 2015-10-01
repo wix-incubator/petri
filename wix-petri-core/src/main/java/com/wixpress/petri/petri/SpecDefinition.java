@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import com.wixpress.petri.experiments.domain.ScopeDefinition;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,11 +51,11 @@ public abstract class SpecDefinition {
                                      @JsonProperty(value = "creationDate") DateTime creationDate,
                                      @JsonProperty(value = "updateDate") DateTime updateTime) {
             this.key = key;
-            this.creationDate = creationDate;
+            this.creationDate = creationDate.withZone(DateTimeZone.UTC);
             if (updateTime == null) {
                 this.updateDate = creationDate;
             } else {
-                this.updateDate = updateTime;
+                this.updateDate = updateTime.withZone(DateTimeZone.UTC);
             }
         }
 

@@ -8,7 +8,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import util.DBDriver;
 
 import java.net.MalformedURLException;
 import java.sql.SQLException;

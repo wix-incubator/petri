@@ -37,7 +37,7 @@ public class TimeZoneAwareDateTimeDeserializer extends StdScalarDeserializer<Dat
             {
                 return null;                // [JACKSON-360]
             }
-            return new DateTime(str);       // Take TimeZone portion from str
+            return new DateTime(str, DateTimeZone.UTC);       // Take TimeZone portion from str
         }
         throw ctxt.mappingException(handledType());
     }
