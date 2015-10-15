@@ -34,6 +34,12 @@
         </dependency>
 
         <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.10</version>
+        </dependency>
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet-api.version}</version>
@@ -94,6 +100,7 @@
             <groupId>com.wixpress.common</groupId>
             <artifactId>petri-test-utils</artifactId>
             <version>1.19.0-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
