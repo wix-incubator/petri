@@ -35,6 +35,7 @@
         <module>petri-test-utils</module>
         <module>sample-extended-filters</module>
         <module>e2e-tests</module>
+        <module>runnable-petri-server</module>
     </modules>
 
     <build>
