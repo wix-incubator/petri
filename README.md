@@ -14,7 +14,7 @@ Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of 
 * Conduction values are periodically reported back to the server to enable quick triaging as well as automatic pausing if limit is specified.
 
 ### Getting started
-* [Install Petri server + DB](https://github.com/wix/petri/wiki/Installing-Petri-Server)
+* [Run](https://github.com/wix/petri/wiki/Running-Petri-Server) (or [Install](https://github.com/wix/petri/wiki/Installing-Petri-Server)) Petri Server
 * [Integrate Laboratory (petri client) into your app](https://github.com/wix/petri/wiki/Integrating-Petri-into-your-app)
 
 
