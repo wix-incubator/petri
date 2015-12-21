@@ -17,12 +17,15 @@ import scala.collection.JavaConversions._
 trait MetricsReportsDao {
   def getReport(experimentId: Int): ju.List[ConductExperimentSummary]
 
+  def getExperimentIdsLastConductedAfterGivenDate(lastConductedDate: DateTime): ju.List[java.lang.Integer]
+
   def addReports(conductExperimentReports: ju.List[ConductExperimentReport])
 
   def getReportedExperimentsSince(since: Long): List[TotalExperimentConduction]
 
   val metricsReportsMapper = new MetricsReportsMapper
   val experimentConductionMapper = new ExperimentConductionMapper
+  val experimentIdMapper = new ExperimentIdMapper
 }
 
 class JdbcMetricsReportsDao(jdbcTemplate: JdbcTemplate, fetchReportsDelta: Long) extends MetricsReportsDao {
@@ -30,6 +33,7 @@ class JdbcMetricsReportsDao(jdbcTemplate: JdbcTemplate, fetchReportsDelta: Long)
   private val addReportQuery = "INSERT INTO metricsReport (server_name, experiment_id, experiment_value, total_count, five_minutes_count, last_update_date)  VALUES (?,?,?,?,?,?) "
   private val updateReportQuery = "UPDATE metricsReport SET total_count = ? , five_minutes_count = ? , last_update_date = ? where server_name = ? AND experiment_id = ?  AND experiment_value = ?"
   private val getReportByExperimentID = "SELECT * FROM metricsReport WHERE experiment_id = ? "
+  private val getLatestConductedReportsQuery = "SELECT experiment_id FROM metricsReport WHERE last_update_date > ? GROUP BY experiment_id"
   private val getReportByPrimaryKey = "SELECT * FROM metricsReport WHERE server_name = ? AND experiment_id = ?  AND experiment_value = ?"
   private def getLastUpdatedReports(since: Long) =  s"SELECT experiment_id,SUM(total_count) FROM metricsReport where last_update_date > $since GROUP BY experiment_id"
 
@@ -42,6 +46,8 @@ class JdbcMetricsReportsDao(jdbcTemplate: JdbcTemplate, fetchReportsDelta: Long)
 
     })
   }
+  override def getExperimentIdsLastConductedAfterGivenDate(lastConductedDate: DateTime) : ju.List[java.lang.Integer] =
+    jdbcTemplate.query(getLatestConductedReportsQuery, experimentIdMapper, asLong(lastConductedDate.getMillis)).map{_.asInstanceOf[java.lang.Integer]}
 
   override def getReport(experimentId: Int): ju.List[ConductExperimentSummary] =
      jdbcTemplate.query(getReportByExperimentID, metricsReportsMapper, asInt(experimentId))
@@ -73,4 +79,8 @@ class ExperimentConductionMapper extends RowMapper[TotalExperimentConduction] {
 class MetricsReportsMapper extends RowMapper[ConductExperimentSummary] {
   override def mapRow(rs: ResultSet, rowNum: Int): ConductExperimentSummary = new ConductExperimentSummary(
     rs.getString("server_name"), rs.getInt("experiment_id"), rs.getString("experiment_value"), rs.getLong("five_minutes_count"), rs.getLong("total_count"), new DateTime(rs.getLong("last_update_date")))
+}
+
+class ExperimentIdMapper extends RowMapper[Int] {
+  override def mapRow(rs: ResultSet, rowNum: Int): Int =  rs.getInt("experiment_id")
 }

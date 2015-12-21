@@ -45,7 +45,8 @@ public class BILoggingTestGroupAssignmentTracker implements TestGroupAssignmentT
                 .put("lng", userInfo.language)
                 .put("experimentId", experimentId)
                 .put("testGroupId", testGroupId)
-                .put("productName", experimentScope);
+                .put("productName", experimentScope)
+                .put("gsi", userInfo.globalSessionId);
 
         additions.contributeToBi(BIContributor$.MODULE$.forJackson(node));
 

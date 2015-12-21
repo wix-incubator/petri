@@ -54,10 +54,11 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         }
 
         DateTime userCreationDate = null; //todo
-        String email = null; //todo
+        boolean isCompanyEmployee = false; //todo
+        boolean registeredUserExists = userId != null; // todo
 
         return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, userInfoType, language, country,
-                userCreationDate, email, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host);
+                userCreationDate, isCompanyEmployee, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host, registeredUserExists);
     }
 
     private UUID getUserId() {

@@ -14,6 +14,7 @@ import java.util.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.*;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Multimaps.index;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.anExperiment;
@@ -86,6 +87,7 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
         }
         return newArrayList(filter(fetchAllExperiments(), isActiveNow()));
     }
+
 
     private Function<? super Collection<Experiment>, ? extends Experiment> mostRecent() {
         return new Function<Collection<Experiment>, Experiment>() {
@@ -240,9 +242,29 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
 
     @Override
     public List<ConductExperimentSummary> getExperimentReport(int experimentId) {
+
         ConductExperimentReport report = getConductExperimentReport(experimentId);
         return ImmutableList.of(new ConductExperimentSummary(report.serverName(), report.experimentId(), report.experimentValue(),
                 report.count(), report.count(), new DateTime()));
+    }
+
+    @Override
+    public List<Integer> getLatestExperimentReportsAfterUpdateDate(DateTime lastUpdateDate) {
+        return newArrayList(transform(reports, convertReportToExperimentId()));
+    }
+
+
+
+    private Function<ConductExperimentReport, Integer> convertReportToExperimentId() {
+        return new Function<ConductExperimentReport, Integer>() {
+            @Nullable
+            @Override
+            public Integer apply(@Nullable ConductExperimentReport report) {
+                if (report != null) {
+                    return report.experimentId();
+                } else throw new IllegalArgumentException("report must not be null");
+            }
+        };
     }
 
 

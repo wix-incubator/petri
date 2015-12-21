@@ -42,6 +42,7 @@ public class ExperimentSnapshotBuilder {
     private String updater = "";
     private String comment = "";
     private int conductLimit = 0;
+    private boolean allowedForBots = false;
 
     private ExperimentSnapshotBuilder() {
     }
@@ -71,7 +72,8 @@ public class ExperimentSnapshotBuilder {
                 withFeatureToggle(snapshot.isFeatureToggle()).
                 withPersistent(snapshot.isPersistent()).
                 withOnlyForLoggedInUsers(snapshot.isOnlyForLoggedInUsers()).
-                withConductLimit(snapshot.conductLimit());
+                withConductLimit(snapshot.conductLimit())
+                .withAllowedForBots(snapshot.allowedForBots());
     }
 
     public ExperimentSnapshotBuilder withConductLimit(int conductLimit) {
@@ -159,6 +161,11 @@ public class ExperimentSnapshotBuilder {
         return this;
     }
 
+    public ExperimentSnapshotBuilder withAllowedForBots(boolean allowedForBots) {
+        this.allowedForBots = allowedForBots;
+        return this;
+    }
+
     public ExperimentSnapshotBuilder withOnlyForLoggedInUsers(boolean onlyForLoggedIn) {
         this.onlyForLoggedInUsers = onlyForLoggedIn;
         return this;
@@ -180,7 +187,7 @@ public class ExperimentSnapshotBuilder {
 
     public ExperimentSnapshot build() {
         validate();
-        return new ExperimentSnapshot(key, isFromSpec, creationDate, description, startDate, endDate, assignIdsIfMissing(groups), scope, paused, name, creator, featureToggle, originalId, linkedId, persistent, filters, onlyForLoggedInUsers, comment, updater, conductLimit);
+        return new ExperimentSnapshot(key, isFromSpec, creationDate, description, startDate, endDate, assignIdsIfMissing(groups), scope, paused, name, creator, featureToggle, originalId, linkedId, persistent, filters, onlyForLoggedInUsers, comment, updater, conductLimit, allowedForBots);
     }
 
     private List<TestGroup> assignIdsIfMissing(List<TestGroup> groups) {
@@ -248,6 +255,7 @@ public class ExperimentSnapshotBuilder {
             throw new IllegalArgumentException("test groups chunk must add up to exactly 100");
         }
     }
+
 
 
 }

@@ -41,6 +41,7 @@ public class ExperimentMakers {
     public static final Property<Experiment, Boolean> featureToggle = newProperty();
     public static final Property<Experiment, String> creator = newProperty();
     public static final Property<Experiment, String> name = newProperty();
+    public static final Property<Experiment, Boolean> allowedForBots = newProperty();
     public static final Property<Experiment, Boolean> persistent = newProperty();
     public static final Property<Experiment, Boolean> onlyForLoggedIn = newProperty();
     public static final Property<Experiment, String> comment = newProperty();
@@ -76,6 +77,7 @@ public class ExperimentMakers {
                                     withFeatureToggle(lookup.valueOf(featureToggle, false)).
                                     withCreator(lookup.valueOf(creator, "")).
                                     withPersistent(lookup.valueOf(persistent, true)).
+                                    withAllowedForBots(lookup.valueOf(allowedForBots, false)).
                                     withOnlyForLoggedInUsers(lookup.valueOf(onlyForLoggedIn, false)).
                                     withComment(lookup.valueOf(comment, "")).
                                     withUpdater(lookup.valueOf(updater, "")).
@@ -113,6 +115,7 @@ public class ExperimentMakers {
                                         withFeatureToggle(lookup.valueOf(featureToggle, original.isToggle())).
                                         withCreator(lookup.valueOf(creator, original.getCreator())).
                                         withPersistent(lookup.valueOf(persistent, original.isPersistent())).
+                                        withAllowedForBots(lookup.valueOf(allowedForBots, original.isPersistent())).
                                         withOnlyForLoggedInUsers(lookup.valueOf(onlyForLoggedIn, original.isOnlyForLoggedInUsers())).
                                         withComment(lookup.valueOf(comment, original.getComment())).
                                         withUpdater(lookup.valueOf(updater, original.getUpdater())).

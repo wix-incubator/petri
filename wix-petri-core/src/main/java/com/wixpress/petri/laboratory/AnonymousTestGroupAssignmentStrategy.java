@@ -13,6 +13,6 @@ public class AnonymousTestGroupAssignmentStrategy extends TestGroupAssignmentStr
 
     @Override
     protected int getToss(com.wixpress.petri.experiments.domain.Experiment experiment, String kernel) {
-        return random.nextInt(10000);
+        return random.nextInt(Integer.MAX_VALUE);
     }
 }

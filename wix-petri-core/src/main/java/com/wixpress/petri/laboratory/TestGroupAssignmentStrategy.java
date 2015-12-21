@@ -11,8 +11,9 @@ import com.wixpress.petri.experiments.domain.TestGroup;
 public abstract class TestGroupAssignmentStrategy {
 
     public TestGroup getAssignment(Experiment experiment, String kernel) {
-        int toss = getToss(experiment, kernel);
-        int chunk = (toss % 100);
+        long toss = Math.abs((long)getToss(experiment, kernel));
+        double hashed = 100.0 * toss / Integer.MAX_VALUE;
+        int chunk = (int) hashed;
         return experiment.getTestGroupByChunk(chunk);
     }
 

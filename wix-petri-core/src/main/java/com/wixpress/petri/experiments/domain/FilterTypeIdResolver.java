@@ -35,6 +35,7 @@ public class FilterTypeIdResolver implements TypeIdResolver {
     public FilterTypeIdResolver() {
         registerTypeWithId("geo", GeoFilter.class);
         registerTypeWithId("anonymous", FirstTimeVisitorsOnlyFilter.class);
+        registerTypeWithId("nonRegistered", NonRegisteredUsersFilter.class);
         registerTypeWithId("registered", RegisteredUsersFilter.class);
         registerTypeWithId("newUsers", NewUsersFilter.class);
         registerTypeWithId("wixUsers", WixEmployeesFilter.class);
@@ -43,6 +44,7 @@ public class FilterTypeIdResolver implements TypeIdResolver {
         registerTypeWithId("includeUserIds", IncludeUserIdsFilter.class);
         registerTypeWithId("not", NotFilter.class);
         registerTypeWithId("userAgentRegex", UserAgentRegexFilter.class);
+        registerTypeWithId("unrecognized", UnrecognizedFilter.class);
     }
 
     private void registerTypeWithId(String typeId, Class<? extends Filter> filterClass) {

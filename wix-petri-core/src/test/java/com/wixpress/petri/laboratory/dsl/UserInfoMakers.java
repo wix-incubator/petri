@@ -34,13 +34,15 @@ public class UserInfoMakers {
     public static final Property<UserInfo, String> language = newProperty();
     public static final Property<UserInfo, String> country = newProperty();
     public static final Property<UserInfo, DateTime> dateCreated = newProperty();
-    public static final Property<UserInfo, String> email = newProperty();
+    public static final Property<UserInfo, Boolean> companyEmployee = newProperty();
     public static final Property<UserInfo, String> anonymousExperimentsLog = newProperty();
     public static final Property<UserInfo, Boolean> recurringUser = newProperty();
+    public static final Property<UserInfo, Boolean> registeredUserExists = newProperty();
     public static final Property<UserInfo, Boolean> robot = newProperty();
     public static final Property<UserInfo, Map<String, String>> experimentOverrides = newProperty();
     public static final Property<UserInfo, UserInfoType> userInfoType = newProperty();
     public static final Property<UserInfo, String> host = newProperty();
+    public static final Property<UserInfo, String> globalSessionId = newProperty();
 
     public static final Instantiator<UserInfo> UserInfo = new Instantiator<UserInfo>() {
 
@@ -57,12 +59,14 @@ public class UserInfoMakers {
             final String language = lookup.valueOf(UserInfoMakers.language, "");
             final String country = lookup.valueOf(UserInfoMakers.country, "");
             final DateTime dateCreated = lookup.valueOf(UserInfoMakers.dateCreated, new DateTime());
-            final String email = lookup.valueOf(UserInfoMakers.email, "");
+            final Boolean companyEmployee = lookup.valueOf(UserInfoMakers.companyEmployee, false);
             final String anonymousExperimentsLog = lookup.valueOf(UserInfoMakers.anonymousExperimentsLog, "");
             final Boolean recurringUser = lookup.valueOf(UserInfoMakers.recurringUser, true);
+            final Boolean registeredUserExists = lookup.valueOf(UserInfoMakers.registeredUserExists, true);
             final Map<String, String> experimentOverrides = lookup.valueOf(UserInfoMakers.experimentOverrides, new HashMap<String, String>());
             final Boolean robot = lookup.valueOf(UserInfoMakers.robot, false);
             final String host = lookup.valueOf(UserInfoMakers.host, "");
+            final String globalSessionId = lookup.valueOf(UserInfoMakers.globalSessionId, "");
             final HashMap<UUID, String> otherUserExperimentsLog = lookup.valueOf(UserInfoMakers.otherUserExperimentsLog, new HashMap<UUID, String>());
             final HashMap<UUID, String> potentialOtherUserExperimentsLogFromCookies = lookup.valueOf(UserInfoMakers.potentialOtherUserExperimentsLogFromCookies, new HashMap<UUID, String>());
 
@@ -70,9 +74,10 @@ public class UserInfoMakers {
                     ip, url, userAgent,
                     userInfoType, language,
                     country,
-                    dateCreated, email,
+                    dateCreated, companyEmployee,
                     anonymousExperimentsLog, recurringUser,
-                    experimentOverrides, robot, host, otherUserExperimentsLog, potentialOtherUserExperimentsLogFromCookies);
+                    experimentOverrides, robot, host, otherUserExperimentsLog, potentialOtherUserExperimentsLogFromCookies,
+                    registeredUserExists, globalSessionId);
         }
     };
 

@@ -164,7 +164,7 @@ public class TrackableLaboratory implements Laboratory {
     }
 
     private <T> T calcExperimentValue(TestResultConverter<T> resultConverter, Experiment experiment, ConductionContext context, Option<Integer> existingTestGroupID) {
-        if (userInfo().isRobot) {
+        if (userInfo().isRobot && (!experiment.isAllowedForBots() || !experiment.isToggle())  ) {
             return null;
         }
         try {

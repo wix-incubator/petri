@@ -25,6 +25,7 @@ import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.id;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.key;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.anExperimentSpec;
 import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -236,6 +237,18 @@ public abstract class PetriClientContractTest {
         List<ConductExperimentSummary> experimentSummary = fullPetriClient().getExperimentReport(experimentId);
         assertThat(experimentSummary.size(), is(1));
         assertThat(experimentSummary, contains(ConductExperimentSummaryMatcher.hasSummary("localhost", experimentId, "true", 3l)));
+
+    }
+
+
+    @Test
+    public void retrievingLatestExperimentReports() throws InterruptedException {
+
+        final DateTime startDate = new DateTime();
+        ConductExperimentReport report = new ConductExperimentReport("localhost", 1, "true", 3l);
+        petriClient().reportConductExperiment(ImmutableList.of(report));
+
+        assertThat(fullPetriClient().getLatestExperimentReportsAfterUpdateDate(startDate), contains(report.experimentId()));
 
     }
 

@@ -1,18 +1,14 @@
 package com.wixpress.petri.experiments.domain;
 
-/**
- * @author: talyag
- * @since: 11/26/13
- */
-public class WixEmployeesFilter implements Filter {
+public class NonRegisteredUsersFilter implements Filter {
 
 
-    public WixEmployeesFilter() {
+    public NonRegisteredUsersFilter() {
     }
 
     @Override
     public String toString() {
-        return "WixEmployeesFilter";
+        return "NonRegisteredUsersFilter";
     }
 
     @Override
@@ -24,6 +20,7 @@ public class WixEmployeesFilter implements Filter {
 
     @Override
     public boolean isEligible(EligibilityCriteria eligibilityCriteria) {
-        return eligibilityCriteria.isCompanyEmployee();
+        return !eligibilityCriteria.isRegisteredUserExists();
     }
+
 }
