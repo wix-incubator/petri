@@ -40,7 +40,7 @@ public class PetriReportsTest extends BaseTest {
     }
 
     private void waitForReporter() throws InterruptedException {
-        sleep(20);
+        sleep(1000);
     }
 
 
