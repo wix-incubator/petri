@@ -18,7 +18,7 @@ public class EligibilityCriteria {
     private final DateTime experimentStartDate;
 
     private final DateTime userCreationDate;
-    private final String email;
+    private final boolean companyEmployee;
     private final String host;
     private final String country;
     private final boolean isRecurringUser;
@@ -26,6 +26,7 @@ public class EligibilityCriteria {
     private final UUID userId;
     private final String language;
     private final String userAgent;
+    private final boolean registeredUserExists;
 
     public EligibilityCriteria(UserInfo userInfo, AdditionalEligibilityCriteria additionalCriteria, DateTime experimentStartDate) {
         this(userInfo, userInfo, additionalCriteria, experimentStartDate);
@@ -45,8 +46,9 @@ public class EligibilityCriteria {
         this.country = overrideCriterionOrElse(EligibilityCriteriaTypes.CountryCriterion.class, userInfo.country);
 
         this.isRecurringUser = userInfo.isRecurringUser;
+        this.registeredUserExists = userInfo.registeredUserExists;
         this.host = userInfo.host;
-        this.email = userInfo.email;
+        this.companyEmployee = userInfo.companyEmployee;
         this.userAgent = userInfo.userAgent;
     }
 
@@ -90,8 +92,8 @@ public class EligibilityCriteria {
         return host;
     }
 
-    public String getEmail() {
-        return email;
+    public boolean isCompanyEmployee() {
+        return companyEmployee;
     }
 
     public DateTime getUserCreationDate() {
@@ -102,5 +104,7 @@ public class EligibilityCriteria {
         return userAgent;
     }
 
-
+    public boolean isRegisteredUserExists() {
+        return registeredUserExists;
+    }
 }

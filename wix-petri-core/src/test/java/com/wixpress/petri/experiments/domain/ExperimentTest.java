@@ -110,6 +110,20 @@ public class ExperimentTest {
     }
 
     @Test
+    public void canBeSerializedWithUnrecognizedFilter() throws IOException {
+        ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
+        Experiment theExperiment = an(Experiment, with(filters,
+                        asList(new FirstTimeVisitorsOnlyFilter(),
+                                new UnrecognizedFilter())
+                )
+        ).make();
+        String json = objectMapper.writeValueAsString(theExperiment);
+        Experiment deSerialized = objectMapper.readValue(json, new TypeReference<Experiment>() {
+        });
+        assertThat(deSerialized, is(theExperiment));
+    }
+
+    @Test
     public void canBeEligibleForAnonymousUsersOnly() {
         List<Filter> anonFilter = new ArrayList<Filter>();
         anonFilter.add(new FirstTimeVisitorsOnlyFilter());
@@ -231,7 +245,7 @@ public class ExperimentTest {
     public void eligibilityForWixEmployeesOrAnonymous() {
         Experiment experiment = experimentWithFilters(new WixEmployeesFilter(), new FirstTimeVisitorsOnlyFilter());
 
-        UserInfo aWixUserInfo = a(UserInfo, with(email, "a@wix.com")).make();
+        UserInfo aWixUserInfo = a(UserInfo, with(companyEmployee, true)).make();
         userIsEligible(experiment, aWixUserInfo);
 
         userIsEligible(experiment, AnonymousUserInfo.make());
@@ -245,10 +259,10 @@ public class ExperimentTest {
     public void eligibilityForWixEmployeesOnly() {
         Experiment experiment = experimentWithFilters(new WixEmployeesFilter());
 
-        UserInfo aNonWixUserInfo = a(UserInfo, with(email, "a@not-wix.com")).make();
+        UserInfo aNonWixUserInfo = a(UserInfo, with(companyEmployee, false)).make();
         userIsNotEligible(experiment, aNonWixUserInfo);
 
-        UserInfo aWixUserInfo = a(UserInfo, with(email, "a@wix.com")).make();
+        UserInfo aWixUserInfo = a(UserInfo, with(companyEmployee, true)).make();
         userIsEligible(experiment, aWixUserInfo);
     }
 
@@ -258,13 +272,13 @@ public class ExperimentTest {
                 new WixEmployeesFilter(), new NotFilter(new IncludeUserIdsFilter(SOME_USER_GUID))
         );
 
-        UserInfo excludedWixUserInfo = a(UserInfo, with(email, "a@wix.com"), with(userId, SOME_USER_GUID)).make();
+        UserInfo excludedWixUserInfo = a(UserInfo, with(companyEmployee, true), with(userId, SOME_USER_GUID)).make();
         userIsNotEligible(experiment, excludedWixUserInfo);
 
-        UserInfo otherWixUserInfo = a(UserInfo, with(email, "b@wix.com"), with(userId, ANOTHER_USER_GUID)).make();
+        UserInfo otherWixUserInfo = a(UserInfo, with(companyEmployee, true), with(userId, ANOTHER_USER_GUID)).make();
         userIsEligible(experiment, otherWixUserInfo);
 
-        UserInfo otherNonWixUserInfo = a(UserInfo, with(email, "b@non-wix.com"), with(userId, ANOTHER_USER_GUID)).make();
+        UserInfo otherNonWixUserInfo = a(UserInfo, with(companyEmployee, false), with(userId, ANOTHER_USER_GUID)).make();
         userIsNotEligible(experiment, otherNonWixUserInfo);
     }
 
@@ -287,13 +301,13 @@ public class ExperimentTest {
                 new WixEmployeesFilter(), new IncludeUserIdsFilter(SOME_USER_GUID)
         );
 
-        UserInfo aWixUserInfo = a(UserInfo, with(email, "a@wix.com")).make();
+        UserInfo aWixUserInfo = a(UserInfo, with(companyEmployee, true)).make();
         userIsEligible(experiment, aWixUserInfo);
 
-        UserInfo includedNonWixUserInfo = a(UserInfo, with(email, "b@not-wix.com"), with(userId, SOME_USER_GUID)).make();
+        UserInfo includedNonWixUserInfo = a(UserInfo, with(companyEmployee, false), with(userId, SOME_USER_GUID)).make();
         userIsEligible(experiment, includedNonWixUserInfo);
 
-        UserInfo nonIncludedNonWixUserInfo = a(UserInfo, with(email, "b@not-wix.com"), with(userId, ANOTHER_USER_GUID)).make();
+        UserInfo nonIncludedNonWixUserInfo = a(UserInfo, with(companyEmployee, false), with(userId, ANOTHER_USER_GUID)).make();
         userIsNotEligible(experiment, nonIncludedNonWixUserInfo);
     }
 

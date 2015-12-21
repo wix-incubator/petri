@@ -173,7 +173,7 @@ public class TrackableLaboratoryTest {
     }
 
     public void addExperimentToCache(Experiment experiment) {
-        List<Experiment> currentExperiments = new ArrayList<Experiment>(this.cache.read());
+        List<Experiment> currentExperiments = new ArrayList<Experiment>(this.cache.read().experiments());
         currentExperiments.add(experiment);
         this.cache.write(currentExperiments);
     }
@@ -761,8 +761,39 @@ public class TrackableLaboratoryTest {
     }
 
     @Test
-    public void defaultValuesAreReturnedForRobots() throws Exception {
+    public void defaultValuesAreReturnedForRobotsWhenRobotsAreNotAllowedOnSpec() throws Exception {
         addExperimentToCache(experimentWithWinningFirstGroup.but(with(scope, "someScope")).make());
+        userInfoStorage.write(a(UserInfo, with(robot, true)).make());
+
+         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
+
+        Map<String, String> expected = new HashMap();
+        assertThat(lab.conductAllInScope("someScope"), is(expected));
+
+        assertBiLogAndAnonAndUserLogsAreEmpty();
+    }
+
+    @Test
+    public void conductionValueIsReturnedForRobotsWhenRobotsAreAllowedOnSpecAndExperimentIsAFeatureToggle() throws Exception {
+        addExperimentToCache(experimentWithWinningFirstGroup.but(
+                with(scope, "someScope"),
+                with(allowedForBots, true) ,
+                with(featureToggle, true)).make());
+        userInfoStorage.write(a(UserInfo, with(robot, true)).make());
+
+        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(WINNING_VALUE));
+
+        Map<String, String> expected = ImmutableMap.of(TheKey.getName(), WINNING_VALUE);
+        assertThat(lab.conductAllInScope("someScope"), is(expected));
+
+    }
+
+    @Test
+    public void defaultValuesAreReturnedForRobotsWhenRobotsAreAllowedOnSpecAndExperimentIsAnABTest() throws Exception {
+        addExperimentToCache(experimentWithWinningFirstGroup.but(
+                with(scope, "someScope"),
+                with(allowedForBots, true) ,
+                with(featureToggle, false)).make());
         userInfoStorage.write(a(UserInfo, with(robot, true)).make());
 
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));

@@ -145,6 +145,11 @@ public class Experiment {
     }
 
     @JsonIgnore
+    public boolean isAllowedForBots() {
+        return experimentSnapshot.isAllowedForBots();
+    }
+
+    @JsonIgnore
     public boolean isOnlyForLoggedInUsers() {
         return experimentSnapshot.isOnlyForLoggedInUsers();
     }

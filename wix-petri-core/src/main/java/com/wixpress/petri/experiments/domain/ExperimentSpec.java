@@ -19,8 +19,8 @@ public class ExperimentSpec {
     private final DateTime creationDate;
     private final DateTime updateDate;
 
-    public ExperimentSpec(String key, String owner, List<String> testGroups, DateTime creationDate, List<ScopeDefinition> scopes, DateTime updateDate, boolean persistent) {
-        experimentSpecSnapshot = new ExperimentSpecSnapshot(key, owner, testGroups, scopes, persistent);
+    public ExperimentSpec(String key, String owner, List<String> testGroups, DateTime creationDate, List<ScopeDefinition> scopes, DateTime updateDate, boolean persistent, boolean allowedForBots) {
+        experimentSpecSnapshot = new ExperimentSpecSnapshot(key, owner, testGroups, scopes, persistent, allowedForBots);
         this.creationDate = creationDate;
         this.updateDate = updateDate;
     }
@@ -57,6 +57,9 @@ public class ExperimentSpec {
     public boolean isPersistent() {
         return experimentSpecSnapshot.isPersistent();
     }
+    public boolean isAllowedForBots() {
+        return experimentSpecSnapshot.isAllowedForBots();
+    }
 
     public boolean hasSameKey(String otherKey) {
         return getKey().equalsIgnoreCase(otherKey);
@@ -70,7 +73,8 @@ public class ExperimentSpec {
                 creationDate.withZone(DateTimeZone.UTC),
                 experimentSpecSnapshot.getScopes(),
                 this.updateDate,
-                experimentSpecSnapshot.isPersistent()
+                experimentSpecSnapshot.isPersistent(),
+                experimentSpecSnapshot.isAllowedForBots()
         );
     }
 

@@ -6,9 +6,11 @@ import java.util.UUID
 import com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf
 import com.wixpress.petri.experiments.domain.{Experiment, ExperimentSnapshot, ExperimentSpec}
 import com.wixpress.petri.petri.PetriRpcServer._
+import org.joda.time.DateTime
 
 import scala.collection.JavaConversions.seqAsJavaList
 import scala.collection.JavaConverters._
+import scala.util.Properties
 import scala.util.control.NonFatal
 
 /**
@@ -59,16 +61,11 @@ class PetriRpcServer(experimentsDao: ExperimentsDao,
   }
 
   override def addSpecs(specs: util.List[ExperimentSpec]) {
-    val existingSpecs = specsDao.fetch()
-    for (spec <- specs.asScala) {
-      try {
-        addSpec(spec, existingSpecs)
-      } catch {
-        case e: Exception if NonFatal(e) =>
-          notifyOfFailure(spec, e)
-          e.printStackTrace()
-      }
-    }
+    addSpecs(specs, validate = true)
+  }
+
+  override def addSpecNoValidation(spec: ExperimentSpec) = {
+    addSpecs(Seq(spec), validate = false)
   }
 
   override def getHistoryById(id: Int): util.List[Experiment] = {
@@ -97,15 +94,35 @@ class PetriRpcServer(experimentsDao: ExperimentsDao,
     metricsReportsDao.getReport(experimentId)
   }
 
-  private def addSpec(experimentSpec: ExperimentSpec, existingSpecs: Seq[ExperimentSpec]) {
+  override def getLatestExperimentReportsAfterUpdateDate(lastConductedDate: DateTime): util.List[java.lang.Integer] = {
+    metricsReportsDao.getExperimentIdsLastConductedAfterGivenDate(lastConductedDate: DateTime)
+  }
+
+  private def addSpecs(specs: util.List[ExperimentSpec], validate: Boolean) {
+    val existingSpecs = specsDao.fetch()
+    for (spec <- specs.asScala) {
+      try {
+        addSpec(spec, existingSpecs, validate)
+      } catch {
+        case e: Exception if NonFatal(e) =>
+          notifyOfFailure(spec, e)
+          e.printStackTrace()
+      }
+    }
+  }
+
+  private def addSpec(experimentSpec: ExperimentSpec, existingSpecs: Seq[ExperimentSpec], validate: Boolean) {
     if (specSnapshotExists(experimentSpec, existingSpecs)) {
       return
     }
 
     val originalSpecOpt = existingSpecs.find(exp => exp.hasSameKey(experimentSpec.getKey))
-    if (hasUnterminatedExperiments(experimentSpec.getKey)) {
-      notifyOfUpdateFailure(experimentSpec, originalSpecOpt)
-      return
+
+    if (validate) {
+      if (hasUnterminatedExperiments(experimentSpec.getKey)) {
+        notifyOfUpdateFailure(experimentSpec, originalSpecOpt)
+        return
+      }
     }
 
     originalSpecOpt.fold(addNew(experimentSpec))(originalSpec => updateExisting(experimentSpec, originalSpec))
@@ -165,7 +182,12 @@ private[petri] object PetriRpcServer {
 
   def printSpecUpdateFailedMsg(key: String) = s"Failed to update spec [$key]"
 
-  def printNonTerminatedExperimentsMsg = "Cannot update spec when non-terminated experiments exist on it"
+  def printNonTerminatedExperimentsMsg = "Cannot update spec when non-terminated experiments exist on it." +
+    Properties.lineSeparator +
+    "If you actually want the new version you need to: terminate the existing experiment/s on this spec and then rescan your specs (via GA or manual POST request)"
 
-  def printOriginalAndNewSpecs(experimentSpec: ExperimentSpec, originalSpec: Option[ExperimentSpec]) = s"Previous spec - [${originalSpec.orNull}], new spec - [$experimentSpec]"
+  def printOriginalAndNewSpecs(experimentSpec: ExperimentSpec, originalSpec: Option[ExperimentSpec]) =
+    s"Previous spec - [${originalSpec.orNull}]"+
+    Properties.lineSeparator + Properties.lineSeparator +
+    s"New spec      - [$experimentSpec]"
 }

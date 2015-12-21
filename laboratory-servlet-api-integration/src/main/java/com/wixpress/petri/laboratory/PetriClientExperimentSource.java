@@ -1,10 +1,9 @@
 package com.wixpress.petri.laboratory;
 
-import com.wixpress.petri.experiments.domain.Experiment;
+import com.wixpress.petri.ExperimentsAndState;
 import com.wixpress.petri.petri.PetriClient;
 
 import java.net.MalformedURLException;
-import java.util.List;
 
 /**
 * Created with IntelliJ IDEA.
@@ -21,12 +20,8 @@ public class PetriClientExperimentSource implements CachedExperiments.Experiment
     }
 
     @Override
-    public List<Experiment> read() {
-        return petriProxy.fetchActiveExperiments();
+    public ExperimentsAndState read() {
+        return new ExperimentsAndState(petriProxy.fetchActiveExperiments(), true);
     }
 
-    @Override
-    public boolean isUpToDate() {
-        return true;
-    }
 }

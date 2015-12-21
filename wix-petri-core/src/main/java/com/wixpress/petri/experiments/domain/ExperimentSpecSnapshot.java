@@ -8,13 +8,15 @@ public class ExperimentSpecSnapshot {
     private final List<String> testGroups;
     private final List<ScopeDefinition> scopes;
     private final boolean persistent;
+    private final boolean allowedForBots ;
 
-    public ExperimentSpecSnapshot(String key, String owner, List<String> testGroups, List<ScopeDefinition> scopes, boolean persistent) {
+    public ExperimentSpecSnapshot(String key, String owner, List<String> testGroups, List<ScopeDefinition> scopes, boolean persistent, boolean allowedForBots) {
         this.key = key;
         this.owner = owner;
         this.testGroups = testGroups;
         this.scopes = scopes;
         this.persistent = persistent;
+        this.allowedForBots = allowedForBots;
     }
 
     public String getKey() {
@@ -37,6 +39,10 @@ public class ExperimentSpecSnapshot {
         return persistent;
     }
 
+    public boolean isAllowedForBots() {
+        return allowedForBots;
+    }
+
     @Override
     public String toString() {
         return "ExperimentSpecSnapshot{" +
@@ -45,6 +51,7 @@ public class ExperimentSpecSnapshot {
                 ", testGroups=" + testGroups +
                 ", scopes=" + scopes +
                 ", persistent=" + persistent +
+                ", allowedForBots=" + allowedForBots +
                 '}';
     }
 
@@ -55,24 +62,23 @@ public class ExperimentSpecSnapshot {
 
         ExperimentSpecSnapshot that = (ExperimentSpecSnapshot) o;
 
-        if (!key.equals(that.key)) return false;
-        if (!owner.equals(that.owner)) return false;
-        if (!scopes.equals(that.scopes)) return false;
-        if (!testGroups.equals(that.testGroups)) return false;
         if (persistent != that.persistent) return false;
+        if (allowedForBots != that.allowedForBots) return false;
+        if (key != null ? !key.equals(that.key) : that.key != null) return false;
+        if (owner != null ? !owner.equals(that.owner) : that.owner != null) return false;
+        if (testGroups != null ? !testGroups.equals(that.testGroups) : that.testGroups != null) return false;
+        return !(scopes != null ? !scopes.equals(that.scopes) : that.scopes != null);
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = key.hashCode();
-        result = 31 * result + owner.hashCode();
-        result = 31 * result + testGroups.hashCode();
-        result = 31 * result + scopes.hashCode();
+        int result = key != null ? key.hashCode() : 0;
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
+        result = 31 * result + (testGroups != null ? testGroups.hashCode() : 0);
+        result = 31 * result + (scopes != null ? scopes.hashCode() : 0);
         result = 31 * result + (persistent ? 1 : 0);
+        result = 31 * result + (allowedForBots ? 1 : 0);
         return result;
     }
-
-
 }

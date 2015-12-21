@@ -42,13 +42,13 @@ public class ExpiredExperimentsTest {
     }
 
     @Test
-    public void neverMatchesIfCacheIsNotUpToDate() {
+    public void neverMatchesIfCacheIsStale() {
         InMemoryExperimentsSource cache = new InMemoryExperimentsSource();
         CachedExperiments experiments = new CachedExperiments(cache);
         ExpiredExperiments ee = new ExpiredExperiments(experiments);
 
         cache.write(asList(a(Experiment, with(id, 777)).make()));
-        cache.setIsUpToDate(false);
+        cache.setStale(true);
         assertFalse(ee.matches(UNKNOWN_EXPERIMENT));
     }
 }

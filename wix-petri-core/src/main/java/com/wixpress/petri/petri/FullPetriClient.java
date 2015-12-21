@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
+import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +34,8 @@ public interface FullPetriClient {
     void deleteSpec(String key);
 
     List<ConductExperimentSummary> getExperimentReport(int experimentId);
+
+    List<Integer> getLatestExperimentReportsAfterUpdateDate(DateTime lastUpdateDate);
 
     public class PetriException extends RuntimeException {
         public PetriException(Throwable e) {

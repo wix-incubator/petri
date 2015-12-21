@@ -320,6 +320,16 @@ public class PetriRpcServerTest {
     }
 
     @Test
+    public void canUpdateSpecsWhenActiveExperimentExistsForItButNoSpecWhenNoValidation() {
+        final ExperimentSpec theSpec = defaultExperimentSpec().build();
+        assumingDaoContainsSpecs(new ArrayList<ExperimentSpec>());
+        assumingDaoContainsExperiments(asList(activeExperiment.but(with(key, theSpec.getKey())).make()));
+
+        context.checking(specIsAdded(theSpec));
+        petriRpcServer.addSpecNoValidation(theSpec);
+    }
+
+    @Test
     public void addsSpecsEvenWhenFirstFails() {
         assumingDaoContainsSpecs(new ArrayList<ExperimentSpec>());
         assumingDaoContainsExperiments(new ArrayList<Experiment>());
@@ -374,6 +384,16 @@ public class PetriRpcServerTest {
             allowing(metricsReportsDao).getReport(1);
             will(returnValue(reports));        }});
         assertThat(petriRpcServer.getExperimentReport(1), is(reports));
+    }
+
+    @Test
+    public void getAllExperimentReports() {
+        final DateTime startDate = new DateTime();
+        final List<Integer> reports = ImmutableList.of(1);
+        context.checking(new Expectations() {{
+            allowing(metricsReportsDao).getExperimentIdsLastConductedAfterGivenDate(startDate);
+            will(returnValue(reports));        }});
+        assertThat(petriRpcServer.getLatestExperimentReportsAfterUpdateDate(startDate), is(reports));
     }
 
 

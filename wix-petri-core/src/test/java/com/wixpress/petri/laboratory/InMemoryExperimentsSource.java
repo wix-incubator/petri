@@ -1,5 +1,6 @@
 package com.wixpress.petri.laboratory;
 
+import com.wixpress.petri.ExperimentsAndState;
 import com.wixpress.petri.experiments.domain.Experiment;
 
 import java.util.List;
@@ -14,24 +15,19 @@ import java.util.List;
 public class InMemoryExperimentsSource implements CachedExperiments.ExperimentsSource {
 
     private List<Experiment> experiments;
-    private boolean isUpToDate = false;
+    private boolean stale = true;
 
     @Override
-    public List<Experiment> read() {
-        return this.experiments;
-    }
-
-    @Override
-    public boolean isUpToDate() {
-        return isUpToDate;
+    public ExperimentsAndState read(){
+        return new ExperimentsAndState(experiments, stale);
     }
 
     public void write(List<Experiment> experiments) {
         this.experiments = experiments;
-        this.isUpToDate = true;
+        this.stale = false;
     }
 
-    public void setIsUpToDate(boolean isUpToDate) {
-        this.isUpToDate = isUpToDate;
+    public void setStale(boolean stale) {
+        this.stale = stale;
     }
 }

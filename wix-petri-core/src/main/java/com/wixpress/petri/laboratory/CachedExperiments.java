@@ -1,6 +1,7 @@
 package com.wixpress.petri.laboratory;
 
 import com.google.common.base.Predicate;
+import com.wixpress.petri.ExperimentsAndState;
 import com.wixpress.petri.experiments.domain.Experiment;
 
 import java.util.ArrayList;
@@ -30,9 +31,7 @@ public class CachedExperiments implements Experiments {
     }
 
     public static interface ExperimentsSource {
-        public List<Experiment> read();
-
-        public boolean isUpToDate();
+        public ExperimentsAndState read();
     }
 
     @Override
@@ -42,7 +41,7 @@ public class CachedExperiments implements Experiments {
 
     @Override
     public Experiment findById(int experimentId) {
-        return find(source.read(), hasID(experimentId), null);
+        return find(experiments(), hasID(experimentId), null);
     }
 
     @Override
@@ -51,17 +50,12 @@ public class CachedExperiments implements Experiments {
     }
 
     @Override
-    public boolean isUpToDate() {
-        return source.isUpToDate();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return source.read().isEmpty();
+    public boolean staleOrEmpty() {
+        return source.read().staleOrEmpty();
     }
 
     private List<Experiment> selectOrderedByFt(Predicate<Experiment> predicate) {
-        ArrayList<Experiment> experiments = newArrayList(filter(this.source.read(), predicate));
+        ArrayList<Experiment> experiments = newArrayList(filter(experiments(), predicate));
         Collections.sort(experiments, new Comparator<Experiment>() {
             @Override
             public int compare(Experiment o1, Experiment o2) {
@@ -71,6 +65,10 @@ public class CachedExperiments implements Experiments {
             }
         });
         return experiments;
+    }
+
+    private List<Experiment> experiments() {
+        return this.source.read().experiments();
     }
 
 

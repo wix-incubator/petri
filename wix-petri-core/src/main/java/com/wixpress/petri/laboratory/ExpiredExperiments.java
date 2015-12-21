@@ -15,10 +15,7 @@ public class ExpiredExperiments implements ExperimentsLog.Predicate {
 
     @Override
     public boolean matches(int experimentId) {
-        //TODO - once the transientCache exposes a read method that return data+status atomically, use that!
-        //(passed to here as a param? or should this move into the CachedExperiments?)
-
-        if (!experiments.isUpToDate() || experiments.isEmpty())
+        if (experiments.staleOrEmpty())
             return false;
 
         Experiment experiment = experiments.findById(experimentId);

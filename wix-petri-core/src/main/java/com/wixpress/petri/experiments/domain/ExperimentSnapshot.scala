@@ -32,7 +32,8 @@ case class ExperimentSnapshot(
                                @BooleanBeanProperty onlyForLoggedInUsers: Boolean,
                                comment: String,
                                updater: String, //not needed for conductableExperiment
-                               conductLimit: Int
+                               conductLimit: Int,
+                               @BooleanBeanProperty allowedForBots: Boolean
                                ) {
   //not needed for conductableExperiment
 

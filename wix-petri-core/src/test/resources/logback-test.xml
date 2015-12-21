@@ -1,5 +1,6 @@
 <configuration>
 
+    <property name="LOG_DIR" value="${java.io.tmpdir}"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -7,21 +8,25 @@
         </encoder>
     </appender>
 
-    <appender name="FILE_APPENDER" class="ch.qos.logback.core.FileAppender">
-        <file>target/bi-events-tests.log</file>
-        <append>false</append>
+    <appender name="EXPERIMENTS_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/experiments_log.bi.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
         <encoder>
-            <pattern>%msg%n</pattern>
+            <pattern>%m %n</pattern>
         </encoder>
     </appender>
 
-    <logger name="com.wixpress" level="all"/>
     <logger name="experimentsLog" level="all">
-        <appender-ref ref="FILE_APPENDER"/>
+        <appender-ref ref="EXPERIMENTS_APPENDER"/>
     </logger>
+
+    <logger name="com.wixpress" level="all"/>
 
     <root level="error">
         <appender-ref ref="STDOUT"/>
     </root>
 
 </configuration>
+

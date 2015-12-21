@@ -41,6 +41,7 @@ public abstract class SpecDefinition {
         private List<ScopeDefinition> scopes = new ArrayList<ScopeDefinition>();
         private String owner = "";
         private boolean persistent = true;
+        private boolean allowedForBots = false;
 
         public ExperimentSpecBuilder(String key, DateTime updateDate) {
             this(key, updateDate, updateDate);
@@ -105,12 +106,22 @@ public abstract class SpecDefinition {
             return this;
         }
 
+        /**
+         * @param allowedForBots whether conduction should be made for bots requests .
+         *                       DO NOT USE unless you have a specific seo use case
+         *                   default is false
+         */
+        public ExperimentSpecBuilder withAllowedForBots(boolean allowedForBots) {
+            this.allowedForBots = allowedForBots;
+            return this;
+        }
+
 
         public ExperimentSpec build() {
             if (scopes.contains(null)) {
                 throw new IllegalArgumentException("cannot create spec with null scope");
             }
-            return new ExperimentSpec(key, owner, testGroups, creationDate, scopes, updateDate, persistent);
+            return new ExperimentSpec(key, owner, testGroups, creationDate, scopes, updateDate, persistent, allowedForBots);
         }
 
     }

@@ -12,7 +12,7 @@ import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -43,10 +43,10 @@ public class BILoggingTestGroupAssignmentTrackerTest {
     private Clock clock = context.mock(Clock.class);
     private DateTime theTime = new DateTime();
     private BILoggingTestGroupAssignmentTracker biLogger = new BILoggingTestGroupAssignmentTracker(clock);
-    private LogDriver logDriver = new LogDriver("target/bi-events-tests.log");
+    private LogDriver logDriver = new LogDriver();
 
 
-    @After
+    @Before
     public void clearLogbackConfiguration() throws Exception {
         logDriver.cleanup();
     }
@@ -101,7 +101,8 @@ public class BILoggingTestGroupAssignmentTrackerTest {
                 "lng",
                 "experimentId",
                 "testGroupId",
-                "productName"));
+                "productName",
+                "gsi"));
     }
 
     @Test
@@ -110,7 +111,8 @@ public class BILoggingTestGroupAssignmentTrackerTest {
                 with(ip, "THE_IP"),
                 with(url, "THE_URL"),
                 with(userAgent, "THE_UA"),
-                with(language, "THE_LANGUAGE")).make();
+                with(language, "THE_LANGUAGE"),
+                with(globalSessionId, "gsi_number")).make();
         int testGroupId = 4;
         Experiment experiment = a(ExperimentMakers.Experiment).but(with(ExperimentMakers.id, 123)).make();
 
@@ -143,7 +145,9 @@ public class BILoggingTestGroupAssignmentTrackerTest {
                 hasEntry("testGroupId", (Object) testGroupId),
                 hasEntry("string", (Object) "s"),
                 hasEntry("int", (Object) 2),
-                hasEntry("boolean", (Object) true)));
+                hasEntry("boolean", (Object) true),
+                hasEntry("gsi", (Object) "gsi_number")
+        ));
 
     }
 

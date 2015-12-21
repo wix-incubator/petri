@@ -47,6 +47,15 @@ class JdbcMetricsReportsDaoIT extends SpecificationWithJUnit  {
       anotherSimpleExperimentTotal.last.totalConduction must beEqualTo(anotherSimpleExperimentReport.count * 2)
     }
 
+    "get experimentId of experiments that were conducted after given date" in new Context {
+      metricsReportDao.addReports(List(simpleExperimentReport, anotherSimpleExperimentReport))
+      val givenDate = new DateTime()
+      print(givenDate)
+      metricsReportDao.addReports(List(anotherSimpleExperimentReport, anotherSimpleExperimentReport.copy(serverName = "anotherServer")))
+      metricsReportDao.getExperimentIdsLastConductedAfterGivenDate(givenDate).toList must contain(exactly(anotherSimpleExperimentReport.experimentId.asInstanceOf[java.lang.Integer] ))
+
+    }
+
     "get empty list when no experiments were reported" in new Context {
       metricsReportDao.addReports(List(simpleExperimentReport))
       metricsReportDao.getReportedExperimentsSince(scheduledInterval = 0) must beEmpty

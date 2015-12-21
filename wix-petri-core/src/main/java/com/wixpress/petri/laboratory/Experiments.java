@@ -18,7 +18,5 @@ public interface Experiments {
 
     List<Experiment> findNonExpiredByScope(String scope);
 
-    boolean isUpToDate();
-
-    boolean isEmpty();
+    boolean staleOrEmpty();
 }
