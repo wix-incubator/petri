@@ -1,0 +1,340 @@
+[
+
+
+
+
+
+
+{
+"title": "Getting started overview",
+"tags": "getting_started",
+"keywords": "",
+"url": "/",
+"summary": ""
+},
+
+
+
+{
+"title": "About",
+"tags": "about",
+"keywords": "about",
+"url": "/mydoc_about/",
+"summary": "about"
+},
+
+
+
+{
+"title": "FAQ layout",
+"tags": "special_layouts",
+"keywords": "frequently asked questions, FAQ, question and answer, collapsible sections, expand, collapse",
+"url": "/mydoc_faq_layout/",
+"summary": "You can use an accordion-layout that takes advantage of Bootstrap styling. This is useful for an FAQ page."
+},
+
+
+
+{
+"title": "Introduction",
+"tags": "getting_startedintroduction",
+"keywords": "introduction",
+"url": "/mydoc_introduction/",
+"summary": "Introduction"
+},
+
+
+
+{
+"title": "Quickstart",
+"tags": "getting_startedquickstart",
+"keywords": "questions, quickstart",
+"url": "/mydoc_quickstart/",
+"summary": "Quickstart"
+},
+
+
+
+{
+"title": "Support",
+"tags": "getting_startedtroubleshooting",
+"keywords": "questions, troubleshooting, contact, support",
+"url": "/mydoc_support/",
+"summary": "Contact us for any support issues."
+},
+
+
+
+{
+"title": "Supported features",
+"tags": "getting_started",
+"keywords": "features, capabilities, scalability, multichannel output, dita, hats, comparison, benefits",
+"url": "/mydoc_supported_features/",
+"summary": "If you're not sure whether Jekyll and this theme will support your requirements, this list provides a semi-comprehensive overview of available features."
+},
+
+
+
+{
+"title": "News",
+"tags": "",
+"keywords": "news, blog, updates, release notes, announcements",
+"url": "/news/",
+"summary": ""
+},
+
+
+
+{
+"title": "News",
+"tags": "",
+"keywords": "news, blog, updates, release notes, announcements",
+"url": "/news_archive/",
+"summary": ""
+},
+
+
+
+{
+"title": "Product 1",
+"tags": "",
+"keywords": "mydoc",
+"url": "/p1_landing_page/",
+"summary": ""
+},
+
+
+
+{
+"title": "Sample 1 Topic (Product 1)",
+"tags": "",
+"keywords": "sample",
+"url": "/p1_sample1/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 2 Topic (Product 1)",
+"tags": "",
+"keywords": "sample",
+"url": "/p1_sample2/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 3 Topic (Product 1)",
+"tags": "",
+"keywords": "sample",
+"url": "/p1_sample3/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 4 Topic (Product 1)",
+"tags": "",
+"keywords": "sample",
+"url": "/p1_sample4/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 5 Topic (Product 1)",
+"tags": "",
+"keywords": "sample",
+"url": "/p1_sample5/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 6 Topic (Product 1)",
+"tags": "",
+"keywords": "sample",
+"url": "/p1_sample6/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 7 Topic (Product 1)",
+"tags": "",
+"keywords": "sample",
+"url": "/p1_sample7/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Product 2",
+"tags": "",
+"keywords": "mydoc",
+"url": "/p2_landing_page/",
+"summary": ""
+},
+
+
+
+{
+"title": "Sample 1 Topic",
+"tags": "",
+"keywords": "sample",
+"url": "/p2_sample1/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 2 Topic",
+"tags": "",
+"keywords": "sample",
+"url": "/p2_sample2/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 3 Topic",
+"tags": "",
+"keywords": "sample",
+"url": "/p2_sample3/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 4 Topic",
+"tags": "",
+"keywords": "sample",
+"url": "/p2_sample4/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 5 Topic",
+"tags": "",
+"keywords": "sample",
+"url": "/p2_sample5/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 6 Topic",
+"tags": "",
+"keywords": "sample",
+"url": "/p2_sample6/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+{
+"title": "Sample 7 Topic",
+"tags": "",
+"keywords": "sample",
+"url": "/p2_sample7/",
+"summary": "This is just a sample topic..."
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+"title": "Welcome to Jekyll!",
+"tags": "",
+"keywords": "",
+"url": "/2016/03/28/welcome-to-jekyll/",
+"summary": ""
+}
+,
+
+
+{
+"title": "Sample post",
+"tags": "newsgetting_started",
+"keywords": "",
+"url": "/samplepost/",
+"summary": "This is some summary frontmatter for my sample post."
+}
+,
+
+
+{
+"title": "Welcome to Jekyll!",
+"tags": "news",
+"keywords": "",
+"url": "/myupdate/",
+"summary": ""
+}
+,
+
+
+{
+"title": "Test post from last year",
+"tags": "news",
+"keywords": "",
+"url": "/test-post-from-last-year/",
+"summary": ""
+}
+
+
+
+]

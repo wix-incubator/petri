@@ -1,0 +1,46 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+entries:
+- title: sidebar
+  product: Petri
+#  version: 5.0
+  folders:
+
+  - title:
+    output: pdf
+    type: frontmatter
+    folderitems:
+    - title:
+      url: /titlepage/
+      output: pdf
+      type: frontmatter
+    - title:
+      url: /tocpage/
+      output: pdf
+      type: frontmatter
+
+  - title: Overview
+    output: web, pdf
+    folderitems:
+
+    - title: Home
+      url: /
+      type: homepage
+      output: web, pdf
+
+    - title: Quickstart
+      url: /mydoc_quickstart/
+      output: web, pdf
+
+    - title: Introduction
+      url: /mydoc_introduction/
+      output: web, pdf
+
+    - title: About
+      url: /mydoc_about/
+      output: web, pdf
+
+    - title: Support
+      url: /mydoc_support/
+      output: web, pdf
+

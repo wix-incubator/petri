@@ -1,0 +1,34 @@
+
+index:
+  title: "Get started"
+  url: "/documentation-theme-jekyll/"
+  link: "<a href='/documentation-theme-jekyll/'>Get started</a>"
+
+
+mydoc_introduction:
+  title: "Introduction"
+  url: "/documentation-theme-jekyll/mydoc_introduction/"
+  link: "<a href='/documentation-theme-jekyll/mydoc_introduction/'>Introduction</a>"
+
+
+mydoc_about:
+  title: "About"
+  url: "/documentation-theme-jekyll/mydoc_about/"
+  link: "<a href='/documentation-theme-jekyll/mydoc_about/'>About</a>"
+
+mydoc_support:
+  title: "Support"
+  url: "/documentation-theme-jekyll/mydoc_support/"
+  link: "<a href='/documentation-theme-jekyll/mydoc_support/'>Support</a>"
+
+
+mydoc_faq:
+  title: "FAQ"
+  url: "/documentation-theme-jekyll/mydoc_faq/"
+  link: "<a href='/documentation-theme-jekyll/mydoc_faq/'>FAQ</a>"
+
+
+mydoc_quickstart:
+  title: "Quickstart"
+  url: "/documentation-theme-jekyll/mydoc_quickstart/"
+  link: "<a href='/documentation-theme-jekyll/mydoc_quickstart/'>Quickstart</a>"
