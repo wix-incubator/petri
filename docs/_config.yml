@@ -2,7 +2,7 @@ permalink: /:year/:month/:day/:title/
 # this sets the style for permalinks. The date formatting (/:year/:month/:day/) will only apply to blog posts, while the pages will just show the title.
 url: http://idratherbewriting.com
 # where you plan to publish your site
-baseurl: ""
+baseurl: "/"
 # any subdirectory that appears after the domain where you're publishing your site
 output: web
 # this property is useful for conditional filtering of content that is separate from the PDF.
