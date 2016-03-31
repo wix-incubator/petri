@@ -1,5 +1,5 @@
 ---
-title: Getting started overview
+title: Petri
 tags: [getting_started]
 sidebar: mydoc_sidebar
 type: homepage
@@ -10,10 +10,6 @@ type: homepage
 ##  Product Experiments Toggles & Reporting Infrastructure
 
 Perti is a holistic experiment infrastructure that covers the lifecycle of product experimenting.
-
-
-Petri
-=====
 
 [![Build Status](https://travis-ci.org/wix/petri.svg?branch=master)](https://travis-ci.org/wix/petri)
 
