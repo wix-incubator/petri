@@ -5,13 +5,13 @@ sidebar: mydoc_sidebar
 type: homepage
 ---
 
+[![Build Status](https://travis-ci.org/wix/petri.svg?branch=master)](https://travis-ci.org/wix/petri)
+
 ![](https://raw.githubusercontent.com/wix/petri/gh-pages/images/scientist_small.png)
 
 ##  Product Experiments Toggles & Reporting Infrastructure
 
 Perti is a holistic experiment infrastructure that covers the lifecycle of product experimenting.
-
-[![Build Status](https://travis-ci.org/wix/petri.svg?branch=master)](https://travis-ci.org/wix/petri)
 
 Wix's holistic experiment system - covers the lifecycle of product experimenting (A/B tests and feature toggles).
 

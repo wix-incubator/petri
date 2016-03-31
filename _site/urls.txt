@@ -12,36 +12,36 @@
  
 :
   title: "Home"
-  url: "/ 'Home'"
-  link: "<a href='/' title='Home'>Home</a>"
+  url: "/petri/ 'Home'"
+  link: "<a href='/petri/' title='Home'>Home</a>"
 
 
  
 mydoc_quickstart:
   title: "Quickstart"
-  url: "/mydoc_quickstart/ 'Quickstart'"
-  link: "<a href='/mydoc_quickstart/' title='Quickstart'>Quickstart</a>"
+  url: "/petri/mydoc_quickstart/ 'Quickstart'"
+  link: "<a href='/petri/mydoc_quickstart/' title='Quickstart'>Quickstart</a>"
 
 
  
 mydoc_introduction:
   title: "Introduction"
-  url: "/mydoc_introduction/ 'Introduction'"
-  link: "<a href='/mydoc_introduction/' title='Introduction'>Introduction</a>"
+  url: "/petri/mydoc_introduction/ 'Introduction'"
+  link: "<a href='/petri/mydoc_introduction/' title='Introduction'>Introduction</a>"
 
 
  
 mydoc_about:
   title: "About"
-  url: "/mydoc_about/ 'About'"
-  link: "<a href='/mydoc_about/' title='About'>About</a>"
+  url: "/petri/mydoc_about/ 'About'"
+  link: "<a href='/petri/mydoc_about/' title='About'>About</a>"
 
 
  
 mydoc_support:
   title: "Support"
-  url: "/mydoc_support/ 'Support'"
-  link: "<a href='/mydoc_support/' title='Support'>Support</a>"
+  url: "/petri/mydoc_support/ 'Support'"
+  link: "<a href='/petri/mydoc_support/' title='Support'>Support</a>"
 
 
 

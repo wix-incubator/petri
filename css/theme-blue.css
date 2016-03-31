@@ -5,7 +5,7 @@
 }
 
 
-h3 {color: #ED1951; }
+h3 {color: black; }
 h4 {color: #808080; }
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
@@ -81,7 +81,7 @@ a[data-toggle="tooltip"] {
 
 body.print h1 {color: #015CAE !important; font-size:28px !important;}
 body.print h2 {color: #595959 !important; font-size:20px !important;}
-body.print h3 {color: #E50E51 !important; font-size:14px !important;}
+body.print h3 {color: black !important; font-size:14px !important;}
 body.print h4 {color: #679DCE !important; font-size:14px; font-style: italic !important;}
 
 .anchorjs-link:hover {
