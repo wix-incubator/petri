@@ -5,7 +5,7 @@ sidebar: mydoc_sidebar
 type: homepage
 ---
 
-![](https://github.com/wix/petri/blob/gh-pages/docs/images/scientist.png)
+![](https://raw.githubusercontent.com/wix/petri/gh-pages/images/scientist.png)
 
 ##  Product Experiments Toggles & Reporting Infrastructure
 
@@ -44,7 +44,8 @@ Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of 
 
 
 
-</br>
+
+
 
 ### License
 
