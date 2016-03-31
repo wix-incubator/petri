@@ -10,10 +10,11 @@ Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of 
 ### Main features
 * A/B tests can be used to affect the experience users receive - thus enabling product managers to know what users prefer.
 * Feature toggles can be used to control inner implementation details - thus enabling developers to gradually roll out features.  
-* Petri allows you to define filters that determine what users will be included in the experiment (by language, geo, user-agent, for individual users and more).
+* Petri allows you to define filters that determine what users will be included in the experiment (by language, geo, user-agent, for individual users and more). Custom filters can also be added.
+* Conduction values are periodically reported back to the server to enable quick triaging as well as automatic pausing if limit is specified.
 
 ### Getting started
-* [Install Petri server + DB](https://github.com/wix/petri/wiki/Installing-Petri-Server)
+* [Run](https://github.com/wix/petri/wiki/Running-Petri-Server) (or [Install](https://github.com/wix/petri/wiki/Installing-Petri-Server)) Petri Server
 * [Integrate Laboratory (petri client) into your app](https://github.com/wix/petri/wiki/Integrating-Petri-into-your-app)
 
 
