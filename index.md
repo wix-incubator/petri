@@ -5,7 +5,7 @@ sidebar: mydoc_sidebar
 type: homepage
 ---
 
-![](https://raw.githubusercontent.com/wix/petri/gh-pages/images/scientist.png)
+![](https://raw.githubusercontent.com/wix/petri/gh-pages/images/scientist_small.png)
 
 ##  Product Experiments Toggles & Reporting Infrastructure
 
