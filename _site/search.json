@@ -175,26 +175,6 @@
 
 
 
-{
-"title": "News",
-"tags": "",
-"keywords": "news, blog, updates, release notes, announcements",
-"url": "/petri/news/",
-"summary": ""
-},
-
-
-
-{
-"title": "News",
-"tags": "",
-"keywords": "news, blog, updates, release notes, announcements",
-"url": "/petri/news_archive/",
-"summary": ""
-},
-
-
-
 
 
 
@@ -210,40 +190,10 @@
 
 
 {
-"title": "Welcome to Jekyll!",
+"title": "",
 "tags": "",
 "keywords": "",
-"url": "/petri/2016/03/28/welcome-to-jekyll/",
-"summary": ""
-}
-,
-
-
-{
-"title": "Sample post",
-"tags": "newsgetting_started",
-"keywords": "",
-"url": "/petri/samplepost/",
-"summary": "This is some summary frontmatter for my sample post."
-}
-,
-
-
-{
-"title": "Welcome to Jekyll!",
-"tags": "news",
-"keywords": "",
-"url": "/petri/myupdate/",
-"summary": ""
-}
-,
-
-
-{
-"title": "Test post from last year",
-"tags": "news",
-"keywords": "",
-"url": "/petri/test-post-from-last-year/",
+"url": "/petri/moo/",
 "summary": ""
 }
 

@@ -130,7 +130,7 @@ window.location.href = uri;
                 <li>
                     <!--start search-->
                     <div id="search-demo-container">
-                        <input type="text" id="search-input" placeholder="search...">
+                        <input type="text" id="search-input" placeholder="">
                         <ul id="results-container"></ul>
                     </div>
                     <script src="/petri/js/jekyll-search.js" type="text/javascript"></script>
@@ -140,7 +140,7 @@ window.location.href = uri;
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/petri/search.json',
                                 searchResultTemplate: '<li><a href="{url}" title="Integrate Laboratory (Petri client) Into Your Application">{title}</a></li>',
-                    noResultsText: 'No results found.',
+                    noResultsText: '',
                             limit: 10,
                             fuzzy: true,
                     })
@@ -383,10 +383,8 @@ $('#toc').on('click', 'a', function() {
 
 <div id="toc"></div>
 
+    <br>
     
-
-
-<br>
 
     
 

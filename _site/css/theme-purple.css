@@ -38,16 +38,17 @@ a[data-toggle="tooltip"] {
 }
 
 .navbar-inverse {
-    background-image: url("https://static.wixstatic.com/media/9ab0d1_b93107c85f0b460a835fd2fc9742a5a5.jpg/v1/fill/w_1436,h_815,al_c,q_85,usm_0.66_1.00_0.01/9ab0d1_b93107c85f0b460a835fd2fc9742a5a5.jpg");
-    border-color: #5b893c;
+    background-image: url("https://static.wixstatic.com/media/9ab0d1_b93107c85f0b460a835fd2fc9742a5a5.jpg/v1/fill/w_1436,h_115,al_c,q_85,usm_0.66_1.00_0.01/9ab0d1_b93107c85f0b460a835fd2fc9742a5a5.jpg");
+    background-color: #420C66;
+    border-color: #420C66;
 }
 
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-    color: #5b893c;
+    color: #420C66;
 }
 
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-    background-color: #5b893c;
+    background-color: #420C66;
     color: #ffffff;
 }
 
@@ -58,8 +59,8 @@ a[data-toggle="tooltip"] {
 
 .btn-primary {
     color: #ffffff;
-    background-color: #5b893c;
-    border-color: #5b893c;
+    background-color: #420C66;
+    border-color: #420C66;
 }
 
 .btn-primary:hover,
@@ -68,14 +69,14 @@ a[data-toggle="tooltip"] {
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
     background-color: #551A8B;
-    border-color: #5b893c;
+    border-color: #420C66;
 }
 
 .printTitle {
-    color: #5b893c !important;
+    color: #420C66 !important;
 }
 
-body.print h1 {color: #5b893c !important; font-size:28px;}
+body.print h1 {color: #420C66 !important; font-size:28px;}
 body.print h2 {color: #595959 !important; font-size:24px;}
 body.print h3 {color: black !important; font-size:14px;}
 body.print h4 {color: #679DCE !important; font-size:14px; font-style: italic;}

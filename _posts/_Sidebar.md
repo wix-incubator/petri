@@ -1,1 +1,0 @@
-![PETRI Logo](http://static.wixstatic.com/media/1a2c40_fc5d9e4220064b0691376d268f159dfa.jpg)
