@@ -392,7 +392,7 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h2 id="step-1-running-petri-server">Step 1: Running Petri Server</h2>
+  <h2 id="step-1-setting-up-petri-server">Step 1: Setting Up Petri Server</h2>
 
 <p>There are two options:</p>
 
@@ -412,8 +412,9 @@ $('#toc').on('click', 'a', function() {
 
 <h3 id="install-petri-server">Install Petri Server</h3>
 
-<p>Prerequisite: Installing the Petri DB:
-Petri requires a database. It has been tested against MySql and h2.</p>
+<h4 id="setup-petris-database">Setup Petri’s Database</h4>
+
+<p>Petri requires a database. It has been tested against MySql and H2.</p>
 
 <ul>
   <li>To create the schema, run the following:</li>
@@ -426,7 +427,7 @@ CREATE TABLE userState (user_id VARCHAR (50) NOT NULL, state VARCHAR (4096) , da
 </code></pre>
 </div>
 
-<h4 id="installing-a-petri-server-is-easy">Installing a Petri server is easy</h4>
+<h4 id="configuration-and-deployment">Configuration and Deployment</h4>
 
 <ul>
   <li>

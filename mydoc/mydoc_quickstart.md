@@ -6,7 +6,7 @@ sidebar: mydoc_quickstart
 permalink: /mydoc_quickstart/
 ---
 
-## Step 1: Running Petri Server
+## Step 1: Setting Up Petri Server
 
 There are two options:
 
@@ -24,8 +24,9 @@ run the server:
 
 ### Install Petri Server
 
-Prerequisite: Installing the Petri DB:
-Petri requires a database. It has been tested against MySql and h2. 
+#### Setup Petri's Database 
+
+Petri requires a database. It has been tested against MySql and H2. 
 
 * To create the schema, run the following:
 
@@ -36,7 +37,7 @@ CREATE TABLE metricsReport (server_name VARCHAR (255) NOT NULL, experiment_id IN
 CREATE TABLE userState (user_id VARCHAR (50) NOT NULL, state VARCHAR (4096) , date_updated BIGINT NOT NULL, PRIMARY KEY(user_id))
 ```
         
-#### Installing a Petri server is easy
+#### Configuration and Deployment
 
 * compile the project  
 
