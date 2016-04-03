@@ -1,6 +1,7 @@
 These docs are based on a [Jekyll docmentation theme](http://idratherbewriting.com/documentation-theme-jekyll/). 
 
 To build this locally. Run:
+
 1. Install Ruby `brew install ruby`
 2. Install Bundler `gem install bundler`
 2. Install the bundle `bundle install`
