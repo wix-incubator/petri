@@ -1,3 +1,11 @@
+---
+title: Custom Filters
+keywords: filters, users
+last_updated: March 31, 2016
+sidebar: mydoc_custom_filters
+permalink: /mydoc_custom_filters/
+---
+
 ### How to add a filter with your own custom logic 
 #### any filter on the classpath that answers the following criteria will be available:
   - the class should be under the root package "filters" (similar to the "specs" package)

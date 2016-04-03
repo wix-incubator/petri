@@ -1,3 +1,11 @@
+---
+title: Architecture Overview
+keywords: architecture
+last_updated: March 31, 2016
+sidebar: mydoc_PETRI_System_Components
+permalink: /mydoc_PETRI_System_Components/
+---
+
 PETRI consists of 2 parts:
 
 PETRI server, which manages and stores all the experiments;

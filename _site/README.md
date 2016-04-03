@@ -1,4 +1,4 @@
-These docs are based on a [Jekyll docmentation theme](http://idratherbewriting.com/documentation-theme-jekyll/). 
+These docs are based on a [Jekyll documentation theme](http://idratherbewriting.com/documentation-theme-jekyll/). 
 
 To build this locally. Run:
 

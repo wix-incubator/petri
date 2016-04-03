@@ -16,11 +16,81 @@
 
 
 {
+"title": "User Experience Persistence",
+"tags": "",
+"keywords": "persistence, experience, UX",
+"url": "/petri/my_doc_registered_vs_non_registered_users/",
+"summary": ""
+},
+
+
+
+{
+"title": "User Experience Persistence",
+"tags": "",
+"keywords": "persistence, experience, UX",
+"url": "/petri/my_doc_user_experience_persistence/",
+"summary": ""
+},
+
+
+
+{
+"title": "Architecture Overview",
+"tags": "",
+"keywords": "architecture",
+"url": "/petri/mydoc_PETRI_System_Components/",
+"summary": ""
+},
+
+
+
+{
 "title": "About",
 "tags": "about",
 "keywords": "about",
 "url": "/petri/mydoc_about/",
 "summary": "about"
+},
+
+
+
+{
+"title": "Basic Concepts and Best Practices",
+"tags": "",
+"keywords": "concepts, best practices",
+"url": "/petri/mydoc_basic_concepts_best_practices/",
+"summary": ""
+},
+
+
+
+{
+"title": "Creating a Petri Backoffice Application",
+"tags": "",
+"keywords": "backoffice, management, application",
+"url": "/petri/mydoc_creating_a_petri_backoffice_app/",
+"summary": ""
+},
+
+
+
+{
+"title": "Custom Filters",
+"tags": "",
+"keywords": "filters, users",
+"url": "/petri/mydoc_custom_filters/",
+"summary": ""
+},
+
+
+
+{
+"title": "Experiments and Experiment Specs",
+"tags": "",
+"keywords": "experiments, specs",
+"url": "/petri/mydoc_experiments/",
+"summary": ""
 },
 
 
@@ -36,6 +106,16 @@
 
 
 {
+"title": "Integrate Laboratory (Petri client) Into Your Application",
+"tags": "",
+"keywords": "application, laboratory, client, petri, integration",
+"url": "/petri/mydoc_integrating_petri_into_your_app/",
+"summary": ""
+},
+
+
+
+{
 "title": "Introduction",
 "tags": "getting_startedintroduction",
 "keywords": "introduction",
@@ -46,8 +126,18 @@
 
 
 {
+"title": "Conducting An Experiment",
+"tags": "",
+"keywords": "laboratory, conduct, API, experiment",
+"url": "/petri/mydoc_laboratory_api/",
+"summary": ""
+},
+
+
+
+{
 "title": "Quickstart",
-"tags": "getting_startedquickstart",
+"tags": "",
 "keywords": "questions, quickstart",
 "url": "/petri/mydoc_quickstart/",
 "summary": "Quickstart"
@@ -57,20 +147,10 @@
 
 {
 "title": "Support",
-"tags": "getting_startedtroubleshooting",
+"tags": "",
 "keywords": "questions, troubleshooting, contact, support",
 "url": "/petri/mydoc_support/",
 "summary": "Contact us for any support issues."
-},
-
-
-
-{
-"title": "Supported features",
-"tags": "getting_started",
-"keywords": "features, capabilities, scalability, multichannel output, dita, hats, comparison, benefits",
-"url": "/petri/mydoc_supported_features/",
-"summary": "If you're not sure whether Jekyll and this theme will support your requirements, this list provides a semi-comprehensive overview of available features."
 },
 
 
@@ -106,6 +186,46 @@
 
 
 
+
+
+
+{
+"title": "Welcome to Jekyll!",
+"tags": "",
+"keywords": "",
+"url": "/petri/2016/03/28/welcome-to-jekyll/",
+"summary": ""
+}
+,
+
+
+{
+"title": "Sample post",
+"tags": "newsgetting_started",
+"keywords": "",
+"url": "/petri/samplepost/",
+"summary": "This is some summary frontmatter for my sample post."
+}
+,
+
+
+{
+"title": "Welcome to Jekyll!",
+"tags": "news",
+"keywords": "",
+"url": "/petri/myupdate/",
+"summary": ""
+}
+,
+
+
+{
+"title": "Test post from last year",
+"tags": "news",
+"keywords": "",
+"url": "/petri/test-post-from-last-year/",
+"summary": ""
+}
 
 
 

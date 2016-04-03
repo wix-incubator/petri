@@ -1,10 +1,9 @@
 ---
 title: Quickstart
-tags: [getting_started, quickstart]
 keywords: questions, quickstart
 last_updated: March 31, 2016
 summary: "Quickstart"
-sidebar: mydoc_sidebar
+sidebar: mydoc_quickstart
 permalink: /mydoc_quickstart/
 ---
 

@@ -8,27 +8,75 @@ index:
 mydoc_introduction:
   title: "Introduction"
   url: "/petri/mydoc_introduction/"
-  link: "<a href='/mydoc_introduction/'>Introduction</a>"
+  link: "<a href='/petri/mydoc_introduction/'>Introduction</a>"
 
 
 mydoc_about:
   title: "About"
   url: "/petri/mydoc_about/"
-  link: "<a href='/mydoc_about/'>About</a>"
+  link: "<a href='/petri/mydoc_about/'>About</a>"
 
 mydoc_support:
   title: "Support"
   url: "/petri/mydoc_support/"
-  link: "<a href='/mydoc_support/'>Support</a>"
+  link: "<a href='/petri/mydoc_support/'>Support</a>"
 
 
 mydoc_faq:
   title: "FAQ"
   url: "/petri/mydoc_faq/"
-  link: "<a href='/mydoc_faq/'>FAQ</a>"
+  link: "<a href='/petri/mydoc_faq/'>FAQ</a>"
 
 
 mydoc_quickstart:
   title: "Quickstart"
   url: "/petri/mydoc_quickstart/"
-  link: "<a href='/mydoc_quickstart/'>Quickstart</a>"
+  link: "<a href='/petri/mydoc_quickstart/'>Quickstart</a>"
+
+mydoc_basic_concepts_best_practices:
+  title: "Basic Concepts and Best Practices"
+  url: "/petri/mydoc_basic_concepts_best_practices/"
+  link: "<a href='/petri/mydoc_basic_concepts_best_practices/'>Basic Concepts and Best Practices</a>"
+
+mydoc_architecture_overview:
+  title: "Architecture Overview"
+  url: "/petri/mydoc_PETRI_System_Components/"
+  link: "<a href='/petri/mydoc_PETRI_System_Components/'>Architecture Overview</a>"
+
+
+mydoc_creating_a_petri_backoffice_app: 
+  title: "Creating A Petri Backoffice Application"
+  url: "/petri/mydoc_creating_a_petri_backoffice_app/"
+  link: "<a href='/petri/mydoc_creating_a_petri_backoffice_app/'>Creating a Petri Backoffice Application</a>"
+
+
+mydoc_experiments: 
+  title: "Experiments And Experiment Specs"
+  url: "/petri/mydoc_experiments/"
+  link: "<a href='/petri/mydoc_experiments/'>Experiments And Experiment Specs</a>"
+
+my_doc_registered_vs_non_registered_users:
+  title: "User Experience Persistence"
+  url: "/petri/my_doc_registered_vs_non_registered_users/"
+  link: "<a href='/petri/my_doc_registered_vs_non_registered_users/'>User Experience Persistence</a>"
+
+my_doc_user_experience_persistence:
+  title: "User Experience Persistence"
+  url: "/petri/my_doc_user_experience_persistence/"
+  link: "<a href='/petri/my_doc_user_experience_persistence/'>User Experience Persistence</a>"
+
+mydoc_integrating_petri_into_your_app:
+  title: "Integrate Laboratory (Petri client) Into Your Application"
+  url: "/petri/my_doc_user_experience_persistence/"
+  link: "<a href='/petri/my_doc_user_experience_persistence/'>Integrate Laboratory (Petri client) Into Your Application</a>"
+
+mydoc_custom_filters: 
+  title: "Custom Filters"
+  url: "/petri/mydoc_custom_filters/"
+  link: "<a href='/petri/mydoc_custom_filters/'>Custom Filters</a>"
+
+mydoc_laboratory_api:
+  title: "Conducting An Experiment"
+  url: "/petri/mydoc_laboratory_api/"
+  link: "<a href='/petri/mydoc_laboratory_api/'>Conducting An Experiment</a>"
+

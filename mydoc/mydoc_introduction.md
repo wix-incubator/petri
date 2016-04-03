@@ -4,7 +4,7 @@ tags: [getting_started, introduction]
 keywords: introduction
 last_updated: March 31, 2016
 summary: "Introduction"
-sidebar: mydoc_introduction
+sidebar: mydoc_sidebar
 permalink: /mydoc_introduction/
 ---
 

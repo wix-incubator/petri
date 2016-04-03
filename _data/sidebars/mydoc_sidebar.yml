@@ -6,41 +6,36 @@ entries:
 #  version: 5.0
   folders:
 
-  - title:
-    output: pdf
-    type: frontmatter
-    folderitems:
-    - title:
-      url: /titlepage/
-      output: pdf
-      type: frontmatter
-    - title:
-      url: /tocpage/
-      output: pdf
-      type: frontmatter
-
   - title: Overview
-    output: web, pdf
+    output: web
     folderitems:
 
     - title: Home
       url: /
       type: homepage
-      output: web, pdf
+      output: web
 
     - title: Quickstart
       url: /mydoc_quickstart/
-      output: web, pdf
+      output: web
 
     - title: Introduction
       url: /mydoc_introduction/
-      output: web, pdf
+      output: web
+
+    - title: Basic Concepts and Best Practices
+      url: /mydoc_basic_concepts_best_practices/
+      output: web
+
+    - title: Architecture Overview
+      url: /mydoc_architecture_overview/
+      output: web
 
     - title: About
       url: /mydoc_about/
-      output: web, pdf
+      output: web
 
     - title: Support
       url: /mydoc_support/
-      output: web, pdf
+      output: web
 

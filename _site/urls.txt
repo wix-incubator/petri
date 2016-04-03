@@ -4,12 +4,6 @@
 
 
  
-
- 
-
-
-
- 
 :
   title: "Home"
   url: "/petri/ 'Home'"
@@ -28,6 +22,20 @@ mydoc_introduction:
   title: "Introduction"
   url: "/petri/mydoc_introduction/ 'Introduction'"
   link: "<a href='/petri/mydoc_introduction/' title='Introduction'>Introduction</a>"
+
+
+ 
+mydoc_basic_concepts_best_practices:
+  title: "Basic Concepts and Best Practices"
+  url: "/petri/mydoc_basic_concepts_best_practices/ 'Basic Concepts and Best Practices'"
+  link: "<a href='/petri/mydoc_basic_concepts_best_practices/' title='Basic Concepts and Best Practices'>Basic Concepts and Best Practices</a>"
+
+
+ 
+mydoc_architecture_overview:
+  title: "Architecture Overview"
+  url: "/petri/mydoc_architecture_overview/ 'Architecture Overview'"
+  link: "<a href='/petri/mydoc_architecture_overview/' title='Architecture Overview'>Architecture Overview</a>"
 
 
  

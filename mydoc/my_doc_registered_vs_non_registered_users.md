@@ -1,3 +1,11 @@
+---
+title: User Experience Persistence
+keywords: persistence, experience, UX
+last_updated: March 31, 2016
+sidebar: my_doc_registered_vs_non_registered_users
+permalink: /my_doc_registered_vs_non_registered_users/
+---
+
 # Registered VS. Non-Registered Users
 
 One of the important fields the ExperimentSnapshotBuilder requires you to define is the ```withOnlyForLoggedInUsers```.
@@ -6,6 +14,7 @@ The ```withOnlyForLoggedInUsers``` field is needed for writing to the correct co
 
 **Note:** Trying to call the 'build' method without setting this field will result in an exception:  
 ```IllegalArgumentException("an experiment cannot be created without specifying the onlyForLoggedInUsers field");```
+
 
 ### Setting the withOnlyForLoggedInUsers field
 Use ```true``` if the experiment is conducted only for logged in users, i.e in an area in your product where it is guaranteed that the user has been identified (for example, the user's dashboard or account area). 

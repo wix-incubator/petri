@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
+  
+  <url>
+    <loc>wix.github.io/petri/2016/03/28/welcome-to-jekyll/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/samplepost/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/myupdate/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/test-post-from-last-year/</loc>
+  </url>
+  
+  
 
 
   
@@ -16,7 +40,49 @@
   
   
   <url>
+    <loc>wix.github.io/petri/my_doc_registered_vs_non_registered_users/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/my_doc_user_experience_persistence/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/mydoc_PETRI_System_Components/</loc>
+  </url>
+  
+  
+  
+  <url>
     <loc>wix.github.io/petri/mydoc_about/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/mydoc_basic_concepts_best_practices/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/mydoc_creating_a_petri_backoffice_app/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/mydoc_custom_filters/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/mydoc_experiments/</loc>
   </url>
   
   
@@ -28,7 +94,19 @@
   
   
   <url>
+    <loc>wix.github.io/petri/mydoc_integrating_petri_into_your_app/</loc>
+  </url>
+  
+  
+  
+  <url>
     <loc>wix.github.io/petri/mydoc_introduction/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/mydoc_laboratory_api/</loc>
   </url>
   
   
@@ -41,12 +119,6 @@
   
   <url>
     <loc>wix.github.io/petri/mydoc_support/</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/mydoc_supported_features/</loc>
   </url>
   
   

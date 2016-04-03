@@ -1,3 +1,12 @@
+---
+title: Creating a Petri Backoffice Application
+keywords: backoffice, management, application
+last_updated: March 31, 2016
+sidebar: mydoc_creating_a_petri_backoffice_app
+permalink: /mydoc_creating_a_petri_backoffice_app/
+---
+
+
 In order to create and modify experiments and specs you will need to create a backoffice app  
 (if you prefer to write it in a non-JVM language, see [the jsons here](https://github.com/wix/petri/wiki/Creating-&-Updating-Experiments-&-Specs)
 

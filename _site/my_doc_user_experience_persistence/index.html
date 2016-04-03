@@ -4,8 +4,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
-<meta name="keywords" content=" news, blog, updates, release notes, announcements">
-<title>News  | Petri</title>
+<meta name="keywords" content=" persistence, experience, UX">
+<title>User Experience Persistence  | Petri</title>
 <link rel="stylesheet" href="/petri/css/syntax.css">
 
 
@@ -114,7 +114,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Petri feedback";
-var body = "I have some feedback about the News page: ";
+var body = "I have some feedback about the User Experience Persistence page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:team-petri@wix.com?subject=";
@@ -139,7 +139,7 @@ window.location.href = uri;
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/petri/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="News">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="User Experience Persistence">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -245,7 +245,7 @@ window.location.href = uri;
     <!-- Content Column -->
     <div class="col-md-9">
         <div class="post-header">
-   <h1 class="post-title-main">News</h1>
+   <h1 class="post-title-main">User Experience Persistence</h1>
 </div>
 
 <div class="post-content">
@@ -253,6 +253,27 @@ window.location.href = uri;
    
 
     
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+  
+});
+</script>
+
+<div id="toc"></div>
 
     
 
@@ -260,78 +281,60 @@ window.location.href = uri;
 
     
 
-  <div class="home">
+    
 
-    <div class="post-list">
-        
+  <p>* “user agent” - a machine/browser</p>
 
+<h4 id="cookies">Cookies</h4>
+<ul>
+  <li>
+    <p>Cookies are used to provide stickiness for users
+i.e , when running an A/B test and a user is given a choice between A or B, once a user receives B they should continue to do so on to the next visit.</p>
+  </li>
+  <li>
+    <p>For anonymous (non-registered) users, the conduction is random as the best we can do is save cookies.
+If the user changes user agent we have no means of identifying the same person (browser/machine) and stickiness will be lost.</p>
+  </li>
+  <li>
+    <p>For registered users, we use the UID as a seed for conduction, thereby providing consistent results regardless of the user agent.
+Despite the seed and results being consistent, we must still save a cookie as it is need for the ‘pause’ feature.</p>
+  </li>
+  <li>
+    <p>Cookies are saved separately.
+One cookie for anonymous experiments (shared by all anonymous users / experiments) on a given user agent, and another cookie per UID.</p>
+    <ul>
+      <li>
+        <p>The reason for this ‘per UID cookie’ is so every user receives their very own unique experience, regardless of other users sharing this user agent (think shared a household where there are two people with different accounts).</p>
+      </li>
+      <li>
+        <p>The reason the anonymous must be saved separately even when a user is logged in is because if and when the user logs out we still want the ‘anonymous experiments’ to retain stickiness (and without the UID we wouldn’t know which cookie to read)</p>
+      </li>
+    </ul>
+  </li>
+</ul>
 
-    <h2><a class="post-link" href="/petri/2016/03/28/welcome-to-jekyll/">Welcome to Jekyll!</a></h2>
-        <span class="post-meta">Mar 28, 2016 /
-            </span>
-        <p> You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your... </p>
+<h4 id="the-problem">The Problem</h4>
+<p>When an experiment is paused, stickiness may be lost (if a user changed user agents).
+In order to solve this you can enable server side state.</p>
 
-
-
-        
-
-
-    <h2><a class="post-link" href="/petri/samplepost/">Sample post</a></h2>
-        <span class="post-meta">Feb 26, 2016 /
-            
-                <a href="/petri/tag_news/">news</a>, 
-                
-                <a href="/petri/tag_getting_started/">getting_started</a>
-                </span>
-        <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries... </p>
-
-
-
-        
-
-
-    <h2><a class="post-link" href="/petri/myupdate/">Welcome to Jekyll!</a></h2>
-        <span class="post-meta">Feb 24, 2016 /
-            
-                <a href="/petri/tag_news/">news</a>
-                </span>
-        <p> Theme updates:
-
-
-  Permalinks
-  Kramdown
-  URL specified in config file
-  removed PDF output
-  removed some of the alternative layouts
-  added blog feature
-  sidebars configurable per page
-
- </p>
-
-
-
-        
-
-
-    <h2><a class="post-link" href="/petri/test-post-from-last-year/">Test post from last year</a></h2>
-        <span class="post-meta">Apr 12, 2015 /
-            
-                <a href="/petri/tag_news/">news</a>
-                </span>
-        <p> This is just a test post from the previous year.
- </p>
-
-
-
-        
-
-        <p><a href="/petri/feed.xml" class="btn btn-primary navbar-btn cursorNorm" role="button">RSS Subscribe</a></p>
-
-<hr />
-        <p>See more posts from the <a href="/petri/news_archive/">News Archive</a>. </p>
-
-
-</div>
+<h4 id="cookies-vs-server-side-state-the-tradeoff">Cookies VS Server Side State: The Tradeoff</h4>
+<ul>
+  <li>Cookies: no overhead, but you may loose stickiness sometimes (when an experiment is paused and a registered user changes the user agent).</li>
+  <li>
+    <p>Server side state: overhead of another hop (for read, if conduction occurs then another for write), but you gain correctness. Here’s <a href="">how to config your app to use server side state</a>. Default is ‘off’.</p>
+  </li>
+  <li>
+    <p>Therefore, you probably want to configure the server side state only for appropriate services (probably in your ‘registered users’ segment, thus allowing any ‘public’ segment to retain its SLA and not pay the overhead).</p>
+  </li>
+  <li>Petri’s implementation tries to save overhead wherever possible:
+    <ul>
+      <li>Cookies override DB state so if a cookie exists the extra hop is avoided.</li>
+      <li>If a conduction was made write state back to DB as an async call so user request returns immediately.</li>
+      <li>State is read from server iff conduction is on registered scope and it is an A/B test (not feature toggle) and if a user exists in context etc.</li>
+      <li>When using the ‘conductAllByScope’ API state is brought once for all experiments.</li>
+    </ul>
+  </li>
+</ul>
 
 
 <div class="tags">
@@ -348,7 +351,7 @@ window.location.href = uri;
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2016 Wix.com. All rights reserved. <br />
- Site last generated: Apr 3, 2016 <br />
+<p>Page last updated:</span> March 31, 2016<br/> Site last generated: Apr 3, 2016 <br />
 <p><img src="/petri/images/company_logo.png" alt="Company logo"/></p>
                 </div>
             </div>

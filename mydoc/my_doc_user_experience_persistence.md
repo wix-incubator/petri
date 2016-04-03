@@ -1,6 +1,14 @@
+---
+title: User Experience Persistence
+keywords: persistence, experience, UX
+last_updated: March 31, 2016
+sidebar: my_doc_user_experience_persistence
+permalink: /my_doc_user_experience_persistence/
+---
+
 \* "user agent" - a machine/browser
 
-### Cookies
+#### Cookies
   - Cookies are used to provide stickiness for users
 i.e , when running an A/B test and a user is given a choice between A or B, once a user receives B they should continue to do so on to the next visit.
 
@@ -17,13 +25,13 @@ One cookie for anonymous experiments (shared by all anonymous users / experiment
     - The reason the anonymous must be saved separately even when a user is logged in is because if and when the user logs out we still want the 'anonymous experiments' to retain stickiness (and without the UID we wouldn't know which cookie to read)
 
 
-### The Problem
+#### The Problem
 When an experiment is paused, stickiness may be lost (if a user changed user agents).
 In order to solve this you can enable server side state.
 
-### Cookies VS Server Side State: The Tradeoff
+#### Cookies VS Server Side State: The Tradeoff
   - Cookies: no overhead, but you may loose stickiness sometimes (when an experiment is paused and a registered user changes the user agent).
-  - Server side state: overhead of another hop (for read, if conduction occurs then another for write), but you gain correctness. Here's [how to config your app to use server side state](https://github.com/wix/petri/wiki/Integrating-Petri-into-your-app). Default is 'off'.
+  - Server side state: overhead of another hop (for read, if conduction occurs then another for write), but you gain correctness. Here's [how to config your app to use server side state]({{site.data.urls.integrating_petri_into_your_app.url}}). Default is 'off'.
 
   - Therefore, you probably want to configure the server side state only for appropriate services (probably in your 'registered users' segment, thus allowing any 'public' segment to retain its SLA and not pay the overhead).
 

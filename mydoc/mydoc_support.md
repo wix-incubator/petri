@@ -1,10 +1,9 @@
 ---
 title: Support
-tags: [getting_started, troubleshooting]
 keywords: questions, troubleshooting, contact, support
 last_updated: March 20, 2016
 summary: "Contact us for any support issues."
-sidebar: mydoc_sidebar
+sidebar: mydoc_support
 permalink: /mydoc_support/
 ---
 
