@@ -1,6 +1,6 @@
 ---
 title: Filters
-keywords: filters, users
+keywords: filters, users, custom
 last_updated: March 31, 2016
 sidebar: custom_filters
 permalink: /custom_filters/
