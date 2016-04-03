@@ -2,8 +2,8 @@
 title: Support
 keywords: questions, troubleshooting, contact, support
 last_updated: March 20, 2016
-sidebar: mydoc_support
-permalink: /mydoc_support/
+sidebar: support
+permalink: /support/
 ---
 
 Feedback, bug reports and improvements are welcome!

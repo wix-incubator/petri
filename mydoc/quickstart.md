@@ -2,8 +2,8 @@
 title: Quickstart
 keywords: questions, quickstart, installation, server, integration
 last_updated: March 31, 2016
-sidebar: mydoc_quickstart
-permalink: /mydoc_quickstart/
+sidebar: quickstart
+permalink: /quickstart/
 ---
 
 ## Step 1: Setting Up Petri Server
@@ -62,11 +62,11 @@ server.port : <int>
 
 
 
-## Step 2: [Creating a Petri BackOffice app]({{site.data.urls.mydoc_creating_a_petri_backoffice_app.url}}) 
+## Step 2: [Creating a Petri BackOffice app]({{site.data.urls.creating_a_petri_backoffice_app.url}}) 
 
-or, alternatively, [just issue a few HTTP requests]({{site.data.urls.mydoc_managing_experiments_specs.url}})
+or, alternatively, [just issue a few HTTP requests]({{site.data.urls.managing_experiments_specs.url}})
 
 
-## Step 3: [Integrating Petri into your application]({{site.data.urls.mydoc_integrating_petri_into_your_app.url}}) 
+## Step 3: [Integrating Petri into your application]({{site.data.urls.integrating_petri_into_your_app.url}}) 
 
-or, alternatively, [Use Laboratory as a Service]({{site.data.urls.mydoc_using_laboratory_as_a_service.url}})
+or, alternatively, [Use Laboratory as a Service]({{site.data.urls.using_laboratory_as_a_service.url}})

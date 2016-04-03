@@ -2,13 +2,13 @@
 title: Managing Experiments And Specs
 keywords: managing, experiments, specs
 last_updated: March 31, 2016
-sidebar: mydoc_managing_experiments_specs
-permalink: /mydoc_managing_experiments_specs/
+sidebar: managing_experiments_specs
+permalink: /managing_experiments_specs/
 ---
 
 ## Using A Java Client
 
-If you're using a Java client, you can use our builder classes to create objects, then call `FullPetriClient` methods with them, as described [here]({{site.data.urls.mydoc_creating_a_petri_backoffice_app.url}})
+If you're using a Java client, you can use our builder classes to create objects, then call `FullPetriClient` methods with them, as described [here]({{site.data.urls.creating_a_petri_backoffice_app.url}})
 
 ## Using A JSON-RPC Client
 

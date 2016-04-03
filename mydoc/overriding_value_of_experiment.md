@@ -2,8 +2,8 @@
 title: Overriding Experiment Values
 keywords: QA, override, experiment, support, testing
 last_updated: March 31, 2016
-sidebar: mydoc_overriding_value_of_experiment
-permalink: /mydoc_overriding_value_of_experiment/
+sidebar: overriding_value_of_experiment
+permalink: /overriding_value_of_experiment/
 ---
 
 > At Wix, we use the override experiment values when testing (so our code base does not go stale) and when support want to imitate a certain user's experience. 

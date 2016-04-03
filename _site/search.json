@@ -3,6 +3,56 @@
 
 
 
+{
+"title": "Architecture Overview",
+"tags": "",
+"keywords": "architecture",
+"url": "/petri/architecture_overview/",
+"summary": ""
+},
+
+
+
+{
+"title": "Basic Concepts and Best Practices",
+"tags": "",
+"keywords": "concepts, best practices",
+"url": "/petri/basic_concepts_best_practices/",
+"summary": ""
+},
+
+
+
+{
+"title": "Creating a Petri Backoffice Application",
+"tags": "",
+"keywords": "backoffice, management, application",
+"url": "/petri/creating_a_petri_backoffice_app/",
+"summary": ""
+},
+
+
+
+{
+"title": "Custom Filters",
+"tags": "",
+"keywords": "filters, users",
+"url": "/petri/custom_filters/",
+"summary": ""
+},
+
+
+
+{
+"title": "Experiments and Experiment Specs",
+"tags": "",
+"keywords": "experiments, specs",
+"url": "/petri/experiments/",
+"summary": ""
+},
+
+
+
 
 
 {
@@ -16,70 +66,10 @@
 
 
 {
-"title": "Architecture Overview",
-"tags": "",
-"keywords": "architecture",
-"url": "/petri/mydoc_architecture_overview/",
-"summary": ""
-},
-
-
-
-{
-"title": "Basic Concepts and Best Practices",
-"tags": "",
-"keywords": "concepts, best practices",
-"url": "/petri/mydoc_basic_concepts_best_practices/",
-"summary": ""
-},
-
-
-
-{
-"title": "Creating a Petri Backoffice Application",
-"tags": "",
-"keywords": "backoffice, management, application",
-"url": "/petri/mydoc_creating_a_petri_backoffice_app/",
-"summary": ""
-},
-
-
-
-{
-"title": "Custom Filters",
-"tags": "",
-"keywords": "filters, users",
-"url": "/petri/mydoc_custom_filters/",
-"summary": ""
-},
-
-
-
-{
-"title": "Experiments and Experiment Specs",
-"tags": "",
-"keywords": "experiments, specs",
-"url": "/petri/mydoc_experiments/",
-"summary": ""
-},
-
-
-
-{
-"title": "FAQ layout",
-"tags": "special_layouts",
-"keywords": "frequently asked questions, FAQ, question and answer, collapsible sections, expand, collapse",
-"url": "/petri/mydoc_faq_layout/",
-"summary": "You can use an accordion-layout that takes advantage of Bootstrap styling. This is useful for an FAQ page."
-},
-
-
-
-{
 "title": "Integrate Laboratory (Petri client) Into Your Application",
 "tags": "",
 "keywords": "application, laboratory, client, petri, integration",
-"url": "/petri/mydoc_integrating_petri_into_your_app/",
+"url": "/petri/integrating_petri_into_your_app/",
 "summary": ""
 },
 
@@ -89,7 +79,7 @@
 "title": "Introduction",
 "tags": "getting_startedintroduction",
 "keywords": "introduction",
-"url": "/petri/mydoc_introduction/",
+"url": "/petri/introduction/",
 "summary": ""
 },
 
@@ -99,7 +89,7 @@
 "title": "Conducting An Experiment",
 "tags": "",
 "keywords": "laboratory, conduct, API, experiment",
-"url": "/petri/mydoc_laboratory_api/",
+"url": "/petri/laboratory_api/",
 "summary": ""
 },
 
@@ -109,8 +99,18 @@
 "title": "Managing Experiments And Specs",
 "tags": "",
 "keywords": "managing, experiments, specs",
-"url": "/petri/mydoc_managing_experiments_specs/",
+"url": "/petri/managing_experiments_specs/",
 "summary": ""
+},
+
+
+
+{
+"title": "FAQ layout",
+"tags": "special_layouts",
+"keywords": "frequently asked questions, FAQ, question and answer, collapsible sections, expand, collapse",
+"url": "/petri/faq_layout/",
+"summary": "You can use an accordion-layout that takes advantage of Bootstrap styling. This is useful for an FAQ page."
 },
 
 
@@ -119,7 +119,7 @@
 "title": "Overriding Experiment Values",
 "tags": "",
 "keywords": "QA, override, experiment, support, testing",
-"url": "/petri/mydoc_overriding_value_of_experiment/",
+"url": "/petri/overriding_value_of_experiment/",
 "summary": ""
 },
 
@@ -129,7 +129,7 @@
 "title": "Quickstart",
 "tags": "",
 "keywords": "questions, quickstart, installation, server, integration",
-"url": "/petri/mydoc_quickstart/",
+"url": "/petri/quickstart/",
 "summary": ""
 },
 
@@ -139,9 +139,13 @@
 "title": "User Experience Persistence",
 "tags": "",
 "keywords": "persistence, experience, UX",
-"url": "/petri/mydoc_registered_vs_non_registered_users/",
+"url": "/petri/registered_vs_non_registered_users/",
 "summary": ""
 },
+
+
+
+
 
 
 
@@ -149,9 +153,17 @@
 "title": "Support",
 "tags": "",
 "keywords": "questions, troubleshooting, contact, support",
-"url": "/petri/mydoc_support/",
+"url": "/petri/support/",
 "summary": ""
 },
+
+
+
+
+
+
+
+
 
 
 
@@ -159,7 +171,7 @@
 "title": "User Experience Persistence",
 "tags": "",
 "keywords": "persistence, experience, UX",
-"url": "/petri/mydoc_user_experience_persistence/",
+"url": "/petri/user_experience_persistence/",
 "summary": ""
 },
 
@@ -169,21 +181,9 @@
 "title": "Laboratory As A Service",
 "tags": "",
 "keywords": "SAAS, laboratory, service, cloud",
-"url": "/petri/mydoc_using_laboratory_as_a_service/",
+"url": "/petri/using_laboratory_as_a_service/",
 "summary": ""
 },
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

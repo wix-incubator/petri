@@ -2,8 +2,8 @@
 title: Creating a Petri Backoffice Application
 keywords: backoffice, management, application
 last_updated: March 31, 2016
-sidebar: mydoc_creating_a_petri_backoffice_app
-permalink: /mydoc_creating_a_petri_backoffice_app/
+sidebar: creating_a_petri_backoffice_app
+permalink: /creating_a_petri_backoffice_app/
 ---
 
 > At Wix, we created a BackOffice application to manage our experiments and specs. Our Product Managers have full access to this BackOffice and can create any user experience they like.
@@ -12,7 +12,7 @@ permalink: /mydoc_creating_a_petri_backoffice_app/
 
 In this section, we will show you how to link your BackOffice application to Petri. 
 
-**Note:** If you prefer to write your BackOffice in a non-JVM language, [read more here]({{site.data.urls.mydoc_managing_experiments_specs.url}}).
+**Note:** If you prefer to write your BackOffice in a non-JVM language, [read more here]({{site.data.urls.managing_experiments_specs.url}}).
 
 
 ### Add petri-core dependency to your POM.xml
@@ -41,7 +41,7 @@ FullPetriClient  petriClient = PetriRPCClient.makeFullClientFor("http://localhos
 
 ### Create a spec definition for your experiment
 
-Better yet, read [this]({{site.data.urls.mydoc_experiments.url}}#what-are-experiment-specs), then add the specs to your code and trigger spec scanning when needed.
+Better yet, read [this]({{site.data.urls.experiments.url}}#what-are-experiment-specs), then add the specs to your code and trigger spec scanning when needed.
 
 ```java
 private  void createSpec(String specKey, List<String> testGroupValues, String scopeName) {

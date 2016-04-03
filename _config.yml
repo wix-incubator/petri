@@ -55,7 +55,7 @@ defaults:
       layout: "page"
       comments: true
       search: true
-      sidebar: mydoc_sidebar
+      sidebar: sidebar
   -
     scope:
       path: ""

@@ -2,8 +2,8 @@
 title: Conducting An Experiment
 keywords: laboratory, conduct, API, experiment
 last_updated: March 31, 2016
-sidebar: mydoc_laboratory_api
-permalink: /mydoc_laboratory_api/
+sidebar: laboratory_api
+permalink: /laboratory_api/
 ---
 
 For the full updated API set see [the code](https://github.com/wix/petri/blob/master/wix-petri-core/src/main/java/com/wixpress/petri/laboratory/Laboratory.java)

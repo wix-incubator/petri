@@ -2,8 +2,8 @@
 title: Basic Concepts and Best Practices
 keywords: concepts, best practices
 last_updated: March 31, 2016
-sidebar: mydoc_basic_concepts_best_practices
-permalink: /mydoc_basic_concepts_best_practices/
+sidebar: basic_concepts_best_practices
+permalink: /basic_concepts_best_practices/
 ---
 
 ## Experiments
@@ -25,7 +25,7 @@ Multiple experiments can be created with the same key. For example:
 - One experiment can be open to 50% of users in Japan and one experiment open to 20% of users in the USA.
 - One FT open to all company employees & an A/B test for the rest of the population.
 
-At Wix, we created a Backoffice application for creating and editing experiments. Learn how to setup yours [here]({{site.data.urls.mydoc_creating_a_petri_backoffice_app.url}}).
+At Wix, we created a Backoffice application for creating and editing experiments. Learn how to setup yours [here]({{site.data.urls.creating_a_petri_backoffice_app.url}}).
 
 ## Experiment Specs
 
@@ -33,7 +33,7 @@ At Wix, we created a Backoffice application for creating and editing experiments
 
 Our best practice is to allow creating experiments based on existing specs. This best practice emerged as a lesson learned from cases of hunting down experiments that did not seem to be working. 
 
-Read more about experiments and experiment specs [here]({{site.data.urls.mydoc_experiments.url}}).
+Read more about experiments and experiment specs [here]({{site.data.urls.experiments.url}}).
 
 ## Filters
 
@@ -41,13 +41,13 @@ Read more about experiments and experiment specs [here]({{site.data.urls.mydoc_e
 
 Filters may be used to determine what users will be included in your defined experiments. Our built in filters include language, geo, user-agent, individual user IDs (usually used for QA) and more. 
 
-You can also create your own custom filters, read more about that [here]({{site.data.urls.mydoc_custom_filters.url}}).
+You can also create your own custom filters, read more about that [here]({{site.data.urls.custom_filters.url}}).
 
 
 ## How Petri Persists User Experience
 
 Cookies are used to provide stickiness for users i.e , when running an A/B test and a user is given a choice between A or B, once a user receives B they should continue to do so on to the next visit.
 
-Read more about how Petri persists user experience [here]({{site.data.urls.mydoc_user_experience_persistence.url}}).
+Read more about how Petri persists user experience [here]({{site.data.urls.user_experience_persistence.url}}).
 
 

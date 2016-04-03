@@ -3,8 +3,8 @@ title: Introduction
 tags: [getting_started, introduction]
 keywords: introduction
 last_updated: March 31, 2016
-sidebar: mydoc_sidebar
-permalink: /mydoc_introduction/
+sidebar: sidebar
+permalink: /introduction/
 ---
 
 

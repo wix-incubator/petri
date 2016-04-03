@@ -13,6 +13,36 @@
   
   
   
+  <url>
+    <loc>wix.github.io/petri/architecture_overview/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/basic_concepts_best_practices/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/creating_a_petri_backoffice_app/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/custom_filters/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/experiments/</loc>
+  </url>
+  
+  
+  
   
   
   <url>
@@ -22,110 +52,80 @@
   
   
   <url>
-    <loc>wix.github.io/petri/mydoc_architecture_overview/</loc>
+    <loc>wix.github.io/petri/integrating_petri_into_your_app/</loc>
   </url>
   
   
   
   <url>
-    <loc>wix.github.io/petri/mydoc_basic_concepts_best_practices/</loc>
+    <loc>wix.github.io/petri/introduction/</loc>
   </url>
   
   
   
   <url>
-    <loc>wix.github.io/petri/mydoc_creating_a_petri_backoffice_app/</loc>
+    <loc>wix.github.io/petri/laboratory_api/</loc>
   </url>
   
   
   
   <url>
-    <loc>wix.github.io/petri/mydoc_custom_filters/</loc>
+    <loc>wix.github.io/petri/managing_experiments_specs/</loc>
   </url>
   
   
   
   <url>
-    <loc>wix.github.io/petri/mydoc_experiments/</loc>
+    <loc>wix.github.io/petri/faq_layout/</loc>
   </url>
   
   
   
   <url>
-    <loc>wix.github.io/petri/mydoc_faq_layout/</loc>
+    <loc>wix.github.io/petri/overriding_value_of_experiment/</loc>
   </url>
   
   
   
   <url>
-    <loc>wix.github.io/petri/mydoc_integrating_petri_into_your_app/</loc>
+    <loc>wix.github.io/petri/quickstart/</loc>
   </url>
   
   
   
   <url>
-    <loc>wix.github.io/petri/mydoc_introduction/</loc>
+    <loc>wix.github.io/petri/registered_vs_non_registered_users/</loc>
+  </url>
+  
+  
+  
+  
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/support/</loc>
+  </url>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/user_experience_persistence/</loc>
   </url>
   
   
   
   <url>
-    <loc>wix.github.io/petri/mydoc_laboratory_api/</loc>
+    <loc>wix.github.io/petri/using_laboratory_as_a_service/</loc>
   </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/mydoc_managing_experiments_specs/</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/mydoc_overriding_value_of_experiment/</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/mydoc_quickstart/</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/mydoc_registered_vs_non_registered_users/</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/mydoc_support/</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/mydoc_user_experience_persistence/</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/mydoc_using_laboratory_as_a_service/</loc>
-  </url>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
 </urlset>

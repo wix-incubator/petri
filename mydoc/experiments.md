@@ -2,8 +2,8 @@
 title: Experiments and Experiment Specs
 keywords: experiments, specs
 last_updated: March 31, 2016
-sidebar: mydoc_experiments
-permalink: /mydoc_experiments/
+sidebar: experiments
+permalink: /experiments/
 ---
 
 ## Terminology
@@ -17,7 +17,7 @@ Multiple experiments can be created with the same key - for example running 2 ex
 - One experiment on 50% of users in Japan & one experiment on 20% of users in USA
 - One FT for all company employees & one A/B test for the rest of the world
 
-At Wix, we created a Backoffice application for creating and editing experiments. Learn how to setup yours [here]({{site.data.urls.mydoc_creating_a_petri_backoffice_app.url}})
+At Wix, we created a Backoffice application for creating and editing experiments. Learn how to setup yours [here]({{site.data.urls.creating_a_petri_backoffice_app.url}})
 
 # Experiment specs
 

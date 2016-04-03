@@ -2,8 +2,8 @@
 title: Integrate Laboratory (Petri client) Into Your Application
 keywords: application, laboratory, client, petri, integration
 last_updated: March 31, 2016
-sidebar: mydoc_integrating_petri_into_your_app
-permalink: /mydoc_integrating_petri_into_your_app/
+sidebar: integrating_petri_into_your_app
+permalink: /integrating_petri_into_your_app/
 ---
 
 * Laboratory is supported for any servlet-api based application:

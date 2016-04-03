@@ -2,8 +2,8 @@
 title: Custom Filters
 keywords: filters, users
 last_updated: March 31, 2016
-sidebar: mydoc_custom_filters
-permalink: /mydoc_custom_filters/
+sidebar: custom_filters
+permalink: /custom_filters/
 ---
 
 ## Add a filter with your own custom logic 
@@ -21,9 +21,9 @@ see examples:
 
 
 
-Another option is to add a jar containing your custom filters. This option is convenient if you are using the [Laboratory as a Service]({{site.data.urls.mydoc_using_laboratory_as_a_service.url}}).
+Another option is to add a jar containing your custom filters. This option is convenient if you are using the [Laboratory as a Service]({{site.data.urls.using_laboratory_as_a_service.url}}).
 
-1. Create a directory called `petri-plugins` in the same location as you [installed the server]({{site.data.urls.mydoc_quickstart.url}}#install-petri-server)
+1. Create a directory called `petri-plugins` in the same location as you [installed the server]({{site.data.urls.quickstart.url}}#install-petri-server)
 
 	- Any jar containing 'extended-filters' in it's name will be scanned for filters
 	- Filters should follow the same guidelines as in the above section

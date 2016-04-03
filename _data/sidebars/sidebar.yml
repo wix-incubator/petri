@@ -16,23 +16,23 @@ entries:
       output: web
 
     - title: Quickstart
-      url: /mydoc_quickstart/
+      url: /quickstart/
       output: web
 
     - title: Introduction
-      url: /mydoc_introduction/
+      url: /introduction/
       output: web
 
     - title: Concepts and Best Practices
-      url: /mydoc_basic_concepts_best_practices/
+      url: /basic_concepts_best_practices/
       output: web
 
     - title: Architecture Overview
-      url: /mydoc_architecture_overview/
+      url: /architecture_overview/
       output: web
 
     - title: Support
-      url: /mydoc_support/
+      url: /support/
       output: web
 
   - title: Concepts
@@ -40,23 +40,23 @@ entries:
     folderitems:
 
     - title: Concepts and Best Practices
-      url: /mydoc_basic_concepts_best_practices/
+      url: /basic_concepts_best_practices/
       output: web
 
     - title: Experiments
-      url: /mydoc_experiments/
+      url: /experiments/
       output: web
 
     - title: Filters
-      url: /mydoc_custom_filters/
+      url: /custom_filters/
       output: web
 
     - title: Registered VS Non-Registered Users
-      url: /mydoc_registered_vs_non_registered_users/
+      url: /registered_vs_non_registered_users/
       output: web
 
     - title: Persistence of User Experience
-      url: /mydoc_user_experience_persistence/
+      url: /user_experience_persistence/
       output: web
 
 
@@ -65,28 +65,28 @@ entries:
     folderitems:
 
     - title: Quickstart
-      url: /mydoc_quickstart/
+      url: /quickstart/
       output: web
 
     - title: Architecture Overview
-      url: /mydoc_architecture_overview/
+      url: /architecture_overview/
       output: web
 
 
     - title: Conducting An Experiment
-      url: /mydoc_laboratory_api/
+      url: /laboratory_api/
       output: web
 
     - title: Integrate Laboratory Into Your Application
-      url: /mydoc_integrating_petri_into_your_app/
+      url: /integrating_petri_into_your_app/
       output: web
 
     - title: Using Laboratory As A Service
-      url: /mydoc_using_laboratory_as_a_service/
+      url: /using_laboratory_as_a_service/
       output: web
 
     - title: Creating a Petri Backoffice Application
-      url: /mydoc_creating_a_petri_backoffice_app/
+      url: /creating_a_petri_backoffice_app/
       output: web
 
   - title: Operations
@@ -94,10 +94,10 @@ entries:
     folderitems:
 
     - title: Managing Experiment Specs
-      url: /mydoc_managing_experiments_specs/
+      url: /managing_experiments_specs/
       output: web
 
     - title: Overriding Experiment Values
-      url: /mydoc_overriding_value_of_experiment/
+      url: /overriding_value_of_experiment/
       output: web
 

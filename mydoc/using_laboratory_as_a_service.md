@@ -2,17 +2,17 @@
 title: Laboratory As A Service
 keywords: SAAS, laboratory, service, cloud
 last_updated: March 31, 2016
-sidebar: mydoc_using_laboratory_as_a_service
-permalink: /mydoc_using_laboratory_as_a_service/
+sidebar: using_laboratory_as_a_service
+permalink: /using_laboratory_as_a_service/
 ---
 
 ## Prerequisites
 
-Read an [overview on Petri's architecture]({{site.data.urls.mydoc_architecture_overview.url}}}) for a general understanding before moving forward.
+Read an [overview on Petri's architecture]({{site.data.urls.architecture_overview.url}}}) for a general understanding before moving forward.
 
 ## Integration For JVM Applications
 
-If you are using a JVM app, please [read more here]({{site.data.urls.mydoc_integrating_petri_into_your_app.url}})  
+If you are using a JVM app, please [read more here]({{site.data.urls.integrating_petri_into_your_app.url}})  
 
 ## Integration For Non-JVM Applications
 
@@ -31,6 +31,6 @@ This means there are two options for using this service:
 - From your non-JVM application, and then you may want to pass some of the context to the request via one of these 2 options:
 
   - Add the userId param for example, or the previous conduction value from the cookie
-  - Pass your own custom context and call the `conductExperimentWithCustomContext` method on the [SampleAppController](https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-petri-app/src/main/java/com/wixpress/common/petri/SampleAppController.java). Combine this with writing your own [custom filters]({{site.data.urls.mydoc_custom_filters.url}}})
+  - Pass your own custom context and call the `conductExperimentWithCustomContext` method on the [SampleAppController](https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-petri-app/src/main/java/com/wixpress/common/petri/SampleAppController.java). Combine this with writing your own [custom filters]({{site.data.urls.custom_filters.url}}})
 .  
 

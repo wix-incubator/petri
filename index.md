@@ -1,6 +1,6 @@
 ---
 title: Petri
-sidebar: mydoc_sidebar
+sidebar: sidebar
 type: homepage
 toc: false
 ---
@@ -24,13 +24,13 @@ Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of 
 
 ### Want to learn more? 
 
-[Introduction to Petri]({{site.data.urls.mydoc_introduction.url}})
+[Introduction to Petri]({{site.data.urls.introduction.url}})
 
-[Basic Concepts and Best Practices]({{site.data.urls.mydoc_basic_concepts_best_practices.url}})
+[Basic Concepts and Best Practices]({{site.data.urls.basic_concepts_best_practices.url}})
 
-[QuickStart Guide]({{site.data.urls.mydoc_quickstart.url}})
+[QuickStart Guide]({{site.data.urls.quickstart.url}})
 
-[Architecture overview]({{site.data.urls.mydoc_architecture_overview.url}})
+[Architecture overview]({{site.data.urls.architecture_overview.url}})
 
 
 

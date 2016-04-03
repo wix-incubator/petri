@@ -2,8 +2,8 @@
 title: User Experience Persistence
 keywords: persistence, experience, UX
 last_updated: March 31, 2016
-sidebar: mydoc_registered_vs_non_registered_users
-permalink: /mydoc_registered_vs_non_registered_users/
+sidebar: registered_vs_non_registered_users
+permalink: /registered_vs_non_registered_users/
 ---
 
 # Registered VS. Non-Registered Users
