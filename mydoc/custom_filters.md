@@ -1,5 +1,5 @@
 ---
-title: Custom Filters
+title: Filters
 keywords: filters, users
 last_updated: March 31, 2016
 sidebar: custom_filters
