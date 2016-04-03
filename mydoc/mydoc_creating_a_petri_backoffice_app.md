@@ -6,21 +6,26 @@ sidebar: mydoc_creating_a_petri_backoffice_app
 permalink: /mydoc_creating_a_petri_backoffice_app/
 ---
 
+> At Wix, we created a BackOffice application to manage our experiments and specs. Our Product Managers have full access to this BackOffice and can create any user experience they like.
 
-In order to create and modify experiments and specs you will need to create a backoffice app  
-(if you prefer to write it in a non-JVM language, see [the jsons here](https://github.com/wix/petri/wiki/Creating-&-Updating-Experiments-&-Specs)
+## Creating Your BackOffice Application
 
-* add petri-core dependency to your pom
+In this section, we will show you how to link your BackOffice application to Petri. 
+
+**Note:** If you prefer to write your BackOffice in a non-JVM language, [read more here]({{site.data.urls.mydoc_managing_experiments_specs.url}}).
+
+
+### Add petri-core dependency to your POM.xml
 
 ```
 <dependency>
 	<groupId>com.wixpress.common</groupId>
     <artifactId>wix-petri-core</artifactId>
 </dependency>
- ```
-* add laboratory-servlet-api-integration dependency to your pom
-    
+```
 
+### Add laboratory-servlet-api-integration dependency to your POM.xml
+    
 ```
 <dependency>
  	<groupId>com.wixpress.common</groupId>
@@ -28,13 +33,15 @@ In order to create and modify experiments and specs you will need to create a ba
 </dependency>
 ```
 
-* Create an instance of FullPetriClient pointing to your Petri Server 
+### Create an instance of FullPetriClient pointing to your Petri Server 
 
 ```java
 FullPetriClient  petriClient = PetriRPCClient.makeFullClientFor("http://localhost:9901/petri");
 ```
 
-* Create a spec definition for your experiment (Or better yet, read [this](https://github.com/wix/petri/wiki/Experiment-Specs), then add the specs to your code and trigger spec scanning when needed)
+### Create a spec definition for your experiment
+
+Better yet, read [this]({{site.data.urls.mydoc_experiments.url}}#what-are-experiment-specs), then add the specs to your code and trigger spec scanning when needed.
 
 ```java
 private  void createSpec(String specKey, List<String> testGroupValues, String scopeName) {
@@ -46,7 +53,7 @@ private  void createSpec(String specKey, List<String> testGroupValues, String sc
 }
 ```
 
-* Create an experiment 
+### Create an experiment 
 
 ```java
 private  void createExperiment(String specKey, List<TestGroup> testGroups, boolean onlyForLoggedIn) {

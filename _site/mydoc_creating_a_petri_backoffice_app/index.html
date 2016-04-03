@@ -215,13 +215,6 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_about/">About</a></li>
-            
-            
-            
-            
-            
-            
             <li><a href="/petri/mydoc_support/">Support</a></li>
             
             
@@ -308,7 +301,7 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
+            <li><a href="/petri/mydoc_using_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
             
             
             
@@ -392,44 +385,52 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    
+
+<br>
 
     
 
     
 
-  <p>In order to create and modify experiments and specs you will need to create a backoffice app<br />
-(if you prefer to write it in a non-JVM language, see <a href="https://github.com/wix/petri/wiki/Creating-&amp;-Updating-Experiments-&amp;-Specs">the jsons here</a></p>
+    
 
-<ul>
-  <li>add petri-core dependency to your pom</li>
-</ul>
+  <blockquote>
+  <p>At Wix, we created a BackOffice application to manage our experiments and specs. Our Product Managers have full access to this BackOffice and can create any user experience they like.</p>
+</blockquote>
+
+<h2 id="creating-your-backoffice-application">Creating Your BackOffice Application</h2>
+
+<p>In this section, we will show you how to link your BackOffice application to Petri.</p>
+
+<p><strong>Note:</strong> If you prefer to write your BackOffice in a non-JVM language, <a href="/petri/mydoc_managing_experiments_specs/">read more here</a>.</p>
+
+<h3 id="add-petri-core-dependency-to-your-pomxml">Add petri-core dependency to your POM.xml</h3>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>&lt;dependency&gt;
 	&lt;groupId&gt;com.wixpress.common&lt;/groupId&gt;
     &lt;artifactId&gt;wix-petri-core&lt;/artifactId&gt;
 &lt;/dependency&gt;
- ```
-* add laboratory-servlet-api-integration dependency to your pom
-    
-
-</code></pre>
-</div>
-<dependency>
- 	<groupid>com.wixpress.common</groupid>
-    <artifactid>laboratory-servlet-api-integration</artifactid>   
-</dependency>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-* Create an instance of FullPetriClient pointing to your Petri Server 
-
-```java
-FullPetriClient  petriClient = PetriRPCClient.makeFullClientFor("http://localhost:9901/petri");
 </code></pre>
 </div>
 
-<ul>
-  <li>Create a spec definition for your experiment (Or better yet, read <a href="https://github.com/wix/petri/wiki/Experiment-Specs">this</a>, then add the specs to your code and trigger spec scanning when needed)</li>
-</ul>
+<h3 id="add-laboratory-servlet-api-integration-dependency-to-your-pomxml">Add laboratory-servlet-api-integration dependency to your POM.xml</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;dependency&gt;
+ 	&lt;groupId&gt;com.wixpress.common&lt;/groupId&gt;
+    &lt;artifactId&gt;laboratory-servlet-api-integration&lt;/artifactId&gt;   
+&lt;/dependency&gt;
+</code></pre>
+</div>
+
+<h3 id="create-an-instance-of-fullpetriclient-pointing-to-your-petri-server">Create an instance of FullPetriClient pointing to your Petri Server</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">FullPetriClient</span>  <span class="n">petriClient</span> <span class="o">=</span> <span class="n">PetriRPCClient</span><span class="o">.</span><span class="na">makeFullClientFor</span><span class="o">(</span><span class="s">"http://localhost:9901/petri"</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<h3 id="create-a-spec-definition-for-your-experiment">Create a spec definition for your experiment</h3>
+
+<p>Better yet, read <a href="/petri/mydoc_experiments/#what-are-experiment-specs">this</a>, then add the specs to your code and trigger spec scanning when needed.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">private</span>  <span class="kt">void</span> <span class="nf">createSpec</span><span class="p">(</span><span class="n">String</span> <span class="n">specKey</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">testGroupValues</span><span class="o">,</span> <span class="n">String</span> <span class="n">scopeName</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">petriClient</span><span class="o">.</span><span class="na">addSpecs</span><span class="o">(</span><span class="n">asList</span><span class="o">(</span>
@@ -441,9 +442,7 @@ FullPetriClient  petriClient = PetriRPCClient.makeFullClientFor("http://localhos
 </code></pre>
 </div>
 
-<ul>
-  <li>Create an experiment</li>
-</ul>
+<h3 id="create-an-experiment">Create an experiment</h3>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">private</span>  <span class="kt">void</span> <span class="nf">createExperiment</span><span class="p">(</span><span class="n">String</span> <span class="n">specKey</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">TestGroup</span><span class="o">&gt;</span> <span class="n">testGroups</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">onlyForLoggedIn</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">DateTime</span> <span class="n">now</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DateTime</span><span class="o">();</span>

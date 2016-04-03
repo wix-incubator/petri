@@ -90,4 +90,9 @@ mydoc_overriding_value_of_experiment:
   url: "/petri/mydoc_overriding_value_of_experiment/"
   link: "<a href='/petri/mydoc_overriding_value_of_experiment/'>Overriding Experiment Values</a>"
 
+mydoc_managing_experiments_specs:
+  title: "Managing Experiments And Specs"
+  url: "/petri/mydoc_managing_experiments_specs/"
+  link: "<a href='/petri/mydoc_managing_experiments_specs/'>Managing Experiments And Specs</a>"
+
 

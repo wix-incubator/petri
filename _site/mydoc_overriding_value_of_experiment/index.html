@@ -215,13 +215,6 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_about/">About</a></li>
-            
-            
-            
-            
-            
-            
             <li><a href="/petri/mydoc_support/">Support</a></li>
             
             
@@ -308,7 +301,7 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
+            <li><a href="/petri/mydoc_using_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
             
             
             
@@ -392,20 +385,27 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    
+
+<br>
 
     
 
     
 
-  <p>Use the <code class="highlighter-rouge">petri_ovr=The-Key:The-Value</code> query parameter to override the value returned from Laboratory’s conduction to ‘The-Value’. The end url should look something like this: 
+    
+
+  <blockquote>
+  <p>At Wix, we use the override experiment values when testing (so our code base does not go stale) and when support want to imitate a certain user’s experience.</p>
+</blockquote>
+
+<p>Use the <code class="highlighter-rouge">petri_ovr=The-Key:The-Value</code> query parameter to override the value returned from Laboratory’s conduction to ‘The-Value’. The end url should look something like this: 
 <code class="highlighter-rouge">http://yourUrl?petri_ovr=The-Key:The-Value</code></p>
 
 <p>The value will be overridden regardless of the current settings. For example, even if the experiment has 100% for the ‘off’ option, and even if the given user does not pass any filters you may have defined on that experiment.</p>
 
 <p>To override multiple experiments concatenate them with a semicolon as a delimiter: <code class="highlighter-rouge">?petri_ovr=The-Key:The-Value;Other-Key:Other-Value</code></p>
 
-<p>Note: The value must be one of the testgroups defined on the experiment</p>
+<p><strong>Note:</strong> The value must be one of the testgroups defined on the experiment</p>
 
 
 <div class="tags">

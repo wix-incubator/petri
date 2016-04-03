@@ -31,10 +31,6 @@ entries:
       url: /mydoc_architecture_overview/
       output: web
 
-    - title: About
-      url: /mydoc_about/
-      output: web
-
     - title: Support
       url: /mydoc_support/
       output: web
@@ -86,7 +82,7 @@ entries:
       output: web
 
     - title: Using Laboratory As A Service
-      url: /mydoc_laboratory_as_a_service/
+      url: /mydoc_using_laboratory_as_a_service/
       output: web
 
     - title: Creating a Petri Backoffice Application

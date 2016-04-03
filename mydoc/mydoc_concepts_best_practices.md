@@ -48,6 +48,6 @@ You can also create your own custom filters, read more about that [here]({{site.
 
 Cookies are used to provide stickiness for users i.e , when running an A/B test and a user is given a choice between A or B, once a user receives B they should continue to do so on to the next visit.
 
-Read more about how Petri persists user experience [here]({{site.data.urls.my_doc_user_experience_persistence.url}}).
+Read more about how Petri persists user experience [here]({{site.data.urls.mydoc_user_experience_persistence.url}}).
 
 

@@ -6,6 +6,8 @@ sidebar: mydoc_overriding_value_of_experiment
 permalink: /mydoc_overriding_value_of_experiment/
 ---
 
+> At Wix, we use the override experiment values when testing (so our code base does not go stale) and when support want to imitate a certain user's experience. 
+
 Use the `petri_ovr=The-Key:The-Value` query parameter to override the value returned from Laboratory's conduction to 'The-Value'. The end url should look something like this: 
 `http://yourUrl?petri_ovr=The-Key:The-Value`
 
@@ -13,4 +15,4 @@ The value will be overridden regardless of the current settings. For example, ev
 
 To override multiple experiments concatenate them with a semicolon as a delimiter: `?petri_ovr=The-Key:The-Value;Other-Key:Other-Value`
 
-Note: The value must be one of the testgroups defined on the experiment
+**Note:** The value must be one of the testgroups defined on the experiment

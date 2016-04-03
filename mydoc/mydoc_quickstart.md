@@ -6,7 +6,7 @@ sidebar: mydoc_quickstart
 permalink: /mydoc_quickstart/
 ---
 
-## Step 1 : Running Petri Server
+## Step 1: Running Petri Server
 
 There are two options:
 
@@ -57,15 +57,15 @@ db.url : <url_string>
 server.port : <int>
 ```
 
-* Run the server : `java -jar petri-server-1.19.0-SNAPSHOT.jar`
+* Run the server: `java -jar petri-server-1.19.0-SNAPSHOT.jar`
 
 
 
-## Step 2 : [Creating a Petri BackOffice app]({{site.data.urls.mydoc_creating_a_petri_backoffice_app.url}}}) 
+## Step 2: [Creating a Petri BackOffice app]({{site.data.urls.mydoc_creating_a_petri_backoffice_app.url}}) 
 
-or, alternatively, [just issue a few http requests](https://github.com/wix/petri/wiki/Creating-&-Updating-Experiments-&-Specs)
+or, alternatively, [just issue a few HTTP requests]({{site.data.urls.mydoc_managing_experiments_specs.url}})
 
 
-## Step 3 : [Integrating Petri into your app](https://github.com/wix/petri/wiki/Integrating-Petri-into-your-app) 
+## Step 3: [Integrating Petri into your application]({{site.data.urls.mydoc_integrating_petri_into_your_app.url}}) 
 
 or, alternatively, [Use Laboratory as a Service]({{site.data.urls.mydoc_using_laboratory_as_a_service.url}})

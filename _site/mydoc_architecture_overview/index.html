@@ -215,13 +215,6 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_about/">About</a></li>
-            
-            
-            
-            
-            
-            
             <li><a href="/petri/mydoc_support/">Support</a></li>
             
             
@@ -308,7 +301,7 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
+            <li><a href="/petri/mydoc_using_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
             
             
             
@@ -392,24 +385,29 @@ $('#toc').on('click', 'a', function() {
 
     
 
-    
+
+<br>
 
     
 
     
 
-  <p>PETRI consists of 2 parts:</p>
+    
 
-<p>PETRI server, which manages and stores all the experiments;
-and a PETRI client library called Laboratory.</p>
+  <p>Petri consists of 2 parts:</p>
+
+<ul>
+  <li>Petri server, which manages and stores all experiments</li>
+  <li>Laboratory, Petri’s client</li>
+</ul>
 
 <p><img src="http://static.wixstatic.com/media/1a2c40_1f81fb9df4b64b0fad220841f31b1de3.png" alt="Petri architecture" /></p>
 
-<p>Laboratory retrieves the active experiments from PETRI server and conducts the experiments. All the business logic of the tossing algorithm and all the filters logic is run from the laboratory which is embedded in your application.</p>
+<p>Laboratory retrieves the active experiments from Petri server and conducts the experiments. All business logic of the tossing algorithm and all filter logic is run from the laboratory which is embedded in the client application.</p>
 
-<p>If you don’t run a JVM application you can call <a href="https://github.com/wix/petri/wiki/Using-Laboratory-as-a-Service">a separate server</a> to perform the conduction for you and get the resulting test group/s via REST api.</p>
+<p><strong>Note:</strong> Clients that don’t run a JVM application can call <a href="/petri/mydoc_using_laboratory_as_a_service/">a separate server</a> to perform the conduction for them, and get the resulting testgroups via HTTP API.</p>
 
-<p>PETRI is designed to be very flexible so if you don’t want to use PETRI server you can simply use PETRI Laboratory and configure it to load the active experiments from the local file system (since you don’t have PETRI server it is up to you to provide the experiment definition file)</p>
+<p>Petri is designed to be very flexible, so if you don’t want to use Petri server you can simply use Petri Laboratory and configure it to load the active experiments from the local file system (since you don’t have Petri server, it is up to you to provide the experiment definition file).</p>
 
 
 

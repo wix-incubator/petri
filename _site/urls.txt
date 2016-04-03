@@ -39,13 +39,6 @@ mydoc_architecture_overview:
 
 
  
-mydoc_about:
-  title: "About"
-  url: "/petri/mydoc_about/ 'About'"
-  link: "<a href='/petri/mydoc_about/' title='About'>About</a>"
-
-
- 
 mydoc_support:
   title: "Support"
   url: "/petri/mydoc_support/ 'Support'"
@@ -120,10 +113,10 @@ mydoc_integrating_petri_into_your_app:
 
 
  
-mydoc_laboratory_as_a_service:
+mydoc_using_laboratory_as_a_service:
   title: "Using Laboratory As A Service"
-  url: "/petri/mydoc_laboratory_as_a_service/ 'Using Laboratory As A Service'"
-  link: "<a href='/petri/mydoc_laboratory_as_a_service/' title='Using Laboratory As A Service'>Using Laboratory As A Service</a>"
+  url: "/petri/mydoc_using_laboratory_as_a_service/ 'Using Laboratory As A Service'"
+  link: "<a href='/petri/mydoc_using_laboratory_as_a_service/' title='Using Laboratory As A Service'>Using Laboratory As A Service</a>"
 
 
  

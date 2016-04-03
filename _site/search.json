@@ -16,16 +16,6 @@
 
 
 {
-"title": "About",
-"tags": "about",
-"keywords": "about",
-"url": "/petri/mydoc_about/",
-"summary": "about"
-},
-
-
-
-{
 "title": "Architecture Overview",
 "tags": "",
 "keywords": "architecture",
@@ -100,7 +90,7 @@
 "tags": "getting_startedintroduction",
 "keywords": "introduction",
 "url": "/petri/mydoc_introduction/",
-"summary": "Introduction"
+"summary": ""
 },
 
 
@@ -160,7 +150,7 @@
 "tags": "",
 "keywords": "questions, troubleshooting, contact, support",
 "url": "/petri/mydoc_support/",
-"summary": "Contact us for any support issues."
+"summary": ""
 },
 
 
