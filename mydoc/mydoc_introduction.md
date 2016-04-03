@@ -8,19 +8,16 @@ sidebar: mydoc_sidebar
 permalink: /mydoc_introduction/
 ---
 
-![Wix PETRI](http://static.wix.com/media/1a2c40_947e5f0e64d175a4534898a64d1a67d2.jpg)
 
-# Product Experiments Toggles & Reporting Infrastructure
-
-Perti is a holistic experiment infrastructure that covers the lifecycle of product experimenting.
+Perti is [Wix](http://www.wix.com)'s holistic experiment system, it covers the lifecycle of product experimenting.
 
 ### Terminology
 
-> **Experiment** - A method of modifying a system’s behaviour based on context.
+**Experiment** - A method of modifying a system’s behaviour based on context.
 
-> **Feature Toggle / Feature Flag** - A stateless experiment.
+**Feature Toggle / Feature Flag** - A stateless experiment.
 
-> **A/B test** - A stateful experiment where we keep track of the participants.
+**A/B test** - A stateful experiment where we keep track of the participants.
 
 ### How an experiment begins its life
 There are many types of experiments on a system and they may vary based on the context. 
@@ -34,8 +31,6 @@ Is the experiment on a part of the system that is executed by a scheduler?
 Are we testing human behavior, protecting the system by doing gradual exposure to users, or trying to improve performance?
 
 While some of these questions can be answered by a product manager who wants to do a simple A/B test, the person who can answer all these question is the developer who implements the experiment logic and knows exactly what the context of the experiment is. 
-
-> An **experiment spec** is the basic template of an experiment. It has all the mandatory limitation and condition on an experiment.
 
 For example: if an experiment is being done on an area of your application where a user has to be signed in then the spec will define a mandatory “filter” on sign-in users
 

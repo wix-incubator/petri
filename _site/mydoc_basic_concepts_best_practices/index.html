@@ -285,30 +285,48 @@ $('#toc').on('click', 'a', function() {
 
   <h2 id="experiments">Experiments</h2>
 
-<ul>
-  <li>Experiment : A method of modifying system’s behaviour based on context.</li>
-  <li>Feature Toggle / Feature Flag is a stateless experiment.</li>
-  <li>A/B test is a stateful experiment where we keep track of the participants.</li>
-</ul>
+<blockquote>
+  <p>An <strong>experiment</strong> is a method of modifying system’s behavior based on context.</p>
+</blockquote>
 
-<p>Multiple experiments can be created with the same key - for example running 2 experiments of the same type:</p>
+<p>There are two types of experiments, each used for different purposes.</p>
+
+<blockquote>
+  <p>A <strong>Feature Toggle / Feature Flag</strong> is a stateless experiment.</p>
+</blockquote>
+
+<p>At Wix, developers use Feature Toggles (FT) to gradually roll out different implementations, where product changes are not intended. Examples include changing of databases and refactoring code.</p>
+
+<blockquote>
+  <p>An <strong>A/B test</strong> is a stateful experiment where data is collected on participants behavior.</p>
+</blockquote>
+
+<p>At Wix, we use A/B tests to gradually affect our user’s experience. This feature helps our Product Managers collect data on user behavior before making decisions. Examples include changing landing pages and product behaviour.</p>
+
+<p>Multiple experiments can be created with the same key. For example:</p>
 
 <ul>
-  <li>One experiment on 50% of users in Japan &amp; one experiment on 20% of users in USA</li>
-  <li>One FT for all company employees &amp; one A/B test for the rest of the world</li>
+  <li>One experiment can be open to 50% of users in Japan and one experiment open to 20% of users in the USA.</li>
+  <li>One FT open to all company employees &amp; an A/B test for the rest of the population.</li>
 </ul>
 
 <p>At Wix, we created a Backoffice application for creating and editing experiments. Learn how to setup yours <a href="/petri/mydoc_creating_a_petri_backoffice_app/">here</a>.</p>
 
 <h2 id="experiment-specs">Experiment Specs</h2>
 
-<p>An experiment spec is a template for creating experiments. It defines the experiment key, test groups (possible outcomes/results), product(s) the experiment belongs to, and an owner.</p>
+<blockquote>
+  <p>An <strong>experiment spec</strong> is a template for creating experiments. It defines the experiment key, test groups (possible outcomes/results), product(s) the experiment belongs to, and an owner.</p>
+</blockquote>
 
 <p>Our best practice is to allow creating experiments based on existing specs. This best practice emerged as a lesson learned from cases of hunting down experiments that did not seem to be working.</p>
 
 <p>Read more about experiments and experiment specs <a href="/petri/mydoc_experiments/">here</a>.</p>
 
 <h2 id="filters">Filters</h2>
+
+<blockquote>
+  <p>A <strong>filter</strong> is a condition for eligibility to participate in an experiment.</p>
+</blockquote>
 
 <p>Filters may be used to determine what users will be included in your defined experiments. Our built in filters include language, geo, user-agent, individual user IDs (usually used for QA) and more.</p>
 
