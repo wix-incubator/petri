@@ -1,13 +1,3 @@
----
-title: Quickstart
-tags: [getting_started, quickstart]
-keywords: questions, quickstart
-last_updated: March 31, 2016
-summary: "Quickstart"
-sidebar: mydoc_sidebar
-permalink: /mydoc_quickstart/
----
-
 There are 3 steps required to get Petri running on your environment
 
 ### Step 1 : [Running Petri Server] (https://github.com/wix/petri/wiki/Running-Petri-Server)

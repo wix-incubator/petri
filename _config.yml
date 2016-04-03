@@ -12,9 +12,9 @@ site_title: Petri
 # this appears in the html browser tab for the site title (seen mostly by search engines, not users)
 company_name: Wix.com
 # this appears in the footer
-github_editme_path: wix/petri/edit/reviews
+github_editme_path: 
 # if you're using Github, provide the basepath to the branch you've created for reviews, following the sample here. if not, leave this value blank.
-disqus_shortname: petri
+disqus_shortname: 
 # if you're using disqus for comments, add the shortname here. if not, leave this value blank.
 host: 127.0.0.1
 # the preview server used. Leave as is.
