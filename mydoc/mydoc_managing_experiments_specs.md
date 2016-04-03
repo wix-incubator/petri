@@ -1,10 +1,17 @@
-# For creating/updating experiments
-* if you're using a java client, you can use the builder classes to create the objects, then call FullPetriClient methods with these objects, as described [here](https://github.com/wix/petri/wiki/Creating-a-Petri-BackOffice-app)
+---
+title: Managing Experiments And Specs
+keywords: managing, experiments, specs
+last_updated: March 31, 2016
+sidebar: mydoc_managing_experiments_specs
+permalink: /mydoc_managing_experiments_specs/
+---
 
-* If you're using some json-rpc client, you can issue http requests to 'http://ip:port/petri/full_api' (following json rpc protocol)
-(all times are utc timedates)
+If you're using a Java client, you can use the builder classes to create the objects, then call FullPetriClient methods with these objects, as described [here]({{site.data.urls.mydoc_creating_a_petri_backoffice_app.url}})
 
-    * method 'insertExperiment' accepts this json:
+* If you're using a json-rpc client, you can issue HTTP requests to 'http://ip:port/petri/full_api' (following JSON RPC protocol)
+(all times are UTC timedates)
+
+    * method 'insertExperiment' accepts this JSON:
 
     ```json
     {    
