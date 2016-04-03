@@ -201,7 +201,7 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Basic Concepts and Best Practices</a></li>
+            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Concepts and Best Practices</a></li>
             
             
             
@@ -223,6 +223,121 @@ window.location.href = uri;
             
             
             <li><a href="/petri/mydoc_support/">Support</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Concepts</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Concepts and Best Practices</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_experiments/">Experiments</a></li>
+            
+            
+            
+            
+            
+            
+            <li class="active"><a href="/petri">Filters</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_registered_vs_non_registered_users/">Registered VS Non-Registered Users</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_user_experience_persistence/">Persistence of User Experience</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Installation and Integration</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_quickstart/">Quickstart</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_architecture_overview/">Architecture Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_laboratory_api/">Conducting An Experiment</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_integrating_petri_into_your_app/">Integrate Laboratory Into Your Application</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_creating_a_petri_backoffice_app/">Creating a Petri Backoffice Application</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Operations</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_managing_experiments_specs/">Managing Experiment Specs</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_overriding_value_of_experiment/">Overriding Experiment Values</a></li>
             
             
             
@@ -283,26 +398,38 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <h3 id="how-to-add-a-filter-with-your-own-custom-logic">How to add a filter with your own custom logic</h3>
-<p>#### any filter on the classpath that answers the following criteria will be available:
-  - the class should be under the root package “filters” (similar to the “specs” package)
-  - the class should implement the <a href="https://github.com/wix/petri/blob/master/wix-petri-core/src/main/java/com/wixpress/petri/experiments/domain/Filter.java">Filter</a> interface 
-  - the class should define the ‘@FilterTypeName(“id”)’ annotation</p>
+  <h2 id="add-a-filter-with-your-own-custom-logic">Add a filter with your own custom logic</h2>
+
+<p>Any filter on the classpath that answers the following criteria will be available:</p>
 
 <ul>
-  <li>see examples <a href="https://github.com/wix/petri/blob/master/wix-petri-core/src/test/java/filters/AdditionalFilter.java">here</a> and <a href="https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-extended-filters/src/main/java/filters/CustomUserTypeFilter.java">here</a></li>
+  <li>The class should be under the root package “filters” (similar to the “specs” package)</li>
+  <li>The class should implement the <a href="https://github.com/wix/petri/blob/master/wix-petri-core/src/main/java/com/wixpress/petri/experiments/domain/Filter.java">Filter</a> interface</li>
+  <li>The class should define the ‘@FilterTypeName(“id”)’ annotation</li>
 </ul>
 
-<h4 id="another-option-is-to-add-a-jar-containing-your-custom-filters---this-option-is-convenient-if-you-are-using-the-laboratory-as-a-service-httpsgithubcomwixpetriwikiusing-laboratory-as-a-service">another option is to add a jar containing your custom filters - This option is convenient if you are using the [Laboratory as a Service] (https://github.com/wix/petri/wiki/Using-Laboratory-as-a-Service).</h4>
-<ul>
-  <li>create a directory called ‘ petri-plugins’ in the same location as you <a href="https://github.com/wix/petri/wiki/Installing-Petri-Server">installed the server</a>
+<p>see examples:</p>
+
+<ol>
+  <li><a href="https://github.com/wix/petri/blob/master/wix-petri-core/src/test/java/filters/AdditionalFilter.java">Additional Filter example</a></li>
+  <li><a href="https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-extended-filters/src/main/java/filters/CustomUserTypeFilter.java">Custom User Type Filter example</a></li>
+</ol>
+
+<p>Another option is to add a jar containing your custom filters. This option is convenient if you are using the <a href="/petri/mydoc_using_laboratory_as_a_service/">Laboratory as a Service</a>.</p>
+
+<ol>
+  <li>
+    <p>Create a directory called <code class="highlighter-rouge">petri-plugins</code> in the same location as you <a href="/petri/mydoc_quickstart/#install-petri-server">installed the server</a></p>
+
     <ul>
-      <li>any jar containing ‘extended-filters’ in it’s name will be scanned for filters</li>
-      <li>filters should follow the same guidelines as in the above section</li>
+      <li>Any jar containing ‘extended-filters’ in it’s name will be scanned for filters</li>
+      <li>Filters should follow the same guidelines as in the above section</li>
     </ul>
   </li>
-  <li>do the same in the location where you installed the ‘Laboratory Service’</li>
-</ul>
+  <li>
+    <p>Do the same in the location where you installed the ‘Laboratory Service’</p>
+  </li>
+</ol>
 
 
 <div class="tags">

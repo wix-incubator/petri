@@ -70,6 +70,11 @@ mydoc_integrating_petri_into_your_app:
   url: "/petri/mydoc_integrating_petri_into_your_app/"
   link: "<a href='/petri/mydoc_integrating_petri_into_your_app/'>Integrate Laboratory (Petri client) Into Your Application</a>"
 
+mydoc_using_laboratory_as_a_service:
+  title: "Laboratory As A Service"
+  url: "/petri/mydoc_using_laboratory_as_a_service/"
+  link: "<a href='/petri/mydoc_using_laboratory_as_a_service/'>Laboratory As A Service</a>"
+
 mydoc_custom_filters: 
   title: "Custom Filters"
   url: "/petri/mydoc_custom_filters/"
@@ -79,4 +84,10 @@ mydoc_laboratory_api:
   title: "Conducting An Experiment"
   url: "/petri/mydoc_laboratory_api/"
   link: "<a href='/petri/mydoc_laboratory_api/'>Conducting An Experiment</a>"
+
+mydoc_overriding_value_of_experiment:
+  title: "Overriding Experiment Values"
+  url: "/petri/mydoc_overriding_value_of_experiment/"
+  link: "<a href='/petri/mydoc_overriding_value_of_experiment/'>Overriding Experiment Values</a>"
+
 

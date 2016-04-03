@@ -201,7 +201,7 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Basic Concepts and Best Practices</a></li>
+            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Concepts and Best Practices</a></li>
             
             
             
@@ -223,6 +223,121 @@ window.location.href = uri;
             
             
             <li><a href="/petri/mydoc_support/">Support</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Concepts</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Concepts and Best Practices</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_experiments/">Experiments</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_custom_filters/">Filters</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_registered_vs_non_registered_users/">Registered VS Non-Registered Users</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_user_experience_persistence/">Persistence of User Experience</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Installation and Integration</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_quickstart/">Quickstart</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_architecture_overview/">Architecture Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_laboratory_api/">Conducting An Experiment</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_integrating_petri_into_your_app/">Integrate Laboratory Into Your Application</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_creating_a_petri_backoffice_app/">Creating a Petri Backoffice Application</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Operations</a>
+        <ul>
+            
+            
+            
+            <li class="active"><a href="/petri">Managing Experiment Specs</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_overriding_value_of_experiment/">Overriding Experiment Values</a></li>
             
             
             
@@ -283,85 +398,84 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>If you’re using a Java client, you can use the builder classes to create the objects, then call FullPetriClient methods with these objects, as described <a href="/petri/mydoc_creating_a_petri_backoffice_app/">here</a></p>
+  <h2 id="using-a-java-client">Using A Java Client</h2>
 
-<ul>
-  <li>
-    <p>If you’re using a json-rpc client, you can issue HTTP requests to ‘http://ip:port/petri/full_api’ (following JSON RPC protocol)
+<p>If you’re using a Java client, you can use our builder classes to create objects, then call <code class="highlighter-rouge">FullPetriClient</code> methods with them, as described <a href="/petri/mydoc_creating_a_petri_backoffice_app/">here</a></p>
+
+<h2 id="using-a-json-rpc-client">Using A JSON-RPC Client</h2>
+
+<p>Issuing an HTTP request to <code class="highlighter-rouge">http://ip:port/petri/full_api</code> (following the JSON RPC protocol)
 (all times are UTC timedates)</p>
 
-    <ul>
-      <li>method ‘insertExperiment’ accepts this JSON:</li>
-    </ul>
+<h3 id="creating-a-new-experiment">Creating A New Experiment</h3>
 
-    <p><code class="highlighter-rouge">json
-  {    
-    "key" : "experimentKey",
-    "fromSpec" : true,
-    "creationDate" : "2014-11-05T15:32:29.451Z", 
-    "description" : "some description",
-    "startDate" : "2014-11-05T15:37:00.000Z",
-    "endDate" : "2015-11-05T15:34:00.000Z",
-    "groups" : [ {
-      "id" : 1,
-      "chunk" : 0,
-      "value" : "false"
-    }, {
-      "id" : 2,
-      "chunk" : 100,
-      "value" : "true"
-    } ],
-    "scope" : "sub-product-tag",
-    "paused" : false,
-    "name" : "some human readable name",
-    "creator" : "someone@wix.com",
-    "featureToggle" : true,
-    "originalId" : 0,
-    "linkedId" : 0,
-    "persistent" : true,
-    "filters" : [ ],
-    "onlyForLoggedInUsers" : false,
-    "comment" : "",
-    "updater" : "someone@wix.com",
-    "conductLimit" : 0
-}
-</code></p>
+<p>To create a new experiment, issue an HTTP request to the <code class="highlighter-rouge">insertExperiment</code> method, which accepts the following JSON:</p>
 
-    <ul>
-      <li>method ‘updateExperiment’ receives the same, but wrapped in:</li>
-    </ul>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">    
+  </span><span class="nt">"key"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"experimentKey"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"fromSpec"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"creationDate"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-11-05T15:32:29.451Z"</span><span class="p">,</span><span class="w"> 
+  </span><span class="nt">"description"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"some description"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"startDate"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-11-05T15:37:00.000Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"endDate"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2015-11-05T15:34:00.000Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"groups"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"chunk"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"false"</span><span class="w">
+  </span><span class="p">},</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"chunk"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="w">
+  </span><span class="p">}</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="nt">"scope"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"sub-product-tag"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"paused"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"some human readable name"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"creator"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"someone@wix.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"featureToggle"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"originalId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"linkedId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"persistent"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"filters"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="nt">"onlyForLoggedInUsers"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"comment"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"updater"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"someone@wix.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"conductLimit"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
 
-    <p><code class="highlighter-rouge">json
-  {
-"id" : 6221,
-  "lastUpdated" : "2014-11-05T15:37:00.000Z",
-  "experimentSnapshot" : {
-           "key" : "experimentKey",
-           "fromSpec" : true,
-           "etc" : "etc",
-           "originalId" : 6221,
-   }
-}
-</code></p>
-  </li>
-</ul>
+<h3 id="editing-an-experiment">Editing An Experiment</h3>
 
-<h1 id="for-creatingupdating-specs">For creating/updating specs:</h1>
-<p>call <code class="highlighter-rouge">void addSpecs(List&lt;ExperimentSpec&gt; expectedSpecs);</code></p>
+<p>To edit an experiment, issue an HTTP request to the <code class="highlighter-rouge">updateExperiment</code> method, which accepts the same JSON as before, only wrapped in the following JSON:</p>
 
-<p>or json with an array of these objects:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+</span><span class="nt">"id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">6221</span><span class="p">,</span><span class="w">
+</span><span class="nt">"lastUpdated"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-11-05T15:37:00.000Z"</span><span class="p">,</span><span class="w">
+</span><span class="nt">"experimentSnapshot"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+         </span><span class="nt">"key"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"experimentKey"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"fromSpec"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"etc"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"etc"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"originalId"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">6221</span><span class="p">,</span><span class="w">
+ </span><span class="err">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="w">    </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"creationDate"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-01-09T13:11:26.846Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"updateDate"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-01-09T13:11:26.846Z"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"key"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"experimentKey"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"owner"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"someone@wix.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"persistent"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"testGroups"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"old"</span><span class="p">,</span><span class="w"> </span><span class="s2">"new"</span><span class="w"> </span><span class="p">],</span><span class="w">
-    </span><span class="nt">"scopes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"your-product"</span><span class="p">,</span><span class="w">
-      </span><span class="nt">"onlyForLoggedInUsers"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-    </span><span class="p">}]</span><span class="w">
+<h1 id="creating-and-updating-experiment-specs">Creating and Updating Experiment Specs</h1>
+
+<p>To create or update an experiment spec, issue a call to the <code class="highlighter-rouge">void addSpecs(List&lt;ExperimentSpec&gt; expectedSpecs);</code> method or JSON with an array of the following objects:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"creationDate"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-01-09T13:11:26.846Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"updateDate"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-01-09T13:11:26.846Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"key"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"experimentKey"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"owner"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"someone@wix.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"persistent"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"testGroups"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">"old"</span><span class="p">,</span><span class="w"> </span><span class="s2">"new"</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="nt">"scopes"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"your-product"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"onlyForLoggedInUsers"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 </div>

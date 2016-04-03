@@ -2,8 +2,8 @@
 title: User Experience Persistence
 keywords: persistence, experience, UX
 last_updated: March 31, 2016
-sidebar: my_doc_user_experience_persistence
-permalink: /my_doc_user_experience_persistence/
+sidebar: mydoc_user_experience_persistence
+permalink: /mydoc_user_experience_persistence/
 ---
 
 \* "user agent" - a machine/browser

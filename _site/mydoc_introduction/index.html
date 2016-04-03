@@ -201,7 +201,7 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Basic Concepts and Best Practices</a></li>
+            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Concepts and Best Practices</a></li>
             
             
             
@@ -223,6 +223,121 @@ window.location.href = uri;
             
             
             <li><a href="/petri/mydoc_support/">Support</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Concepts</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Concepts and Best Practices</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_experiments/">Experiments</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_custom_filters/">Filters</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_registered_vs_non_registered_users/">Registered VS Non-Registered Users</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_user_experience_persistence/">Persistence of User Experience</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Installation and Integration</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_quickstart/">Quickstart</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_architecture_overview/">Architecture Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_laboratory_api/">Conducting An Experiment</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_integrating_petri_into_your_app/">Integrate Laboratory Into Your Application</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_creating_a_petri_backoffice_app/">Creating a Petri Backoffice Application</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Operations</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_managing_experiments_specs/">Managing Experiment Specs</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_overriding_value_of_experiment/">Overriding Experiment Values</a></li>
             
             
             
@@ -307,6 +422,10 @@ Is the experiment on a part of the system that is executed by a scheduler?
 Are we testing human behavior, protecting the system by doing gradual exposure to users, or trying to improve performance?</p>
 
 <p>While some of these questions can be answered by a product manager who wants to do a simple A/B test, the person who can answer all these question is the developer who implements the experiment logic and knows exactly what the context of the experiment is.</p>
+
+<blockquote>
+  <p>An <strong>experiment spec</strong> is the basic template of an experiment. It has all the mandatory limitation and condition on an experiment.</p>
+</blockquote>
 
 <p>For example: if an experiment is being done on an area of your application where a user has to be signed in then the spec will define a mandatory “filter” on sign-in users</p>
 

@@ -26,9 +26,9 @@ mydoc_introduction:
 
  
 mydoc_basic_concepts_best_practices:
-  title: "Basic Concepts and Best Practices"
-  url: "/petri/mydoc_basic_concepts_best_practices/ 'Basic Concepts and Best Practices'"
-  link: "<a href='/petri/mydoc_basic_concepts_best_practices/' title='Basic Concepts and Best Practices'>Basic Concepts and Best Practices</a>"
+  title: "Concepts and Best Practices"
+  url: "/petri/mydoc_basic_concepts_best_practices/ 'Concepts and Best Practices'"
+  link: "<a href='/petri/mydoc_basic_concepts_best_practices/' title='Concepts and Best Practices'>Concepts and Best Practices</a>"
 
 
  
@@ -50,6 +50,103 @@ mydoc_support:
   title: "Support"
   url: "/petri/mydoc_support/ 'Support'"
   link: "<a href='/petri/mydoc_support/' title='Support'>Support</a>"
+
+
+
+
+ 
+mydoc_basic_concepts_best_practices:
+  title: "Concepts and Best Practices"
+  url: "/petri/mydoc_basic_concepts_best_practices/ 'Concepts and Best Practices'"
+  link: "<a href='/petri/mydoc_basic_concepts_best_practices/' title='Concepts and Best Practices'>Concepts and Best Practices</a>"
+
+
+ 
+mydoc_experiments:
+  title: "Experiments"
+  url: "/petri/mydoc_experiments/ 'Experiments'"
+  link: "<a href='/petri/mydoc_experiments/' title='Experiments'>Experiments</a>"
+
+
+ 
+mydoc_custom_filters:
+  title: "Filters"
+  url: "/petri/mydoc_custom_filters/ 'Filters'"
+  link: "<a href='/petri/mydoc_custom_filters/' title='Filters'>Filters</a>"
+
+
+ 
+mydoc_registered_vs_non_registered_users:
+  title: "Registered VS Non-Registered Users"
+  url: "/petri/mydoc_registered_vs_non_registered_users/ 'Registered VS Non-Registered Users'"
+  link: "<a href='/petri/mydoc_registered_vs_non_registered_users/' title='Registered VS Non-Registered Users'>Registered VS Non-Registered Users</a>"
+
+
+ 
+mydoc_user_experience_persistence:
+  title: "Persistence of User Experience"
+  url: "/petri/mydoc_user_experience_persistence/ 'Persistence of User Experience'"
+  link: "<a href='/petri/mydoc_user_experience_persistence/' title='Persistence of User Experience'>Persistence of User Experience</a>"
+
+
+
+
+ 
+mydoc_quickstart:
+  title: "Quickstart"
+  url: "/petri/mydoc_quickstart/ 'Quickstart'"
+  link: "<a href='/petri/mydoc_quickstart/' title='Quickstart'>Quickstart</a>"
+
+
+ 
+mydoc_architecture_overview:
+  title: "Architecture Overview"
+  url: "/petri/mydoc_architecture_overview/ 'Architecture Overview'"
+  link: "<a href='/petri/mydoc_architecture_overview/' title='Architecture Overview'>Architecture Overview</a>"
+
+
+ 
+mydoc_laboratory_api:
+  title: "Conducting An Experiment"
+  url: "/petri/mydoc_laboratory_api/ 'Conducting An Experiment'"
+  link: "<a href='/petri/mydoc_laboratory_api/' title='Conducting An Experiment'>Conducting An Experiment</a>"
+
+
+ 
+mydoc_integrating_petri_into_your_app:
+  title: "Integrate Laboratory Into Your Application"
+  url: "/petri/mydoc_integrating_petri_into_your_app/ 'Integrate Laboratory Into Your Application'"
+  link: "<a href='/petri/mydoc_integrating_petri_into_your_app/' title='Integrate Laboratory Into Your Application'>Integrate Laboratory Into Your Application</a>"
+
+
+ 
+mydoc_laboratory_as_a_service:
+  title: "Using Laboratory As A Service"
+  url: "/petri/mydoc_laboratory_as_a_service/ 'Using Laboratory As A Service'"
+  link: "<a href='/petri/mydoc_laboratory_as_a_service/' title='Using Laboratory As A Service'>Using Laboratory As A Service</a>"
+
+
+ 
+mydoc_creating_a_petri_backoffice_app:
+  title: "Creating a Petri Backoffice Application"
+  url: "/petri/mydoc_creating_a_petri_backoffice_app/ 'Creating a Petri Backoffice Application'"
+  link: "<a href='/petri/mydoc_creating_a_petri_backoffice_app/' title='Creating a Petri Backoffice Application'>Creating a Petri Backoffice Application</a>"
+
+
+
+
+ 
+mydoc_managing_experiments_specs:
+  title: "Managing Experiment Specs"
+  url: "/petri/mydoc_managing_experiments_specs/ 'Managing Experiment Specs'"
+  link: "<a href='/petri/mydoc_managing_experiments_specs/' title='Managing Experiment Specs'>Managing Experiment Specs</a>"
+
+
+ 
+mydoc_overriding_value_of_experiment:
+  title: "Overriding Experiment Values"
+  url: "/petri/mydoc_overriding_value_of_experiment/ 'Overriding Experiment Values'"
+  link: "<a href='/petri/mydoc_overriding_value_of_experiment/' title='Overriding Experiment Values'>Overriding Experiment Values</a>"
 
 
 

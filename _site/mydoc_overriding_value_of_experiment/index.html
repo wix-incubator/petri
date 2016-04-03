@@ -4,8 +4,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
-<meta name="keywords" content=" ">
-<title>Petri  | Petri</title>
+<meta name="keywords" content=" QA, override, experiment, support, testing">
+<title>Overriding Experiment Values  | Petri</title>
 <link rel="stylesheet" href="/petri/css/syntax.css">
 
 
@@ -114,7 +114,7 @@
 <script>
 function SendLinkByMail(href) {
 var subject= "Petri feedback";
-var body = "I have some feedback about the Petri page: ";
+var body = "I have some feedback about the Overriding Experiment Values page: ";
 body += window.location.href;
 body += "";
 var uri = "mailto:team-petri@wix.com?subject=";
@@ -139,7 +139,7 @@ window.location.href = uri;
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: '/petri/search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="Petri">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Overriding Experiment Values">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -180,7 +180,7 @@ window.location.href = uri;
             
             
             
-            <li class="active"><a href="/petri">Home</a></li>
+            <li><a href="/petri/">Home</a></li>
             
             
             
@@ -337,7 +337,7 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_overriding_value_of_experiment/">Overriding Experiment Values</a></li>
+            <li class="active"><a href="/petri">Overriding Experiment Values</a></li>
             
             
             
@@ -360,7 +360,7 @@ window.location.href = uri;
     <!-- Content Column -->
     <div class="col-md-9">
         <div class="post-header">
-   <h1 class="post-title-main">Petri</h1>
+   <h1 class="post-title-main">Overriding Experiment Values</h1>
 </div>
 
 <div class="post-content">
@@ -368,6 +368,27 @@ window.location.href = uri;
    
 
     
+    
+<!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
+<script>
+$( document ).ready(function() {
+  // Handler for .ready() called.
+
+$('#toc').toc({ minimumHeaders: 0, listType: 'ul', showSpeed: 0, headers: 'h2,h3,h4' });
+
+/* this offset helps account for the space taken up by the floating toolbar. */
+$('#toc').on('click', 'a', function() {
+  var target = $(this.getAttribute('href'))
+    , scroll_target = target.offset().top
+
+  $(window).scrollTop(scroll_target - 10);
+  return false
+})
+  
+});
+</script>
+
+<div id="toc"></div>
 
     
 
@@ -375,37 +396,16 @@ window.location.href = uri;
 
     
 
-  <p><a href="https://travis-ci.org/wix/petri"><img src="https://travis-ci.org/wix/petri.svg?branch=master" alt="Build Status" /></a></p>
+    
 
-<p><img src="https://raw.githubusercontent.com/wix/petri/gh-pages/images/scientist_small.png" alt="Scientist" align="right" /></p>
+  <p>Use the <code class="highlighter-rouge">petri_ovr=The-Key:The-Value</code> query parameter to override the value returned from Laboratory’s conduction to ‘The-Value’. The end url should look something like this: 
+<code class="highlighter-rouge">http://yourUrl?petri_ovr=The-Key:The-Value</code></p>
 
-<h2 id="a-product-experiment-infrastructure">A Product Experiment Infrastructure</h2>
+<p>The value will be overridden regardless of the current settings. For example, even if the experiment has 100% for the ‘off’ option, and even if the given user does not pass any filters you may have defined on that experiment.</p>
 
-<p>Perti is <a href="http://www.wix.com">Wix</a>’s holistic experiment system, it covers the lifecycle of product experimenting including A/B tests and feature toggles.</p>
+<p>To override multiple experiments concatenate them with a semicolon as a delimiter: <code class="highlighter-rouge">?petri_ovr=The-Key:The-Value;Other-Key:Other-Value</code></p>
 
-<p>Petri is used at large scale at <a href="http://www.wix.com">Wix</a>, supporting dozens of daily changes (instantly affecting production, no deployment needed).</p>
-
-<h3 id="main-features">Main features</h3>
-<ul>
-  <li>Create and gradually open A/B tests to affect your user’s experience. This feature helps our Product Managers collect data on user behavior before making decisions.</li>
-  <li>Create Feature Toggles to control inner implementation details. This feature helps our developers gradually roll out features.</li>
-  <li>Define filters to determine what users will be included in your defined experiments. Our filters include language, geo, user-agent, individual user IDs (usually used for QA) and more. Custom filters can also be added.</li>
-  <li>Conduction values are periodically reported back to the server to enable quick triaging as well as automatic pausing if a limit to the number of users is specified.</li>
-</ul>
-
-<h3 id="want-to-learn-more">Want to learn more?</h3>
-
-<p><a href="/petri/mydoc_introduction/">Introduction to Petri</a></p>
-
-<p><a href="/petri/mydoc_basic_concepts_best_practices/">Basic Concepts and Best Practices</a></p>
-
-<p><a href="/petri/mydoc_quickstart/">QuickStart Guide</a></p>
-
-<p><a href="/petri/mydoc_architecture_overview/">Architecture overview</a></p>
-
-<h3 id="license">License</h3>
-
-<p>Copyright (c) 2016 Wix.com Ltd. All Rights Reserved. Use of this source code is governed by a BSD-style license that can be found in the LICENSE file in the root of the source tree.</p>
+<p>Note: The value must be one of the testgroups defined on the experiment</p>
 
 
 <div class="tags">
@@ -422,7 +422,7 @@ window.location.href = uri;
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2016 Wix.com. All rights reserved. <br />
- Site last generated: Apr 3, 2016 <br />
+<p>Page last updated:</span> March 31, 2016<br/> Site last generated: Apr 3, 2016 <br />
 <p><img src="/petri/images/company_logo.png" alt="Company logo"/></p>
                 </div>
             </div>

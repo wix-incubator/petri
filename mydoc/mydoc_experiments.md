@@ -21,7 +21,6 @@ At Wix, we created a Backoffice application for creating and editing experiments
 
 # Experiment specs
 
-
 ## What are experiment specs?
 An experiment spec is a template for creating experiments. It defines the experiment key, test groups (possible outcomes/results), product(s) the experiment belongs to, and an owner.
 
@@ -79,7 +78,7 @@ The above could also be achieved by the following steps:
     return laboratory.conductExperiment("ButtonColorSpec"", "yellow");
 ```
 
-#### The benefits of using specs
+### The benefits of using specs
 
 - Using **specs eliminates the possibility of typos**
 

@@ -23,7 +23,7 @@ entries:
       url: /mydoc_introduction/
       output: web
 
-    - title: Basic Concepts and Best Practices
+    - title: Concepts and Best Practices
       url: /mydoc_basic_concepts_best_practices/
       output: web
 
@@ -37,5 +37,71 @@ entries:
 
     - title: Support
       url: /mydoc_support/
+      output: web
+
+  - title: Concepts
+    output: web
+    folderitems:
+
+    - title: Concepts and Best Practices
+      url: /mydoc_basic_concepts_best_practices/
+      output: web
+
+    - title: Experiments
+      url: /mydoc_experiments/
+      output: web
+
+    - title: Filters
+      url: /mydoc_custom_filters/
+      output: web
+
+    - title: Registered VS Non-Registered Users
+      url: /mydoc_registered_vs_non_registered_users/
+      output: web
+
+    - title: Persistence of User Experience
+      url: /mydoc_user_experience_persistence/
+      output: web
+
+
+  - title: Installation and Integration
+    output: web
+    folderitems:
+
+    - title: Quickstart
+      url: /mydoc_quickstart/
+      output: web
+
+    - title: Architecture Overview
+      url: /mydoc_architecture_overview/
+      output: web
+
+
+    - title: Conducting An Experiment
+      url: /mydoc_laboratory_api/
+      output: web
+
+    - title: Integrate Laboratory Into Your Application
+      url: /mydoc_integrating_petri_into_your_app/
+      output: web
+
+    - title: Using Laboratory As A Service
+      url: /mydoc_laboratory_as_a_service/
+      output: web
+
+    - title: Creating a Petri Backoffice Application
+      url: /mydoc_creating_a_petri_backoffice_app/
+      output: web
+
+  - title: Operations
+    output: web
+    folderitems:
+
+    - title: Managing Experiment Specs
+      url: /mydoc_managing_experiments_specs/
+      output: web
+
+    - title: Overriding Experiment Values
+      url: /mydoc_overriding_value_of_experiment/
       output: web
 

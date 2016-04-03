@@ -201,7 +201,7 @@ window.location.href = uri;
             
             
             
-            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Basic Concepts and Best Practices</a></li>
+            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Concepts and Best Practices</a></li>
             
             
             
@@ -223,6 +223,121 @@ window.location.href = uri;
             
             
             <li><a href="/petri/mydoc_support/">Support</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Concepts</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_basic_concepts_best_practices/">Concepts and Best Practices</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_experiments/">Experiments</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_custom_filters/">Filters</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_registered_vs_non_registered_users/">Registered VS Non-Registered Users</a></li>
+            
+            
+            
+            
+            
+            
+            <li class="active"><a href="/petri">Persistence of User Experience</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Installation and Integration</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_quickstart/">Quickstart</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_architecture_overview/">Architecture Overview</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_laboratory_api/">Conducting An Experiment</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_integrating_petri_into_your_app/">Integrate Laboratory Into Your Application</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_laboratory_as_a_service/">Using Laboratory As A Service</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_creating_a_petri_backoffice_app/">Creating a Petri Backoffice Application</a></li>
+            
+            
+            
+            
+        </ul>
+        
+        
+    
+    <li>
+        <a href="#">Operations</a>
+        <ul>
+            
+            
+            
+            <li><a href="/petri/mydoc_managing_experiments_specs/">Managing Experiment Specs</a></li>
+            
+            
+            
+            
+            
+            
+            <li><a href="/petri/mydoc_overriding_value_of_experiment/">Overriding Experiment Values</a></li>
             
             
             
@@ -283,34 +398,58 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>Read <a href="/petri/mydoc_architecture_overview/}">this</a> for a general overview of the system’s architecture.</p>
+  <p>* “user agent” - a machine/browser</p>
 
-<p>If you don’t run a JVM application you can call PETRI server to perform the experiment for you and get the resulting test group/s via REST api.
-This can be achieved by simply deploying the [sample app] (https://github.com/wix/petri/tree/master/sample-petri-app)<br />
-(url is defined in laboratory.properties under the WEB-INF folder)</p>
-
-<h5 id="if-you-use-this-setup-it-is-important-that-you-understand-how-laboratory-reads-and-writes-context">If you use this setup, it is important that you understand how laboratory reads and writes context:</h5>
-
+<h4 id="cookies">Cookies</h4>
 <ul>
-  <li>relevant context is read from the http request (user id, language etc). See the <a href="https://github.com/wix/petri/blob/master/petri-spring-integration/src/main/java/com/wixpress/petri/laboratory/HttpRequestUserInfoExtractor.java">relevant code</a> for exact header/cookie/param names</li>
-  <li>previous conduction values are read from Petri’s cookie - so consistent experience is maintained per user</li>
-  <li>conduction values (where relevant) may be written back to the cookies.</li>
-</ul>
-
-<h5 id="this-means-that-you-have-two-options-of-using-this-service">This means that you have two options of using this service:</h5>
-<ul>
-  <li>for issuing calls directly from your client code / the browser</li>
-  <li>from your non-JVM app, and then you might want to pass some of the context to the request via one of these 2 options:
+  <li>
+    <p>Cookies are used to provide stickiness for users
+i.e , when running an A/B test and a user is given a choice between A or B, once a user receives B they should continue to do so on to the next visit.</p>
+  </li>
+  <li>
+    <p>For anonymous (non-registered) users, the conduction is random as the best we can do is save cookies.
+If the user changes user agent we have no means of identifying the same person (browser/machine) and stickiness will be lost.</p>
+  </li>
+  <li>
+    <p>For registered users, we use the UID as a seed for conduction, thereby providing consistent results regardless of the user agent.
+Despite the seed and results being consistent, we must still save a cookie as it is need for the ‘pause’ feature.</p>
+  </li>
+  <li>
+    <p>Cookies are saved separately.
+One cookie for anonymous experiments (shared by all anonymous users / experiments) on a given user agent, and another cookie per UID.</p>
     <ul>
-      <li>add the userId param for example, or the previous conduction value from the cookie</li>
-      <li>pass your own custom context and call the ‘conductExperimentWithCustomContext’ method on the <a href="https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-petri-app/src/main/java/com/wixpress/common/petri/SampleAppController.java">SampleAppController</a>. 
-Combine this with writing your own <a href="/petri/mydoc_custom_filters/}">custom filters</a>
-.</li>
+      <li>
+        <p>The reason for this ‘per UID cookie’ is so every user receives their very own unique experience, regardless of other users sharing this user agent (think shared a household where there are two people with different accounts).</p>
+      </li>
+      <li>
+        <p>The reason the anonymous must be saved separately even when a user is logged in is because if and when the user logs out we still want the ‘anonymous experiments’ to retain stickiness (and without the UID we wouldn’t know which cookie to read)</p>
+      </li>
     </ul>
   </li>
 </ul>
 
-<p>If you <b>are</b> using a JVM app, go <a href="/petri/mydoc_integrating_petri_into_your_app/}">this way</a></p>
+<h4 id="the-problem">The Problem</h4>
+<p>When an experiment is paused, stickiness may be lost (if a user changed user agents).
+In order to solve this you can enable server side state.</p>
+
+<h4 id="cookies-vs-server-side-state-the-tradeoff">Cookies VS Server Side State: The Tradeoff</h4>
+<ul>
+  <li>Cookies: no overhead, but you may loose stickiness sometimes (when an experiment is paused and a registered user changes the user agent).</li>
+  <li>
+    <p>Server side state: overhead of another hop (for read, if conduction occurs then another for write), but you gain correctness. Here’s <a href="">how to config your app to use server side state</a>. Default is ‘off’.</p>
+  </li>
+  <li>
+    <p>Therefore, you probably want to configure the server side state only for appropriate services (probably in your ‘registered users’ segment, thus allowing any ‘public’ segment to retain its SLA and not pay the overhead).</p>
+  </li>
+  <li>Petri’s implementation tries to save overhead wherever possible:
+    <ul>
+      <li>Cookies override DB state so if a cookie exists the extra hop is avoided.</li>
+      <li>If a conduction was made write state back to DB as an async call so user request returns immediately.</li>
+      <li>State is read from server iff conduction is on registered scope and it is an A/B test (not feature toggle) and if a user exists in context etc.</li>
+      <li>When using the ‘conductAllByScope’ API state is brought once for all experiments.</li>
+    </ul>
+  </li>
+</ul>
 
 
 <div class="tags">

@@ -1,4 +1,10 @@
-### Useful for testing/QA/support etc
+---
+title: Overriding Experiment Values
+keywords: QA, override, experiment, support, testing
+last_updated: March 31, 2016
+sidebar: mydoc_overriding_value_of_experiment
+permalink: /mydoc_overriding_value_of_experiment/
+---
 
 Use the `petri_ovr=The-Key:The-Value` query parameter to override the value returned from Laboratory's conduction to 'The-Value'. The end url should look something like this: 
 `http://yourUrl?petri_ovr=The-Key:The-Value`

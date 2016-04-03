@@ -1,29 +1,36 @@
 ---
-title: User Experience Persistence
-keywords: persistence, experience, UX
+title: Laboratory As A Service
+keywords: SAAS, laboratory, service, cloud
 last_updated: March 31, 2016
-sidebar: my_doc_user_experience_persistence
-permalink: /my_doc_user_experience_persistence/
+sidebar: mydoc_using_laboratory_as_a_service
+permalink: /mydoc_using_laboratory_as_a_service/
 ---
 
-Read [this]({{site.data.urls.mydoc_architecture_overview.url}}}) for a general overview of the system's architecture.
+## Prerequisites
 
-If you don't run a JVM application you can call PETRI server to perform the experiment for you and get the resulting test group/s via REST api.
-This can be achieved by simply deploying the [sample app] (https://github.com/wix/petri/tree/master/sample-petri-app)  
-(url is defined in laboratory.properties under the WEB-INF folder)
+Read an [overview on Petri's architecture]({{site.data.urls.mydoc_architecture_overview.url}}}) for a general understanding before moving forward.
 
-##### If you use this setup, it is important that you understand how laboratory reads and writes context:  
+## Integration For JVM Applications
 
-- relevant context is read from the http request (user id, language etc). See the [relevant code](https://github.com/wix/petri/blob/master/petri-spring-integration/src/main/java/com/wixpress/petri/laboratory/HttpRequestUserInfoExtractor.java) for exact header/cookie/param names
-- previous conduction values are read from Petri's cookie - so consistent experience is maintained per user
-- conduction values (where relevant) may be written back to the cookies.
+If you are using a JVM app, please [read more here]({{site.data.urls.mydoc_integrating_petri_into_your_app.url}})  
 
-##### This means that you have two options of using this service:
-- for issuing calls directly from your client code / the browser
-- from your non-JVM app, and then you might want to pass some of the context to the request via one of these 2 options:
-  - add the userId param for example, or the previous conduction value from the cookie
-  - pass your own custom context and call the 'conductExperimentWithCustomContext' method on the [SampleAppController](https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-petri-app/src/main/java/com/wixpress/common/petri/SampleAppController.java). 
-Combine this with writing your own [custom filters]({{site.data.urls.mydoc_custom_filters.url}}})
+## Integration For Non-JVM Applications
+
+If you don't run a JVM application you may call Petri server to perform the experiment for you and get the resulting testgroups via a REST API.
+This can be achieved by deploying the [sample app](https://github.com/wix/petri/tree/master/sample-petri-app). Note: The URL is defined in laboratory.properties under the WEB-INF folder.
+
+When you use this setup, it is important you understand how Laboratory reads and writes context:  
+
+- Relevant context is read from the HTTP request (user id, language etc). See the [relevant code](https://github.com/wix/petri/blob/master/petri-spring-integration/src/main/java/com/wixpress/petri/laboratory/HttpRequestUserInfoExtractor.java) for exact header/cookie/param names
+- Previous conduction values are read from Petri's cookie, so consistent experience is maintained per user.
+- Conduction values (where relevant) may be written back to the cookies.
+
+This means there are two options for using this service:
+
+- For issuing calls directly from your client code / the browser
+- From your non-JVM application, and then you may want to pass some of the context to the request via one of these 2 options:
+
+  - Add the userId param for example, or the previous conduction value from the cookie
+  - Pass your own custom context and call the `conductExperimentWithCustomContext` method on the [SampleAppController](https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-petri-app/src/main/java/com/wixpress/common/petri/SampleAppController.java). Combine this with writing your own [custom filters]({{site.data.urls.mydoc_custom_filters.url}}})
 .  
 
-If you <b>are</b> using a JVM app, go [this way]({{site.data.urls.mydoc_integrating_petri_into_your_app.url}}})  

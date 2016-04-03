@@ -6,16 +6,26 @@ sidebar: mydoc_custom_filters
 permalink: /mydoc_custom_filters/
 ---
 
-### How to add a filter with your own custom logic 
-#### any filter on the classpath that answers the following criteria will be available:
-  - the class should be under the root package "filters" (similar to the "specs" package)
-  - the class should implement the [Filter](https://github.com/wix/petri/blob/master/wix-petri-core/src/main/java/com/wixpress/petri/experiments/domain/Filter.java) interface 
-  - the class should define the '@FilterTypeName("id")' annotation
+## Add a filter with your own custom logic 
 
-* see examples [here](https://github.com/wix/petri/blob/master/wix-petri-core/src/test/java/filters/AdditionalFilter.java) and [here](https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-extended-filters/src/main/java/filters/CustomUserTypeFilter.java)
+Any filter on the classpath that answers the following criteria will be available:
 
-#### another option is to add a jar containing your custom filters - This option is convenient if you are using the [Laboratory as a Service] (https://github.com/wix/petri/wiki/Using-Laboratory-as-a-Service).
-  - create a directory called ' petri-plugins' in the same location as you [installed the server](https://github.com/wix/petri/wiki/Installing-Petri-Server)
-    - any jar containing 'extended-filters' in it's name will be scanned for filters
-    - filters should follow the same guidelines as in the above section
-  - do the same in the location where you installed the 'Laboratory Service'
+  - The class should be under the root package "filters" (similar to the "specs" package)
+  - The class should implement the [Filter](https://github.com/wix/petri/blob/master/wix-petri-core/src/main/java/com/wixpress/petri/experiments/domain/Filter.java) interface 
+  - The class should define the '@FilterTypeName("id")' annotation
+
+see examples:
+
+1. [Additional Filter example](https://github.com/wix/petri/blob/master/wix-petri-core/src/test/java/filters/AdditionalFilter.java)
+2. [Custom User Type Filter example](https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-extended-filters/src/main/java/filters/CustomUserTypeFilter.java)
+
+
+
+Another option is to add a jar containing your custom filters. This option is convenient if you are using the [Laboratory as a Service]({{site.data.urls.mydoc_using_laboratory_as_a_service.url}}).
+
+1. Create a directory called `petri-plugins` in the same location as you [installed the server]({{site.data.urls.mydoc_quickstart.url}}#install-petri-server)
+
+	- Any jar containing 'extended-filters' in it's name will be scanned for filters
+	- Filters should follow the same guidelines as in the above section
+
+2. Do the same in the location where you installed the 'Laboratory Service'

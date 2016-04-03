@@ -32,6 +32,8 @@ Are we testing human behavior, protecting the system by doing gradual exposure t
 
 While some of these questions can be answered by a product manager who wants to do a simple A/B test, the person who can answer all these question is the developer who implements the experiment logic and knows exactly what the context of the experiment is. 
 
+> An **experiment spec** is the basic template of an experiment. It has all the mandatory limitation and condition on an experiment.
+
 For example: if an experiment is being done on an area of your application where a user has to be signed in then the spec will define a mandatory “filter” on sign-in users
 
 > **Filter** - A condition for eligibility to participate in an experiment.
