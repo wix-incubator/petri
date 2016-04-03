@@ -3,8 +3,8 @@
     <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Quickstart">
-<meta name="keywords" content=" questions, quickstart">
+<meta name="description" content="">
+<meta name="keywords" content=" questions, quickstart, installation, server, integration">
 <title>Quickstart  | Petri</title>
 <link rel="stylesheet" href="/petri/css/syntax.css">
 
@@ -251,8 +251,6 @@ window.location.href = uri;
 <div class="post-content">
 
    
-    <div class="summary">Quickstart</div>
-   
 
     
     
@@ -285,19 +283,78 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>There are 3 steps required to get Petri running on your environment</p>
+  <h2 id="step-1--running-petri-server">Step 1 : Running Petri Server</h2>
 
-<h3 id="step-1--running-petri-server-httpsgithubcomwixpetriwikirunning-petri-server">Step 1 : [Running Petri Server] (https://github.com/wix/petri/wiki/Running-Petri-Server)</h3>
+<p>There are two options:</p>
 
-<h6 id="or-alternatively-installing-petri-server-httpsgithubcomwixpetriwikiinstalling-petri-server">(Or, alternatively, [Installing Petri Server] (https://github.com/wix/petri/wiki/Installing-Petri-Server))</h6>
+<ul>
+  <li>Use our runnable jar</li>
+  <li>Install a Petri server from scratch</li>
+</ul>
 
-<h3 id="step-2--creating-a-petri-backoffice-app-httpsgithubcomwixpetriwikicreating-a-petri-backoffice-app">Step 2 : [Creating a Petri BackOffice app] (https://github.com/wix/petri/wiki/Creating-a-Petri-BackOffice-app)</h3>
+<h3 id="download-our-runnable-jar">Download our runnable jar</h3>
 
-<h6 id="or-alternatively-just-issue-a-few-http-requestshttpsgithubcomwixpetriwikicreating--updating-experiments--specs">(Or, alternatively, <a href="https://github.com/wix/petri/wiki/Creating-&amp;-Updating-Experiments-&amp;-Specs">just issue a few http requests</a>)</h6>
+<p>Download the <a href="https://github.com/wix/petri/releases/download/1.0/runnable-petri-server.jar">runnable-petri-server</a></p>
 
-<h3 id="step-3--integrating-petri-into-your-app-httpsgithubcomwixpetriwikiintegrating-petri-into-your-app">Step 3 : [Integrating Petri into your app] (https://github.com/wix/petri/wiki/Integrating-Petri-into-your-app)</h3>
+<p>run the server:
+<code class="highlighter-rouge">bash
+  java -jar runnable-petri-server.jar
+</code></p>
 
-<h6 id="or-alternatively-use-laboratory-as-a-servicehttpsgithubcomwixpetriwikiusing-laboratory-as-a-service">(Or, alternatively, <a href="https://github.com/wix/petri/wiki/Using-Laboratory-as-a-Service">Use Laboratory as a Service</a>)</h6>
+<h3 id="install-petri-server">Install Petri Server</h3>
+
+<p>Prerequisite: Installing the Petri DB:
+Petri requires a database. It has been tested against MySql and h2.</p>
+
+<ul>
+  <li>To create the schema, run the following:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CREATE TABLE experiments (id INT AUTO_INCREMENT, experiment MEDIUMTEXT, last_update_date BIGINT, orig_id INT, start_date BIGINT DEFAULT 0, end_date BIGINT DEFAULT 4102444800000, PRIMARY KEY(id, last_update_date))
+CREATE TABLE specs (id INT PRIMARY KEY AUTO_INCREMENT, fqn VARCHAR (255) NOT NULL, spec MEDIUMTEXT, UNIQUE KEY (fqn))
+CREATE TABLE metricsReport (server_name VARCHAR (255) NOT NULL, experiment_id INT NOT NULL, experiment_value VARCHAR (255) NOT NULL, total_count BIGINT,  five_minutes_count BIGINT , last_update_date BIGINT,  PRIMARY KEY (server_name, experiment_id, experiment_value))
+CREATE TABLE userState (user_id VARCHAR (50) NOT NULL, state VARCHAR (4096) , date_updated BIGINT NOT NULL, PRIMARY KEY(user_id))
+</code></pre>
+</div>
+
+<h4 id="installing-a-petri-server-is-easy">Installing a Petri server is easy</h4>
+
+<ul>
+  <li>
+    <p>compile the project</p>
+  </li>
+  <li>
+    <p>copy the resulting jar and lib folder from the target folder to your folder of choice.</p>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cp petri-server/target/petri-server-1.19.0-SNAPSHOT.jar
+cp -r petri-server/target/lib .
+</code></pre>
+</div>
+
+<ul>
+  <li>create a ‘petri.properties’ file (values should match your db  and the port the server will receive RPC calls on )</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>db.username : &lt;username_string&gt;
+db.password : &lt;password_string&gt;
+db.url : &lt;url_string&gt;
+server.port : &lt;int&gt;
+</code></pre>
+</div>
+
+<ul>
+  <li>Run the server : <code class="highlighter-rouge">java -jar petri-server-1.19.0-SNAPSHOT.jar</code></li>
+</ul>
+
+<h2 id="step-2--creating-a-petri-backoffice-apppetrimydoccreatingapetribackofficeapp">Step 2 : <a href="/petri/mydoc_creating_a_petri_backoffice_app/}">Creating a Petri BackOffice app</a></h2>
+
+<p>or, alternatively, <a href="https://github.com/wix/petri/wiki/Creating-&amp;-Updating-Experiments-&amp;-Specs">just issue a few http requests</a></p>
+
+<h2 id="step-3--integrating-petri-into-your-apphttpsgithubcomwixpetriwikiintegrating-petri-into-your-app">Step 3 : <a href="https://github.com/wix/petri/wiki/Integrating-Petri-into-your-app">Integrating Petri into your app</a></h2>
+
+<p>or, alternatively, <a href="">Use Laboratory as a Service</a></p>
 
 
 <div class="tags">

@@ -16,21 +16,11 @@
 
 
 {
-"title": "User Experience Persistence",
-"tags": "",
-"keywords": "persistence, experience, UX",
-"url": "/petri/my_doc_registered_vs_non_registered_users/",
-"summary": ""
-},
-
-
-
-{
-"title": "User Experience Persistence",
-"tags": "",
-"keywords": "persistence, experience, UX",
-"url": "/petri/my_doc_user_experience_persistence/",
-"summary": ""
+"title": "About",
+"tags": "about",
+"keywords": "about",
+"url": "/petri/mydoc_about/",
+"summary": "about"
 },
 
 
@@ -39,18 +29,8 @@
 "title": "Architecture Overview",
 "tags": "",
 "keywords": "architecture",
-"url": "/petri/mydoc_PETRI_System_Components/",
+"url": "/petri/mydoc_architecture_overview/",
 "summary": ""
-},
-
-
-
-{
-"title": "About",
-"tags": "about",
-"keywords": "about",
-"url": "/petri/mydoc_about/",
-"summary": "about"
 },
 
 
@@ -138,9 +118,19 @@
 {
 "title": "Quickstart",
 "tags": "",
-"keywords": "questions, quickstart",
+"keywords": "questions, quickstart, installation, server, integration",
 "url": "/petri/mydoc_quickstart/",
-"summary": "Quickstart"
+"summary": ""
+},
+
+
+
+{
+"title": "User Experience Persistence",
+"tags": "",
+"keywords": "persistence, experience, UX",
+"url": "/petri/mydoc_registered_vs_non_registered_users/",
+"summary": ""
 },
 
 
@@ -151,6 +141,26 @@
 "keywords": "questions, troubleshooting, contact, support",
 "url": "/petri/mydoc_support/",
 "summary": "Contact us for any support issues."
+},
+
+
+
+{
+"title": "User Experience Persistence",
+"tags": "",
+"keywords": "persistence, experience, UX",
+"url": "/petri/my_doc_user_experience_persistence/",
+"summary": ""
+},
+
+
+
+{
+"title": "User Experience Persistence",
+"tags": "",
+"keywords": "persistence, experience, UX",
+"url": "/petri/my_doc_user_experience_persistence/",
+"summary": ""
 },
 
 

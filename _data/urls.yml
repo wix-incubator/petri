@@ -40,8 +40,8 @@ mydoc_basic_concepts_best_practices:
 
 mydoc_architecture_overview:
   title: "Architecture Overview"
-  url: "/petri/mydoc_PETRI_System_Components/"
-  link: "<a href='/petri/mydoc_PETRI_System_Components/'>Architecture Overview</a>"
+  url: "/petri/mydoc_architecture_overview/"
+  link: "<a href='/petri/mydoc_architecture_overview/'>Architecture Overview</a>"
 
 
 mydoc_creating_a_petri_backoffice_app: 
@@ -55,20 +55,20 @@ mydoc_experiments:
   url: "/petri/mydoc_experiments/"
   link: "<a href='/petri/mydoc_experiments/'>Experiments And Experiment Specs</a>"
 
-my_doc_registered_vs_non_registered_users:
+mydoc_registered_vs_non_registered_users:
   title: "User Experience Persistence"
-  url: "/petri/my_doc_registered_vs_non_registered_users/"
-  link: "<a href='/petri/my_doc_registered_vs_non_registered_users/'>User Experience Persistence</a>"
+  url: "/petri/mydoc_registered_vs_non_registered_users/"
+  link: "<a href='/petri/mydoc_registered_vs_non_registered_users/'>User Experience Persistence</a>"
 
-my_doc_user_experience_persistence:
+mydoc_user_experience_persistence:
   title: "User Experience Persistence"
-  url: "/petri/my_doc_user_experience_persistence/"
-  link: "<a href='/petri/my_doc_user_experience_persistence/'>User Experience Persistence</a>"
+  url: "/petri/mydoc_user_experience_persistence/"
+  link: "<a href='/petri/mydoc_user_experience_persistence/'>User Experience Persistence</a>"
 
 mydoc_integrating_petri_into_your_app:
   title: "Integrate Laboratory (Petri client) Into Your Application"
-  url: "/petri/my_doc_user_experience_persistence/"
-  link: "<a href='/petri/my_doc_user_experience_persistence/'>Integrate Laboratory (Petri client) Into Your Application</a>"
+  url: "/petri/mydoc_integrating_petri_into_your_app/"
+  link: "<a href='/petri/mydoc_integrating_petri_into_your_app/'>Integrate Laboratory (Petri client) Into Your Application</a>"
 
 mydoc_custom_filters: 
   title: "Custom Filters"

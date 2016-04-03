@@ -2,8 +2,8 @@
 title: Architecture Overview
 keywords: architecture
 last_updated: March 31, 2016
-sidebar: mydoc_PETRI_System_Components
-permalink: /mydoc_PETRI_System_Components/
+sidebar: mydoc_architecture_overview
+permalink: /mydoc_architecture_overview/
 ---
 
 PETRI consists of 2 parts:

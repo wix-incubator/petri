@@ -40,25 +40,13 @@
   
   
   <url>
-    <loc>wix.github.io/petri/my_doc_registered_vs_non_registered_users/</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/my_doc_user_experience_persistence/</loc>
-  </url>
-  
-  
-  
-  <url>
-    <loc>wix.github.io/petri/mydoc_PETRI_System_Components/</loc>
-  </url>
-  
-  
-  
-  <url>
     <loc>wix.github.io/petri/mydoc_about/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/mydoc_architecture_overview/</loc>
   </url>
   
   
@@ -118,7 +106,25 @@
   
   
   <url>
+    <loc>wix.github.io/petri/mydoc_registered_vs_non_registered_users/</loc>
+  </url>
+  
+  
+  
+  <url>
     <loc>wix.github.io/petri/mydoc_support/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/my_doc_user_experience_persistence/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/my_doc_user_experience_persistence/</loc>
   </url>
   
   
