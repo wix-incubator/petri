@@ -1,4 +1,3 @@
-
 ---
 title: Build Petri Server From Scratch (Uses MySql)
 keywords: questions, quickstart, installation, server, integration, database

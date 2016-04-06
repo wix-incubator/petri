@@ -126,6 +126,16 @@
 
 
 {
+"title": "Build Petri Server From Scratch (Uses MySql)",
+"tags": "",
+"keywords": "questions, quickstart, installation, server, integration, database",
+"url": "/petri/petri_server_from_scratch/",
+"summary": ""
+},
+
+
+
+{
 "title": "Quickstart",
 "tags": "",
 "keywords": "questions, quickstart, installation, server, integration",
