@@ -8,7 +8,7 @@ permalink: /petri_server_from_scratch/
 
 ![Setting Up Petri Server](https://raw.githubusercontent.com/wix/petri/gh-pages/images/quickstart_architecture1.png)
 
-#### Setup Petri's MySql Database 
+## Setup Petri's MySql Database 
 
 Run a script creating the needed schema
 
@@ -19,7 +19,7 @@ CREATE TABLE metricsReport (server_name VARCHAR (255) NOT NULL, experiment_id IN
 CREATE TABLE userState (user_id VARCHAR (50) NOT NULL, state VARCHAR (4096) , date_updated BIGINT NOT NULL, PRIMARY KEY(user_id))
 ```
         
-#### Configuration and Deployment
+## Configuration and Deployment
 
 - Compile the project  
 
