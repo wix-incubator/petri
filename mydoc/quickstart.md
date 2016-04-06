@@ -8,65 +8,28 @@ permalink: /quickstart/
 
 ## Step 1: Setting Up Petri Server
 
-There are two options:
+![Setting Up Petri Server](https://raw.githubusercontent.com/wix/petri/gh-pages/images/quickstart_architecture1.png)
 
-- Use our runnable jar
-- Install a Petri server from scratch
+Use our runnable jar, which uses an in memory database (H2). This is great to test out the waters with. However, if you're looking for a more scalable solution you can [build Petri server from scratch, with a disk database (MySql)]({{site.data.urls.petri_server_from_scratch.url}}).
 
-### Download our runnable jar
+Download the [runnable-petri-server](https://github.com/wix/petri/releases/download/1.0/runnable-petri-server.jar). It uses H2 which persists the data to your local storage. This is a great alternative to start with to see that everything is running smoothly, as at this point you don't have much data to store. 
 
-Download the [runnable-petri-server](https://github.com/wix/petri/releases/download/1.0/runnable-petri-server.jar)
-
-run the server:
+Run the server:
 ```bash
   java -jar runnable-petri-server.jar
 ```
 
-### Install Petri Server
+## Step 2: [Create a Petri BackOffice app]({{site.data.urls.creating_a_petri_backoffice_app.url}}) 
 
-#### Setup Petri's Database 
+We created a BackOffice application (soon to be open sourced as well!) to manage our experiments and specs. Our Product Managers have full access to it so they can create any user experience they like. 
 
-Petri requires a database. It has been tested against MySql and H2. 
-
-* To create the schema, run the following:
-
-```
-CREATE TABLE experiments (id INT AUTO_INCREMENT, experiment MEDIUMTEXT, last_update_date BIGINT, orig_id INT, start_date BIGINT DEFAULT 0, end_date BIGINT DEFAULT 4102444800000, PRIMARY KEY(id, last_update_date))
-CREATE TABLE specs (id INT PRIMARY KEY AUTO_INCREMENT, fqn VARCHAR (255) NOT NULL, spec MEDIUMTEXT, UNIQUE KEY (fqn))
-CREATE TABLE metricsReport (server_name VARCHAR (255) NOT NULL, experiment_id INT NOT NULL, experiment_value VARCHAR (255) NOT NULL, total_count BIGINT,  five_minutes_count BIGINT , last_update_date BIGINT,  PRIMARY KEY (server_name, experiment_id, experiment_value))
-CREATE TABLE userState (user_id VARCHAR (50) NOT NULL, state VARCHAR (4096) , date_updated BIGINT NOT NULL, PRIMARY KEY(user_id))
-```
-        
-#### Configuration and Deployment
-
-* compile the project  
-
-* copy the resulting jar and lib folder from the target folder to your folder of choice.
-
-```
-cp petri-server/target/petri-server-1.19.0-SNAPSHOT.jar
-cp -r petri-server/target/lib .
-```
-  
-* create a 'petri.properties' file (values should match your db  and the port the server will receive RPC calls on )
+If you're looking to see if Petri is for you, you can [issue a few HTTP requests]({{site.data.urls.managing_experiments_specs.url}}) to create specs and experiments programatically to get the ball rolling. This is essentially what our BackOffice does behind the scenes. 
 
 
-```
-db.username : <username_string>
-db.password : <password_string>
-db.url : <url_string>
-server.port : <int>
-```
+## Step 3: [Integrate Laboratory (Petri's client) into your application]({{site.data.urls.integrating_petri_into_your_app.url}}) 
 
-* Run the server: `java -jar petri-server-1.19.0-SNAPSHOT.jar`
+![Setting Up Petri Server](https://raw.githubusercontent.com/wix/petri/gh-pages/images/quickstart_architecture3.png)
 
+Integrating Laboratory into your application is very easy if you're writing a JVM based server. It saves our servers extra hops as all the logic of experiemnt conduction is done within the Laboratory library, within the server who needs it. 
 
-
-## Step 2: [Creating a Petri BackOffice app]({{site.data.urls.creating_a_petri_backoffice_app.url}}) 
-
-or, alternatively, [just issue a few HTTP requests]({{site.data.urls.managing_experiments_specs.url}})
-
-
-## Step 3: [Integrating Petri into your application]({{site.data.urls.integrating_petri_into_your_app.url}}) 
-
-or, alternatively, [Use Laboratory as a Service]({{site.data.urls.using_laboratory_as_a_service.url}})
+If you're not using a JVM based language you can [run Laboratory as a service]({{site.data.urls.using_laboratory_as_a_service.url}}). This means that you will be making that extra hop when you need to conduct an experiment. We use this method for some of our client code. 

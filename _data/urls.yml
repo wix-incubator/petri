@@ -95,4 +95,9 @@ managing_experiments_specs:
   url: "/petri/managing_experiments_specs/"
   link: "<a href='/petri/managing_experiments_specs/'>Managing Experiments And Specs</a>"
 
+petri_server_from_scratch:
+  title: "Build Petri Server From Scratch (Uses MySql)"
+  url: "/petri/petri_server_from_scratch/"
+  link: "<a href='/petri/petri_server_from_scratch/'>Build Petri Server From Scratch (Uses MySql)</a>"
+
 

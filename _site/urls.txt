@@ -120,6 +120,13 @@ using_laboratory_as_a_service:
 
 
  
+petri_server_from_scratch:
+  title: "Build Petri Server From Scratch"
+  url: "/petri/petri_server_from_scratch/ 'Build Petri Server From Scratch'"
+  link: "<a href='/petri/petri_server_from_scratch/' title='Build Petri Server From Scratch'>Build Petri Server From Scratch</a>"
+
+
+ 
 creating_a_petri_backoffice_app:
   title: "Creating a Petri Backoffice Application"
   url: "/petri/creating_a_petri_backoffice_app/ 'Creating a Petri Backoffice Application'"

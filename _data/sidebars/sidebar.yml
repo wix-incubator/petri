@@ -72,7 +72,6 @@ entries:
       url: /architecture_overview/
       output: web
 
-
     - title: Conducting An Experiment
       url: /laboratory_api/
       output: web
@@ -83,6 +82,10 @@ entries:
 
     - title: Using Laboratory As A Service
       url: /using_laboratory_as_a_service/
+      output: web
+
+    - title: Build Petri Server From Scratch
+      url: /petri_server_from_scratch/
       output: web
 
     - title: Creating a Petri Backoffice Application
@@ -100,4 +103,5 @@ entries:
     - title: Overriding Experiment Values
       url: /overriding_value_of_experiment/
       output: web
+
 
