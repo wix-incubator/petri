@@ -1,5 +1,5 @@
 ---
-title: Build Petri Server From Scratch (Uses MySql)
+title: Configure & Run Petri Server
 keywords: questions, quickstart, installation, server, integration, database
 last_updated: April 6, 2016
 sidebar: configure_petri_server
