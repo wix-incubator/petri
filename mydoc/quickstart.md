@@ -10,7 +10,7 @@ permalink: /quickstart/
 
 ![Setting Up Petri Server](https://raw.githubusercontent.com/wix/petri/gh-pages/images/quickstart_architecture1.png)
 
-Use our runnable jar, which use H2 with disk persistency. However, if you're looking for a more scalable solution you can [configure Petri server to run with MySql)]({{site.data.urls.petri_server_from_scratch.url}}).
+Use our runnable jar, which use H2 with disk persistency. However, if you're looking for a more scalable solution you can [configure Petri server to run with MySql]({{site.data.urls.petri_server_from_scratch.url}}).
 
 Download the [runnable-petri-server](https://github.com/wix/petri/releases/download/1.0/runnable-petri-server.jar). 
 
