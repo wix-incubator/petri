@@ -21,16 +21,9 @@ CREATE TABLE userState (user_id VARCHAR (50) NOT NULL, state VARCHAR (4096) , da
         
 ## Configuration and Deployment
 
-- Compile the project  
+- download the [runnable-petri-server](https://github.com/wix/petri/releases/download/1.0/runnable-petri-server.jar) 
 
-- Copy the resulting jar and lib folder from the target folder to your folder of choice.
-
-```
-cp petri-server/target/petri-server-1.19.0-SNAPSHOT.jar
-cp -r petri-server/target/lib .
-```
-  
-- Create a 'petri.properties' file. The values below should match your database info and your server's port for receiving RPC requests.
+- Create a 'petri.properties' file (and place it next to the server jar). The values below should match your database info and your server's port for receiving RPC requests.
 
 
 ```
@@ -40,4 +33,7 @@ db.url : <url_string>
 server.port : <int> // Your server's port, on which it will receive RPC requests
 ```
 
-- Run the server: `java -jar petri-server-1.19.0-SNAPSHOT.jar` 
+- Run the server: 
+```
+java -jar runnable-petri-server.jar
+```
