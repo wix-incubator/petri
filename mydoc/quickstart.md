@@ -10,13 +10,13 @@ permalink: /quickstart/
 
 ![Setting Up Petri Server](https://raw.githubusercontent.com/wix/petri/gh-pages/images/quickstart_architecture1.png)
 
-Use our runnable jar, which uses an in memory database (H2). This is great to test out the waters with. However, if you're looking for a more scalable solution you can [build Petri server from scratch, with a disk database (MySql)]({{site.data.urls.petri_server_from_scratch.url}}).
+Use our runnable jar, which use H2 with disk persistency. However, if you're looking for a more scalable solution you can [configure Petri server to run with MySql)]({{site.data.urls.petri_server_from_scratch.url}}).
 
-Download the [runnable-petri-server](https://github.com/wix/petri/releases/download/1.0/runnable-petri-server.jar). It uses H2 which persists the data to your local storage. This is a great alternative to start with to see that everything is running smoothly, as at this point you don't have much data to store. 
+Download the [runnable-petri-server](https://github.com/wix/petri/releases/download/1.0/runnable-petri-server.jar). 
 
 Run the server:
-```bash
-  java -jar runnable-petri-server.jar
+```
+java -jar runnable-petri-server.jar
 ```
 
 ## Step 2: [Create a Petri BackOffice app]({{site.data.urls.creating_a_petri_backoffice_app.url}}) 
