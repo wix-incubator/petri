@@ -2,8 +2,8 @@
 title: Build Petri Server From Scratch (Uses MySql)
 keywords: questions, quickstart, installation, server, integration, database
 last_updated: April 6, 2016
-sidebar: petri_server_from_scratch
-permalink: /petri_server_from_scratch/
+sidebar: configure_petri_server
+permalink: /configure_petri_server/
 ---
 
 ![Setting Up Petri Server](https://raw.githubusercontent.com/wix/petri/gh-pages/images/quickstart_architecture1.png)
