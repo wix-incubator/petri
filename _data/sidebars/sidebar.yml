@@ -84,7 +84,7 @@ entries:
       url: /using_laboratory_as_a_service/
       output: web
 
-    - title: Build Petri Server From Scratch
+    - title: Configure & Run Petri Server
       url: /configure_petri_server/
       output: web
 
