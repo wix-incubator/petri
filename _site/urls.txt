@@ -120,10 +120,10 @@ using_laboratory_as_a_service:
 
 
  
-petri_server_from_scratch:
+configure_petri_server:
   title: "Build Petri Server From Scratch"
-  url: "/petri/petri_server_from_scratch/ 'Build Petri Server From Scratch'"
-  link: "<a href='/petri/petri_server_from_scratch/' title='Build Petri Server From Scratch'>Build Petri Server From Scratch</a>"
+  url: "/petri/configure_petri_server/ 'Build Petri Server From Scratch'"
+  link: "<a href='/petri/configure_petri_server/' title='Build Petri Server From Scratch'>Build Petri Server From Scratch</a>"
 
 
  

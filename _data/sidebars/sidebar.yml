@@ -85,7 +85,7 @@ entries:
       output: web
 
     - title: Build Petri Server From Scratch
-      url: /petri_server_from_scratch/
+      url: /configure_petri_server/
       output: web
 
     - title: Creating a Petri Backoffice Application
