@@ -8,7 +8,7 @@ permalink: /integrating_petri_into_your_app/
 
 * Laboratory is supported for any servlet-api based application:
 
-    (If you want to use it from a different type of app please read this : [Laboratory as a Service](https://github.com/wix/petri/wiki/Using-Laboratory-as-a-Service))  
+    (If you want to use it from a different type of app please read this : [Laboratory as a Service]({{site.data.urls.using_laboratory_as_a_service.url}})  
 
 * add laboratory-servlet-api-integration dependency to your pom
 
@@ -25,7 +25,7 @@ permalink: /integrating_petri_into_your_app/
     petri.url=http://<sever>:<port>/petri  
 ```
 
- * Optionally add this to the properties file - (if you want this. read [here](https://github.com/wix/petri/wiki/How-Petri-Persists-Experience-For-Users) for more info)
+ * Optionally add this to the properties file - (if you want this. read [here]({{site.data.urls.user_experience_persistence.url}}) for more info)
  
 ```
     petri.writeStateToServer = true 
