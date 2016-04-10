@@ -7,32 +7,48 @@
          version="2.5">
 
     <servlet>
-        <servlet-name>test-servlet</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>/WEB-INF/applicationContext.xml</param-value>
-        </init-param>
-        <load-on-startup>1</load-on-startup>
+        <servlet-name>ExtractUserInfoServlet</servlet-name>
+        <servlet-class>com.wixpress.petri.ExtractUserInfoServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>test-servlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>ExtractUserInfoServlet</servlet-name>
+        <url-pattern>/extractUserInfo</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ConductExperimentServlet</servlet-name>
+        <servlet-class>com.wixpress.petri.ConductExperimentServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ConductExperimentServlet</servlet-name>
+        <url-pattern>/conductExperiment</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SpecsSynchronizerServlet</servlet-name>
+        <servlet-class>com.wixpress.petri.SpecsSynchronizerServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SpecsSynchronizerServlet</servlet-name>
+        <url-pattern>/sync-specs</url-pattern>
     </servlet-mapping>
 
     <filter>
         <filter-name>laboratoryFilter</filter-name>
         <filter-class>com.wixpress.petri.laboratory.http.LaboratoryFilter</filter-class>
-        <init-param>
-            <param-name>laboratoryConfig</param-name>
-            <param-value>/WEB-INF/laboratory.properties</param-value>
-        </init-param>
     </filter>
 
     <filter-mapping>
         <filter-name>laboratoryFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <context-param>
+        <param-name>laboratoryConfig</param-name>
+        <param-value>/WEB-INF/laboratory.properties</param-value>
+    </context-param>
 
 </web-app>

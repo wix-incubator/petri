@@ -25,11 +25,4 @@ public class LaboratoryConfig {
     public Laboratory laboratory(HttpSession session) {
         return (Laboratory) session.getAttribute(PETRI_LABORATORY);
     }
-
-    @Bean
-    @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-    public UserInfoStorage requestScopedUserInfoStorage(HttpSession session) {
-        return (UserInfoStorage) session.getAttribute(PETRI_USER_INFO_STORAGE);
-    }
-
 }

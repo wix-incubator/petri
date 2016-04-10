@@ -29,6 +29,7 @@
     <modules>
         <module>wix-petri-core</module>
         <module>laboratory-servlet-api-integration</module>
+        <module>laboratory-spring-integration</module>
         <module>petri-server-core</module>
         <module>petri-server</module>
         <module>sample-petri-app</module>

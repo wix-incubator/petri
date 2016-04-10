@@ -7,16 +7,25 @@ import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentBuilder;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
+import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.UUID;
 
 import static com.wixpress.petri.test.TestBuilders.experimentOnRegisteredWithFirstWinning;
 import static com.wixpress.petri.test.TestBuilders.experimentWithFirstWinning;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 
 
@@ -87,6 +96,17 @@ public class PetriE2eTest extends BaseTest {
         assertThat(testResult, is("a"));
     }
 
+    @Test
+    public void validateSpecSyncAvailability() throws Exception {
+         String syncSpecsUrl = "http://localhost:" + SAMPLE_APP_PORT + "/sync-specs";
 
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost post = new HttpPost(syncSpecsUrl);
+        HttpResponse response = httpClient.execute(post);
+        assertThat(response.getStatusLine().getStatusCode(), CoreMatchers.is(HttpStatus.SC_OK));
 
+        List<ExperimentSpec> specs = fullPetriClient.fetchSpecs();
+
+        assertNotEquals(specs.size(), 0);
+    }
 }
