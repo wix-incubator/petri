@@ -121,9 +121,9 @@ using_laboratory_as_a_service:
 
  
 configure_petri_server:
-  title: "Build Petri Server From Scratch"
-  url: "/petri/configure_petri_server/ 'Build Petri Server From Scratch'"
-  link: "<a href='/petri/configure_petri_server/' title='Build Petri Server From Scratch'>Build Petri Server From Scratch</a>"
+  title: "Configure & Run Petri Server"
+  url: "/petri/configure_petri_server/ 'Configure & Run Petri Server'"
+  link: "<a href='/petri/configure_petri_server/' title='Configure & Run Petri Server'>Configure & Run Petri Server</a>"
 
 
  

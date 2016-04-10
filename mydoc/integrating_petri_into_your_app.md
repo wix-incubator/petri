@@ -32,6 +32,7 @@ permalink: /integrating_petri_into_your_app/
 ```
 
 * Add the following filters to your web.xml file 
+
 ```
 <filter>
     <filter-name>laboratoryFilter</filter-name>
@@ -61,4 +62,4 @@ permalink: /integrating_petri_into_your_app/
 
 
 
-</br>
+
