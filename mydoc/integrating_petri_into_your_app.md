@@ -33,19 +33,19 @@ permalink: /integrating_petri_into_your_app/
 
 * Add the following filters to your web.xml file 
 ```
-    <filter>
-        <filter-name>laboratoryFilter</filter-name>
-        <filter-class>com.wixpress.petri.laboratory.http.LaboratoryFilter</filter-class>
-        <init-param>
-            <param-name>laboratoryConfig</param-name>
-            <param-value>/WEB-INF/laboratory.properties</param-value>
-        </init-param>
-    </filter>
+<filter>
+    <filter-name>laboratoryFilter</filter-name>
+    <filter-class>com.wixpress.petri.laboratory.http.LaboratoryFilter</filter-class>
+    <init-param>
+        <param-name>laboratoryConfig</param-name>
+        <param-value>/WEB-INF/laboratory.properties</param-value>
+    </init-param>
+</filter>
 
-    <filter-mapping>
-        <filter-name>laboratoryFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+<filter-mapping>
+    <filter-name>laboratoryFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
 ```
 
 * Add the LaboratoryConfig spring configuration to your applicationContext
