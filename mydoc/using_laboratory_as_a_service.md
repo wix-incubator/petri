@@ -21,7 +21,7 @@ This can be achieved by deploying the [sample app](https://github.com/wix/petri/
 
 When you use this setup, it is important you understand how Laboratory reads and writes context:  
 
-- Relevant context is read from the HTTP request (user id, language etc). See the [relevant code](https://github.com/wix/petri/blob/master/petri-spring-integration/src/main/java/com/wixpress/petri/laboratory/HttpRequestUserInfoExtractor.java) for exact header/cookie/param names
+- Relevant context is read from the HTTP request (user id, language etc). See the [relevant code](https://github.com/wix/petri/blob/master/laboratory-servlet-api-integration/src/main/java/com/wixpress/petri/laboratory/HttpRequestUserInfoExtractor.java) for exact header/cookie/param names
 - Previous conduction values are read from Petri's cookie, so consistent experience is maintained per user.
 - Conduction values (where relevant) may be written back to the cookies.
 
