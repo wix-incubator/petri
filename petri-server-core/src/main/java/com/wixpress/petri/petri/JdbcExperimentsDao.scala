@@ -65,6 +65,10 @@ class JdbcExperimentsDao(jdbcTemplate: JdbcTemplate, mapper: PetriMapper[Experim
     jdbcTemplate.query(FETCH_SQL_GROUPED_BY_ORIGINAL_ID, rsExtractor)
   }
 
+  override def fetchExperimentById(experimentId: Int): Option[Experiment] = {
+    jdbcTemplate.query(SELECT_SQL, rsExtractor, Int.box(experimentId)).headOption
+  }
+
   override def migrateStartEndDates(): Int = {
     val experiments = jdbcTemplate
       .query("SELECT id, last_update_date, experiment FROM experiments WHERE start_date = 0", rsExtractor)

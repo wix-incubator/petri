@@ -5,12 +5,12 @@ import java.util.UUID
 
 import com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf
 import com.wixpress.petri.experiments.domain.{Experiment, ExperimentSnapshot, ExperimentSpec}
+import com.wixpress.petri.petri.Exceptions.ExperimentNotFoundException
 import com.wixpress.petri.petri.PetriRpcServer._
 import org.joda.time.DateTime
 
 import scala.collection.JavaConversions.seqAsJavaList
 import scala.collection.JavaConverters._
-import scala.util.Properties
 import scala.util.control.NonFatal
 
 /**
@@ -175,6 +175,11 @@ class PetriRpcServer(experimentsDao: ExperimentsDao,
   override def migrateStartEndDates(): Unit = {
     experimentsDao.migrateStartEndDates()
   }
+
+  @throws(classOf[ExperimentNotFoundException])
+  override def fetchExperimentById(experimentId: Int): Experiment = experimentsDao.fetchExperimentById(experimentId).
+    getOrElse(throw new ExperimentNotFoundException("Cannot find experiment with id = " + experimentId + "."))
+
 }
 
 private[petri] object PetriRpcServer {
@@ -183,11 +188,11 @@ private[petri] object PetriRpcServer {
   def printSpecUpdateFailedMsg(key: String) = s"Failed to update spec [$key]"
 
   def printNonTerminatedExperimentsMsg = "Cannot update spec when non-terminated experiments exist on it." +
-    Properties.lineSeparator +
+    " " +
     "If you actually want the new version you need to: terminate the existing experiment/s on this spec and then rescan your specs (via GA or manual POST request)"
 
   def printOriginalAndNewSpecs(experimentSpec: ExperimentSpec, originalSpec: Option[ExperimentSpec]) =
     s"Previous spec - [${originalSpec.orNull}]"+
-    Properties.lineSeparator + Properties.lineSeparator +
+    "  " +
     s"New spec      - [$experimentSpec]"
 }

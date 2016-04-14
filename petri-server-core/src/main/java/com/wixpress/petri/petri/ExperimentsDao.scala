@@ -24,4 +24,6 @@ trait ExperimentsDao {
   def fetchAllExperimentsGroupedByOriginalId: Seq[Experiment]
 
   def migrateStartEndDates(): Int
+
+  def fetchExperimentById(experimentId: Int) : Option[Experiment]
 }

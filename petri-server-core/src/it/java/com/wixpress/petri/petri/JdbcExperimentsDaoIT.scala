@@ -220,6 +220,30 @@ class JdbcExperimentsDaoIT extends SpecWithJUnit with JMock {
     }
   }
 
+  "fetchExperimentById" should {
+
+    "return Some(None) if experiment does not exist" in new ctx {
+      dao.fetchExperimentById(1337) must beNone
+    }
+
+    "return the only experiment if one exists" in new ctx {
+      val exp = givenExperimentWithSpec(snapshot)
+      dao.fetchExperimentById(exp.getOriginalId) must beSome(exp)
+    }
+
+    "return the updated experiment if it was updated" in new ctx {
+      val exp = givenExperimentWithSpec(snapshot)
+      val expUpdate = experiment.but(
+        withA(id, Int.box(exp.getId)),
+        withA(originalId, Int.box(exp.getOriginalId)),
+        withA(description, "new description"))
+      val expected = expUpdate.but(withA(lastUpdated, exp.getLastUpdated.plusMinutes(35))).make
+
+      dao.update(expUpdate.make, expected.getLastUpdated)
+      dao.fetchExperimentById(exp.getId) must beSome(expected)
+    }
+  }
+
   "migrateStartEndDates" should {
     "succeed" in new migrationCtx {
       /**

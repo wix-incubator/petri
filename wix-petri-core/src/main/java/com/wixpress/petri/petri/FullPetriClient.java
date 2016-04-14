@@ -8,18 +8,19 @@ import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import org.joda.time.DateTime;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author talyag
  * @since 9/24/14
  */
-//TODO - move this class to petri-server module
+//TODO - move this class to petri-server module.
 public interface FullPetriClient {
 
     List<Experiment> fetchAllExperiments();
 
     List<Experiment> fetchAllExperimentsGroupedByOriginalId();
+
+    Experiment fetchExperimentById(int experimentId);
 
     Experiment insertExperiment(ExperimentSnapshot snapshot);
 

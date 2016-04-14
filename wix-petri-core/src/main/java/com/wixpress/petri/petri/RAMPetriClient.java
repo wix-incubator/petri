@@ -14,7 +14,6 @@ import java.util.*;
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Lists.*;
-import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Multimaps.index;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.anExperiment;
@@ -130,6 +129,12 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
         List<Experiment> allExperiments = fetchAllExperiments();
         final ImmutableListMultimap<Integer, Experiment> groupedByOriginalId = index(allExperiments, originalId());
         return newArrayList(transform(groupedByOriginalId.asMap().values(), mostRecent()));
+    }
+
+    @Override
+    public Experiment fetchExperimentById(int experimentId) {
+        List<Experiment> allExperiments = fetchAllExperimentsGroupedByOriginalId();
+        return find(allExperiments, hasID(experimentId), null);
     }
 
     @Override
