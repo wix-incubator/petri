@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.wixpress.petri.laboratory.UserInfoType.ANONYMOUS_LOG_STORAGE_KEY;
-
 public class UserInfo implements ConductionStrategy {
 
     private static final DateTime BEGINNING_OF_TIME = new DateTime(0);
@@ -19,11 +17,6 @@ public class UserInfo implements ConductionStrategy {
     public static UserInfo userInfoFromNullRequest(String host) {
         return new UserInfo("", (UUID) null, null, "", "", "",
                 new NullUserInfoType(), "", "", BEGINNING_OF_TIME, false, "", false, new HashMap<String, String>(), false, host, emptyOtherUsersExperimentsLogs, emptyOtherUsersExperimentsLogs, false, "");
-    }
-
-    private static UserInfo userInfoWithNoExperimentsLogs() {
-        return new UserInfo("", (UUID) null, null, "", "", "",
-                new NullUserInfoType(), "", "", BEGINNING_OF_TIME, false, "", false, new HashMap<String, String>(), false, "n/a", emptyOtherUsersExperimentsLogs, emptyOtherUsersExperimentsLogs, false, "");
     }
 
     public final String experimentsLog;
@@ -213,13 +206,9 @@ public class UserInfo implements ConductionStrategy {
         return experimentOverrides.get(keyName);
     }
 
-    public void saveExperimentState(ExperimentStateStorage experimentStateStorage) {
-        saveExperimentState(experimentStateStorage, userInfoWithNoExperimentsLogs());
-    }
-
     public void saveExperimentState(ExperimentStateStorage experimentStateStorage, UserInfo originalUserInfo) {
         if (!anonymousExperimentsLog.equals(originalUserInfo.anonymousExperimentsLog)){
-            experimentStateStorage.storeAnonymousExperimentsLog(ANONYMOUS_LOG_STORAGE_KEY, anonymousExperimentsLog);
+            experimentStateStorage.storeAnonymousExperimentsLog(anonymousExperimentsLog);
         }
 
         if (!experimentsLog.equals(originalUserInfo.experimentsLog)){

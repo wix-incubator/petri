@@ -31,12 +31,10 @@ import static org.junit.Assert.assertThat;
  * Date: 8/7/14
  * Time: 6:45 PM
  */
-
-
 public class UserInfoExtractorIT {
 
     private static final SampleAppRunner testAppRunner = new SampleAppRunner(9002);
-    private static final String ANONYMOUS_LOG_STORAGE_KEY = "_wixAB3";
+    private static final String ANONYMOUS_LOG_STORAGE_KEY = "myPetriCookie";//This value should match the 'petri.log.storage.key' value in /WEB-INF/laboratory.properties
     private static final String EXTRACT_USER_INFO_URL = "http://localhost:9002/extractUserInfo";
     private static final List<Pair<String, String>> NO_PROPERTIES = null;
 
@@ -215,7 +213,7 @@ public class UserInfoExtractorIT {
     }
 
     private String userExperimentCookieStr(String userId, String value) {
-        return "_wixAB3|" + userId + "=" + value;
+        return ANONYMOUS_LOG_STORAGE_KEY + "|" + userId + "=" + value;
     }
 
     private Matcher<scala.collection.immutable.Map> isMapOfSize(final int size) {

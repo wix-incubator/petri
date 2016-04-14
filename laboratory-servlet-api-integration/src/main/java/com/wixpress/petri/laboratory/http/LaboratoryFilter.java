@@ -29,6 +29,7 @@ public class LaboratoryFilter implements Filter {
 
     private ServerMetricsReporter metricsReporter;
     private PetriClient petriClient;
+    private PetriProperties petriProperties;
     private UserRequestPetriClient userRequestPetriClient;
     private PetriTopology petriTopology;
 
@@ -66,7 +67,7 @@ public class LaboratoryFilter implements Filter {
 
         final UserInfo userInfo = storage.read();
         final UserInfo originalUserInfo = storage.readOriginal();
-        userInfo.saveExperimentState(new CookieExperimentStateStorage(response), originalUserInfo);
+        userInfo.saveExperimentState(new CookieExperimentStateStorage(response, petriProperties.getPetriLogStorageCookieName()), originalUserInfo);
         if (petriTopology.isWriteStateToServer()) {
             userInfo.saveExperimentState(new ServerStateExperimentStateStorage(petriClient), originalUserInfo);
         }
@@ -83,7 +84,7 @@ public class LaboratoryFilter implements Filter {
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
         return new RequestScopedUserInfoStorage(
                 new HttpRequestUserInfoExtractor(
-                        httpServletRequest));
+                        httpServletRequest, petriProperties.getPetriLogStorageCookieName()));
     }
 
     public void destroy() {
@@ -91,7 +92,8 @@ public class LaboratoryFilter implements Filter {
     }
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        readProperties(filterConfig);
+        petriProperties = new DefaultPetriProperties(filterConfig.getServletContext());
+        readProperties();
 
         try {
             petriClient = PetriRPCClient.makeFor(petriTopology.getPetriUrl());
@@ -105,8 +107,7 @@ public class LaboratoryFilter implements Filter {
         FilterTypeIdResolver.useDynamicFilterClassLoading();
     }
 
-    private void readProperties(FilterConfig filterConfig) {
-        PetriProperties petriProperties = new PetriProperties(filterConfig.getServletContext());
+    private void readProperties() {
         final String petriUrl = petriProperties.getProperty("petri.url");
         //off by default so as not to incur overhead without users being explicitly aware of it
         final Boolean writeStateToServer = Boolean.valueOf(petriProperties.getProperty("petri.writeStateToServer", "false"));

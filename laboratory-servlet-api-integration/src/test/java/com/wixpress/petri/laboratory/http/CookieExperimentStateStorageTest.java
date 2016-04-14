@@ -31,8 +31,8 @@ public class CookieExperimentStateStorageTest {
             oneOf(response).addCookie(with(aCookieWith(someCookieName, someCookieValue)));
         }});
 
-        CookieExperimentStateStorage storage = new CookieExperimentStateStorage(response);
-        storage.storeAnonymousExperimentsLog(someCookieName, someCookieValue);
+        CookieExperimentStateStorage storage = new CookieExperimentStateStorage(response, someCookieName);
+        storage.storeAnonymousExperimentsLog(someCookieValue);
     }
 
     public static class CookieMatcher extends TypeSafeMatcher<Cookie> {

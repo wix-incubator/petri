@@ -3,14 +3,14 @@ package com.wixpress.petri.laboratory.http;
 import com.wixpress.petri.laboratory.ExceptionType;
 import com.wixpress.petri.laboratory.ExperimentStateStorage;
 import com.wixpress.petri.petri.PetriClient;
-import com.wixpress.petri.petri.RAMPetriClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletResponseWrapper;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by talyag on 6/4/15.
@@ -27,7 +27,7 @@ public class ServerStateExperimentStateStorage implements ExperimentStateStorage
     }
 
     @Override
-    public void storeAnonymousExperimentsLog(String key, String experimentsLog) {
+    public void storeAnonymousExperimentsLog(String experimentsLog) {
 
     }
 
