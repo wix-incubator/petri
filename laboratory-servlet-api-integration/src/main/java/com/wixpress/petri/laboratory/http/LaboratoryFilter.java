@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.util.Properties;
 import java.util.concurrent.Executors;
 
 /**
@@ -28,9 +26,8 @@ public class LaboratoryFilter implements Filter {
 
     public static final String PETRI_USER_INFO_STORAGE = "petri_userInfoStorage";
     public static final String PETRI_LABORATORY = "petri_laboratory";
-    private final PetriProperties petriProperties = new PetriProperties();
 
-    private  ServerMetricsReporter metricsReporter ;
+    private ServerMetricsReporter metricsReporter;
     private PetriClient petriClient;
     private UserRequestPetriClient userRequestPetriClient;
     private PetriTopology petriTopology;
@@ -70,7 +67,7 @@ public class LaboratoryFilter implements Filter {
         final UserInfo userInfo = storage.read();
         final UserInfo originalUserInfo = storage.readOriginal();
         userInfo.saveExperimentState(new CookieExperimentStateStorage(response), originalUserInfo);
-        if(petriTopology.isWriteStateToServer()) {
+        if (petriTopology.isWriteStateToServer()) {
             userInfo.saveExperimentState(new ServerStateExperimentStateStorage(petriClient), originalUserInfo);
         }
         resp.getOutputStream().write(baos.toByteArray());
@@ -80,15 +77,7 @@ public class LaboratoryFilter implements Filter {
     private Laboratory laboratory(UserInfoStorage storage) throws MalformedURLException {
         Experiments experiments = new CachedExperiments(new PetriClientExperimentSource(petriClient));
         TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
-        ErrorHandler errorHandler = new ErrorHandler() {
-            @Override
-            public void handle(String message, Throwable cause, ExceptionType exceptionType) {
-                cause.printStackTrace();
-            }
-
-        };
-
-        return new TrackableLaboratory(experiments, tracker, storage, errorHandler, 50, metricsReporter, userRequestPetriClient, petriTopology);
+        return new TrackableLaboratory(experiments, tracker, storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, petriTopology);
     }
 
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
@@ -117,16 +106,12 @@ public class LaboratoryFilter implements Filter {
     }
 
     private void readProperties(FilterConfig filterConfig) {
-        String laboratoryConfig = filterConfig.getInitParameter("laboratoryConfig");
-        InputStream input = filterConfig.getServletContext().getResourceAsStream(laboratoryConfig);
-
-        Properties p = petriProperties.fromStream(input);
-
-        final String petriUrl = p.getProperty("petri.url");
+        PetriProperties petriProperties = new PetriProperties(filterConfig.getServletContext());
+        final String petriUrl = petriProperties.getProperty("petri.url");
         //off by default so as not to incur overhead without users being explicitly aware of it
-        final Boolean writeStateToServer = Boolean.valueOf(p.getProperty("petri.writeStateToServer", "false"));
-        final String reporterInterval = p.getProperty("reporter.interval", "300000");
-        petriTopology = new PetriTopology(){
+        final Boolean writeStateToServer = Boolean.valueOf(petriProperties.getProperty("petri.writeStateToServer", "false"));
+        final String reporterInterval = petriProperties.getProperty("reporter.interval", "300000");
+        petriTopology = new PetriTopology() {
 
             @Override
             public String getPetriUrl() {
@@ -134,18 +119,20 @@ public class LaboratoryFilter implements Filter {
             }
 
             @Override
-            public Long getReportsScheduleTimeInMillis(){
+            public Long getReportsScheduleTimeInMillis() {
                 long scheduleReportInterval = Long.parseLong(reporterInterval);
                 return scheduleReportInterval;
             }
 
             @Override
-            public boolean isWriteStateToServer() {return writeStateToServer;}
+            public boolean isWriteStateToServer() {
+                return writeStateToServer;
+            }
         };
     }
 
     private void startMetricsReporterScheduler(Long reportsScheduleTimeInMillis) {
-        metricsReporter = new ServerMetricsReporter(petriClient , Executors.newScheduledThreadPool(5), reportsScheduleTimeInMillis);
+        metricsReporter = new ServerMetricsReporter(petriClient, Executors.newScheduledThreadPool(5), reportsScheduleTimeInMillis);
         metricsReporter.startScheduler();
     }
 

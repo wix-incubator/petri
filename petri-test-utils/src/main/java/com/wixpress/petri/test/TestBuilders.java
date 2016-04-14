@@ -38,7 +38,7 @@ public class TestBuilders {
     public static ExperimentBuilder updateExperimentState(Experiment experiment, final TestGroup... testGroups) {
         return aCopyOf(experiment).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(experiment.getExperimentSnapshot())
-                                .withGroups(Arrays.asList(testGroups)).build()
+                        .withGroups(Arrays.asList(testGroups)).build()
                 );
     }
 }

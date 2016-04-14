@@ -3,7 +3,6 @@ package com.wixpress.petri.laboratory;
 import com.wixpress.petri.petri.HostResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -74,15 +73,22 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
     }
 
     private String getCookieValue(String key) {
-        final Cookie cookie = WebUtils.getCookie(request,key);
-        return cookie == null ? "" : cookie.getValue();
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(key)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return "";
     }
 
     private String sanitizeString(String someString) {
         return someString == null ? "" : someString;
     }
 
-    boolean checkForRobotHeader(String userAgent){
+    boolean checkForRobotHeader(String userAgent) {
         userAgent = userAgent.toLowerCase();
         return (userAgent.contains("bot") ||
                 userAgent.contains("crawler") ||
@@ -91,17 +97,17 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
                 userAgent.contains("nagios-plugins"));
     }
 
-    String getCountry(){
+    String getCountry() {
         String geoCountry = request.getHeader("GEOIP_COUNTRY_CODE");
-        if (geoCountry != null){
+        if (geoCountry != null) {
             return geoCountry;
         }
         return request.getLocale().getCountry();
     }
 
-    String getIp(){
+    String getIp() {
         String originatingIP = request.getHeader("X-FORWARDED-FOR");
-        if (originatingIP != null){
+        if (originatingIP != null) {
             return originatingIP;
         }
         return request.getRemoteAddr();

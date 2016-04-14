@@ -22,17 +22,7 @@ import javax.annotation.Resource;
 public class TestAppController {
 
     @Resource
-    private UserInfoStorage uiStorage;
-
-    @Resource
     private Laboratory laboratory;
-
-    @RequestMapping(value = "/extractUserInfo", method = RequestMethod.GET)
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
-    public UserInfo extractUserInfo() {
-        return uiStorage.read();
-    }
 
     @RequestMapping(value = "/conductExperiment", method = RequestMethod.GET)
     @ResponseBody
@@ -40,5 +30,4 @@ public class TestAppController {
     public String conductExperiment(@RequestParam("key") String key, @RequestParam("fallback") String fallback) {
         return laboratory.conductExperiment(key,fallback,new StringConverter());
     }
-
 }

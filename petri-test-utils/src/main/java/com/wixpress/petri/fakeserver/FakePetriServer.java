@@ -3,6 +3,7 @@ package com.wixpress.petri.fakeserver;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentBuilder;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
+import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import com.wixpress.petri.petri.ConductExperimentSummary;
 import com.wixpress.petri.petri.RAMPetriClient;
 import com.wixpress.petri.petri.SpecDefinition;
@@ -13,17 +14,17 @@ import static com.wixpress.petri.experiments.jackson.ObjectMapperFactory.makeObj
 import static java.util.Arrays.asList;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 9/2/14
-* Time: 11:54 AM
-* To change this template use File | Settings | File Templates.
-*/
+ * Created with IntelliJ IDEA.
+ * User: sagyr
+ * Date: 9/2/14
+ * Time: 11:54 AM
+ * To change this template use File | Settings | File Templates.
+ */
 public class FakePetriServer {
     private final TestJsonRPCServer petriServer;
     private RAMPetriClient petriClient;
 
-    public FakePetriServer(int port){
+    public FakePetriServer(int port) {
         petriClient = new RAMPetriClient();
         petriServer = new TestJsonRPCServer(petriClient, makeObjectMapper(), port);
     }
@@ -52,10 +53,12 @@ public class FakePetriServer {
         return petriClient.getExperimentReport(experimentId);
     }
 
-    public void failNextReuqest(){
+    public void failNextReuqest() {
         petriClient.setBlowUp(true);
     }
 
-
+    public List<ExperimentSpec> fetchSpecs() {
+        return petriClient.fetchSpecs();
+    }
 
 }
