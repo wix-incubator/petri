@@ -315,12 +315,12 @@ public class Experiment {
         return !(tryFind(newFilters, instanceOf(NewUsersFilter.class)).isPresent());
     }
 
-    public Assignment conduct(ConductionContext context, UserInfo userInfo) {
+    public Assignment conduct(ConductionContext context, UserInfo userInfo, ExternalDataFetchers externalDataFetchers) {
         long startTime = System.currentTimeMillis();
         TestGroup winning = null;
         ConductionStrategy conductionStrategy = context.conductionStrategyOrFallback(userInfo);
         EligibilityCriteria eligibilityCriteria = new EligibilityCriteria(
-                userInfo, conductionStrategy, context.additionalEligibilityCriteria(), getStartDate());
+                userInfo, conductionStrategy, context.additionalEligibilityCriteria(), getStartDate(), externalDataFetchers);
 
         if (!isPaused() && isEligible(eligibilityCriteria)) {
             if (isToggle()) {

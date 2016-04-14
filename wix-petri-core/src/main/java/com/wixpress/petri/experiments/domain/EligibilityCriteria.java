@@ -9,8 +9,7 @@ import scala.Option;
 
 import java.util.UUID;
 
-import static com.wixpress.petri.laboratory.EligibilityCriteriaTypes.LanguageCriterion;
-import static com.wixpress.petri.laboratory.EligibilityCriteriaTypes.UserCreationDateCriterion;
+import static com.wixpress.petri.laboratory.EligibilityCriteriaTypes.*;
 
 public class EligibilityCriteria {
     private final AdditionalEligibilityCriteria additionalCriteria;
@@ -27,12 +26,18 @@ public class EligibilityCriteria {
     private final String language;
     private final String userAgent;
     private final boolean registeredUserExists;
+    private final ExternalDataFetchers externalDataFetchers;
 
     public EligibilityCriteria(UserInfo userInfo, AdditionalEligibilityCriteria additionalCriteria, DateTime experimentStartDate) {
-        this(userInfo, userInfo, additionalCriteria, experimentStartDate);
+        this(userInfo, userInfo, additionalCriteria, experimentStartDate, null);
     }
 
-    public EligibilityCriteria(UserInfo userInfo, ConductionStrategy conductionStrategy, AdditionalEligibilityCriteria additionalCriteria, DateTime experimentStartDate) {
+    public EligibilityCriteria(UserInfo userInfo, AdditionalEligibilityCriteria additionalCriteria, DateTime experimentStartDate, ExternalDataFetchers externalDataFetchers) {
+        this(userInfo, userInfo, additionalCriteria, experimentStartDate, externalDataFetchers);
+    }
+
+    public EligibilityCriteria(UserInfo userInfo, ConductionStrategy conductionStrategy, AdditionalEligibilityCriteria additionalCriteria,
+                               DateTime experimentStartDate, ExternalDataFetchers externalDataFetchers) {
         this.experimentStartDate = experimentStartDate;
         this.additionalCriteria = additionalCriteria;
 
@@ -48,8 +53,9 @@ public class EligibilityCriteria {
         this.isRecurringUser = userInfo.isRecurringUser;
         this.registeredUserExists = userInfo.registeredUserExists;
         this.host = userInfo.host;
-        this.companyEmployee = userInfo.companyEmployee;
+        this.companyEmployee = overrideCriterionOrElse(CompanyEmployeeCriterion.class, userInfo.companyEmployee);
         this.userAgent = userInfo.userAgent;
+        this.externalDataFetchers = externalDataFetchers;
     }
 
     public <V, T extends EligibilityCriterion<V>> V getAdditionalCriterion(Class<T> criterionClass) {
@@ -106,5 +112,9 @@ public class EligibilityCriteria {
 
     public boolean isRegisteredUserExists() {
         return registeredUserExists;
+    }
+
+    public ExternalDataFetchers getExternalDataFetchers() {
+        return externalDataFetchers;
     }
 }

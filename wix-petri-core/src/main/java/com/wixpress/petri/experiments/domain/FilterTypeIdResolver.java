@@ -44,6 +44,7 @@ public class FilterTypeIdResolver implements TypeIdResolver {
         registerTypeWithId("includeUserIds", IncludeUserIdsFilter.class);
         registerTypeWithId("not", NotFilter.class);
         registerTypeWithId("userAgentRegex", UserAgentRegexFilter.class);
+        registerTypeWithId("userNotInAnyGroup", UserNotInAnyGroupFilter.class);
         registerTypeWithId("unrecognized", UnrecognizedFilter.class);
     }
 

@@ -83,7 +83,7 @@ public class AggregateFilter implements Filter {
 
         @Override
         public boolean apply(Filter input) {
-            return isNotFilter(IncludeUserIdsFilter.class).apply(input);
+            return isNotFilter(IncludeUserIdsFilter.class).apply(input) || input instanceof UserNotInAnyGroupFilter;
         }
     }
 

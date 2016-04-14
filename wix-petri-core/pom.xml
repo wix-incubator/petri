@@ -194,6 +194,23 @@
         </dependency>
 
         <dependency>
+            <groupId>com.wixpress</groupId>
+            <artifactId>specs2-jmock_${scala.dependencies.version}</artifactId>
+            <scope>test</scope>
+            <version>${jmock-specs2-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-library</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>

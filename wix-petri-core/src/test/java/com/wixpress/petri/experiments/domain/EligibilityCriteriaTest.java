@@ -1,5 +1,6 @@
 package com.wixpress.petri.experiments.domain;
 
+import com.wixpress.petri.laboratory.EligibilityCriteriaTypes;
 import com.wixpress.petri.laboratory.EligibilityCriteriaTypes.CountryCriterion;
 import org.joda.time.DateTime;
 import org.junit.Test;
@@ -33,6 +34,13 @@ public class EligibilityCriteriaTest {
         AdditionalEligibilityCriteria withCountry = new AdditionalEligibilityCriteria().withCriterion(new CountryCriterion("yy"));
         EligibilityCriteria eligibilityCriteria = new EligibilityCriteria(a(UserInfo).make(), withCountry, null);
         assertThat(eligibilityCriteria.getCountry(), is("yy"));
+    }
+
+    @Test
+    public void usesCompanyEmployeeOverride() {
+        AdditionalEligibilityCriteria withCompanyEmployee = new AdditionalEligibilityCriteria().withCriterion(new EligibilityCriteriaTypes.CompanyEmployeeCriterion(true));
+        EligibilityCriteria eligibilityCriteria = new EligibilityCriteria(a(UserInfo).make(), withCompanyEmployee, null);
+        assertThat(eligibilityCriteria.isCompanyEmployee(), is(true));
     }
 
 

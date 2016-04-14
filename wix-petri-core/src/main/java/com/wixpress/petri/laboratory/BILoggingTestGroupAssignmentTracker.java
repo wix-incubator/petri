@@ -40,6 +40,7 @@ public class BILoggingTestGroupAssignmentTracker implements TestGroupAssignmentT
                 .put("logged_session_uuid", uid)
                 .put("label_id", experimentId * 10000 + testGroupId)
                 .put("ip", userInfo.ip)
+                .put("geo", userInfo.country)
                 .put("url", userInfo.url)
                 .put("user_agent", userInfo.userAgent)
                 .put("lng", userInfo.language)

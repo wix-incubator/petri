@@ -2,6 +2,7 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.laboratory.ConductionContextBuilder;
@@ -10,6 +11,7 @@ import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.laboratory.dsl.UserInfoMakers;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -28,6 +30,8 @@ import static com.wixpress.petri.laboratory.dsl.UserInfoMakers.*;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
+import org.jmock.Expectations;
+import org.jmock.integration.junit4.JUnitRuleMockery;
 
 
 /**
@@ -36,9 +40,13 @@ import static org.junit.Assert.*;
  */
 public class ExperimentTest {
 
+    @Rule
+    public JUnitRuleMockery context = new JUnitRuleMockery();
     private static final DateTime NOW = DateTime.now(DateTimeZone.UTC);
     private static final UUID SOME_USER_GUID = UUID.fromString("19fc13d9-5943-4a87-82b1-4acb7e5cb039");
     private static final UUID ANOTHER_USER_GUID = UUID.fromString("19fc13d9-5943-4a87-82b1-4acb7e5cb038");
+    private UserGroupsService userGroupsService = context.mock(UserGroupsService.class);
+    private ExternalDataFetchers externalDataFetchers = new ExternalDataFetchers(userGroupsService);
 
     private void experimentIsNotActive(Experiment experimentWithUnknownEndDate) {
         assertFalse("Experiment should not be active", experimentWithUnknownEndDate.isActiveAt(NOW));
@@ -46,6 +54,28 @@ public class ExperimentTest {
 
     private void assertExperimentIsActive(Experiment experimentWithUnknownStartDate) {
         assertTrue("Experiment should be active", experimentWithUnknownStartDate.isActiveAt(NOW));
+    }
+
+    private Experiment experimentWithFilters(Filter... filter) {
+        return an(Experiment, with(ExperimentMakers.filters, asList(filter))).make();
+    }
+
+    private void userIsEligible(Experiment experiment, UserInfo user) {
+        assertThat(experiment.isEligible(defaultEligibilityCriteriaForUser(user)), is(true));
+    }
+
+    private void userIsNotEligible(Experiment experiment, UserInfo user) {
+        assertThat(experiment.isEligible(defaultEligibilityCriteriaForUser(user)), is(false));
+    }
+
+    private void userIsEligibleOnConduct(Experiment experiment, UserInfo user) {
+        assertThat(experiment.conduct(ConductionContextBuilder.newInstance(), user, externalDataFetchers).getTestGroup(), is(notNullValue()));
+
+    }
+
+    private void userIsNotEligibleOnConduct(Experiment experiment, UserInfo user) {
+        assertThat(experiment.conduct(ConductionContextBuilder.newInstance(), user, externalDataFetchers).getTestGroup(), is(nullValue()));
+
     }
 
     @Test
@@ -106,7 +136,7 @@ public class ExperimentTest {
         Experiment deSerialized = objectMapper.readValue(jsonWithUnknownFilter, new TypeReference<Experiment>() {
         });
 
-        deSerialized.conduct(ConductionContextBuilder.newInstance(), a(UserInfo).make());
+        deSerialized.conduct(ConductionContextBuilder.newInstance(), a(UserInfo).make(), externalDataFetchers);
     }
 
     @Test
@@ -229,17 +259,6 @@ public class ExperimentTest {
         assertThat(terminated.getEndDate(), is(futureExperiment.getStartDate()));
     }
 
-    private Experiment experimentWithFilters(Filter... filter) {
-        return an(Experiment, with(ExperimentMakers.filters, asList(filter))).make();
-    }
-
-    private void userIsEligible(Experiment experiment, UserInfo user) {
-        assertThat(experiment.isEligible(defaultEligibilityCriteriaForUser(user)), is(true));
-    }
-
-    private void userIsNotEligible(Experiment experiment, UserInfo user) {
-        assertThat(experiment.isEligible(defaultEligibilityCriteriaForUser(user)), is(false));
-    }
 
     @Test
     public void eligibilityForWixEmployeesOrAnonymous() {
@@ -281,6 +300,7 @@ public class ExperimentTest {
         UserInfo otherNonWixUserInfo = a(UserInfo, with(companyEmployee, false), with(userId, ANOTHER_USER_GUID)).make();
         userIsNotEligible(experiment, otherNonWixUserInfo);
     }
+
 
     @Test
     public void eligibilityForExcludeUidOnly() {
@@ -418,10 +438,27 @@ public class ExperimentTest {
         Experiment experiment = experimentWithFilters(new NewUsersFilter());
 
         UserInfo oldUserInfo = a(UserInfoMakers.UserInfo).but(with(dateCreated, new DateTime().minusHours(1))).make();
-        assertThat(experiment.conduct(ConductionContextBuilder.newInstance(), oldUserInfo).getTestGroup(), is(nullValue()));
+        userIsNotEligibleOnConduct(experiment, oldUserInfo);
 
         UserInfo newUserInfo = a(UserInfoMakers.UserInfo).make();
-        assertThat(experiment.conduct(ConductionContextBuilder.newInstance(), newUserInfo).getTestGroup(), is(notNullValue()));
+        userIsEligibleOnConduct(experiment, newUserInfo);
+    }
+
+    @Test
+    public void eligibilityForWixEmployeesExcludingGroup() {
+        ImmutableList<String> excludedGroups = ImmutableList.of("Group1");
+        Experiment experiment = experimentWithFilters(
+                new WixEmployeesFilter(), new UserNotInAnyGroupFilter(excludedGroups)
+        );
+
+        expectUserInGroup(SOME_USER_GUID, excludedGroups,true);
+        UserInfo excludedWixUserInfo = a(UserInfo, with(companyEmployee, true), with(userId, SOME_USER_GUID)).make();
+        userIsNotEligibleOnConduct(experiment, excludedWixUserInfo);
+
+        expectUserInGroup(ANOTHER_USER_GUID, excludedGroups,false);
+        UserInfo otherWixUserInfo = a(UserInfo, with(companyEmployee, true), with(userId, ANOTHER_USER_GUID)).make();
+        userIsEligibleOnConduct(experiment, otherWixUserInfo);
+
     }
 
     //guardAgainstFilterTypeIdChanges
@@ -431,6 +468,13 @@ public class ExperimentTest {
         ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
         objectMapper.readValue(experimentWithFilters, new TypeReference<Experiment>() {
         });
+    }
+
+    private void expectUserInGroup(final UUID userId, final ImmutableList<String> excludedGroups, final boolean isInGroup) {
+        context.checking(new Expectations() {{
+            allowing(userGroupsService).isUserInAnyGroup(userId, excludedGroups);
+            will(returnValue(isInGroup));
+        }});
     }
 
 

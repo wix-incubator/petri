@@ -1,15 +1,5 @@
 package com.wixpress.petri.petri
 
-import java.{lang=>jl}
-
-/**
- * @author shaiyallin
- * @since 6/12/14
- */
-trait PetriTopology {
-  def getPetriUrl: String
-
-  def getReportsScheduleTimeInMillis: jl.Long = 30000l
-
-  def isWriteStateToServer = true
+@deprecated(message = "temp alias to LaboratoryTopology. here only to not break bootstrap.", since = "2-Mar-2016")
+trait PetriTopology extends LaboratoryTopology {
 }

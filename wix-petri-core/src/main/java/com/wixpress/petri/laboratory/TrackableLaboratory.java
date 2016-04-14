@@ -1,12 +1,10 @@
 package com.wixpress.petri.laboratory;
 
 import com.google.common.collect.ImmutableMap;
-import com.wixpress.petri.experiments.domain.Assignment;
-import com.wixpress.petri.experiments.domain.Experiment;
-import com.wixpress.petri.experiments.domain.TestGroup;
+import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.laboratory.converters.StringConverter;
 import com.wixpress.petri.petri.MetricsReporter;
-import com.wixpress.petri.petri.PetriTopology;
+import com.wixpress.petri.petri.LaboratoryTopology;
 import com.wixpress.petri.petri.SpecDefinition;
 import com.wixpress.petri.petri.UserRequestPetriClient;
 import scala.Option;
@@ -30,13 +28,15 @@ public class TrackableLaboratory implements Laboratory {
     private final ErrorHandler laboratoryErrorHandler;
     private final MetricsReporter metricsReporter;
     private final UserRequestPetriClient petriClient;
-    private final PetriTopology petriTopology;
+    private final LaboratoryTopology laboratoryTopology;
+    private final ExternalDataFetchers externalDataFetchers;
 
+    private final static String REMOVE_FT_COOKIES_ENABLED_FT = "removeFtCookiesEnabledFt";
 
     public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
                                PetriConductionContextRetriever petriConductionContextRetriever,
                                ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter,
-                               UserRequestPetriClient petriClient, PetriTopology petriTopology) {
+                               UserRequestPetriClient petriClient, LaboratoryTopology laboratoryTopology, ExternalDataFetchers externalDataFetchers) {
         this.experiments = experiments;
         this.testGroupAssignmentTracker = testGroupAssignmentTracker;
         this.userInfoStorage = userInfoStorage;
@@ -45,13 +45,14 @@ public class TrackableLaboratory implements Laboratory {
         this.maxConductionTimeMillis = maxConductionTimeMillis;
         this.metricsReporter = metricsReporter;
         this.petriClient = petriClient;
-        this.petriTopology = petriTopology;
+        this.laboratoryTopology = laboratoryTopology;
+        this.externalDataFetchers = externalDataFetchers;
     }
 
     public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
                                ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter,
-                               UserRequestPetriClient petriClient, PetriTopology petriTopology) {
-        this(experiments, testGroupAssignmentTracker, userInfoStorage, new DefaultConductionContextRetriever(), laboratoryErrorHandler, maxConductionTimeMillis, metricsReporter, petriClient, petriTopology);
+                               UserRequestPetriClient petriClient, LaboratoryTopology laboratoryTopology, ExternalDataFetchers externalDataFetchers) {
+        this(experiments, testGroupAssignmentTracker, userInfoStorage, new DefaultConductionContextRetriever(), laboratoryErrorHandler, maxConductionTimeMillis, metricsReporter, petriClient, laboratoryTopology, externalDataFetchers);
 
     }
 
@@ -154,13 +155,14 @@ public class TrackableLaboratory implements Laboratory {
 
     private void removeExpiredExperiments() {
         //TODO - make userinfo.removeExpired()
-        UserInfo updateUserInfo = userInfo().removeExperimentsWhere(expired()).removeAnonymousExperimentsWhere(expired());
+        ExpiredExperiments expired = expired();
+        UserInfo updateUserInfo = userInfo().removeExperimentsWhere(expired).removeAnonymousExperimentsWhere(expired);
         if (!updateUserInfo.equals(userInfo()))
             userInfoStorage.write(updateUserInfo);
     }
 
     private ExpiredExperiments expired() {
-        return new ExpiredExperiments(experiments);
+        return new ExpiredExperiments(experiments, isRemoveFTCookiesEnabledByFT());
     }
 
     private <T> T calcExperimentValue(TestResultConverter<T> resultConverter, Experiment experiment, ConductionContext context, Option<Integer> existingTestGroupID) {
@@ -197,7 +199,7 @@ public class TrackableLaboratory implements Laboratory {
     }
 
     private <T> T valueFromConduct(TestResultConverter<T> resultConverter, Experiment experiment, ConductionContext context) {
-        Assignment assignment = experiment.conduct(context, userInfo());
+        Assignment assignment = experiment.conduct(context, userInfo(), externalDataFetchers);
 
         assignment.executeSideEffects(testGroupAssignmentTracker, userInfoStorage);
 
@@ -248,7 +250,7 @@ public class TrackableLaboratory implements Laboratory {
     }
 
     private boolean serverStateIsRelevant(List<Experiment> experiments, Map<String, String> testGroupsFromCookies, UUID uid) {
-        return petriTopology.isWriteStateToServer() &&
+        return laboratoryTopology.isWriteStateToServer() &&
                 uid != null &&
                 atLeastOnePersistentKeyMissingInCookie(experiments, testGroupsFromCookies);
     }
@@ -273,6 +275,10 @@ public class TrackableLaboratory implements Laboratory {
             }
         }
         return !existingKeys.containsAll(suspectKeys);
+    }
+
+    private boolean isRemoveFTCookiesEnabledByFT(){
+        return !experiments.findNonExpiredByKey(REMOVE_FT_COOKIES_ENABLED_FT).isEmpty();
     }
 
 }

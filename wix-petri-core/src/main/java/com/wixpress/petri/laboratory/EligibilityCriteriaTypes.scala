@@ -20,9 +20,12 @@ object EligibilityCriteriaTypes {
     override def getValue: String = geo
   }
 
+  class CompanyEmployeeCriterion(isCompanyEmployee: java.lang.Boolean) extends EligibilityCriterion[java.lang.Boolean] {
+    override def getValue: java.lang.Boolean = isCompanyEmployee
+  }
+
   class CustomContextCriterion(customContextMap: java.util.Map[String,String]) extends EligibilityCriterion[java.util.Map[String,String]] {
     override def getValue: java.util.Map[String,String] = customContextMap
   }
-
 
 }

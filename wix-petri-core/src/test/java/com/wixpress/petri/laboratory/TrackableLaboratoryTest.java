@@ -52,6 +52,7 @@ public class TrackableLaboratoryTest {
     private Maker<com.wixpress.petri.laboratory.UserInfo> aRegisteredUserInfo;
     public static int EXPERIMENT_MAX_TIME_MILLIS = 10;
     private UserInfo registeredUserInfo;
+    private ExternalDataFetchers externalDataFetchers = null;
 
 
     private static final Class TheKey = new SpecDefinition() {
@@ -78,7 +79,7 @@ public class TrackableLaboratoryTest {
     private FakeErrorHandler laboratoryErrorHandler;
     private FakeMetricsReporter metricsReporter;
     private UserRequestPetriClient petriClient;
-    private FakePetriTopology petriTopology;
+    private FakeLaboratoryTopology laboratoryTopology;
 
     @Before
     public void setUp() throws Exception {
@@ -92,11 +93,11 @@ public class TrackableLaboratoryTest {
         testGroupAssignmentTracker = new FakeTestGroupAssignmentTracker();
         laboratoryErrorHandler = new FakeErrorHandler();
         metricsReporter = new FakeMetricsReporter();
-        petriTopology = new FakePetriTopology();
-
+        laboratoryTopology = new FakeLaboratoryTopology();
         petriClient = context.mock(UserRequestPetriClient.class);
+
         lab = new TrackableLaboratory(experiments, testGroupAssignmentTracker, userInfoStorage,
-                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, petriTopology);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, laboratoryTopology, externalDataFetchers);
     }
 
     public static class FakeErrorHandler implements ErrorHandler {
@@ -147,7 +148,7 @@ public class TrackableLaboratoryTest {
         }
     }
 
-    public static class FakePetriTopology implements PetriTopology {
+    public static class FakeLaboratoryTopology implements LaboratoryTopology {
 
 
         private boolean isWriteStateToServer = true;
@@ -165,6 +166,11 @@ public class TrackableLaboratoryTest {
         @Override
         public boolean isWriteStateToServer() {
             return isWriteStateToServer;
+        }
+
+        @Override
+        public String getAuthorizationServiceUrl() {
+            return null;
         }
 
         public void setWriteStateToServer(boolean isWriteStateToServer) {
@@ -543,7 +549,7 @@ public class TrackableLaboratoryTest {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
         lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
-                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, petriTopology);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, laboratoryTopology, externalDataFetchers);
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
         errorReportWasSent(Matchers.<Throwable>instanceOf(BlowingUpCachedExperiments.CacheExploded.class));
         assertBiLogIsEmpty();
@@ -554,7 +560,7 @@ public class TrackableLaboratoryTest {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
         lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
-                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, petriTopology);
+                laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, laboratoryTopology, externalDataFetchers);
 
         Map<String, String> expected = new HashMap();
         assertThat(lab.conductAllInScope("whatever"), is(expected));
@@ -639,7 +645,7 @@ public class TrackableLaboratoryTest {
     @Test
     public void doNotReadStateFromServerWhenExperimentIsForRegisteredUsersAndConfigIsOff() throws Exception {
         addExperimentToCache(experimentForRegisteredUserWithWinningFirstGroup.make());
-        petriTopology.setWriteStateToServer(false);
+        laboratoryTopology.setWriteStateToServer(false);
 
         userInfoStorage.write(registeredUserInfo);
         //no expectation allowing reading state from server

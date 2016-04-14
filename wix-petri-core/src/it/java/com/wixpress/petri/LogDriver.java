@@ -1,13 +1,14 @@
 package com.wixpress.petri;
 
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.rolling.RollingFileAppender;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,9 +26,12 @@ public class LogDriver {
         this.logFile = new File(getLogFileFullName());
     }
 
-    private String getLogFileFullName(){
-        String tmpDir = System.getProperty("java.io.tmpdir");
-        return tmpDir + "/experiments_log.bi." + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    private String getLogFileFullName() {
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+        RollingFileAppender appender = (RollingFileAppender) context.getLogger("experimentsLog").getAppender("EXPERIMENTS_APPENDER");
+
+        return appender.getFile();
     }
 
     public String lastLongEntry() throws IOException {

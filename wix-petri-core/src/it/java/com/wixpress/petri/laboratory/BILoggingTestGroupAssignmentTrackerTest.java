@@ -8,6 +8,7 @@ import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.petri.Clock;
+import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.joda.time.DateTime;
@@ -49,6 +50,14 @@ public class BILoggingTestGroupAssignmentTrackerTest {
     @Before
     public void clearLogbackConfiguration() throws Exception {
         logDriver.cleanup();
+        givenCurrentDateTime();
+    }
+
+    private void givenCurrentDateTime() {
+        context.checking(new Expectations() {{
+            allowing(clock).getCurrentDateTime();
+            will(returnValue(theTime));
+        }});
     }
 
     private Map<String, Object> biReportLine() throws IOException {
@@ -71,20 +80,34 @@ public class BILoggingTestGroupAssignmentTrackerTest {
         return Iterables.toArray(keys, String.class);
     }
 
+    private UserInfo userInfo = a(UserInfo,
+            with(ip, "THE_IP"),
+            with(url, "THE_URL"),
+            with(userAgent, "THE_UA"),
+            with(language, "THE_LANGUAGE"),
+            with(globalSessionId, "THE_GSI_NUMBER")).make();
+
+    private Matcher<Map<String, Object>> regularBiLine(int testGroupId, Experiment experiment) {
+        return allOf(
+                hasEntry("date", (Object) theTime.toString(ISODateTimeFormat.dateTime())),
+                hasEntry("cuid", (Object) userInfo.clientId.toString()),
+                hasEntry("label_id", (Object) (experiment.getId() * 10000 + testGroupId)),
+                hasEntry("ip", (Object) userInfo.ip),
+                hasEntry("geo", (Object) userInfo.country),
+                hasEntry("url", (Object) userInfo.url),
+                hasEntry("user_agent", (Object) userInfo.userAgent),
+                hasEntry("lng", (Object) userInfo.language),
+                hasEntry("experimentId", (Object) experiment.getId()),
+                hasEntry("testGroupId", (Object) testGroupId),
+                hasEntry("productName", (Object) experiment.getScope()),
+                hasEntry("gsi", (Object) "THE_GSI_NUMBER")
+        );
+    }
+
     @Test
     public void generatesCorrectLogLineWithParametersOrder() throws Exception {
-        UserInfo userInfo = a(UserInfo,
-                with(ip, "THE_IP"),
-                with(url, "THE_URL"),
-                with(userAgent, "THE_UA"),
-                with(language, "THE_LANGUAGE")).make();
         int testGroupId = 4;
         Experiment experiment = a(ExperimentMakers.Experiment).but(with(ExperimentMakers.id, 123)).make();
-
-        context.checking(new Expectations() {{
-            allowing(clock).getCurrentDateTime();
-            will(returnValue(theTime));
-        }});
 
         biLogger.newAssignment(userInfo, testGroupId, experiment);
 
@@ -96,6 +119,7 @@ public class BILoggingTestGroupAssignmentTrackerTest {
                 "logged_session_uuid",
                 "label_id",
                 "ip",
+                "geo",
                 "url",
                 "user_agent",
                 "lng",
@@ -107,19 +131,9 @@ public class BILoggingTestGroupAssignmentTrackerTest {
 
     @Test
     public void valuesFromAdditionsAddedToTheEndOfLogOverridingDefaultParameters() throws Exception {
-        UserInfo userInfo = a(UserInfo,
-                with(ip, "THE_IP"),
-                with(url, "THE_URL"),
-                with(userAgent, "THE_UA"),
-                with(language, "THE_LANGUAGE"),
-                with(globalSessionId, "gsi_number")).make();
+
         int testGroupId = 4;
         Experiment experiment = a(ExperimentMakers.Experiment).but(with(ExperimentMakers.id, 123)).make();
-
-        context.checking(new Expectations() {{
-            allowing(clock).getCurrentDateTime();
-            will(returnValue(theTime));
-        }});
 
         biLogger.newAssignment(userInfo, testGroupId, new BIAdditions() {
             @Override
@@ -132,56 +146,30 @@ public class BILoggingTestGroupAssignmentTrackerTest {
             }
         }, experiment.getId(), experiment.getScope());
 
-        assertThat(biReportLine(), allOf(
-                hasEntry("date", (Object) theTime.toString(ISODateTimeFormat.dateTime())),
-                hasEntry("cuid", (Object) userInfo.clientId.toString()),
-                hasEntry("uuid", (Object) "overriden"),
-                hasEntry("label_id", (Object) (experiment.getId() * 10000 + testGroupId)),
-                hasEntry("ip", (Object) userInfo.ip),
-                hasEntry("url", (Object) userInfo.url),
-                hasEntry("user_agent", (Object) userInfo.userAgent),
-                hasEntry("lng", (Object) userInfo.language),
-                hasEntry("experimentId", (Object) experiment.getId()),
-                hasEntry("testGroupId", (Object) testGroupId),
-                hasEntry("string", (Object) "s"),
-                hasEntry("int", (Object) 2),
-                hasEntry("boolean", (Object) true),
-                hasEntry("gsi", (Object) "gsi_number")
-        ));
+        Map<String, Object> actual = biReportLine();
+        assertThat(actual, regularBiLine(testGroupId, experiment));
 
+        assertThat(actual, hasEntry("uuid", (Object) "overriden"));
+        assertThat(actual, hasEntry("logged_session_uuid", (Object) userInfo.getUserId().toString()));
+        assertThat(actual, hasEntry("string", (Object) "s"));
+        assertThat(actual, hasEntry("int", (Object) 2));
+        assertThat(actual, hasEntry("boolean", (Object) true));
     }
 
     @Test
     public void generatesCorrectLogLine() throws Exception {
-        UserInfo userInfo = a(UserInfo,
-                with(ip, "THE_IP"),
-                with(url, "THE_URL"),
-                with(userAgent, "THE_UA"),
-                with(language, "THE_LANGUAGE")).make();
         int testGroupId = 4;
         Experiment experiment = a(ExperimentMakers.Experiment).but(with(ExperimentMakers.id, 123)).make();
 
-        context.checking(new Expectations() {{
-            allowing(clock).getCurrentDateTime();
-            will(returnValue(theTime));
-        }});
-
         biLogger.newAssignment(userInfo, testGroupId, experiment);
 
-        Object uid = userInfo.getUserId().toString();
-        assertThat(biReportLine(), allOf(
-                hasEntry("date", (Object) theTime.toString(ISODateTimeFormat.dateTime())),
-                hasEntry("cuid", (Object) userInfo.clientId.toString()),
-                hasEntry("uuid", uid),
-                hasEntry("logged_session_uuid", uid),
-                hasEntry("label_id", (Object) (experiment.getId() * 10000 + testGroupId)),
-                hasEntry("ip", (Object) userInfo.ip),
-                hasEntry("url", (Object) userInfo.url),
-                hasEntry("user_agent", (Object) userInfo.userAgent),
-                hasEntry("lng", (Object) userInfo.language),
-                hasEntry("experimentId", (Object) experiment.getId()),
-                hasEntry("testGroupId", (Object) testGroupId),
-                hasEntry("productName", (Object) experiment.getScope())));
+        Map<String, Object> actual = biReportLine();
+        assertThat(actual, regularBiLine(testGroupId, experiment));
+
+        assertThat(actual, hasEntry("uuid", (Object) userInfo.getUserId().toString()));
+        assertThat(actual, hasEntry("logged_session_uuid", (Object) userInfo.getUserId().toString()));
     }
+
+
 
 }

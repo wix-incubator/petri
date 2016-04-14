@@ -1,6 +1,7 @@
 package com.wixpress.petri.laboratory.http;
 
 import com.wixpress.petri.PetriRPCClient;
+import com.wixpress.petri.experiments.domain.ExternalDataFetchers;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
 import com.wixpress.petri.laboratory.*;
 import com.wixpress.petri.petri.*;
@@ -30,7 +31,7 @@ public class LaboratoryFilter implements Filter {
     private ServerMetricsReporter metricsReporter;
     private PetriClient petriClient;
     private UserRequestPetriClient userRequestPetriClient;
-    private PetriTopology petriTopology;
+    private LaboratoryTopology laboratoryTopology;
 
     public LaboratoryFilter() {
     }
@@ -67,7 +68,7 @@ public class LaboratoryFilter implements Filter {
         final UserInfo userInfo = storage.read();
         final UserInfo originalUserInfo = storage.readOriginal();
         userInfo.saveExperimentState(new CookieExperimentStateStorage(response), originalUserInfo);
-        if (petriTopology.isWriteStateToServer()) {
+        if (laboratoryTopology.isWriteStateToServer()) {
             userInfo.saveExperimentState(new ServerStateExperimentStateStorage(petriClient), originalUserInfo);
         }
         resp.getOutputStream().write(baos.toByteArray());
@@ -77,7 +78,7 @@ public class LaboratoryFilter implements Filter {
     private Laboratory laboratory(UserInfoStorage storage) throws MalformedURLException {
         Experiments experiments = new CachedExperiments(new PetriClientExperimentSource(petriClient));
         TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
-        return new TrackableLaboratory(experiments, tracker, storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, petriTopology);
+        return new TrackableLaboratory(experiments, tracker, storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, laboratoryTopology, new ExternalDataFetchers(null));
     }
 
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
@@ -94,13 +95,13 @@ public class LaboratoryFilter implements Filter {
         readProperties(filterConfig);
 
         try {
-            petriClient = PetriRPCClient.makeFor(petriTopology.getPetriUrl());
-            userRequestPetriClient = PetriRPCClient.makeUserRequestFor(petriTopology.getPetriUrl());
+            petriClient = PetriRPCClient.makeFor(laboratoryTopology.getPetriUrl());
+            userRequestPetriClient = PetriRPCClient.makeUserRequestFor(laboratoryTopology.getPetriUrl());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
-        startMetricsReporterScheduler(petriTopology.getReportsScheduleTimeInMillis());
+        startMetricsReporterScheduler(laboratoryTopology.getReportsScheduleTimeInMillis());
 
         FilterTypeIdResolver.useDynamicFilterClassLoading();
     }
@@ -111,7 +112,7 @@ public class LaboratoryFilter implements Filter {
         //off by default so as not to incur overhead without users being explicitly aware of it
         final Boolean writeStateToServer = Boolean.valueOf(petriProperties.getProperty("petri.writeStateToServer", "false"));
         final String reporterInterval = petriProperties.getProperty("reporter.interval", "300000");
-        petriTopology = new PetriTopology() {
+        laboratoryTopology = new LaboratoryTopology() {
 
             @Override
             public String getPetriUrl() {
@@ -128,6 +129,10 @@ public class LaboratoryFilter implements Filter {
             public boolean isWriteStateToServer() {
                 return writeStateToServer;
             }
+
+            @Override
+            public String getAuthorizationServiceUrl() {return "";}
+
         };
     }
 

@@ -12,4 +12,8 @@ public class FilterTestUtils {
         return new EligibilityCriteria(userInfo, new AdditionalEligibilityCriteria(), null);
     }
 
+    public static EligibilityCriteria defaultEligibilityCriteriaForUser(UserInfo userInfo , ExternalDataFetchers externalDataFetchers) {
+        return new EligibilityCriteria(userInfo, new AdditionalEligibilityCriteria(), null, externalDataFetchers);
+    }
+
 }

@@ -65,6 +65,20 @@ public class TestGroupMakers {
                     with(probability, 50)).
                     make());
 
+    public static List<TestGroup> ValidTestGroupsWithValues(String value1, String value2) {
+        return asList(
+                a(TestGroupMakers.TestGroup,
+                        with(TestGroupMakers.groupId, 1),
+                        with(value, value1),
+                        with(probability, 50)).
+                        make(),
+                a(TestGroupMakers.TestGroup,
+                        with(TestGroupMakers.groupId, 2),
+                        with(value, value2),
+                        with(probability, 50)).
+                        make());
+    }
+
     public static final List<TestGroup> VALID_TEST_GROUP_WITH_NO_VALUES_LIST = asList(
             a(TestGroupMakers.TestGroup,
                     with(TestGroupMakers.groupId, 1),

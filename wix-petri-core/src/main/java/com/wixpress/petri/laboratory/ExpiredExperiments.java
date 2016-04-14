@@ -8,9 +8,11 @@ import com.wixpress.petri.experiments.domain.Experiment;
  */
 public class ExpiredExperiments implements ExperimentsLog.Predicate {
     private Experiments experiments;
+    private boolean isRemoveFTCookiesEnabledByFT;
 
-    public ExpiredExperiments(Experiments experiments) {
+    public ExpiredExperiments(Experiments experiments, boolean isRemoveFTCookiesEnabledByFT) {
         this.experiments = experiments;
+        this.isRemoveFTCookiesEnabledByFT = isRemoveFTCookiesEnabledByFT;
     }
 
     @Override
@@ -19,7 +21,7 @@ public class ExpiredExperiments implements ExperimentsLog.Predicate {
             return false;
 
         Experiment experiment = experiments.findById(experimentId);
-        return (experiment == null) || experiment.isTerminated();
+        return (experiment == null) || experiment.isTerminated() || (isRemoveFTCookiesEnabledByFT && experiment.isToggle());
     }
 
 }
