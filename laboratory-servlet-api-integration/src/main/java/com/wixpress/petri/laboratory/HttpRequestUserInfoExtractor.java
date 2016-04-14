@@ -3,7 +3,6 @@ package com.wixpress.petri.laboratory;
 import com.wixpress.petri.petri.HostResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -19,15 +18,16 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
     private final String EXPERIMENTS_OVERRIDE_REQUEST_PARAM = "petri_ovr";
     private final String USER_ID_REQUEST_PARAM = "laboratory_user_id";
     private final HttpServletRequest request;
+    private final String petriLogStorageCookieName;
     private final ExperimentOverridesUrlDecoder experimentOverridesUrlDecoder = new ExperimentOverridesUrlDecoder();
 
-    public HttpRequestUserInfoExtractor(HttpServletRequest request) {
+    public HttpRequestUserInfoExtractor(HttpServletRequest request, String petriLogStorageCookieName) {
         this.request = request;
+        this.petriLogStorageCookieName = petriLogStorageCookieName;
     }
 
     @Override
     public UserInfo extract() {
-
         String host = HostResolver.getServerName();
         if (request == null) {
             return UserInfo.userInfoFromNullRequest(host);
@@ -42,14 +42,15 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         UUID userId = getUserId();
         UUID clientId = null;
         boolean isRecurringUser = clientId != null;
-        String anonymousExperimentsLog = getCookieValue("_wixAB3");
+        String anonymousExperimentsLog = getCookieValue(petriLogStorageCookieName);
         UserInfoType userInfoType = UserInfoTypeFactory.make(userId);
         Map<String, String> experimentOverrides =
                 experimentOverridesUrlDecoder.decode(request.getParameter(EXPERIMENTS_OVERRIDE_REQUEST_PARAM));
 
+
         String experimentsLog = "";
         if (!userInfoType.isAnonymous()) {
-            experimentsLog = getExperimentsLog(userId);
+            experimentsLog = getExperimentsLog(petriLogStorageCookieName, userId);
         }
 
         DateTime userCreationDate = null; //todo
@@ -65,9 +66,9 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         return userId == null ? null : UUID.fromString(userId);
     }
 
-    private String getExperimentsLog(UUID userId) {
+    private String getExperimentsLog(String petriLogStorageCookieName, UUID userId) {
         if (userId != null) {
-            return getCookieValue("_wixAB3|" + userId.toString());
+            return getCookieValue(petriLogStorageCookieName + "|" + userId.toString());
         }
         return "";
     }

@@ -11,7 +11,7 @@ import java.util.UUID;
  * To change this template use File | Settings | File Templates.
  */
 public interface ExperimentStateStorage {
-    void storeAnonymousExperimentsLog(String key, String experimentsLog);
+    void storeAnonymousExperimentsLog(String experimentsLog);
 
     void storeUserExperimentsLog(UUID userInSessionId, UUID userIdToPersistBy, String experimentsLog);
 

@@ -1,6 +1,7 @@
 package com.wixpress.petri;
 
 import com.wixpress.petri.laboratory.DefaultErrorHandler;
+import com.wixpress.petri.laboratory.http.DefaultPetriProperties;
 import com.wixpress.petri.laboratory.http.PetriProperties;
 import com.wixpress.petri.petri.ClasspathSpecDefinitions;
 import com.wixpress.petri.petri.JodaTimeClock;
@@ -24,7 +25,7 @@ public class SpecsSynchronizerServlet extends BaseHttpServlet {
 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PetriProperties petriProperties = new PetriProperties(getServletContext());
+        PetriProperties petriProperties = new DefaultPetriProperties(getServletContext());
 
         ClasspathSpecDefinitions specDefinitions =
                 new ClasspathSpecDefinitions(petriProperties.getProperty(PETRI_SPECS_PKG_KEY), new DefaultErrorHandler());
