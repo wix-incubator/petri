@@ -29,6 +29,7 @@ public class LaboratoryFilter implements Filter {
 
     private ServerMetricsReporter metricsReporter;
     private PetriClient petriClient;
+    private LaboratoryProperties laboratoryProperties;
     private UserRequestPetriClient userRequestPetriClient;
     private PetriTopology petriTopology;
 
@@ -66,7 +67,7 @@ public class LaboratoryFilter implements Filter {
 
         final UserInfo userInfo = storage.read();
         final UserInfo originalUserInfo = storage.readOriginal();
-        userInfo.saveExperimentState(new CookieExperimentStateStorage(response), originalUserInfo);
+        userInfo.saveExperimentState(new CookieExperimentStateStorage(response, laboratoryProperties.getPetriCookieName()), originalUserInfo);
         if (petriTopology.isWriteStateToServer()) {
             userInfo.saveExperimentState(new ServerStateExperimentStateStorage(petriClient), originalUserInfo);
         }
@@ -83,7 +84,7 @@ public class LaboratoryFilter implements Filter {
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
         return new RequestScopedUserInfoStorage(
                 new HttpRequestUserInfoExtractor(
-                        httpServletRequest));
+                        httpServletRequest, laboratoryProperties.getPetriCookieName()));
     }
 
     public void destroy() {
@@ -91,7 +92,8 @@ public class LaboratoryFilter implements Filter {
     }
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        readProperties(filterConfig);
+        laboratoryProperties = new DefaultLaboratoryProperties(filterConfig.getServletContext());
+        readProperties();
 
         try {
             petriClient = PetriRPCClient.makeFor(petriTopology.getPetriUrl());
@@ -105,12 +107,11 @@ public class LaboratoryFilter implements Filter {
         FilterTypeIdResolver.useDynamicFilterClassLoading();
     }
 
-    private void readProperties(FilterConfig filterConfig) {
-        PetriProperties petriProperties = new PetriProperties(filterConfig.getServletContext());
-        final String petriUrl = petriProperties.getProperty("petri.url");
+    private void readProperties() {
+        final String petriUrl = laboratoryProperties.getProperty("petri.url");
         //off by default so as not to incur overhead without users being explicitly aware of it
-        final Boolean writeStateToServer = Boolean.valueOf(petriProperties.getProperty("petri.writeStateToServer", "false"));
-        final String reporterInterval = petriProperties.getProperty("reporter.interval", "300000");
+        final Boolean writeStateToServer = Boolean.valueOf(laboratoryProperties.getProperty("petri.writeStateToServer", "false"));
+        final String reporterInterval = laboratoryProperties.getProperty("reporter.interval", "300000");
         petriTopology = new PetriTopology() {
 
             @Override

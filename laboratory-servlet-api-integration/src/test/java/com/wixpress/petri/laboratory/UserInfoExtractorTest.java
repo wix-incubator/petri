@@ -28,11 +28,12 @@ public class UserInfoExtractorTest {
     private static final String DEFAULT_REQUEST_URL = "http://" + DEFAULT_SERVER_NAME;
     private static final String CUSTOM_SERVER_NAME = "test.wix.com";
     private static final String CUSTOM_REQUEST_URL = "http://" + CUSTOM_SERVER_NAME;
+    private static final String PETRI_LOG_STORAGE_COOKIE_NAME = "cookieValue";
 
     @Before
     public void setup() {
         stubRequest = new MockHttpServletRequest();
-        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest);
+        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME);
     }
 
     @Test
@@ -50,7 +51,7 @@ public class UserInfoExtractorTest {
 
     @Test
     public void extractAUserInfoForNullRequest() {
-        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null);
+        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null, PETRI_LOG_STORAGE_COOKIE_NAME);
         UserInfo userInfo = userInfoExtractor.extract();
         UserInfo expectedUserInfo = new UserInfo("", null, null, "", "", "",
                 new NullUserInfoType(), "", "", new DateTime(0), false, "", false, new HashMap<String, String>(), false, HOST, false);
