@@ -1,7 +1,8 @@
 package com.wixpress.petri;
 
 import com.wixpress.petri.laboratory.DefaultErrorHandler;
-import com.wixpress.petri.laboratory.http.PetriProperties;
+import com.wixpress.petri.laboratory.http.DefaultLaboratoryProperties;
+import com.wixpress.petri.laboratory.http.LaboratoryProperties;
 import com.wixpress.petri.petri.ClasspathSpecDefinitions;
 import com.wixpress.petri.petri.JodaTimeClock;
 import com.wixpress.petri.petri.SpecsSynchronizer;
@@ -24,13 +25,13 @@ public class SpecsSynchronizerServlet extends BaseHttpServlet {
 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PetriProperties petriProperties = new PetriProperties(getServletContext());
+        LaboratoryProperties laboratoryProperties = new DefaultLaboratoryProperties(getServletContext());
 
         ClasspathSpecDefinitions specDefinitions =
-                new ClasspathSpecDefinitions(petriProperties.getProperty(PETRI_SPECS_PKG_KEY), new DefaultErrorHandler());
+                new ClasspathSpecDefinitions(laboratoryProperties.getProperty(PETRI_SPECS_PKG_KEY), new DefaultErrorHandler());
 
         SpecsSynchronizer specsSynchronizer =
-                new SpecsSynchronizer(PetriRPCClient.makeFor(petriProperties.getProperty(PETRI_URL_KEY)), specDefinitions, new JodaTimeClock());
+                new SpecsSynchronizer(PetriRPCClient.makeFor(laboratoryProperties.getProperty(PETRI_URL_KEY)), specDefinitions, new JodaTimeClock());
 
         List<String> specs = specsSynchronizer.syncSpecs();
         writeAsJsonResponse(response, specs);

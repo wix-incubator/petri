@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.wixpress.petri.laboratory.UserInfoType.ANONYMOUS_LOG_STORAGE_KEY;
-
 public class UserInfo implements ConductionStrategy {
 
     private static final DateTime BEGINNING_OF_TIME = new DateTime(0);
@@ -219,7 +217,7 @@ public class UserInfo implements ConductionStrategy {
 
     public void saveExperimentState(ExperimentStateStorage experimentStateStorage, UserInfo originalUserInfo) {
         if (!anonymousExperimentsLog.equals(originalUserInfo.anonymousExperimentsLog)){
-            experimentStateStorage.storeAnonymousExperimentsLog(ANONYMOUS_LOG_STORAGE_KEY, anonymousExperimentsLog);
+            experimentStateStorage.storeAnonymousExperimentsLog(anonymousExperimentsLog);
         }
 
         if (!experimentsLog.equals(originalUserInfo.experimentsLog)){

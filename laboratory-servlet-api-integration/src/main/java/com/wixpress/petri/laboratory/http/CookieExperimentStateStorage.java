@@ -1,7 +1,6 @@
 package com.wixpress.petri.laboratory.http;
 
 import com.wixpress.petri.laboratory.ExperimentStateStorage;
-import com.wixpress.petri.laboratory.UserInfoType;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -20,13 +19,15 @@ public class CookieExperimentStateStorage implements ExperimentStateStorage {
     public static final int COOKIE_AGE = SIX_MONTHS_IN_SECONDS;
 
     private final HttpServletResponse response;
+    private final String petriCookieName;
 
-    public CookieExperimentStateStorage(HttpServletResponse response) {
+    public CookieExperimentStateStorage(HttpServletResponse response, String petriCookieName) {
         this.response = response;
+        this.petriCookieName = petriCookieName;
     }
 
-    static public String cookieKeyFor(UUID userId) {
-        return UserInfoType.ANONYMOUS_LOG_STORAGE_KEY + "|" + userId;
+    private String cookieKeyFor(UUID userId) {
+        return petriCookieName + "|" + userId;
     }
 
     private void storeExperimentsLog(String key, String experimentsLog) {
@@ -37,8 +38,8 @@ public class CookieExperimentStateStorage implements ExperimentStateStorage {
     }
 
     @Override
-    public void storeAnonymousExperimentsLog(String key, String experimentsLog) {
-        storeExperimentsLog(key, experimentsLog);
+    public void storeAnonymousExperimentsLog(String experimentsLog) {
+        storeExperimentsLog(petriCookieName, experimentsLog);
     }
 
     @Override
