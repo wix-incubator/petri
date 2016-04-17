@@ -9,12 +9,14 @@ import java.util.Properties;
  * User: itayk
  * Date: 06/11/14
  */
-public class PetriProperties {
+public class DefaultLaboratoryProperties implements LaboratoryProperties {
 
     private static final String LABORATORY_CONFIG_NAME = "laboratoryConfig";
+    private static final String PETRI_COOKIE_KEY = "petri.cookie.key";
+
     private Properties properties = new Properties();
 
-    public PetriProperties(ServletContext context) {
+    public DefaultLaboratoryProperties(ServletContext context) {
         String laboratoryConfig = context.getInitParameter(LABORATORY_CONFIG_NAME);
         InputStream input = context.getResourceAsStream(laboratoryConfig);
         loadFromStream(input);
@@ -35,5 +37,9 @@ public class PetriProperties {
 
     public String getProperty(String key, String defaultValue) {
         return properties.getProperty(key, defaultValue);
+    }
+
+    public String getPetriCookieName(){
+        return getProperty(PETRI_COOKIE_KEY);
     }
 }
