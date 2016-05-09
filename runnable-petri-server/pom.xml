@@ -6,33 +6,32 @@
 
     <parent>
         <artifactId>wix-petri</artifactId>
-        <groupId>com.wixpress.common</groupId>
-        <version>1.19.0-SNAPSHOT</version>
+        <groupId>com.wix</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.wixpress.common</groupId>
     <artifactId>runnable-petri-server</artifactId>
     <name>Runnable Petri Server</name>
-    <version>1.19.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>petri-server</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>petri-test-utils</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>laboratory-servlet-api-integration</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
@@ -110,11 +109,11 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
+                    <version>3.5.1</version>
                     <!-- compile for Java 1.7 -->
                     <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
+                        <source>${java.source.version}</source>
+                        <target>${java.target.version}</target>
                         <encoding>UTF-8</encoding>
                     </configuration>
                 </plugin>

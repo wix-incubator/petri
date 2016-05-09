@@ -76,7 +76,7 @@ public class RunnableServerIT {
     }
 
     private void runPetriServer() throws Exception {
-        String[] command = "java -jar target/runnable-petri-server-1.19.0-SNAPSHOT.jar".split(" ");
+        String[] command = "java -jar target/runnable-petri-server-1.0.0-SNAPSHOT.jar".split(" ");
         petriServerProcess = new ProcessBuilder(command).start();
     }
 

@@ -2,12 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>wix-petri</artifactId>
-        <groupId>com.wixpress.common</groupId>
-        <version>1.19.0-SNAPSHOT</version>
+        <groupId>com.wix</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>e2e-tests</artifactId>
     <name>End To End Tests</name>
@@ -35,39 +37,39 @@
 
         <!-- project specific -->
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>petri-server</artifactId>
             <scope>test</scope>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>wix-petri-core</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>sample-petri-app</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <classifier>classes</classifier>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>petri-server-core</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>petri-server-core</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
@@ -89,8 +91,8 @@
 
         <dependency>
             <artifactId>petri-test-utils</artifactId>
-            <groupId>com.wixpress.common</groupId>
-            <version>1.19.0-SNAPSHOT</version>
+            <groupId>com.wix</groupId>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
@@ -107,8 +109,8 @@
                         <phase>compile</phase>
                         <configuration>
                             <target>
-                                <copy file="${basedir}/../sample-extended-filters/target/sample-extended-filters-1.19.0-SNAPSHOT.jar"
-                                      tofile="${basedir}/petri-plugins/sample-extended-filters-1.19.0-SNAPSHOT.jar"/>
+                                <copy file="${basedir}/../sample-extended-filters/target/sample-extended-filters-1.0.0-SNAPSHOT.jar"
+                                      tofile="${basedir}/petri-plugins/sample-extended-filters-1.0.0-SNAPSHOT.jar"/>
                             </target>
                         </configuration>
                         <goals>

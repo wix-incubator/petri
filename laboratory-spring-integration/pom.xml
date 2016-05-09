@@ -2,27 +2,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>wix-petri</artifactId>
-        <groupId>com.wixpress.common</groupId>
-        <version>1.19.0-SNAPSHOT</version>
+        <groupId>com.wix</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
     <artifactId>laboratory-spring-integration</artifactId>
     <name>Laboratory Spring Integration</name>
 
     <dependencies>
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>laboratory-servlet-api-integration</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>laboratory-servlet-api-integration</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
@@ -84,17 +86,17 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>petri-test-utils</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>petri-server-core</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.natpryce</groupId>
@@ -103,11 +105,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>wix-petri-core</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

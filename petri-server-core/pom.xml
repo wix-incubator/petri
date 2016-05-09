@@ -2,12 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <artifactId>wix-petri</artifactId>
-        <groupId>com.wixpress.common</groupId>
-        <version>1.19.0-SNAPSHOT</version>
+        <groupId>com.wix</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <artifactId>petri-server-core</artifactId>
+    <name>Laboratory Spring Integration</name>
+    <packaging>jar</packaging>
 
     <developers>
         <developer>
@@ -27,17 +33,11 @@
         </developer>
     </developers>
 
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>petri-server-core</artifactId>
-    <packaging>jar</packaging>
-    <name>Petri Server Core</name>
-    <version>1.19.0-SNAPSHOT</version>
-
     <dependencies>
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>wix-petri-core</artifactId>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -120,11 +120,11 @@
         </dependency>
 
         <dependency>
-            <groupId>com.wixpress.common</groupId>
+            <groupId>com.wix</groupId>
             <artifactId>wix-petri-core</artifactId>
             <classifier>tests</classifier>
             <scope>test</scope>
-            <version>1.19.0-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -165,7 +165,7 @@
         <dependency>
             <groupId>org.specs2</groupId>
             <artifactId>specs2-junit_${scala.dependencies.version}</artifactId>
-            <version>${specs2-version}</version>
+            <version>${specs2.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -178,7 +178,7 @@
         <dependency>
             <groupId>org.specs2</groupId>
             <artifactId>specs2-mock_${scala.dependencies.version}</artifactId>
-            <version>${specs2-version}</version>
+            <version>${specs2.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -246,7 +246,7 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>${scala-maven-plugin.version}</version>
+                <version>${scala.maven.plugin.version}</version>
                 <configuration>
                     <args>
                         <arg>-unchecked</arg>
@@ -302,3 +302,5 @@
 
 
 </project>
+
+
