@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.wix</groupId>
     <artifactId>wix-petri</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.6.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Wix Petri</name>
     <description>Wix experiment and A/B test suite</description>
@@ -12,7 +12,7 @@
 
     <parent>
         <groupId>com.wix</groupId>
-        <artifactId>wix-os-parent</artifactId>
+        <artifactId>wix-oss-parent</artifactId>
         <version>1.1.0</version>
     </parent>
 
