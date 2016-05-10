@@ -13,7 +13,7 @@
     <parent>
         <groupId>com.wix</groupId>
         <artifactId>wix-os-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </parent>
 
     <developers>
@@ -61,15 +61,6 @@
         <make-it-easy-version>3.1.0</make-it-easy-version>
         <hamcrest-version>1.3</hamcrest-version>
         <junit-version>4.11</junit-version>
-
-
-        <java.source.version>1.8</java.source.version>
-        <java.target.version>1.8</java.target.version>
-        <scala.maven.plugin.version>3.2.2</scala.maven.plugin.version>
-        <scala.version>2.11.8</scala.version>
-        <scala.dependencies.version>2.11</scala.dependencies.version>
-        <specs2.version>3.7</specs2.version>
-
     </properties>
 
     <modules>
@@ -84,42 +75,4 @@
         <module>e2e-tests</module>
         <module>runnable-petri-server</module>
     </modules>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Test.*</include>
-                        <include>**/*IT.*</include>
-                    </includes>
-                </configuration>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-
-    <repositories>
-        <repository>
-            <id>scalaz-stream-bintray</id>
-            <url>http://dl.bintray.com/scalaz/releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
 </project>

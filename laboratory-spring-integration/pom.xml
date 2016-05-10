@@ -13,6 +13,7 @@
 
     <artifactId>laboratory-spring-integration</artifactId>
     <name>Laboratory Spring Integration</name>
+    <description>Wix client for conducting experiments on projects using Spring </description>
 
     <dependencies>
         <dependency>
