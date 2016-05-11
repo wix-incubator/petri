@@ -2,29 +2,65 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.wixpress.common</groupId>
+    <groupId>com.wix</groupId>
     <artifactId>wix-petri</artifactId>
-    <version>1.19.0-SNAPSHOT</version>
+    <version>0.6.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Wix Petri</name>
+    <description>Wix experiment and A/B test suite</description>
+    <url>http://wix.github.io/petri/</url>
+
+    <parent>
+        <groupId>com.wix</groupId>
+        <artifactId>wix-oss-parent</artifactId>
+        <version>1.1.0</version>
+    </parent>
+
+    <developers>
+        <developer>
+            <name>Talya Gendler</name>
+            <email>talyag@wix.com</email>
+            <organization>wix.com</organization>
+            <organizationUrl>http://wix.io</organizationUrl>
+        </developer>
+        <developer>
+            <name>Dalia Simons</name>
+            <email>dalias@wix.com</email>
+            <organization>wix.com</organization>
+            <organizationUrl>http://wix.io</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>https://github.com/wix/petri</url>
+        <connection>scm:git:git://github.com/wix/petri.git</connection>
+        <developerConnection>scm:git:git@github.com:wix/petri.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <url>https://github.com/wix/petri/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
-        <scala-maven-plugin.version>3.2.0</scala-maven-plugin.version>
-        <scala.version>2.11.6</scala.version>
-        <scala.dependencies.version>2.11</scala.dependencies.version>
-
         <org.springframework.version>4.1.1.RELEASE</org.springframework.version>
         <com.fasterxml.jackson.default.version>2.4.3</com.fasterxml.jackson.default.version>
-
         <javax.servlet-api.version>3.0.1</javax.servlet-api.version>
         <commons-io.version>2.4</commons-io.version>
-
         <jmock-version>2.8.1</jmock-version>
         <jmock-specs2-version>0.1.16</jmock-specs2-version>
         <make-it-easy-version>3.1.0</make-it-easy-version>
         <hamcrest-version>1.3</hamcrest-version>
         <junit-version>4.11</junit-version>
-        <specs2-version>3.6</specs2-version>
     </properties>
 
     <modules>
@@ -39,29 +75,4 @@
         <module>e2e-tests</module>
         <module>runnable-petri-server</module>
     </modules>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
-                    <configuration>
-                        <source>1.7</source>
-                        <target>1.7</target>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-
-    <repositories>
-        <repository>
-            <id>scalaz-stream-bintray</id>
-            <url>http://dl.bintray.com/scalaz/releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
 </project>

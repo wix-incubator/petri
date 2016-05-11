@@ -13,7 +13,11 @@ import org.junit.Test;
 import java.io.File;
 import java.net.ConnectException;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 
@@ -76,7 +80,16 @@ public class RunnableServerIT {
     }
 
     private void runPetriServer() throws Exception {
-        String[] command = "java -jar target/runnable-petri-server-1.19.0-SNAPSHOT.jar".split(" ");
+        Map<String,String> d = System.getenv();
+        List<File> runnableJarFiles = FileUtils
+                .listFiles(new File("target"), new String[]{"jar"}, false)
+                .stream()
+                .filter(file -> !file.getName().startsWith("original")
+                        && !file.getName().endsWith("javadoc.jar")
+                        && !file.getName().endsWith("sources.jar"))
+                .collect(Collectors.toList());
+        assertThat(runnableJarFiles.size(), is(1));
+        String[] command = ("java -jar target/" + runnableJarFiles.get(0).getName()).split(" ");
         petriServerProcess = new ProcessBuilder(command).start();
     }
 
