@@ -4,6 +4,7 @@
 
     <artifactId>e2e-tests</artifactId>
     <name>End To End Tests</name>
+    <description>Module conducting End To End Tests for Petri system</description>
 
     <parent>
         <artifactId>wix-petri</artifactId>

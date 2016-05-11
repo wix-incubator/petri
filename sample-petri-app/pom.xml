@@ -12,6 +12,7 @@
     <artifactId>sample-petri-app</artifactId>
     <packaging>war</packaging>
     <name>Sample Petri App</name>
+    <description>Example app on how to use petri</description>
 
     <dependencies>
 

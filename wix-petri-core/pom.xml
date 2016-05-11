@@ -11,6 +11,7 @@
 
     <artifactId>wix-petri-core</artifactId>
     <name>Wix Petri Core</name>
+    <description>Petri Core module shared by all artifacts</description>
 
     <dependencies>
         <dependency>

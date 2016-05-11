@@ -11,6 +11,7 @@
 
     <artifactId>runnable-petri-server</artifactId>
     <name>Runnable Petri Server</name>
+    <description>Wrapper for creating a Runnable jar for Petri Server</description>
 
 
     <dependencies>

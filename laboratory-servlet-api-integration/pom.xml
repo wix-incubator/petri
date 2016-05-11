@@ -11,7 +11,7 @@
 
     <artifactId>laboratory-servlet-api-integration</artifactId>
     <name>Laboratory Servlet API Integration</name>
-    <description>Wix client for conducting experiments on projects not using Spring</description>
+    <description>Wix client for conducting experiments on projects using Servlet Api</description>
 
     <dependencies>
 

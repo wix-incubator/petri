@@ -10,6 +10,7 @@
 
     <artifactId>sample-extended-filters</artifactId>
     <name>Sample Extended Filters</name>
+    <description>Sample module with examples for extending the basic filters</description>
 
     <dependencies>
         <dependency>
