@@ -12,7 +12,8 @@
     </parent>
 
     <artifactId>petri-server-core</artifactId>
-    <name>Laboratory Spring Integration</name>
+    <name>Petri Server Core</name>
+    <description>Petri Server Core module</description>
     <packaging>jar</packaging>
 
     <developers>

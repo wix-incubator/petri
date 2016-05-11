@@ -13,6 +13,7 @@
 
     <artifactId>petri-test-utils</artifactId>
     <name>Test Utils</name>
+    <description>Test Utils for testing Petri client in your code</description>
 
     <dependencies>
 

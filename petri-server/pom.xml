@@ -13,6 +13,7 @@
 
     <artifactId>petri-server</artifactId>
     <name>Petri Server</name>
+    <description>Petri Server module</description>
 
     <dependencies>
 
