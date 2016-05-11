@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.wix</groupId>
     <artifactId>wix-petri</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Wix Petri</name>
     <description>Wix experiment and A/B test suite</description>
@@ -35,7 +35,7 @@
         <url>https://github.com/wix/petri</url>
         <connection>scm:git:git://github.com/wix/petri.git</connection>
         <developerConnection>scm:git:git@github.com:wix/petri.git</developerConnection>
-        <tag>0.6.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
