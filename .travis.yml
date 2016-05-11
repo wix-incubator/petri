@@ -1,5 +1,7 @@
 language: java
 script: mvn clean verify
+jdk:
+    - oraclejdk8
 notifications:
   email:
     - talyag@wix.com
