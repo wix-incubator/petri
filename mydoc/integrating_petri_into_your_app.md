@@ -68,7 +68,7 @@ Or, for the spring flavored version:
 ```
 
 * To conduct - `laboratory.conductExperiment(key, fallback)`
-spring example, servlet-filter-example
+[spring example](https://github.com/wix/petri/blob/master/laboratory-spring-integration/src/it/java/com/wixpress/petri/TestAppController.java), [servlet-filter-example](https://github.com/wix/petri/blob/master/laboratory-servlet-api-integration/src/it/java/com/wixpress/petri/ConductExperimentServlet.java)
 
 * Take a look at the [sample-petri-app](https://github.com/wix/petri/tree/master/sample-petri-app) project for a full example
 
