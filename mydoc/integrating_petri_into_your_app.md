@@ -8,14 +8,25 @@ permalink: /integrating_petri_into_your_app/
 
 * Laboratory is supported for any servlet-api based application:
 
-    (If you want to use it from a different type of app please read this : [Laboratory as a Service]({{site.data.urls.using_laboratory_as_a_service.url}})  
+    (If you want to use it from a different type of app please read this : [Laboratory as a Service]({{site.data.urls.using_laboratory_as_a_service.url}}))  
 
-* add laboratory-servlet-api-integration dependency to your pom
+* Laboratory is published to the Maven Central Repository, so you simply have to add the appropriate dependency to your POM:
 
 ```
 <dependency>
-    <groupId>com.wixpress.common</groupId>
+    <groupId>com.wix</groupId>
     <artifactId>laboratory-servlet-api-integration</artifactId>   
+    <version>0.6</version>
+</dependency>
+```
+
+Or, for the spring flavored version:
+
+```
+<dependency>
+    <groupId>com.wix</groupId>
+    <artifactId>laboratory-spring-integration</artifactId>   
+    <version>0.6</version>
 </dependency>
 ```
 
@@ -34,27 +45,30 @@ permalink: /integrating_petri_into_your_app/
 * Add the following filters to your web.xml file 
 
 ```
-<filter>
-    <filter-name>laboratoryFilter</filter-name>
-    <filter-class>com.wixpress.petri.laboratory.http.LaboratoryFilter</filter-class>
-    <init-param>
+ <filter>
+        <filter-name>laboratoryFilter</filter-name>
+        <filter-class>com.wixpress.petri.laboratory.http.LaboratoryFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>laboratoryFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <context-param>
         <param-name>laboratoryConfig</param-name>
         <param-value>/WEB-INF/laboratory.properties</param-value>
-    </init-param>
-</filter>
-
-<filter-mapping>
-    <filter-name>laboratoryFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-</filter-mapping>
+    </context-param>
 ```
 
-* Add the LaboratoryConfig spring configuration to your applicationContext
+* If you are using Spring add the LaboratoryConfig spring configuration to your applicationContext
 
 ```
  <bean class="com.wixpress.petri.laboratory.LaboratoryConfig"/>
 ```
 
+* To conduct - `laboratory.conductExperiment(key, fallback)`
+spring example, servlet-filter-example
 
 * Take a look at the [sample-petri-app](https://github.com/wix/petri/tree/master/sample-petri-app) project for a full example
 
