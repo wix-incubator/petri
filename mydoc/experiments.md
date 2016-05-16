@@ -95,7 +95,9 @@ The above could also be achieved by the following steps:
 
 ## How to manage experiment specs
 
-The simplest way is to wire the SpecsSynchronizer into your app (see SpecsSynchronizerController for inspiration). Every time you trigger this all specs in your code will be scanned. It is up to you to consider what triggers spec scanning (probably deployment of a new server version).
+The simplest way is to wire the SpecsSynchronizerServlet into your app (as [in the sample app](https://github.com/wix/petri/blob/master/sample-petri-app/src/main/webapp/WEB-INF/web.xml)
+Issuing a POST call to this endpoint ([example](https://github.com/wix/petri/blob/2f63046f3204e9e116b867057ea99bd4d4da2d33/e2e-tests/src/test/java/com/wixpress/common/petri/e2e/PetriE2eTest.java#L100)) will trigger a scan of all specs in your code. It is up to you to consider what triggers spec scanning (probably deployment of a new server version).
+The deafult package for scanning specs is 'specs'm and can be overriden by setting the 'petri.specs.pkg' property in the laboratory.properties config file.
 
 You could also call the ExperimentSpecBuilder yourself:
 
