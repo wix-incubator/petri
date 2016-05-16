@@ -37,29 +37,6 @@ public class SampleAppRunner {
         this(port, pathToWebapp, 0, false);
     }
 
-    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState) {
-        this.port = port;
-        this.sampleAppServer = new ServerRunner(port, pathToWebapp);
-        this.client = HttpClientBuilder.create().build();
-
-        if (reporterInterval != 0) {
-            addReportingIntervalToProperties(pathToWebapp, reporterInterval);
-        }
-        addServerSideToProperties(pathToWebapp, useServerSideState);
-    }
-
-    private void addServerSideToProperties(String pathToWebapp, boolean useServerSideState) {
-        File properties = new File(pathToWebapp + "/WEB-INF/laboratory.properties");
-        try {
-            properties.createNewFile();
-            PropertiesConfiguration config = new PropertiesConfiguration(properties);
-            config.setProperty("petri.writeStateToServer", useServerSideState);
-            config.save();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static SampleAppRunner SampleAppRunnerWithServerSideStateOff(int port) {
         return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, false);
     }
@@ -68,12 +45,34 @@ public class SampleAppRunner {
         return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, true);
     }
 
-    private void addReportingIntervalToProperties(String pathToWebapp, int reporterInterval) {
-        File properties = new File(pathToWebapp + "/WEB-INF/laboratory.properties");
+    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState) {
+        this.port = port;
+        this.sampleAppServer = new ServerRunner(port, pathToWebapp);
+        this.client = HttpClientBuilder.create().build();
+
+        File propertiesFile = new File(pathToWebapp + "/WEB-INF/laboratory.properties");
+
+        //TODO - save original file and revert to it on 'stop' (so build doesnt create local changes)
+
+        if (reporterInterval != 0) {
+            addReportingIntervalToProperties(propertiesFile, reporterInterval);
+        }
+        addServerSideToProperties(propertiesFile, useServerSideState);
+    }
+
+    private void addServerSideToProperties(File propertiesFile, boolean useServerSideState) {
+        setProperty(propertiesFile, useServerSideState, "petri.writeStateToServer");
+    }
+
+    private void addReportingIntervalToProperties(File propertiesFile, int reporterInterval) {
+        setProperty(propertiesFile, reporterInterval, "reporter.interval");
+    }
+
+    private void setProperty(File propertiesFile, Object reporterInterval, String propertyName) {
         try {
-            properties.createNewFile();
-            PropertiesConfiguration config = new PropertiesConfiguration(properties);
-            config.setProperty("reporter.interval", reporterInterval);
+            propertiesFile.createNewFile();
+            PropertiesConfiguration config = new PropertiesConfiguration(propertiesFile);
+            config.setProperty(propertyName, reporterInterval);
             config.save();
         } catch (Exception e) {
             e.printStackTrace();
