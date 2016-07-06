@@ -24,14 +24,6 @@ In this section, we will show you how to link your BackOffice application to Pet
 </dependency>
 ```
 
-### Add laboratory-servlet-api-integration dependency to your POM.xml
-    
-```
-<dependency>
- 	<groupId>com.wixpress.common</groupId>
-    <artifactId>laboratory-servlet-api-integration</artifactId>   
-</dependency>
-```
 
 ### Create an instance of FullPetriClient pointing to your Petri Server 
 
