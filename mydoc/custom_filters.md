@@ -5,10 +5,9 @@ last_updated: March 31, 2016
 sidebar: custom_filters
 permalink: /custom_filters/
 ---
+* [Filters concept](http://wix.github.io/petri/basic_concepts_best_practices/#filters) 
 
 ## Add a custom filter with your own custom logic 
-
-[Filters concept](http://wix.github.io/petri/basic_concepts_best_practices/#filters) 
 
 Any filter on the classpath that answers the following criteria will be available:
 
