@@ -13,6 +13,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.*;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -28,6 +29,9 @@ public class SampleAppRunner {
     private final ServerRunner sampleAppServer;
     private final int port;
     private final HttpClient client;
+
+    private Path tempPropertiesFilePath;
+    private Path originalPropertiesFile;
 
     public SampleAppRunner(int port){
         this(port, DEFAULT_PATH_TO_WEBAPP);
@@ -50,14 +54,23 @@ public class SampleAppRunner {
         this.sampleAppServer = new ServerRunner(port, pathToWebapp);
         this.client = HttpClientBuilder.create().build();
 
-        File propertiesFile = new File(pathToWebapp + "/WEB-INF/laboratory.properties");
-
-        //TODO - save original file and revert to it on 'stop' (so build doesnt create local changes)
+        final File propertiesFile = getLaboratoryPropertiesFile(pathToWebapp);
 
         if (reporterInterval != 0) {
             addReportingIntervalToProperties(propertiesFile, reporterInterval);
         }
         addServerSideToProperties(propertiesFile, useServerSideState);
+    }
+
+    private File getLaboratoryPropertiesFile(String pathToWebapp)  {
+        try {
+            tempPropertiesFilePath = Files.createTempFile("laboratory-temp", "properties");
+            originalPropertiesFile = Paths.get(pathToWebapp + "/WEB-INF/laboratory.properties");
+            Files.copy(originalPropertiesFile, tempPropertiesFilePath, StandardCopyOption.REPLACE_EXISTING);
+            return originalPropertiesFile.toFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void addServerSideToProperties(File propertiesFile, boolean useServerSideState) {
@@ -85,6 +98,12 @@ public class SampleAppRunner {
 
     public void stop() throws Exception {
         sampleAppServer.stop();
+        revertChangesToLoboratoryPropertiesFile();
+    }
+
+    private void revertChangesToLoboratoryPropertiesFile() throws IOException {
+        Files.copy(tempPropertiesFilePath, originalPropertiesFile, StandardCopyOption.REPLACE_EXISTING);
+        Files.deleteIfExists(tempPropertiesFilePath);
     }
 
     private HttpClient newClient(){
