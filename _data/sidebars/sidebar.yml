@@ -47,7 +47,7 @@ entries:
       url: /experiments/
       output: web
 
-    - title: Filters
+    - title: Custom Filters
       url: /custom_filters/
       output: web
 
