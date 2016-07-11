@@ -1,12 +1,14 @@
 ---
-title: Filters
+title: Custom Filters
 keywords: filters, users, custom
 last_updated: March 31, 2016
 sidebar: custom_filters
 permalink: /custom_filters/
 ---
 
-## Add a filter with your own custom logic 
+## Add a custom filter with your own custom logic 
+
+[Filters concept](http://wix.github.io/petri/basic_concepts_best_practices/#filters) 
 
 Any filter on the classpath that answers the following criteria will be available:
 
