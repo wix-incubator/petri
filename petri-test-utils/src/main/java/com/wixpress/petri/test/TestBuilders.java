@@ -36,12 +36,12 @@ public class TestBuilders {
                 withOnlyForLoggedInUsers(true);
     }
 
-    public static ExperimentSnapshotBuilder experimentWithFirstWinningAndFilter(String key) {
+    public static ExperimentSnapshotBuilder experimentOnRegisteredWithFilter(String key) {
         return experimentWithFirstWinning(key).
                 withFilters(Collections.singletonList(new GeoFilter(Collections.singletonList("IL"))));
     }
 
-    static ExperimentBuilder updateExperimentState(Experiment experiment, final TestGroup... testGroups) {
+    public static ExperimentBuilder updateExperimentState(Experiment experiment, final TestGroup... testGroups) {
         return aCopyOf(experiment).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(experiment.getExperimentSnapshot())
                         .withGroups(Arrays.asList(testGroups)).build()
