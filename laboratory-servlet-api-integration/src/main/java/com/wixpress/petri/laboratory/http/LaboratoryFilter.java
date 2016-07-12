@@ -31,6 +31,7 @@ public class LaboratoryFilter implements Filter {
     private ServerMetricsReporter metricsReporter;
     private PetriClient petriClient;
     private LaboratoryProperties laboratoryProperties;
+    private FilterParametersExtractorsConfig filterParametersExtractorsConfig;
     private UserRequestPetriClient userRequestPetriClient;
     private LaboratoryTopology laboratoryTopology;
 
@@ -85,7 +86,7 @@ public class LaboratoryFilter implements Filter {
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
         return new RequestScopedUserInfoStorage(
                 new HttpRequestUserInfoExtractor(
-                        httpServletRequest, laboratoryProperties.getPetriCookieName()));
+                        httpServletRequest, laboratoryProperties.getPetriCookieName(), filterParametersExtractorsConfig));
     }
 
     public void destroy() {
@@ -93,8 +94,11 @@ public class LaboratoryFilter implements Filter {
     }
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        laboratoryProperties = new DefaultLaboratoryProperties(filterConfig.getServletContext());
+        final ServletContext context = filterConfig.getServletContext();
+        laboratoryProperties = new DefaultLaboratoryProperties(context);
         readProperties();
+
+        filterParametersExtractorsConfig = FilterParametersExtractorsConfig.readConfig(context);
 
         try {
             petriClient = PetriRPCClient.makeFor(laboratoryTopology.getPetriUrl());

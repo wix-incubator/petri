@@ -19,11 +19,13 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
     private final String USER_ID_REQUEST_PARAM = "laboratory_user_id";
     private final HttpServletRequest request;
     private final String petriCookieName;
+    private FilterParametersExtractorsConfig filterParametersExtractorsConfig;
     private final ExperimentOverridesUrlDecoder experimentOverridesUrlDecoder = new ExperimentOverridesUrlDecoder();
 
-    public HttpRequestUserInfoExtractor(HttpServletRequest request, String petriCookieName) {
+    public HttpRequestUserInfoExtractor(HttpServletRequest request, String petriCookieName, FilterParametersExtractorsConfig filterParametersExtractorsConfig) {
         this.request = request;
         this.petriCookieName = petriCookieName;
+        this.filterParametersExtractorsConfig = filterParametersExtractorsConfig;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         String url = getRequestURL();
         String ip = getIp();
         String language = request.getLocale().getLanguage();
-        String country = getCountry();
+        String country = CountryResolver.resolve(request, filterParametersExtractorsConfig);
         UUID userId = getUserId();
         UUID clientId = null;
         boolean isRecurringUser = clientId != null;
@@ -98,14 +100,6 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
                 userAgent.contains("nagios-plugins"));
     }
 
-    String getCountry() {
-        String geoCountry = request.getHeader("GEOIP_COUNTRY_CODE");
-        if (geoCountry != null) {
-            return geoCountry;
-        }
-        return request.getLocale().getCountry();
-    }
-
     String getIp() {
         String originatingIP = request.getHeader("X-FORWARDED-FOR");
         if (originatingIP != null) {
@@ -131,5 +125,4 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
 
         return URL;
     }
-
 }

@@ -13,7 +13,10 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -33,19 +36,19 @@ public class SampleAppRunner {
     private Path tempPropertiesFilePath;
     private Path originalPropertiesFile;
 
-    public SampleAppRunner(int port){
+    SampleAppRunner(int port){
         this(port, DEFAULT_PATH_TO_WEBAPP);
     }
 
-    public SampleAppRunner(int port, String pathToWebapp){
+    private SampleAppRunner(int port, String pathToWebapp){
         this(port, pathToWebapp, 0, false);
     }
 
-    public static SampleAppRunner SampleAppRunnerWithServerSideStateOff(int port) {
+    static SampleAppRunner SampleAppRunnerWithServerSideStateOff(int port) {
         return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, false);
     }
 
-    public static SampleAppRunner SampleAppRunnerWithServerSideStateOn(int port) {
+    static SampleAppRunner SampleAppRunnerWithServerSideStateOn(int port) {
         return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, true);
     }
 
@@ -118,6 +121,19 @@ public class SampleAppRunner {
                 "&fallback=" +
                 fallback;
         HttpGet request  = new HttpGet(uri);
+        HttpResponse response = client.execute(request);
+        return EntityUtils.toString(response.getEntity(), "UTF-8");
+    }
+
+    public String conductExperimentWithGeoHeader(String key, String fallback) throws IOException {
+        String uri = "http://localhost:" +
+                port +
+                "/conductExperiment?key=" +
+                key +
+                "&fallback=" +
+                fallback;
+        HttpGet request  = new HttpGet(uri);
+        request.setHeader("GEO_HEADER", "IL");
         HttpResponse response = client.execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }

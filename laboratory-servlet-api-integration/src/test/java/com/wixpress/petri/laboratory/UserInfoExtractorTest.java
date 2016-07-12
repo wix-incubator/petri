@@ -33,7 +33,7 @@ public class UserInfoExtractorTest {
     @Before
     public void setup() {
         stubRequest = new MockHttpServletRequest();
-        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME);
+        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME, FilterParametersExtractorsConfig.apply());
     }
 
     @Test
@@ -51,10 +51,10 @@ public class UserInfoExtractorTest {
 
     @Test
     public void extractAUserInfoForNullRequest() {
-        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null, PETRI_LOG_STORAGE_COOKIE_NAME);
+        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null, PETRI_LOG_STORAGE_COOKIE_NAME, FilterParametersExtractorsConfig.apply());
         UserInfo userInfo = userInfoExtractor.extract();
         UserInfo expectedUserInfo = new UserInfo("", null, null, "", "", "",
-                new NullUserInfoType(), "", "", new DateTime(0), false, "", false, new HashMap<String, String>(), false, HOST, false);
+                new NullUserInfoType(), "", "", new DateTime(0), false, "", false, new HashMap<>(), false, HOST, false);
 
         assertThat(userInfo, is(expectedUserInfo));
     }
