@@ -15,7 +15,7 @@ object HttpRequestExtractionOptions extends Enumeration {
 }
 
 object FilterParameters extends Enumeration {
-  val Country = Value
+  val Country, Language = Value
 }
 
 case class FilterParametersExtractorsConfig(configs: Map[String, List[(String, String)]])

@@ -115,4 +115,15 @@ public class UserInfoExtractorTest {
         assertThat(userInfoExtractor.extract().isAnonymous(), is(true));
     }
 
+    @Test
+    public void languageResolverIsUsed() {
+        final String someLang = "he";
+        stubRequest.addParameter("Some_Param", someLang);
+        UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
+                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.Language(),
+                        HttpRequestExtractionOptions.Param(), "Some_Param"));
+
+        assertThat(extractor.extract().language, is(someLang));
+    }
+
 }
