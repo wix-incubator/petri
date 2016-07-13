@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -125,17 +124,6 @@ public class UserInfoExtractorTest {
                         HttpRequestExtractionOptions.Param(), "Some_Param"));
 
         assertThat(extractor.extract().language, is(someLang));
-    }
-
-    @Test
-    public void userIdResolverIsUsed() {
-        final UUID someUser = UUID.randomUUID();
-        stubRequest.addParameter("Some_Param", someUser.toString());
-        UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
-                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.UserId(),
-                        HttpRequestExtractionOptions.Param(), "Some_Param"));
-
-        assertThat(extractor.extract().getUserId(), is(someUser));
     }
 
 }

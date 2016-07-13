@@ -37,7 +37,7 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         boolean isRobot = checkForRobotHeader(userAgent);
         String url = getRequestURL();
         String ip = getIp();
-        String language = request.getLocale().getLanguage();
+        String language = new LanguageResolver().resolve(request, filterParametersExtractorsConfig);
         String country = new CountryResolver().resolve(request, filterParametersExtractorsConfig);
         UUID userId = getUserId();
         String anonymousExperimentsLog = getCookieValue(petriCookieName);
