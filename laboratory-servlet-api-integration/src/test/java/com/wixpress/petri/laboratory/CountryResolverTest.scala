@@ -46,6 +46,15 @@ class CountryResolverTest extends SpecificationWithJUnit{
       resolver.resolve(request, config) must beEqualTo(country)
     }
 
+    "resolve by 'SOME_PARAM_NAME' cookie if filterParamConfig defines filterParam Country param" in new Context {
+      val config = new FilterParametersExtractorsConfig(
+        Map("Country" -> List(("Param", "SOME_PARAM_NAME"))))
+
+      private val country =  "SomeCountry"
+      request.addParameter("SOME_PARAM_NAME", country)
+      resolver.resolve(request, config) must beEqualTo(country)
+    }
+
 
     "resolve by configuration order if first config is missing move to next" in new Context {
       val config = new FilterParametersExtractorsConfig(
