@@ -8,6 +8,10 @@ import com.wixpress.petri.laboratory.HttpRequestExtractionOptions.{Cookie, Heade
 abstract class Resolver[T] {
   val filterParam: FilterParameters.Value
 
+  def defaultResolution(request: HttpServletRequest): T
+
+  def convert(value: String): T
+
   def resolve(request: HttpServletRequest, filterParametersExtractorsConfig: FilterParametersExtractorsConfig): T = {
     val extractorConfig = filterParametersExtractorsConfig.configs.get(filterParam.toString)
     val filterParamByConfig = extractorConfig.flatMap(_.collectFirst {
@@ -17,11 +21,7 @@ abstract class Resolver[T] {
     filterParamByConfig.getOrElse(defaultResolution(request))
   }
 
-  def defaultResolution(request: HttpServletRequest): T
-
-  def convert(value: String): T
-
-  def extractBy(request: HttpServletRequest, config: (String, String)): Option[T] = {
+  private def extractBy(request: HttpServletRequest, config: (String, String)): Option[T] = {
     val header = Header.toString
     val cookie = Cookie.toString
     val param = Param.toString
@@ -44,10 +44,8 @@ trait StringResolver extends Resolver[String] {
 class CountryResolver extends StringResolver {
   override val filterParam = FilterParameters.Country
 
-  override def defaultResolution(request: HttpServletRequest): String = {
-    val countryByDefaultHeader = request.getHeader("GEOIP_COUNTRY_CODE")
-    Option(countryByDefaultHeader).getOrElse(request.getLocale.getCountry)
-  }
+  override def defaultResolution(request: HttpServletRequest): String =
+    Option(request.getHeader("GEOIP_COUNTRY_CODE")).getOrElse(request.getLocale.getCountry)
 }
 
 object CountryResolver {
@@ -57,9 +55,7 @@ object CountryResolver {
 class LanguageResolver extends StringResolver {
   override val filterParam = FilterParameters.Language
 
-  override def defaultResolution(request: HttpServletRequest): String = {
-    request.getLocale.getLanguage
-  }
+  override def defaultResolution(request: HttpServletRequest): String = request.getLocale.getLanguage
 }
 
 object LanguageResolver {
@@ -71,11 +67,8 @@ class UserIdResolver extends Resolver[UUID] {
 
   override def convert(value: String): UUID = UUID.fromString(value)
 
-  override def defaultResolution(request: HttpServletRequest): UUID = {
-    val userId: String = request.getParameter("laboratory_user_id")
-    if (userId == null) null
-    else convert(userId)
-  }
+  override def defaultResolution(request: HttpServletRequest): UUID =
+    Option(request.getParameter("laboratory_user_id")).map(convert).orNull
 }
 
 object UserIdResolver {
