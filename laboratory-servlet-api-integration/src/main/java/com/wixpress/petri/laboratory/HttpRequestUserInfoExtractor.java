@@ -39,7 +39,7 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         String ip = getIp();
         String language = new LanguageResolver().resolve(request, filterParametersExtractorsConfig);
         String country = new CountryResolver().resolve(request, filterParametersExtractorsConfig);
-        UUID userId = getUserId();
+        UUID userId = new UserIdResolver().resolve(request,filterParametersExtractorsConfig);
         String anonymousExperimentsLog = getCookieValue(petriCookieName);
         UserInfoType userInfoType = UserInfoTypeFactory.make(userId);
         Map<String, String> experimentOverrides =
@@ -55,11 +55,6 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
 
         return new UserInfo(experimentsLog, userId, null, ip, url, userAgent, userInfoType, language, country,
                 null, false, anonymousExperimentsLog, false, experimentOverrides, isRobot, host, registeredUserExists);
-    }
-
-    private UUID getUserId() {
-        String userId = request.getParameter("laboratory_user_id");
-        return userId == null ? null : UUID.fromString(userId);
     }
 
     private String getExperimentsLog(String petriCookieName, UUID userId) {
