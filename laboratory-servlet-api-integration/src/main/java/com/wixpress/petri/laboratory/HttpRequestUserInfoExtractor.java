@@ -2,7 +2,7 @@ package com.wixpress.petri.laboratory;
 
 import com.wixpress.petri.petri.HostResolver;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -15,8 +15,6 @@ import java.util.UUID;
  */
 public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
 
-    private final String EXPERIMENTS_OVERRIDE_REQUEST_PARAM = "petri_ovr";
-    private final String USER_ID_REQUEST_PARAM = "laboratory_user_id";
     private final HttpServletRequest request;
     private final String petriCookieName;
     private FilterParametersExtractorsConfig filterParametersExtractorsConfig;
@@ -42,12 +40,10 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         String language = request.getLocale().getLanguage();
         String country = new CountryResolver().resolve(request, filterParametersExtractorsConfig);
         UUID userId = getUserId();
-        UUID clientId = null;
-        boolean isRecurringUser = clientId != null;
         String anonymousExperimentsLog = getCookieValue(petriCookieName);
         UserInfoType userInfoType = UserInfoTypeFactory.make(userId);
         Map<String, String> experimentOverrides =
-                experimentOverridesUrlDecoder.decode(request.getParameter(EXPERIMENTS_OVERRIDE_REQUEST_PARAM));
+                experimentOverridesUrlDecoder.decode(request.getParameter("petri_ovr"));
 
 
         String experimentsLog = "";
@@ -55,16 +51,14 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
             experimentsLog = getExperimentsLog(petriCookieName, userId);
         }
 
-        DateTime userCreationDate = null; //todo
-        boolean isCompanyEmployee = false; //todo
         boolean registeredUserExists = userId != null; // todo
 
-        return new UserInfo(experimentsLog, userId, clientId, ip, url, userAgent, userInfoType, language, country,
-                userCreationDate, isCompanyEmployee, anonymousExperimentsLog, isRecurringUser, experimentOverrides, isRobot, host, registeredUserExists);
+        return new UserInfo(experimentsLog, userId, null, ip, url, userAgent, userInfoType, language, country,
+                null, false, anonymousExperimentsLog, false, experimentOverrides, isRobot, host, registeredUserExists);
     }
 
     private UUID getUserId() {
-        String userId = request.getParameter(USER_ID_REQUEST_PARAM);
+        String userId = request.getParameter("laboratory_user_id");
         return userId == null ? null : UUID.fromString(userId);
     }
 
@@ -100,7 +94,7 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
                 userAgent.contains("nagios-plugins"));
     }
 
-    String getIp() {
+    private String getIp() {
         String originatingIP = request.getHeader("X-FORWARDED-FOR");
         if (originatingIP != null) {
             return originatingIP;
