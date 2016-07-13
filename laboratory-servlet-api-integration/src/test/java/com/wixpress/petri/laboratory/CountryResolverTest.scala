@@ -1,5 +1,7 @@
 package com.wixpress.petri.laboratory
 
+import javax.servlet.http.Cookie
+
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.Scope
 import org.springframework.mock.web.MockHttpServletRequest
@@ -14,6 +16,7 @@ class CountryResolverTest extends SpecificationWithJUnit{
   "CountryResolver" should {
     "resolve by default servlet default locale" in new Context {
       val config = FilterParametersExtractorsConfig()
+
       resolver.resolve(request, config) must beEqualTo(request.getLocale.getCountry)
     }
 
@@ -24,5 +27,34 @@ class CountryResolverTest extends SpecificationWithJUnit{
       request.addHeader("GEOIP_COUNTRY_CODE", country)
       resolver.resolve(request, config) must beEqualTo(country)
     }
+
+    "resolve by 'SOME_HEADER_NAME' header if filterParamConfig defines filterParam Country header" in new Context {
+      val config = new FilterParametersExtractorsConfig(
+        Map("Country" -> List(("Header", "SOME_HEADER_NAME"))))
+
+      private val country =  "SomeCountry"
+      request.addHeader("SOME_HEADER_NAME", country)
+      resolver.resolve(request, config) must beEqualTo(country)
+    }
+
+    "resolve by 'SOME_COOKIE_NAME' cookie if filterParamConfig defines filterParam Country cookie" in new Context {
+      val config = new FilterParametersExtractorsConfig(
+        Map("Country" -> List(("Cookie", "SOME_COOKIE_NAME"))))
+
+      private val country =  "SomeCountry"
+      request.setCookies(new Cookie("SOME_COOKIE_NAME", country))
+      resolver.resolve(request, config) must beEqualTo(country)
+    }
+
+
+    "resolve by configuration order if first config is missing move to next" in new Context {
+      val config = new FilterParametersExtractorsConfig(
+        Map("Country" -> List(("Cookie", "SOME_COOKIE_NAME"), ("Header", "Some_Header"))))
+
+      private val country =  "SomeCountry"
+      request.addHeader("Some_Header", country)
+      resolver.resolve(request, config) must beEqualTo(country)
+    }
+
   }
 }

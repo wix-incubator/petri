@@ -40,7 +40,7 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         String url = getRequestURL();
         String ip = getIp();
         String language = request.getLocale().getLanguage();
-        String country = CountryResolver.resolve(request, filterParametersExtractorsConfig);
+        String country = new CountryResolver().resolve(request, filterParametersExtractorsConfig);
         UUID userId = getUserId();
         UUID clientId = null;
         boolean isRecurringUser = clientId != null;
