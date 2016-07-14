@@ -23,18 +23,18 @@ If you want to customize the way country param is bein extracted from the Http r
 the file should look like this:
 
 ```yaml
-configs:
-  Country:
-  - - "Header"
-    - "SOME_HEADER_NAME"
-  - - "Cookie"
-    - "SOME_COOKIE_NAME"
-  - - "Param"
-    - "SOME_PARAM_NAME"
-  - - "Header"
-    - "SOME_OTHER_HEADER_NAME"
-  Language:
-  ...
+    configs:
+      Country:
+      - - "Header"
+      - "SOME_HEADER_NAME"
+    - - "Cookie"
+      - "SOME_COOKIE_NAME"
+    - - "Param"
+      - "SOME_PARAM_NAME"
+    - - "Header"
+      - "SOME_OTHER_HEADER_NAME"
+    Language:
+      ...
 ```
 
 This configuration means that the country value for the the filter will be extracted be the order of the list, meanning first the reslover will try to find a header on the request with the name `SOME_HEADER_NAME` than the cookie and so on. take note that you can specify multpile header/cookie/param names and they will each be resolved by the order of the list.
