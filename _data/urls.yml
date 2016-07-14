@@ -75,6 +75,11 @@ using_laboratory_as_a_service:
   url: "/petri/using_laboratory_as_a_service/"
   link: "<a href='/petri/using_laboratory_as_a_service/'>Laboratory As A Service</a>"
 
+builtin_filters: 
+  title: "Built-In Filters"
+  url: "/petri/builtin_filters/"
+  link: "<a href='/petri/builtin_filters/'>Built-In Filters</a>"
+
 custom_filters: 
   title: "Custom Filters"
   url: "/petri/custom_filters/"
