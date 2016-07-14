@@ -21,7 +21,8 @@ We can take the `CountryFilter` as an example, this filter uses the CountryResol
 you can view the [CountryResolver](https://github.com/wix/petri/blob/master/laboratory-servlet-api-integration/src/main/java/com/wixpress/petri/laboratory/Resolvers.scala#L44)'s, default resolution of this value by looking at the `defaultResolution` function.
 If you want to customize the way country param is bein extracted from the Http request You can configure it by setting `FilterParametersExtractorsConfig` thiss can be achieved by putting a filters.yaml file in your application resource root.
 the file should look like this:
-```
+
+```yaml
 configs:
   Country:
   - - "Header"
