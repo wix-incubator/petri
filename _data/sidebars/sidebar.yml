@@ -47,7 +47,7 @@ entries:
       url: /experiments/
       output: web
       
-   - title: Built-in Filters
+    - title: Built-in Filters
       url: /builtin_filters/
       output: web
 
