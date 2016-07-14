@@ -14,9 +14,9 @@ You can view the various builtin filters in here under the [package filters](htt
 
 Currently three filters support custom parameters:
 
- 1. CountryFilter
- 2. LanguageFilter
- 3. IncludeUserIdsFilter
+ 1. `GeoFilter` (By Country)
+ 2. `LanguageFilter`
+ 3. `IncludeUserIdsFilter`
 
 We can take the `CountryFilter` as an example, this filter uses the CountryResolver in order to get the calue of the country from the Http request
 you can view the [CountryResolver](https://github.com/wix/petri/blob/master/laboratory-servlet-api-integration/src/main/java/com/wixpress/petri/laboratory/Resolvers.scala#L44)'s, default resolution of this value by looking at the `defaultResolution` function.
