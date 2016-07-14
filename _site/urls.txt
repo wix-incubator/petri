@@ -61,6 +61,12 @@ experiments:
   link: "<a href='/petri/experiments/' title='Experiments'>Experiments</a>"
 
 
+
+builtin_filters:
+  title: "Built-In Filters"
+  url: "/petri/builtin_filters/ 'Built-In Filters'"
+  link: "<a href='/petri/builtin_filters/' title='Built-In Filters'>Built-In Filters</a>"
+
  
 custom_filters:
   title: "Filters"
