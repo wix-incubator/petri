@@ -5,6 +5,7 @@ import com.wixpress.petri.petri.SpecDefinition;
 import org.joda.time.DateTime;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf;
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.anExperimentSnapshot;
@@ -35,7 +36,12 @@ public class TestBuilders {
                 withOnlyForLoggedInUsers(true);
     }
 
-    public static ExperimentBuilder updateExperimentState(Experiment experiment, final TestGroup... testGroups) {
+    public static ExperimentSnapshotBuilder experimentWithFirstWinningAndFilter(String key) {
+        return experimentWithFirstWinning(key).
+                withFilters(Collections.singletonList(new GeoFilter(Collections.singletonList("IL"))));
+    }
+
+    static ExperimentBuilder updateExperimentState(Experiment experiment, final TestGroup... testGroups) {
         return aCopyOf(experiment).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(experiment.getExperimentSnapshot())
                         .withGroups(Arrays.asList(testGroups)).build()
