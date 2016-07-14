@@ -20,6 +20,7 @@
             <artifactId>wix-petri-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>

@@ -1,5 +1,7 @@
 package com.wixpress.petri.test
 
+import java.util.Optional
+
 import com.wixpress.petri.test.SampleAppRunner.DEFAULT_PATH_TO_WEBAPP
 import org.specs2.mutable.SpecificationWithJUnit
 
@@ -12,7 +14,7 @@ class LaboratoryPropertiesIT extends SpecificationWithJUnit {
       val reporterIntervalDifferentVal = 7
 
       val originalLabPropsContent = labPropFileContent
-      val sampleApp = new SampleAppRunner(9015, DEFAULT_PATH_TO_WEBAPP, reporterIntervalDifferentVal, false)
+      val sampleApp = new SampleAppRunner(9015, DEFAULT_PATH_TO_WEBAPP, reporterIntervalDifferentVal, false, Optional.empty())
 
       sampleApp.start()
       sampleApp.stop()
