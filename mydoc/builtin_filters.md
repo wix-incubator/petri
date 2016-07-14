@@ -26,7 +26,7 @@ the file should look like this:
     configs:
       Country:
       - - "Header"
-          - "SOME_HEADER_NAME"
+        - "SOME_HEADER_NAME"
       - - "Cookie"
         - "SOME_COOKIE_NAME"
       - - "Param"
