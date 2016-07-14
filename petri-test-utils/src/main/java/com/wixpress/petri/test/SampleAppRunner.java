@@ -2,6 +2,7 @@ package com.wixpress.petri.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wixpress.common.petri.testutils.ServerRunner;
+import com.wixpress.petri.laboratory.FilterParametersExtractorsConfig;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -18,6 +19,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -33,31 +36,31 @@ public class SampleAppRunner {
     private final int port;
     private final HttpClient client;
 
-    private Path tempPropertiesFilePath;
-    private Path originalPropertiesFile;
+    private final Map<Path, Path> originalToTempConfigs = new HashMap<>();
 
     SampleAppRunner(int port){
         this(port, DEFAULT_PATH_TO_WEBAPP);
     }
 
     private SampleAppRunner(int port, String pathToWebapp){
-        this(port, pathToWebapp, 0, false);
+        this(port, pathToWebapp, 0, false, Optional.empty());
     }
 
     static SampleAppRunner SampleAppRunnerWithServerSideStateOff(int port) {
-        return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, false);
+        return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, false, Optional.empty());
     }
 
     static SampleAppRunner SampleAppRunnerWithServerSideStateOn(int port) {
-        return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, true);
+        return new SampleAppRunner(port, DEFAULT_PATH_TO_WEBAPP, 0, true, Optional.empty());
     }
 
-    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState) {
+    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState,
+                           Optional<FilterParametersExtractorsConfig> filterParamsConfigOptional) {
         this.port = port;
         this.sampleAppServer = new ServerRunner(port, pathToWebapp);
         this.client = HttpClientBuilder.create().build();
 
-        final File propertiesFile = getLaboratoryPropertiesFile(pathToWebapp);
+        final File propertiesFile = setupConfigFilesBackup(pathToWebapp, filterParamsConfigOptional);
 
         if (reporterInterval != 0) {
             addReportingIntervalToProperties(propertiesFile, reporterInterval);
@@ -65,15 +68,47 @@ public class SampleAppRunner {
         addServerSideToProperties(propertiesFile, useServerSideState);
     }
 
-    private File getLaboratoryPropertiesFile(String pathToWebapp)  {
+    private File setupConfigFilesBackup(String pathToWebapp, Optional<FilterParametersExtractorsConfig> filterParamsConfigOptional)  {
         try {
-            tempPropertiesFilePath = Files.createTempFile("laboratory-temp", "properties");
-            originalPropertiesFile = Paths.get(pathToWebapp + "/WEB-INF/laboratory.properties");
-            Files.copy(originalPropertiesFile, tempPropertiesFilePath, StandardCopyOption.REPLACE_EXISTING);
-            return originalPropertiesFile.toFile();
+            final Path originalLabProps = Paths.get(pathToWebapp, "WEB-INF", "laboratory.properties");
+            originalToTempConfigs.put(originalLabProps,
+                    Files.createTempFile("laboratory-temp", "properties"));
+
+            final Path originalFilterParamsConfig = Paths.get(pathToWebapp, "WEB-INF", "filters.yaml");
+            optionallySetupBackupFiltersConfig(filterParamsConfigOptional, originalFilterParamsConfig);
+            backupConfigs();
+            optionallyOverrideFiltersConfig(filterParamsConfigOptional, originalFilterParamsConfig);
+            return originalLabProps.toFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void optionallyOverrideFiltersConfig(Optional<FilterParametersExtractorsConfig> filterParamsConfigOptional, Path originalFilterParamsConfig) {
+        filterParamsConfigOptional.ifPresent(config -> new FilterParametersExtractorsConfigTestUtil()
+                .replaceConfig(originalFilterParamsConfig.toFile(), config));
+    }
+
+    private void backupConfigs() {
+        originalToTempConfigs.forEach((original, temp) -> {
+            try {
+                Files.copy(original, temp, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    private void optionallySetupBackupFiltersConfig(Optional<FilterParametersExtractorsConfig> filterParamsConfigOptional, Path originalFilterParamsConfig) {
+        filterParamsConfigOptional
+                .ifPresent(config -> {
+                    try {
+                        originalToTempConfigs.put(originalFilterParamsConfig,
+                                Files.createTempFile("filters-temp", "yaml"));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     private void addServerSideToProperties(File propertiesFile, boolean useServerSideState) {
@@ -101,12 +136,18 @@ public class SampleAppRunner {
 
     public void stop() throws Exception {
         sampleAppServer.stop();
-        revertChangesToLoboratoryPropertiesFile();
+        revertChangesToConfigFiles();
     }
 
-    private void revertChangesToLoboratoryPropertiesFile() throws IOException {
-        Files.copy(tempPropertiesFilePath, originalPropertiesFile, StandardCopyOption.REPLACE_EXISTING);
-        Files.deleteIfExists(tempPropertiesFilePath);
+    private void revertChangesToConfigFiles() throws IOException {
+        originalToTempConfigs.forEach((original, temp) -> {
+            try {
+                Files.copy(temp, original, StandardCopyOption.REPLACE_EXISTING);
+                Files.deleteIfExists(temp);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private HttpClient newClient(){

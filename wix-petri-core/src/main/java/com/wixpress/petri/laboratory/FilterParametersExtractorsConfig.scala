@@ -36,4 +36,8 @@ object FilterParametersExtractorsConfig {
       case _ => FilterParametersExtractorsConfig()
     }
   }
+
+  def forParamOptionAndName(param: FilterParameters.Value, option: HttpRequestExtractionOptions.Value,
+                            name: String): FilterParametersExtractorsConfig =
+    new FilterParametersExtractorsConfig(Map(param.toString -> List((option.toString, name))))
 }

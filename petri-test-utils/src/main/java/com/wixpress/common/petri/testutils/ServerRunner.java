@@ -13,11 +13,9 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class ServerRunner {
 
     private final Server server;
-    private final String pathToWebapp;
 
     public ServerRunner(int port, String pathToWebapp) {
         this.server = new Server(port);
-        this.pathToWebapp = pathToWebapp;
         WebAppContext context = new WebAppContext();
 
         context.setContextPath("/");
