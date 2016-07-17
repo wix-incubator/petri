@@ -121,7 +121,7 @@ public class UserInfoExtractorTest {
         final String someLang = "he";
         stubRequest.addParameter("Some_Param", someLang);
         UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
-                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.Language(),
+                FilterParametersExtractorsConfig.forParamOptionAndName(FilterParameters.Language(),
                         HttpRequestExtractionOptions.Param(), "Some_Param"));
 
         assertThat(extractor.extract().language, is(someLang));
@@ -132,7 +132,7 @@ public class UserInfoExtractorTest {
         final UUID someUser = UUID.randomUUID();
         stubRequest.addParameter("Some_Param", someUser.toString());
         UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
-                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.UserId(),
+                FilterParametersExtractorsConfig.forParamOptionAndName(FilterParameters.UserId(),
                         HttpRequestExtractionOptions.Param(), "Some_Param"));
 
         assertThat(extractor.extract().getUserId(), is(someUser));

@@ -1,6 +1,9 @@
 package com.wixpress.common.petri.e2e;
 
 import com.wixpress.petri.PetriRPCClient;
+import com.wixpress.petri.laboratory.FilterParameters;
+import com.wixpress.petri.laboratory.FilterParametersExtractorsConfig;
+import com.wixpress.petri.laboratory.HttpRequestExtractionOptions;
 import com.wixpress.petri.petri.DBDriver;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
@@ -11,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import java.net.MalformedURLException;
+import java.util.Optional;
 
 import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
 import com.wixpress.petri.Main;
@@ -41,7 +45,10 @@ public abstract class BaseTest {
     @BeforeClass
     public static void startServers() throws Exception {
 
-        sampleAppRunner = new SampleAppRunner(SAMPLE_APP_PORT, SAMPLE_WEBAPP_PATH, 1, true);
+        sampleAppRunner = new SampleAppRunner(SAMPLE_APP_PORT, SAMPLE_WEBAPP_PATH, 1, true,
+                Optional.of(FilterParametersExtractorsConfig
+                        .forParamOptionAndName(FilterParameters.Country(), HttpRequestExtractionOptions.Header(),
+                                "GEO_HEADER")));
 
         // TODO: Remove duplication with RPCPetriServerTest
         dbDriver = DBDriver.dbDriver("jdbc:h2:mem:test;IGNORECASE=TRUE");
