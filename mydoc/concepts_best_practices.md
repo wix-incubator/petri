@@ -39,7 +39,7 @@ Read more about experiments and experiment specs [here]({{site.data.urls.experim
 
 > A **filter** is a condition for eligibility to participate in an experiment.
 
-Filters may be used to determine what users will be included in your defined experiments. Our built in filters include language, geo, user-agent, individual user IDs (usually used for QA) and more. 
+Filters may be used to determine what users will be included in your defined experiments. Our built in filters include language, geo, user-agent, individual user IDs (usually used for QA) and [more]({{site.data.urls.builtin_filters.url}}). 
 
 You can also create your own custom filters, read more about that [here]({{site.data.urls.custom_filters.url}}).
 
