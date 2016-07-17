@@ -10,7 +10,7 @@ permalink: /builtin_filters/
 
 ## Customize a built-in filter data extraction
 
-You can view the various builtin filters in here under the [package filters](https://github.com/wix/petri/tree/master/wix-petri-core/src/main/java/com/wixpress/petri/experiments/domain)
+You can view the various builtin filters in  [here](https://github.com/wix/petri/tree/master/wix-petri-core/src/main/java/com/wixpress/petri/experiments/domain)
 
 Currently three filters support custom parameters:
 
@@ -18,9 +18,9 @@ Currently three filters support custom parameters:
  2. `LanguageFilter`
  3. `IncludeUserIdsFilter`
 
-We can take the `CountryFilter` as an example, this filter uses the CountryResolver in order to get the calue of the country from the Http request
-you can view the [CountryResolver](https://github.com/wix/petri/blob/master/laboratory-servlet-api-integration/src/main/java/com/wixpress/petri/laboratory/Resolvers.scala#L44)'s, default resolution of this value by looking at the `defaultResolution` function.
-If you want to customize the way country param is bein extracted from the Http request You can configure it by setting `FilterParametersExtractorsConfig` thiss can be achieved by putting a `filters.yaml` file in your application `WEB-INF` folder.
+We can take the `GeoFilter` as an example, this filter uses the `CountryResolver` in order to get the value of the country from the Http request
+you can view the [CountryResolver](https://github.com/wix/petri/blob/master/laboratory-servlet-api-integration/src/main/java/com/wixpress/petri/laboratory/Resolvers.scala#L44)'s, default resolution by looking at the `defaultResolution` function.
+If you want to customize the way the country parameter is being extracted from the Http request, you can configure it by setting `FilterParametersExtractorsConfig`. This can also be achieved by putting a `filters.yaml` file in your application `WEB-INF` folder.
 the file should look like this:
 
 ```yaml
@@ -38,6 +38,6 @@ the file should look like this:
         ...
 ```
 
-This configuration means that the country value for the the filter will be extracted be the order of the list, meanning first the reslover will try to find a header on the request with the name `SOME_HEADER_NAME` than the cookie and so on. take note that you can specify multpile header/cookie/param names and they will each be resolved by the order of the list.
-the first time the resolver find a value the seoltion process completes.
-If not custom value was extracted the reslover defalt to the default beaviour
+This configuration means that the country value for the the filter will be extracted by the order of the list. Meanning first the reslover will try to find a header on the request with the name `SOME_HEADER_NAME`, then the cookie and so on. Notice that you can specify multpile header/cookie/param names and they will each be resolved by the order of the list.
+The first time the resolver finds a value the resolution process terminates.
+If no custom value was extracted the reslover defalts to `defaultResolution`'s value
