@@ -9,6 +9,7 @@ import com.wixpress.petri.experiments.domain.ExperimentBuilder;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
+import com.wixpress.petri.test.TestBuilders;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -108,5 +109,13 @@ public class PetriE2eTest extends BaseTest {
         List<ExperimentSpec> specs = fullPetriClient.fetchSpecs();
 
         assertNotEquals(specs.size(), 0);
+    }
+
+    @Test
+    public void conductingAnExperimentWithGeoFilterWithCustomizedDataExtractor() throws IOException {
+        addSpec("THE_KEY");
+        fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndFilter("THE_KEY").build());
+        String testResult = sampleAppRunner.conductExperimentWithGeoHeader("THE_KEY", "FALLBACK_VALUE");
+        assertThat(testResult, is("a"));
     }
 }
