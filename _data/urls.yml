@@ -80,10 +80,10 @@ builtin_filters:
   url: "/petri/builtin_filters/"
   link: "<a href='/petri/builtin_filters/'>Built-In Filters</a>"
 
-custom_filters: 
-  title: "Custom Filters"
-  url: "/petri/custom_filters/"
-  link: "<a href='/petri/custom_filters/'>Custom Filters</a>"
+filters: 
+  title: "Filters"
+  url: "/petri/filters/"
+  link: "<a href='/petri/filters/'>Filters</a>"
 
 laboratory_api:
   title: "Conducting An Experiment"

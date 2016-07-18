@@ -47,12 +47,9 @@ entries:
       url: /experiments/
       output: web
       
-    - title: Built-in Filters
-      url: /builtin_filters/
-      output: web
 
-    - title: Custom Filters
-      url: /custom_filters/
+    - title: Filters
+      url: /filters/
       output: web
 
     - title: Registered VS Non-Registered Users

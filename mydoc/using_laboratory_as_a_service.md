@@ -31,6 +31,6 @@ This means there are two options for using this service:
 - From your non-JVM application, and then you may want to pass some of the context to the request via one of these 2 options:
 
   - Add the userId param for example, or the previous conduction value from the cookie
-  - Pass your own custom context and call the `conductExperimentWithCustomContext` method on the [SampleAppController](https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-petri-app/src/main/java/com/wixpress/common/petri/SampleAppController.java). Combine this with writing your own [custom filters]({{site.data.urls.custom_filters.url}}})
+  - Pass your own custom context and call the `conductExperimentWithCustomContext` method on the [SampleAppController](https://github.com/wix/petri/blob/2c31c03a47dcf00466fc812834b5c7abdc3271ae/sample-petri-app/src/main/java/com/wixpress/common/petri/SampleAppController.java). Combine this with writing your own [custom filters]({{site.data.urls.filters.url}}})
 .  
 

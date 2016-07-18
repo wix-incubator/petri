@@ -44,26 +44,6 @@
 
 
 {
-"title": "Built-In Filters",
-"tags": "",
-"keywords": "filters, users, custom",
-"url": "/petri/builtin_filters/",
-"summary": ""
-},
-
-
-
-{
-"title": "Filters",
-"tags": "",
-"keywords": "filters, users, custom",
-"url": "/petri/custom_filters/",
-"summary": ""
-},
-
-
-
-{
 "title": "Experiments and Experiment Specs",
 "tags": "",
 "keywords": "experiments, specs",
@@ -72,6 +52,16 @@
 },
 
 
+
+
+
+{
+"title": "Filters",
+"tags": "",
+"keywords": "filters, users, custom, built in",
+"url": "/petri/filters/",
+"summary": ""
+},
 
 
 
