@@ -1,6 +1,7 @@
 package com.wixpress.petri.laboratory;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.laboratory.converters.IntegerConverter;
@@ -75,7 +76,7 @@ public class TrackableLaboratoryTest {
     private TrackableLaboratory lab;
     private RamUserInfoStorage userInfoStorage;
     private InMemoryExperimentsSource cache;
-    private FakeTestGroupAssignmentTracker testGroupAssignmentTracker;
+    private List<FakeTestGroupAssignmentTracker> assignmentTrackers;
     private FakeErrorHandler laboratoryErrorHandler;
     private FakeMetricsReporter metricsReporter;
     private UserRequestPetriClient petriClient;
@@ -90,13 +91,13 @@ public class TrackableLaboratoryTest {
                 with(UserInfoMakers.userId, SOME_USER_GUID));
         registeredUserInfo = aRegisteredUserInfo.make();
         userInfoStorage = new RamUserInfoStorage();
-        testGroupAssignmentTracker = new FakeTestGroupAssignmentTracker();
+        assignmentTrackers = Lists.newArrayList(new FakeTestGroupAssignmentTracker(), new FakeTestGroupAssignmentTracker());
         laboratoryErrorHandler = new FakeErrorHandler();
         metricsReporter = new FakeMetricsReporter();
         laboratoryTopology = new FakeLaboratoryTopology();
         petriClient = context.mock(UserRequestPetriClient.class);
 
-        lab = new TrackableLaboratory(experiments, testGroupAssignmentTracker, userInfoStorage,
+        lab = new TrackableLaboratory(experiments, assignmentTrackers, userInfoStorage,
                 laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, laboratoryTopology, externalDataFetchers);
     }
 
@@ -189,7 +190,10 @@ public class TrackableLaboratoryTest {
     }
 
     private void assertBiLogHasItemThat(Matcher<Assignment> matcher) {
-        assertThat(testGroupAssignmentTracker.getAssignments(), hasItem(matcher));
+        for (FakeTestGroupAssignmentTracker assignmentTracker : assignmentTrackers) {
+            assertThat(assignmentTracker.getAssignments(), hasItem(matcher));
+        }
+
     }
 
     private void assertBiLogAndAnonAndUserLogsAreEmpty() {
@@ -199,7 +203,9 @@ public class TrackableLaboratoryTest {
     }
 
     private void assertBiLogIsEmpty() {
-        assertThat(testGroupAssignmentTracker.getAssignments(), is(Matchers.empty()));
+        for (FakeTestGroupAssignmentTracker assignmentTracker : assignmentTrackers) {
+            assertThat(assignmentTracker.getAssignments(), is(Matchers.empty()));
+        }
     }
 
     private void assertUserLogIsEmpty() {
@@ -548,7 +554,7 @@ public class TrackableLaboratoryTest {
     public void defaultValueIsReturnedWhenUnexpectedExceptionIsThrown() {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
-        lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
+        lab = new TrackableLaboratory(experiments, Lists.newArrayList(new FakeTestGroupAssignmentTracker()), userInfoStorage,
                 laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, laboratoryTopology, externalDataFetchers);
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
         errorReportWasSent(Matchers.<Throwable>instanceOf(BlowingUpCachedExperiments.CacheExploded.class));
@@ -559,7 +565,7 @@ public class TrackableLaboratoryTest {
     public void defaultValuesAreReturnedWhenUnexpectedExceptionIsThrown() {
         experiments = new BlowingUpCachedExperiments();
         userInfoStorage.write(aRegisteredUserInfo.make());
-        lab = new TrackableLaboratory(experiments, new FakeTestGroupAssignmentTracker(), userInfoStorage,
+        lab = new TrackableLaboratory(experiments, Lists.newArrayList(new FakeTestGroupAssignmentTracker()), userInfoStorage,
                 laboratoryErrorHandler, EXPERIMENT_MAX_TIME_MILLIS, metricsReporter, petriClient, laboratoryTopology, externalDataFetchers);
 
         Map<String, String> expected = new HashMap();

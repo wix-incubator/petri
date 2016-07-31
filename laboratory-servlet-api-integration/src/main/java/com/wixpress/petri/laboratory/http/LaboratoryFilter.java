@@ -1,5 +1,6 @@
 package com.wixpress.petri.laboratory.http;
 
+import com.google.common.collect.Lists;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.ExternalDataFetchers;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
@@ -80,7 +81,7 @@ public class LaboratoryFilter implements Filter {
     private Laboratory laboratory(UserInfoStorage storage) throws MalformedURLException {
         Experiments experiments = new CachedExperiments(new PetriClientExperimentSource(petriClient));
         TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
-        return new TrackableLaboratory(experiments, tracker, storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, laboratoryTopology, new ExternalDataFetchers(null));
+        return new TrackableLaboratory(experiments, Lists.newArrayList(tracker), storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, laboratoryTopology, new ExternalDataFetchers(null));
     }
 
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
