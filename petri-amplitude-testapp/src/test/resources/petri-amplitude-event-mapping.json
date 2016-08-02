@@ -1,0 +1,21 @@
+{
+  "request" : {
+    "url" : "/httpapi",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalTo" : "api_key=198e3469868de498f5d67581d6de4518&event={\"event_type\":\"PetriBiEvent\",\"ip\":\"127.0.0.1\",\"language\":\"en\",\"country\":\"US\",\"user_id\":\"882c6f27-6378-4987-9652-99ebc0ef7262\",\"event_properties\":{\"experimentId\":1,\"url\":\"http://localhost:9811/test\",\"productName\":\"SampleAppFTW\",\"userAgent\":\"Mozilla%2F5.0+%28Windows%3B+U%3B+Windows+NT+5.1%3B+en-US%3B+rv%3A1.9.2.8%29+Gecko%2F20100722+Firefox%2F3.6.8\",\"testGroup\":1}}"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "success.txt",
+    "headers" : {
+      "Access-Control-Allow-Origin" : "*",
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Tue, 02 Aug 2016 14:09:31 GMT",
+      "Server" : "TornadoServer/3.2.2",
+      "Content-Length" : "7",
+      "Connection" : "keep-alive"
+    }
+  }
+}

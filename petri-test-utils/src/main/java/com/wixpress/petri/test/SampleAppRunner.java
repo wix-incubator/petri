@@ -53,6 +53,10 @@ public class SampleAppRunner {
     }
 
     public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState) {
+        this(port, pathToWebapp, reporterInterval, useServerSideState, null);
+    }
+
+    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState, String amplitudeUrl) {
         this.port = port;
         this.sampleAppServer = new ServerRunner(port, pathToWebapp);
         this.client = HttpClientBuilder.create().build();
@@ -63,6 +67,10 @@ public class SampleAppRunner {
             addReportingIntervalToProperties(propertiesFile, reporterInterval);
         }
         addServerSideToProperties(propertiesFile, useServerSideState);
+
+        if (amplitudeUrl != null) {
+            overrideAmplitudeUrl(propertiesFile, amplitudeUrl);
+        }
     }
 
     private File getLaboratoryPropertiesFile(String pathToWebapp)  {
@@ -74,6 +82,10 @@ public class SampleAppRunner {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void overrideAmplitudeUrl(File propertiesFile, String amplitudeUrl) {
+        setProperty(propertiesFile, amplitudeUrl, "amplitude.url");
     }
 
     private void addServerSideToProperties(File propertiesFile, boolean useServerSideState) {

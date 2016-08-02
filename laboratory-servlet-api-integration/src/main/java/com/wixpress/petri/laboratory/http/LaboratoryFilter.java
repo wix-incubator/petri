@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 /**
@@ -35,6 +36,8 @@ public class LaboratoryFilter implements Filter {
     private FilterParametersExtractorsConfig filterParametersExtractorsConfig;
     private UserRequestPetriClient userRequestPetriClient;
     private LaboratoryTopology laboratoryTopology;
+    private TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
+    private ArrayList<TestGroupAssignmentTracker> assignmentTrackers = Lists.newArrayList(tracker);
 
     public LaboratoryFilter() {
     }
@@ -80,8 +83,7 @@ public class LaboratoryFilter implements Filter {
 
     private Laboratory laboratory(UserInfoStorage storage) throws MalformedURLException {
         Experiments experiments = new CachedExperiments(new PetriClientExperimentSource(petriClient));
-        TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
-        return new TrackableLaboratory(experiments, Lists.newArrayList(tracker), storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, laboratoryTopology, new ExternalDataFetchers(null));
+        return new TrackableLaboratory(experiments, assignmentTrackers, storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, laboratoryTopology, new ExternalDataFetchers(null));
     }
 
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
@@ -100,6 +102,13 @@ public class LaboratoryFilter implements Filter {
         readProperties();
 
         filterParametersExtractorsConfig = FilterParametersExtractorsConfig.readConfig(context);
+
+        String amplitudeUrl = laboratoryProperties.getProperty("amplitude.url");
+        String amplitudeApiKey = laboratoryProperties.getProperty("amplitude.api.key");
+
+        if (amplitudeUrl != null && amplitudeApiKey != null) {
+            assignmentTrackers.add(new AmplitudeTestGroupAssignmentTracker(new AmplitudeAdapter(amplitudeUrl, amplitudeApiKey)));
+        }
 
         try {
             petriClient = PetriRPCClient.makeFor(laboratoryTopology.getPetriUrl());

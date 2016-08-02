@@ -1,0 +1,21 @@
+{
+  "request" : {
+    "url" : "/httpapi",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalTo" : "api_key=198e3469868de498f5d67581d6de4518&event={\"event_type\":\"PetriBiEvent\",\"ip\":\"THE_IP\",\"language\":\"THE_LANGUAGE\",\"country\":\"THE_COUNTRY\",\"user_id\":\"ba8f170a-fe2e-4453-92bf-e7a6aa6a1443\",\"event_properties\":{\"experimentId\":123,\"url\":\"THE_URL\",\"productName\":\"PRODUCT_NAME\",\"userAgent\":\"THE_UA\",\"testGroup\":4}}"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "tracker_it_response.txt",
+    "headers" : {
+      "Access-Control-Allow-Origin" : "*",
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Tue, 02 Aug 2016 14:15:17 GMT",
+      "Server" : "TornadoServer/3.2.2",
+      "Content-Length" : "7",
+      "Connection" : "keep-alive"
+    }
+  }
+}
