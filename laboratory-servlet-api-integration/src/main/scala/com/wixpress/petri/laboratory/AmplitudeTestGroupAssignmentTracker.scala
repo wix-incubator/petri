@@ -1,6 +1,7 @@
 package com.wixpress.petri.laboratory
 
 import java.net.URLEncoder
+import java.util.UUID
 import javax.annotation.Nullable
 
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -21,10 +22,10 @@ class AmplitudeTestGroupAssignmentTracker(amplitudeAdapter: AmplitudeAdapter) ex
 case class AmplitudeAdapter(amplitudeUrl: String, apiKey: String, amplitudeTimeoutMs: Int) {
   def this(amplitudeUrl: String, apiKey: String) = this(amplitudeUrl, apiKey, 2000)
 
-  val requestConfig = RequestConfig.custom.setConnectTimeout(amplitudeTimeoutMs).build
-  val client = HttpClientBuilder.create.setDefaultRequestConfig(requestConfig).build
+  val requestConfig = RequestConfig.custom.setConnectionRequestTimeout(amplitudeTimeoutMs).build
 
   def sendEvent(event: BaseAmplitudeEvent): Unit = {
+    val client = HttpClientBuilder.create.setDefaultRequestConfig(requestConfig).build
     val httpPost = new HttpPost(amplitudeUrl)
     val bodyStr = s"api_key=$apiKey&event=${asJson(event)}"
     val entity = new ByteArrayEntity(bodyStr.getBytes("UTF-8"))
@@ -89,7 +90,7 @@ object AmplitudePetriEvent {
       language = userInfo.language,
       ip = userInfo.ip,
       country = userInfo.country,
-      userId = userInfo.getUserId.toString,
+      userId = Option(userInfo.getUserId).getOrElse(UUID.fromString("00000000-0000-0000-0000-000000000000")).toString,
       eventProperties = AmplitudePetriEventProperties(
         experimentId = assignment.getExperimentId,
         url = userInfo.url,

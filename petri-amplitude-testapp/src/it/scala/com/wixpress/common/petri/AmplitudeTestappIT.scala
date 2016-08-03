@@ -4,7 +4,6 @@ import java.util.UUID
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import com.github.tomakehurst.wiremock.client.VerificationException
-import com.wixpress.common.petri.AmplitudeTestappConfig.webappPath
 import com.wixpress.petri.fakeserver.FakePetriServer
 import com.wixpress.petri.laboratory.{AmplitudeDriver, AmplitudePetriEvent}
 import com.wixpress.petri.test.{SampleAppRunner, TestBuilders}
@@ -13,20 +12,20 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.BeforeAfterAll
 
-// the stub for the amplitude wiremock is file-based - it's located in test/resources/*mapping.json
 class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
+  val webappPath = classOf[AmplitudeTestappIT].getResource("/").getPath + "../../../petri-amplitude-testapp/src/main/webapp"
   val webappPort = 9811
   val amplitudePort = 11981
   val amplitudeDriver = new AmplitudeDriver(amplitudePort)
   val appRunner = new SampleAppRunner(webappPort, webappPath, 1, true, amplitudeDriver.amplitudeUrl)
   val sampleAppViewDriver = new SampleAppViewDriver(webappPort)
   val petriDriver = new PetriDriver(9010)
-  val userId = UUID.fromString("882c6f27-6378-4987-9652-99ebc0ef7262")
 
   "AmplitudeTestapp" should {
     "enter the page, click the button and check that petri event + business bi event were logged in amplitude" in {
       petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
 
+      sampleAppViewDriver.enterThePageAndExpectFirstTimeMessage()
       sampleAppViewDriver.enterThePageAndClickButton()
 
       eventually {
@@ -50,21 +49,27 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
 
   class SampleAppViewDriver(port: Int) {
     private val driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6)
+    private val pageUrl = s"http://localhost:$port/test"
     driver.setJavascriptEnabled(true)
 
-    def enterThePageAndClickButton() = {
-      driver.get(s"http://localhost:$port/test?laboratory_user_id=$userId")
-      val button = driver.findElement(By.id("buttonId"))
+    def enterThePageAndExpectFirstTimeMessage() = {
+      driver.get(pageUrl)
+      driver.findElement(By.id("resultText")).getText === "welcome new user - please refresh the page to see an experiment"
+    }
 
+    def enterThePageAndClickButton() = {
+      driver.get(pageUrl)
+      val button = driver.findElement(By.id("buttonId"))
       assertButtonWasNotRenderedOnFallbackColor(button)
 
       button.click()
+
       driver.findElement(By.id("resultText")).getText must eventually(be_===("ok"))
     }
   }
 
   def assertButtonWasNotRenderedOnFallbackColor(button: WebElement) =
-    button.getCssValue("color") must be_!==("yellow")
+    button.getCssValue("color") must be_==("red")
 
   class PetriDriver(port: Int) {
     private val petri = new FakePetriServer(port)
@@ -80,3 +85,8 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
   }
 
 }
+
+
+
+
+
