@@ -14,11 +14,11 @@ class AmplitudeTestappConfig {
   @Bean
   def amplitudeAdapter = {
     val propertiesPath = AmplitudeTestappConfig.webappPath + "/WEB-INF/laboratory.properties"
-    val amplitudeUrlFromConfig = Source.fromFile(propertiesPath).getLines().find(line => line.startsWith("amplitude.url")).map(_.split("=").last)
 
-    new AmplitudeAdapter(
-      amplitudeUrl = amplitudeUrlFromConfig.getOrElse("https://api.amplitude.com/httpapi"),
-      apiKey = "198e3469868de498f5d67581d6de4518")
+    def property(property: String) =
+      Source.fromFile(propertiesPath).getLines().find(line => line.startsWith(property)).map(_.split("=").last).orNull
+
+    AmplitudeAdapter.create(property("amplitude.url"), property("amplitude.api.key"), property("amplitude.timeout.ms"))
   }
 
 

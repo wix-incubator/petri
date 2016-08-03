@@ -105,9 +105,11 @@ public class LaboratoryFilter implements Filter {
 
         String amplitudeUrl = laboratoryProperties.getProperty("amplitude.url");
         String amplitudeApiKey = laboratoryProperties.getProperty("amplitude.api.key");
+        String amplitudeTimeoutMs = laboratoryProperties.getProperty("amplitude.timeout.ms");
 
         if (amplitudeUrl != null && amplitudeApiKey != null) {
-            tracker = tracker.add(new AmplitudeTestGroupAssignmentTracker(new AmplitudeAdapter(amplitudeUrl, amplitudeApiKey)));
+            tracker = tracker.add(new AmplitudeTestGroupAssignmentTracker(
+                    AmplitudeAdapter.create(amplitudeUrl, amplitudeApiKey, amplitudeTimeoutMs)));
         }
 
         try {
@@ -146,7 +148,9 @@ public class LaboratoryFilter implements Filter {
             }
 
             @Override
-            public String getAuthorizationServiceUrl() {return "";}
+            public String getAuthorizationServiceUrl() {
+                return "";
+            }
 
         };
     }
