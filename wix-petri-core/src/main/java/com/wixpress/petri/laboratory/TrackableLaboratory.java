@@ -23,7 +23,7 @@ public class TrackableLaboratory implements Laboratory {
     private final int maxConductionTimeMillis;
     private final Experiments experiments;
     private final UserInfoStorage userInfoStorage;
-    private final List<? extends TestGroupAssignmentTracker> assignmentTrackers;
+    private final TestGroupAssignmentTracker testGroupAssignmentTracker;
     private final PetriConductionContextRetriever petriConductionContextRetriever;
     private final ErrorHandler laboratoryErrorHandler;
     private final MetricsReporter metricsReporter;
@@ -33,12 +33,12 @@ public class TrackableLaboratory implements Laboratory {
 
     private final static String REMOVE_FT_COOKIES_ENABLED_FT = "removeFtCookiesEnabledFt";
 
-    public TrackableLaboratory(Experiments experiments, List<? extends TestGroupAssignmentTracker> assignmentTrackers, UserInfoStorage userInfoStorage,
+    public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
                                PetriConductionContextRetriever petriConductionContextRetriever,
                                ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter,
                                UserRequestPetriClient petriClient, LaboratoryTopology laboratoryTopology, ExternalDataFetchers externalDataFetchers) {
         this.experiments = experiments;
-        this.assignmentTrackers = assignmentTrackers;
+        this.testGroupAssignmentTracker = testGroupAssignmentTracker;
         this.userInfoStorage = userInfoStorage;
         this.petriConductionContextRetriever = petriConductionContextRetriever;
         this.laboratoryErrorHandler = laboratoryErrorHandler;
@@ -49,10 +49,10 @@ public class TrackableLaboratory implements Laboratory {
         this.externalDataFetchers = externalDataFetchers;
     }
 
-    public TrackableLaboratory(Experiments experiments, List<? extends TestGroupAssignmentTracker> assignmentTrackers, UserInfoStorage userInfoStorage,
+    public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
                                ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter,
                                UserRequestPetriClient petriClient, LaboratoryTopology laboratoryTopology, ExternalDataFetchers externalDataFetchers) {
-        this(experiments, assignmentTrackers, userInfoStorage, new DefaultConductionContextRetriever(), laboratoryErrorHandler, maxConductionTimeMillis, metricsReporter, petriClient, laboratoryTopology, externalDataFetchers);
+        this(experiments, testGroupAssignmentTracker, userInfoStorage, new DefaultConductionContextRetriever(), laboratoryErrorHandler, maxConductionTimeMillis, metricsReporter, petriClient, laboratoryTopology, externalDataFetchers);
 
     }
 
@@ -201,9 +201,7 @@ public class TrackableLaboratory implements Laboratory {
     private <T> T valueFromConduct(TestResultConverter<T> resultConverter, Experiment experiment, ConductionContext context) {
         Assignment assignment = experiment.conduct(context, userInfo(), externalDataFetchers);
 
-        for (TestGroupAssignmentTracker assignmentTracker : assignmentTrackers) {
-            assignment.executeSideEffects(assignmentTracker, userInfoStorage);
-        }
+        assignment.executeSideEffects(testGroupAssignmentTracker, userInfoStorage);
 
         generateExperimentReports(assignment, experiment);
 

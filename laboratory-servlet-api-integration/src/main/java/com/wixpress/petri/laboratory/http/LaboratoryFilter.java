@@ -36,8 +36,8 @@ public class LaboratoryFilter implements Filter {
     private FilterParametersExtractorsConfig filterParametersExtractorsConfig;
     private UserRequestPetriClient userRequestPetriClient;
     private LaboratoryTopology laboratoryTopology;
-    private TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
-    private ArrayList<TestGroupAssignmentTracker> assignmentTrackers = Lists.newArrayList(tracker);
+    private CompositeTestGroupAssignmentTracker tracker = CompositeTestGroupAssignmentTracker.create(new BILoggingTestGroupAssignmentTracker(new JodaTimeClock()));
+
 
     public LaboratoryFilter() {
     }
@@ -83,7 +83,7 @@ public class LaboratoryFilter implements Filter {
 
     private Laboratory laboratory(UserInfoStorage storage) throws MalformedURLException {
         Experiments experiments = new CachedExperiments(new PetriClientExperimentSource(petriClient));
-        return new TrackableLaboratory(experiments, assignmentTrackers, storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, laboratoryTopology, new ExternalDataFetchers(null));
+        return new TrackableLaboratory(experiments, tracker, storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, laboratoryTopology, new ExternalDataFetchers(null));
     }
 
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
@@ -107,7 +107,7 @@ public class LaboratoryFilter implements Filter {
         String amplitudeApiKey = laboratoryProperties.getProperty("amplitude.api.key");
 
         if (amplitudeUrl != null && amplitudeApiKey != null) {
-            assignmentTrackers.add(new AmplitudeTestGroupAssignmentTracker(new AmplitudeAdapter(amplitudeUrl, amplitudeApiKey)));
+            tracker = tracker.add(new AmplitudeTestGroupAssignmentTracker(new AmplitudeAdapter(amplitudeUrl, amplitudeApiKey)));
         }
 
         try {

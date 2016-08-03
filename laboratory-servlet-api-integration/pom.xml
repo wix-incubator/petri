@@ -60,6 +60,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.1</version>
+        </dependency>
 
         <!-- test dependencies -->
         <dependency>
@@ -81,9 +86,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.1</version>
+            <groupId>com.wix</groupId>
+            <artifactId>specs2-jmock_${scala.dependencies.version}</artifactId>
+            <version>0.1.21</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -156,11 +161,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.1</version>
-        </dependency>
+
 
     </dependencies>
 
