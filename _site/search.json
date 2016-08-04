@@ -66,6 +66,26 @@
 
 
 {
+"title": "",
+"tags": "",
+"keywords": "",
+"url": "/petri/sample-petri-app/target/sample-petri-app-0.7.0-SNAPSHOT/WEB-INF/filters.yaml",
+"summary": ""
+},
+
+
+
+{
+"title": "",
+"tags": "",
+"keywords": "",
+"url": "/petri/petri-amplitude-testapp/target/petri-amplitude-testapp-0.7.0-SNAPSHOT/WEB-INF/filters.yaml",
+"summary": ""
+},
+
+
+
+{
 "title": "Petri",
 "tags": "",
 "keywords": "",
@@ -80,6 +100,16 @@
 "tags": "",
 "keywords": "application, laboratory, client, petri, integration",
 "url": "/petri/integrating_petri_into_your_app/",
+"summary": ""
+},
+
+
+
+{
+"title": "Integrating Laboratory with Amplitude",
+"tags": "",
+"keywords": "amplitude, bi, event",
+"url": "/petri/integrating_with_amplitude/",
 "summary": ""
 },
 

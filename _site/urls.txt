@@ -113,6 +113,13 @@ integrating_petri_into_your_app:
 
 
  
+integrating_with_amplitude:
+  title: "Integrating Laboratory with Amplitude"
+  url: "/petri/integrating_with_amplitude/ 'Integrating Laboratory with Amplitude'"
+  link: "<a href='/petri/integrating_with_amplitude/' title='Integrating Laboratory with Amplitude'>Integrating Laboratory with Amplitude</a>"
+
+
+ 
 using_laboratory_as_a_service:
   title: "Using Laboratory As A Service"
   url: "/petri/using_laboratory_as_a_service/ 'Using Laboratory As A Service'"

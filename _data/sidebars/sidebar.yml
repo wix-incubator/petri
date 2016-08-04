@@ -81,6 +81,10 @@ entries:
       url: /integrating_petri_into_your_app/
       output: web
 
+    - title: Integrating Laboratory with Amplitude
+      url: /integrating_with_amplitude/
+      output: web
+
     - title: Using Laboratory As A Service
       url: /using_laboratory_as_a_service/
       output: web
