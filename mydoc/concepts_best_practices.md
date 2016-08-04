@@ -50,4 +50,10 @@ Cookies are used to provide stickiness for users i.e , when running an A/B test 
 
 Read more about how Petri persists user experience [here]({{site.data.urls.user_experience_persistence.url}}).
 
+## Petri BI
 
+> A **Petri BI** is a logged event created upon experiment conduction and contains its results.
+
+BI events are used to get a better view on how an experiments results influence the application funnel.
+
+Read more about BI [here]({{site.data.urls.integrating_with_amplitude.url}}).

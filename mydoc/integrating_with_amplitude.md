@@ -6,7 +6,7 @@ sidebar: integrating_with_amplitude
 permalink: /integrating_with_amplitude/
 ---
 
-> Petri logs its experiments' results to a log file. If you don't have a BI system in place, you can optionally report them on Amplitude.com for faster results. Amplitude.com is a simple BI as a service which you can use to easily analyze experiment results via funnels.
+> Petri logs its experiments' results to a log file. If you don't have a BI system in place, you can optionally report them on Amplitude.com for faster results. Amplitude.com is a simple BI-as-a-service which you can use to easily analyze experiment results via funnels.
 
 ### Reporting Petri Experiment Results to Amplitude
 
