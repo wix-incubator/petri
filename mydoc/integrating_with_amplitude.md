@@ -24,6 +24,14 @@ Sending the experiment results is not enough for creating a funnel - you must al
 
 For instructions on how to integrate and send events to Amplitude read [this](https://amplitude.zendesk.com/hc/en-us/categories/200409887-Installation-and-Integration).
 
-An example can be found in the class AmplitudeAdapter in the laboratory-servlet-api-integration module.
+An example can be found in the class [AmplitudeAdapter](petri/laboratory-servlet-api-integration/src/main/scala/com/wixpress/petri/amplitude/AmplitudeAdapter.scala).
 
+### Live Examples
+
+- Take a look on [AmplitudeTestappIT](petri/petri-amplitude-testapp/src/it/scala/com/wixpress/common/petri/AmplitudeTestappIT.scala) for an application that is integrated with petri and amplitude, and sends both petri BI events and the relevant application BI events.
+- For a live demo with petri and amplitude:
+    - Run [MainAmplitudeSampleApp](petri/petri-amplitude-testapp/src/main/scala/com/wixpress/common/petri/MainAmplitudeSampleApp.scala),
+    - Enter from couple of browsers, or incognito mode several times, or delete cookies after each visit in **http://localhost:9811/test**,
+    - See the funnel created from the events on [Amplitude.com](https://amplitude.com/app/151746/funnels?fid=20206&cg=User&range=Last%2030%20Days&i=1&dets=0) [user:nimrodl@wix.com,password:GNK5OdwkZzh5Qw7f9qPB].
+- Funnel example on Amplitude:
 ![Setting Up Petri Server](https://raw.githubusercontent.com/wix/petri/gh-pages/images/button_clicks_by_its_color_funnel.png)
