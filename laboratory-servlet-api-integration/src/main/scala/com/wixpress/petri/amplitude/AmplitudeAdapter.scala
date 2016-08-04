@@ -14,7 +14,7 @@ case class AmplitudeAdapter(amplitudeUrl: String, apiKey: String, amplitudeTimeo
   val requestConfig = RequestConfig.custom.
     setConnectionRequestTimeout(amplitudeTimeoutMs).
     setConnectTimeout(amplitudeTimeoutMs).
-    setSocketTimeout(amplitudeTimeoutMs).build
+    setSocketTimeout(amplitudeTimeoutMs * 2).build
 
   def sendEvent(event: BaseAmplitudeEvent): Unit = {
     val client = HttpClientBuilder.create.setDefaultRequestConfig(requestConfig).build

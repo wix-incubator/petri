@@ -29,12 +29,12 @@ class PageWithButtonController {
     val userInfo = request.getSession.getAttribute(PETRI_USER_INFO_STORAGE).asInstanceOf[UserInfoStorage]
     userInfo.write(copyUserWithNewId(UUID.fromString(theUserId), userInfo.read()))
 
-    renderedPageForRegisteredUser()
+    renderedPageForRegisteredUser(theUserId)
   }
 
   def copyUserWithNewId(userId: UUID, u:UserInfo) = new UserInfo(u.experimentsLog, userId, u.clientId, u.ip, u.url, u.userAgent, new RegisteredUserInfoType(userId), u.language, u.country, u.dateCreated, u.companyEmployee, u.anonymousExperimentsLog, u.isRecurringUser, u.experimentOverrides, u.isRobot, u.host, new util.HashMap[UUID, String](), u.potentialOtherUserExperimentsLogFromCookies, u.registeredUserExists, u.globalSessionId)
 
-  private def renderedPageForRegisteredUser() = {
+  private def renderedPageForRegisteredUser(userId:String) = {
     val color = colorFromExperiment()
     s"""
        |<html>
@@ -42,6 +42,9 @@ class PageWithButtonController {
        |<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
        |</head>
        |<body>
+       |<div>
+       |Welcome user $userId!
+       |</div>
        |<div>
        |  <input type="button" name="buttonId" id="buttonId" value="${if (color == "red") "Don't " else ""}click here!" style="color: $color"/>
        |</div>
