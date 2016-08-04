@@ -25,3 +25,5 @@ Sending the experiment results is not enough for creating a funnel - you must al
 For instructions on how to integrate and send events to Amplitude read [this](https://amplitude.zendesk.com/hc/en-us/categories/200409887-Installation-and-Integration).
 
 An example can be found in the class AmplitudeAdapter in the laboratory-servlet-api-integration module.
+
+![Setting Up Petri Server](https://raw.githubusercontent.com/wix/petri/gh-pages/images/button_clicks_by_its_color_funnel.png)
