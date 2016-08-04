@@ -2,8 +2,9 @@ package com.wixpress.common.petri
 
 import javax.servlet.http.HttpSession
 
+import com.wixpress.petri.amplitude.AmplitudeAdapter
+import com.wixpress.petri.laboratory.Laboratory
 import com.wixpress.petri.laboratory.http.LaboratoryFilter._
-import com.wixpress.petri.laboratory.{AmplitudeAdapter, Laboratory}
 import org.springframework.context.annotation.{Bean, Configuration, Scope, ScopedProxyMode}
 
 import scala.io.Source

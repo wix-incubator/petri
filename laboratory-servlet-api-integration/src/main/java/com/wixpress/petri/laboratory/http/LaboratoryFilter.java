@@ -1,7 +1,7 @@
 package com.wixpress.petri.laboratory.http;
 
-import com.google.common.collect.Lists;
 import com.wixpress.petri.PetriRPCClient;
+import com.wixpress.petri.amplitude.AmplitudeAdapter;
 import com.wixpress.petri.experiments.domain.ExternalDataFetchers;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
 import com.wixpress.petri.laboratory.*;
@@ -15,7 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 /**

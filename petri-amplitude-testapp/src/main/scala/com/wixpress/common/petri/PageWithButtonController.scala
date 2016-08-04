@@ -5,8 +5,9 @@ import javax.annotation.Resource
 import javax.servlet.http.{Cookie, HttpServletRequest, HttpServletResponse}
 
 import com.wixpress.common.petri.PageWithButtonController.labUserIdField
+import com.wixpress.petri.amplitude.{AmplitudeAdapter, AmplitudeEvent}
+import com.wixpress.petri.laboratory.Laboratory
 import com.wixpress.petri.laboratory.converters.StringConverter
-import com.wixpress.petri.laboratory.{AmplitudeAdapter, AmplitudeEvent, Laboratory}
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.{RequestMapping, RequestMethod, ResponseBody}
 

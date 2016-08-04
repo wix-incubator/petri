@@ -3,6 +3,7 @@ package com.wixpress.petri.laboratory
 import java.util.UUID
 
 import com.natpryce.makeiteasy.MakeItEasy._
+import com.wixpress.petri.amplitude.AmplitudeAdapter
 import com.wixpress.petri.experiments.domain.{Assignment, TestGroup}
 import com.wixpress.petri.laboratory.dsl.UserInfoMakers._
 import com.wixpress.petri.laboratory.dsl.{ExperimentMakers, UserInfoMakers}
