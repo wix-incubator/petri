@@ -22,7 +22,7 @@ class AmplitudePetriEventTest extends SpecificationWithJUnit {
       `with`(userAgent, "THE_UA"),
       `with`(language, "THE_LANGUAGE")).make
 
-    val testGroup = new TestGroup(4, 0, "")
+    val testGroup = new TestGroup(4, 0, "red")
     val experimentId: java.lang.Integer = 123
     val experiment = a(ExperimentMakers.Experiment).but(
       `with`(ExperimentMakers.id, experimentId),
@@ -35,7 +35,7 @@ class AmplitudePetriEventTest extends SpecificationWithJUnit {
   "AmplitudeEvent" should {
     "be created from an assignment" in new Context {
       AmplitudePetriEvent.fromAssignment(assignment) must be_===(AmplitudePetriEvent(
-        eventType = AmplitudePetriEvent.petriBiEventType,
+        eventType = s"${AmplitudePetriEvent.petriBiEventType}-123",
         language = "THE_LANGUAGE",
         country = "THE_COUNTRY",
         ip = "THE_IP",
@@ -45,7 +45,7 @@ class AmplitudePetriEventTest extends SpecificationWithJUnit {
           productName = "PRODUCT_NAME",
           url = "THE_URL",
           userAgent = "THE_UA",
-          testGroup = 4
+          testGroup = "red"
         )
       ))
     }

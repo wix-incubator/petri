@@ -35,7 +35,7 @@ class AmplitudeTestGroupAssignmentTrackerIT extends SpecificationWithJUnit with 
       `with`(language, "THE_LANGUAGE"),
       `with`(globalSessionId, "THE_GSI_NUMBER")).make
 
-    val testGroup = new TestGroup(4, 0, "")
+    val testGroup = new TestGroup(1, 0, "red")
     val experimentId: java.lang.Integer = 123
     val experiment = a(ExperimentMakers.Experiment).but(
       `with`(ExperimentMakers.id, experimentId),

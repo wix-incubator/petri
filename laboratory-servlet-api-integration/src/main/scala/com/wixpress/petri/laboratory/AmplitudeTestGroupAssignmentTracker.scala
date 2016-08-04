@@ -19,7 +19,7 @@ case class AmplitudePetriEvent(@JsonProperty("event_type") eventType: String,
                                @JsonProperty("user_id") userId: String,
                                @JsonProperty("event_properties") eventProperties: AmplitudePetriEventProperties) extends BaseAmplitudeEvent
 
-case class AmplitudePetriEventProperties(experimentId: Int, url: String, productName: String, userAgent: String, testGroup: Int)
+case class AmplitudePetriEventProperties(experimentId: Int, url: String, productName: String, userAgent: String, testGroup: String)
 
 object AmplitudePetriEvent {
   val petriBiEventType = "PetriBiEvent"
@@ -27,7 +27,7 @@ object AmplitudePetriEvent {
   def fromAssignment(assignment: Assignment): AmplitudePetriEvent = {
     val userInfo = assignment.getUserInfo
     AmplitudePetriEvent(
-      eventType = AmplitudePetriEvent.petriBiEventType,
+      eventType = s"${AmplitudePetriEvent.petriBiEventType}-${assignment.getExperimentId}",
       language = userInfo.language,
       ip = userInfo.ip,
       country = userInfo.country,
@@ -37,7 +37,7 @@ object AmplitudePetriEvent {
         url = userInfo.url,
         productName = assignment.getScope,
         userAgent = URLEncoder.encode(userInfo.userAgent, "UTF-8"),
-        testGroup = assignment.getTestGroup.getId
+        testGroup = assignment.getTestGroup.getValue
       )
     )
   }

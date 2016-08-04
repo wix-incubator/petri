@@ -7,10 +7,10 @@
         "contains": "api_key=198e3469868de498f5d67581d6de4518&event="
       },
       {
-        "contains": "\"event_type\":\"PetriBiEvent\""
+        "contains": "\"event_type\":\"PetriBiEvent"
       },
       {
-        "contains": "\"testGroup\":1"
+        "contains": "\"testGroup\":\"a\""
       }
     ]
   },
