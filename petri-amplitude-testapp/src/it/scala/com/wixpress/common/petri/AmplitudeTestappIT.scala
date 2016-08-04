@@ -26,7 +26,6 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
     "enter the page, click the button and check that petri event + business bi event were logged in amplitude" in {
       petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
 
-//      sampleAppViewDriver.enterThePageAndExpectFirstTimeMessage()
       sampleAppViewDriver.enterThePageAndClickButton()
 
       eventually {
@@ -52,11 +51,6 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
     private val driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6)
     private val pageUrl = s"http://localhost:$port/test"
     driver.setJavascriptEnabled(true)
-
-    def enterThePageAndExpectFirstTimeMessage() = {
-      driver.get(pageUrl)
-      driver.findElement(By.id("resultText")).getText === "welcome new user - please refresh the page to see an experiment"
-    }
 
     def enterThePageAndClickButton() = {
       driver.get(pageUrl)
