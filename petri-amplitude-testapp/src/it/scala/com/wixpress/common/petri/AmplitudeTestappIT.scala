@@ -1,7 +1,10 @@
 package com.wixpress.common.petri
 
+import java.util.Arrays._
+
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import com.github.tomakehurst.wiremock.client.VerificationException
+import com.wixpress.petri.experiments.domain.TestGroup
 import com.wixpress.petri.fakeserver.FakePetriServer
 import com.wixpress.petri.laboratory.{AmplitudeDriver, AmplitudePetriEvent}
 import com.wixpress.petri.test.{SampleAppRunner, TestBuilders}
@@ -78,7 +81,9 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
 
     def addSpecAndExperiment(key: String) = {
       petri.addSpec(TestBuilders.abSpecBuilder(key))
-      petri.addExperiment(TestBuilders.experimentWithFirstWinning(key).withScope("SampleAppFTW"))
+
+      petri.addExperiment(TestBuilders.experimentWithFirstWinning(key).withScope("SampleAppFTW").
+        withGroups(asList(new TestGroup(1, 100, "red"), new TestGroup(2, 0, "blue"))))
     }
   }
 

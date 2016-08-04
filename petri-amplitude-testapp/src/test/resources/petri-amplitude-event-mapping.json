@@ -10,7 +10,7 @@
         "contains": "\"event_type\":\"PetriBiEvent"
       },
       {
-        "contains": "\"testGroup\":\"a\""
+        "contains": "\"testGroup\":\"red\""
       }
     ]
   },

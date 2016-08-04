@@ -66,8 +66,10 @@ class PageWithButtonController {
        |       $$("#resultText").html("working on it... wait!");
        |       $$.post( "/buttonClicked", function(res) {
        |         $$("#resultText").html('Finished! checkout results <a href="https://amplitude.com/app/151746/funnels?fid=20206&sset=%7B%22byProp%22:%22a%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%22b%22,%22segmentIndex%22:0%7D&cg=User&range=Last%207%20Days&i=1&dets=0">here!</a>');
+       |         $$("#userDetails").html('to login: User: nimrodl@wix.com , Password: GNK5OdwkZzh5Qw7f9qPB');
        |       }).fail(function(error) {
        |             $$("#resultText").html('Sorry! timeout contacting amplitude service. checkout results <a href="https://amplitude.com/app/151746/funnels?fid=20206&sset=%7B%22byProp%22:%22a%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%22b%22,%22segmentIndex%22:0%7D&cg=User&range=Last%207%20Days&i=1&dets=0">here!</a>');
+       |             $$("#userDetails").html('to login: User: nimrodl@wix.com , Password: GNK5OdwkZzh5Qw7f9qPB');
        |         })
        |     });
        |});
@@ -76,13 +78,8 @@ class PageWithButtonController {
     """.stripMargin
   }
 
-  def colorFromExperiment() = {
-    laboratory.conductExperiment("BUTTON_COLOR_SPEC", "yellow", new StringConverter) match {
-      case "a" => "red"
-      case "b" => "blue"
-      case _ => "yellow"
-    }
-  }
+  def colorFromExperiment() =
+    laboratory.conductExperiment("BUTTON_COLOR_SPEC", "yellow", new StringConverter)
 
   @RequestMapping(value = Array("/buttonClicked"), method = Array(RequestMethod.POST))
   @ResponseBody

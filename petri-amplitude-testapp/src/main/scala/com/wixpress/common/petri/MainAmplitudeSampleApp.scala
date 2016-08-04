@@ -13,7 +13,7 @@ object MainAmplitudeSampleApp {
     val petriDriver = new PetriDriver(9010)
     val experiment = petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
 
-    petriDriver.updateExperiment(experiment, new TestGroup(1, 50, "a"), new TestGroup(2, 50, "b"))
+    petriDriver.updateExperiment(experiment, new TestGroup(1, 50, "red"), new TestGroup(2, 50, "blue"))
 
     petriDriver.start()
     appRunner.start()
