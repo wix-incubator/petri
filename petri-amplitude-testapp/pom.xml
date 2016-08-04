@@ -15,7 +15,11 @@
     <description>Example app using amplitude as the bi target</description>
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>8.1.5.v20120716</version>
+        </dependency>
         <dependency>
             <groupId>com.wix</groupId>
             <artifactId>laboratory-spring-integration</artifactId>
@@ -39,14 +43,6 @@
             <version>${hamcrest-version}</version>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>8.1.5.v20120716</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

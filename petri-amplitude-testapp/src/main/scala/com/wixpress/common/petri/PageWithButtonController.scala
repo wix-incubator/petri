@@ -4,8 +4,9 @@ import java.util.UUID
 import javax.annotation.Resource
 import javax.servlet.http.{Cookie, HttpServletRequest, HttpServletResponse}
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.wixpress.common.petri.PageWithButtonController.labUserIdField
-import com.wixpress.petri.amplitude.{AmplitudeAdapter, AmplitudeEvent}
+import com.wixpress.petri.amplitude.{AmplitudeAdapter, BaseAmplitudeEvent}
 import com.wixpress.petri.laboratory.Laboratory
 import com.wixpress.petri.laboratory.converters.StringConverter
 import org.springframework.stereotype.Controller
@@ -64,9 +65,9 @@ class PageWithButtonController {
        |       $$("#buttonId").hide();
        |       $$("#resultText").html("working on it... wait!");
        |       $$.post( "/buttonClicked", function(res) {
-       |         $$("#resultText").html('Finished! checkout results <a href="https://amplitude.com/app/151746/funnels?fid=20206&sset=%7B%22byProp%22:%221%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%22NONE%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%222%22,%22segmentIndex%22:0%7D&cg=User&range=Last%2030%20Days&i=1&dets=0">here!</a>');
+       |         $$("#resultText").html('Finished! checkout results <a href="https://amplitude.com/app/151746/funnels?fid=20206&sset=%7B%22byProp%22:%22a%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%22b%22,%22segmentIndex%22:0%7D&cg=User&range=Last%207%20Days&i=1&dets=0">here!</a>');
        |       }).fail(function(error) {
-       |             $$("#resultText").html('Sorry! timeout contacting amplitude service. checkout results <a href="https://amplitude.com/app/151746/funnels?fid=20206&sset=%7B%22byProp%22:%221%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%22NONE%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%222%22,%22segmentIndex%22:0%7D&cg=User&range=Last%2030%20Days&i=1&dets=0">here!</a>');
+       |             $$("#resultText").html('Sorry! timeout contacting amplitude service. checkout results <a href="https://amplitude.com/app/151746/funnels?fid=20206&sset=%7B%22byProp%22:%22a%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%22b%22,%22segmentIndex%22:0%7D&cg=User&range=Last%207%20Days&i=1&dets=0">here!</a>');
        |         })
        |     });
        |});
@@ -110,3 +111,7 @@ object ButtonClickedEvent {
 object PageWithButtonController {
   val labUserIdField = "laboratory_user_id"
 }
+
+case class AmplitudeEvent(@JsonProperty("event_type") eventType: String,
+                          ip: String, language: String, country: String,
+                          @JsonProperty("user_id") userId: String) extends BaseAmplitudeEvent
