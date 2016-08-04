@@ -26,7 +26,7 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
     "enter the page, click the button and check that petri event + business bi event were logged in amplitude" in {
       petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
 
-      sampleAppViewDriver.enterThePageAndExpectFirstTimeMessage()
+//      sampleAppViewDriver.enterThePageAndExpectFirstTimeMessage()
       sampleAppViewDriver.enterThePageAndClickButton()
 
       eventually {

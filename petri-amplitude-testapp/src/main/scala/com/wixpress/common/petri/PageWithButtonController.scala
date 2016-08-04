@@ -1,5 +1,6 @@
 package com.wixpress.common.petri
 
+import java.util
 import java.util.UUID
 import javax.annotation.Resource
 import javax.servlet.http.{Cookie, HttpServletRequest, HttpServletResponse}
@@ -7,8 +8,9 @@ import javax.servlet.http.{Cookie, HttpServletRequest, HttpServletResponse}
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.wixpress.common.petri.PageWithButtonController.labUserIdField
 import com.wixpress.petri.amplitude.{AmplitudeAdapter, BaseAmplitudeEvent}
-import com.wixpress.petri.laboratory.Laboratory
 import com.wixpress.petri.laboratory.converters.StringConverter
+import com.wixpress.petri.laboratory.http.LaboratoryFilter.PETRI_USER_INFO_STORAGE
+import com.wixpress.petri.laboratory.{Laboratory, RegisteredUserInfoType, UserInfo, UserInfoStorage}
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.{RequestMapping, RequestMethod, ResponseBody}
 
@@ -23,25 +25,14 @@ class PageWithButtonController {
   @RequestMapping(value = Array("/test"), method = Array(RequestMethod.GET), produces = Array("text/html"))
   @ResponseBody
   def test(request: HttpServletRequest, response: HttpServletResponse): String = {
-    getUserId(request) match {
-      case Some(userId) => renderedPageForRegisteredUser()
-      case _ =>
-        getOrPutUserId(request, response)
-        renderedPageForNewUser()
-    }
+    val theUserId = getOrPutUserId(request, response)
+    val userInfo = request.getSession.getAttribute(PETRI_USER_INFO_STORAGE).asInstanceOf[UserInfoStorage]
+    userInfo.write(copyUserWithNewId(UUID.fromString(theUserId), userInfo.read()))
+
+    renderedPageForRegisteredUser()
   }
 
-  private def renderedPageForNewUser() = {
-    s"""
-       |<html>
-       |<body>
-       |<div id="resultText">
-       |welcome new user - please refresh the page to see an experiment
-       |</div>
-       |</body>
-       |</html>
-    """.stripMargin
-  }
+  def copyUserWithNewId(userId: UUID, u:UserInfo) = new UserInfo(u.experimentsLog, userId, u.clientId, u.ip, u.url, u.userAgent, new RegisteredUserInfoType(userId), u.language, u.country, u.dateCreated, u.companyEmployee, u.anonymousExperimentsLog, u.isRecurringUser, u.experimentOverrides, u.isRobot, u.host, new util.HashMap[UUID, String](), u.potentialOtherUserExperimentsLogFromCookies, u.registeredUserExists, u.globalSessionId)
 
   private def renderedPageForRegisteredUser() = {
     val color = colorFromExperiment()
@@ -95,7 +86,7 @@ class PageWithButtonController {
     userId
   }
 
-  def getUserId(request: HttpServletRequest) = {
+  private def getUserId(request: HttpServletRequest) = {
     val cookie = request.getCookies.toSet.find(_.getName == labUserIdField).map(_.getValue)
     Option(request.getParameter(labUserIdField)).orElse(cookie)
   }
