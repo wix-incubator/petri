@@ -1,14 +1,12 @@
 package com.wixpress.common.petri
 
-import java.util.UUID
-
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import com.github.tomakehurst.wiremock.client.VerificationException
 import com.wixpress.petri.fakeserver.FakePetriServer
 import com.wixpress.petri.laboratory.{AmplitudeDriver, AmplitudePetriEvent}
 import com.wixpress.petri.test.{SampleAppRunner, TestBuilders}
-import org.openqa.selenium.{By, WebElement}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
+import org.openqa.selenium.{By, WebElement}
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.BeforeAfterAll
 
@@ -64,7 +62,7 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
 
       button.click()
 
-      driver.findElement(By.id("resultText")).getText must eventually(be_===("ok"))
+      driver.findElement(By.id("resultText")).getText must eventually(contain("Finished"))
     }
   }
 
