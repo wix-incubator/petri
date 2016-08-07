@@ -105,4 +105,9 @@ configure_petri_server:
   url: "/petri/configure_petri_server/"
   link: "<a href='/petri/configure_petri_server/'>Build Petri Server From Scratch (Uses MySql)</a>"
 
+integrating_with_amplitude:
+  title: "Integrating With Amplitude"
+  url: "/petri/integrating_with_amplitude"
+  link: "<a hreg='/petri/integrating_with_amplitude/>'Integrating With Amplitude'</a>"
+
 
