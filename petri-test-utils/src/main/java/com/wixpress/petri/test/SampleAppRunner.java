@@ -32,6 +32,7 @@ public class SampleAppRunner {
     private final ServerRunner sampleAppServer;
     private final int port;
     private final HttpClient client;
+    public static final String GEO_HEADER = "GEO_HEADER";
 
     private Path tempPropertiesFilePath;
     private Path originalPropertiesFile;
@@ -137,7 +138,7 @@ public class SampleAppRunner {
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
 
-    public String conductExperimentWithGeoHeader(String key, String fallback) throws IOException {
+    public String conductExperimentWithGeoHeader(String key, String fallback, String userGeo) throws IOException {
         String uri = "http://localhost:" +
                 port +
                 "/conductExperiment?key=" +
@@ -145,7 +146,7 @@ public class SampleAppRunner {
                 "&fallback=" +
                 fallback;
         HttpGet request  = new HttpGet(uri);
-        request.setHeader("GEO_HEADER", "IL");
+        request.setHeader(GEO_HEADER, userGeo);
         HttpResponse response = client.execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }

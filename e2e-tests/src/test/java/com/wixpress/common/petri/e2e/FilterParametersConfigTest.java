@@ -25,7 +25,7 @@ public class FilterParametersConfigTest extends BaseTest {
         original = Paths.get(BaseTest.SAMPLE_WEBAPP_PATH, "WEB-INF/filters.yaml");
         tempFile = Files.createTempFile("filters-temp", "yaml");
         copy(original, tempFile);
-        new FilterParametersExtractorsConfigTestUtil().replaceConfig(original.toFile());
+        new FilterParametersExtractorsConfigTestUtil().replaceConfigWithGeoHeader(original.toFile());
         BaseTest.startServers();
     }
 
@@ -42,7 +42,7 @@ public class FilterParametersConfigTest extends BaseTest {
     public void conductingAnExperimentWithGeoFilterWithCustomizedDataExtractor() throws IOException {
         addSpec("THE_KEY");
         fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndFilter("THE_KEY").build());
-        String testResult = sampleAppRunner.conductExperimentWithGeoHeader("THE_KEY", "FALLBACK_VALUE");
+        String testResult = sampleAppRunner.conductExperimentWithGeoHeader("THE_KEY", "FALLBACK_VALUE", "IL");
         assertThat(testResult, is("a"));
     }
 }
