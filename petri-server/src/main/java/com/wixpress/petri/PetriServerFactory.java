@@ -1,9 +1,6 @@
 package com.wixpress.petri;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wixpress.petri.experiments.domain.Experiment;
-import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
-import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.*;
 import org.apache.commons.dbcp.BasicDataSource;
@@ -70,7 +67,7 @@ class PetriServerFactory {
         }
 
         @Override
-        public void notify(String title, String message, InternetAddress from, Boolean notifyCaptain, List<String> recipients) {
+        public void notify(String title, String message, Boolean notifyCaptain, List<String> recipients) {
 
         }
     }

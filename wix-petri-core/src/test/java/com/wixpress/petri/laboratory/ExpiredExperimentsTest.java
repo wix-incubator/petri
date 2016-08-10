@@ -25,7 +25,7 @@ public class ExpiredExperimentsTest {
     public void matchesUnknownExperiments() {
         InMemoryExperimentsSource cache = new InMemoryExperimentsSource();
         CachedExperiments experiments = new CachedExperiments(cache);
-        ExpiredExperiments ee = new ExpiredExperiments(experiments, true);
+        ExpiredExperiments ee = new ExpiredExperiments(experiments);
 
         cache.write(asList(a(Experiment, with(id, 777)).make()));
         assertTrue(ee.matches(UNKNOWN_EXPERIMENT));
@@ -35,7 +35,7 @@ public class ExpiredExperimentsTest {
     public void neverMatchesIfEmpty() {
         InMemoryExperimentsSource cache = new InMemoryExperimentsSource();
         CachedExperiments experiments = new CachedExperiments(cache);
-        ExpiredExperiments ee = new ExpiredExperiments(experiments, true);
+        ExpiredExperiments ee = new ExpiredExperiments(experiments);
 
         cache.write(new ArrayList<Experiment>());
         assertFalse(ee.matches(UNKNOWN_EXPERIMENT));
@@ -45,7 +45,7 @@ public class ExpiredExperimentsTest {
     public void neverMatchesIfCacheIsStale() {
         InMemoryExperimentsSource cache = new InMemoryExperimentsSource();
         CachedExperiments experiments = new CachedExperiments(cache);
-        ExpiredExperiments ee = new ExpiredExperiments(experiments, true);
+        ExpiredExperiments ee = new ExpiredExperiments(experiments);
 
         cache.write(asList(a(Experiment, with(id, 777)).make()));
         cache.setStale(true);
@@ -56,7 +56,7 @@ public class ExpiredExperimentsTest {
     public void matchesExpiredFeatureToggles() {
         InMemoryExperimentsSource cache = new InMemoryExperimentsSource();
         CachedExperiments experiments = new CachedExperiments(cache);
-        ExpiredExperiments ee = new ExpiredExperiments(experiments, true);
+        ExpiredExperiments ee = new ExpiredExperiments(experiments);
 
         cache.write(asList(a(Experiment,
                         with(id, 777),
@@ -66,17 +66,4 @@ public class ExpiredExperimentsTest {
         assertTrue(ee.matches(777));
     }
 
-    @Test
-    public void notMatchesExpiredFeatureTogglesWhenFtIsOff() {
-        InMemoryExperimentsSource cache = new InMemoryExperimentsSource();
-        CachedExperiments experiments = new CachedExperiments(cache);
-        ExpiredExperiments ee = new ExpiredExperiments(experiments, false);
-
-        cache.write(asList(a(Experiment,
-                        with(id, 777),
-                        with(featureToggle, true),
-                        with(testGroups, TestGroupMakers.TEST_GROUPS_WITH_FIRST_ALWAYS_WINNING)
-        ).make()));
-        assertFalse(ee.matches(777));
-    }
 }

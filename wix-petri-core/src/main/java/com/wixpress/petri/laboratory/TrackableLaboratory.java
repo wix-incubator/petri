@@ -31,8 +31,6 @@ public class TrackableLaboratory implements Laboratory {
     private final LaboratoryTopology laboratoryTopology;
     private final ExternalDataFetchers externalDataFetchers;
 
-    private final static String REMOVE_FT_COOKIES_ENABLED_FT = "removeFtCookiesEnabledFt";
-
     public TrackableLaboratory(Experiments experiments, TestGroupAssignmentTracker testGroupAssignmentTracker, UserInfoStorage userInfoStorage,
                                PetriConductionContextRetriever petriConductionContextRetriever,
                                ErrorHandler laboratoryErrorHandler, int maxConductionTimeMillis, MetricsReporter metricsReporter,
@@ -162,7 +160,7 @@ public class TrackableLaboratory implements Laboratory {
     }
 
     private ExpiredExperiments expired() {
-        return new ExpiredExperiments(experiments, isRemoveFTCookiesEnabledByFT());
+        return new ExpiredExperiments(experiments);
     }
 
     private <T> T calcExperimentValue(TestResultConverter<T> resultConverter, Experiment experiment, ConductionContext context, Option<Integer> existingTestGroupID) {
@@ -275,10 +273,6 @@ public class TrackableLaboratory implements Laboratory {
             }
         }
         return !existingKeys.containsAll(suspectKeys);
-    }
-
-    private boolean isRemoveFTCookiesEnabledByFT(){
-        return !experiments.findNonExpiredByKey(REMOVE_FT_COOKIES_ENABLED_FT).isEmpty();
     }
 
 }

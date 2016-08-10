@@ -69,6 +69,10 @@ class JdbcExperimentsDao(jdbcTemplate: JdbcTemplate, mapper: PetriMapper[Experim
     jdbcTemplate.query(SELECT_SQL, rsExtractor, Int.box(experimentId)).headOption
   }
 
+  override def fetchEndingBetween(from: DateTime, to: DateTime): Seq[Experiment] = {
+    jdbcTemplate.query(FETCH_SQL_FOR_ENDING_BETWEEN, rsExtractor, Long.box(getTimestamp(from.minusSeconds(2))), Long.box(getTimestamp(to)))
+  }
+
   override def migrateStartEndDates(): Int = {
     val experiments = jdbcTemplate
       .query("SELECT id, last_update_date, experiment FROM experiments WHERE start_date = 0", rsExtractor)
@@ -126,6 +130,9 @@ private object JdbcExperimentsDao {
     "FROM experiments " +
     "JOIN (SELECT id, MAX(last_update_date) AS ts FROM experiments GROUP BY id) maxt " +
     "ON (experiments.id = maxt.id AND experiments.last_update_date = maxt.ts AND (? BETWEEN experiments.start_date AND experiments.end_date - 1))"
+
+  //TODO - extract all the common group by id!!
+  val FETCH_SQL_FOR_ENDING_BETWEEN = FETCH_SQL + " AND experiments.end_date BETWEEN ? AND ?"
 
   def getTimestamp(v: DateTime) = v.getMillis
 

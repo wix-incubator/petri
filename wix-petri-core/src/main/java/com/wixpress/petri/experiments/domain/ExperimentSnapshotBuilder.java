@@ -1,6 +1,8 @@
 package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -26,6 +28,7 @@ public class ExperimentSnapshotBuilder {
     private boolean isFromSpec = true;
     private DateTime creationDate = UNKNOWN_TIME;
     private String scope = "";
+    private List<String> scopes = new ArrayList<>();
     private List<TestGroup> groups = new ArrayList<>();
     private String description = "";
     private String name = "";
@@ -58,7 +61,7 @@ public class ExperimentSnapshotBuilder {
                 withLinkedId(snapshot.linkedId()).
                 withOriginalId(snapshot.originalId()).
                 withCreationDate(snapshot.creationDate()).
-                withScope(snapshot.scope()).
+                withScopes(snapshot.scopes()).
                 withGroups(snapshot.groups()).
                 withDescription(snapshot.description()).
                 withComment(snapshot.comment()).
@@ -106,8 +109,17 @@ public class ExperimentSnapshotBuilder {
         return this;
     }
 
+    @Deprecated
     public ExperimentSnapshotBuilder withScope(String scope) {
+        //TODO remove this once we verify everything works properly
         this.scope = scope;
+        this.scopes = ImmutableList.of(scope);
+        return this;
+    }
+
+    public ExperimentSnapshotBuilder withScopes(List<String> scopes) {
+        this.scope = StringUtils.join(scopes,",");
+        this.scopes = scopes;
         return this;
     }
 
@@ -187,7 +199,9 @@ public class ExperimentSnapshotBuilder {
 
     public ExperimentSnapshot build() {
         validate();
-        return new ExperimentSnapshot(key, isFromSpec, creationDate, description, startDate, endDate, assignIdsIfMissing(groups), scope, paused, name, creator, featureToggle, originalId, linkedId, persistent, filters, onlyForLoggedInUsers, comment, updater, conductLimit, allowedForBots);
+        return new ExperimentSnapshot(key, isFromSpec, creationDate, description, startDate, endDate, assignIdsIfMissing(groups),
+                scope, scopes, paused, name, creator, featureToggle, originalId, linkedId, persistent, filters, onlyForLoggedInUsers,
+                comment, updater, conductLimit, allowedForBots);
     }
 
     private List<TestGroup> assignIdsIfMissing(List<TestGroup> groups) {

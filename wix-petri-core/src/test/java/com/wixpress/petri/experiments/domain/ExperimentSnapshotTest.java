@@ -2,6 +2,7 @@ package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.laboratory.dsl.TestGroupMakers;
 import org.junit.Test;
@@ -36,7 +37,7 @@ public class ExperimentSnapshotTest {
                 withKey("key").
                 withDescription("lbl").
                 withGroups(TestGroupMakers.VALID_TEST_GROUP_LIST).
-                withScope("editor").
+                withScopes(ImmutableList.of("editor")).
                 withOnlyForLoggedInUsers(true).build();
 
         String json = objectMapper.writeValueAsString(snapshot);
@@ -46,24 +47,37 @@ public class ExperimentSnapshotTest {
     }
 
     @Test
-    public void canBeSerializedFromOld() throws IOException {
+    public void canBeSerializedFromOldVersionWithMissingFields() throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
-        String jsonWithNoFiltersAndNoScopeField = "{\"key\":\"key\",\"creationDate\":\"2013-12-04T14:56:34.039+02:00\",\"description\":\"lbl\",\"startDate\":\"2013-12-04T14:56:34.063+02:00\",\"endDate\":\"2013-12-04T14:56:34.063+02:00\",\"groups\":[{\"id\":1,\"chunk\":50,\"value\":\"\"},{\"id\":2,\"chunk\":50,\"value\":\"\"}],\"scopes\":[],\"onlyForLoggedInUsers\":\"true\"}";
-        ExperimentSnapshot deSerialized = objectMapper.readValue(jsonWithNoFiltersAndNoScopeField, new TypeReference<ExperimentSnapshot>() {
+        String jsonWithNoFiltersField = "{\"key\":\"key\",\"creationDate\":\"2013-12-04T14:56:34.039+02:00\",\"description\":\"lbl\",\"startDate\":\"2013-12-04T14:56:34.063+02:00\",\"endDate\":\"2013-12-04T14:56:34.063+02:00\",\"groups\":[{\"id\":1,\"chunk\":50,\"value\":\"\"},{\"id\":2,\"chunk\":50,\"value\":\"\"}],\"scope\":\"somescope\",\"onlyForLoggedInUsers\":\"true\"}";
+        ExperimentSnapshot deSerialized = objectMapper.readValue(jsonWithNoFiltersField, new TypeReference<ExperimentSnapshot>() {
         });
         assertThat(deSerialized, is(notNullValue()));
         assertThat(deSerialized.filters().size(), is(0));
-        assertThat(deSerialized.scope(), isEmptyString());
+        assertThat(deSerialized.scopes(), contains("somescope"));
+    }
+
+    @Test
+    public void canBeSerializedFromVersionWithSingleScope() throws IOException {
+        ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
+        String jsonWitSingleScopeField = "{\"key\":\"key\",\"creationDate\":\"2013-12-04T14:56:34.039+02:00\",\"description\":\"lbl\",\"startDate\":\"2013-12-04T14:56:34.063+02:00\",\"endDate\":\"2013-12-04T14:56:34.063+02:00\",\"groups\":[{\"id\":1,\"chunk\":50,\"value\":\"\"},{\"id\":2,\"chunk\":50,\"value\":\"\"}],\"filters\":[],\"scope\":\"somescope\",\"onlyForLoggedInUsers\":\"true\"}";
+        ExperimentSnapshot deSerialized = objectMapper.readValue(jsonWitSingleScopeField, new TypeReference<ExperimentSnapshot>() {
+        });
+        assertThat(deSerialized, is(notNullValue()));
+        assertThat(deSerialized.filters().size(), is(0));
+        assertThat(deSerialized.scopes(), contains("somescope"));
     }
 
 
     @Test
-    public void canBeSerializedFromNew() throws IOException {
+    public void canBeSerializedFromNewVersionWithUnkownFiled() throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
-        String jsonWithUnknownField = "{\"unknown\":\"key\",\"key\":\"key\",\"creationDate\":\"2013-12-04T14:56:34.039+02:00\",\"description\":\"lbl\",\"startDate\":\"2013-12-04T14:56:34.063+02:00\",\"endDate\":\"2013-12-04T14:56:34.063+02:00\",\"groups\":[{\"id\":1,\"chunk\":50,\"value\":\"\"},{\"id\":2,\"chunk\":50,\"value\":\"\"}],\"scopes\":[],\"filters\":[],\"onlyForLoggedInUsers\":\"true\"}";
+        String jsonWithUnknownField = "{\"unknown\":\"key\",\"key\":\"key\",\"creationDate\":\"2013-12-04T14:56:34.039+02:00\",\"description\":\"lbl\",\"startDate\":\"2013-12-04T14:56:34.063+02:00\",\"endDate\":\"2013-12-04T14:56:34.063+02:00\",\"groups\":[{\"id\":1,\"chunk\":50,\"value\":\"\"},{\"id\":2,\"chunk\":50,\"value\":\"\"}],\"scopes\":[\"somescope\"],\"filters\":[],\"onlyForLoggedInUsers\":\"true\", \"someUnkonwn\":[]}";
         ExperimentSnapshot deSerialized = objectMapper.readValue(jsonWithUnknownField, new TypeReference<ExperimentSnapshot>() {
         });
         assertThat(deSerialized, is(notNullValue()));
+        assertThat(deSerialized.scopes(), contains("somescope"));
+        assertThat(deSerialized.scope(), is("somescope"));
     }
 
     @Test

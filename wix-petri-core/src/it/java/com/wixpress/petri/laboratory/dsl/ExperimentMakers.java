@@ -1,5 +1,6 @@
 package com.wixpress.petri.laboratory.dsl;
 
+import com.google.common.collect.ImmutableList;
 import com.natpryce.makeiteasy.Instantiator;
 import com.natpryce.makeiteasy.Property;
 import com.natpryce.makeiteasy.PropertyLookup;
@@ -30,6 +31,7 @@ public class ExperimentMakers {
     public static final Property<Experiment, DateTime> lastUpdated = newProperty();
     public static final Property<Experiment, DateTime> creationDate = newProperty();
     public static final Property<Experiment, String> scope = newProperty();
+    public static final Property<Experiment, List<String>> scopes = newProperty();
     //TODO - should be Donor<List<TestGroup>> so we can use asList()
     // (isn't listOf good enough / the same?)
     public static final Property<Experiment, List<TestGroup>> testGroups = newProperty();
@@ -70,6 +72,7 @@ public class ExperimentMakers {
                                     withEndDate(lookup.valueOf(endDate, DEFAULT_END_DATE)).
                                     withGroups(lookup.valueOf(testGroups, TestGroupMakers.VALID_TEST_GROUP_LIST)).
                                     withScope(lookup.valueOf(scope, "")).
+                                    withScopes(lookup.valueOf(scopes, ImmutableList.of(lookup.valueOf(scope, "")))).
                                     withFilters(lookup.valueOf(filters, new ArrayList<Filter>())).
                                     withPaused(lookup.valueOf(paused, false)).
                                     withOriginalId(lookup.valueOf(originalId, 0)).
@@ -108,6 +111,7 @@ public class ExperimentMakers {
                                         withEndDate(lookup.valueOf(endDate, original.getEndDate())).
                                         withGroups(lookup.valueOf(testGroups, original.getGroups())).
                                         withScope(lookup.valueOf(scope, original.getScope())).
+                                        withScopes(lookup.valueOf(scopes, original.getScopes())).
                                         withFilters(lookup.valueOf(filters, original.getFilters())).
                                         withPaused(lookup.valueOf(paused, original.isPaused())).
                                         withOriginalId(lookup.valueOf(originalId, original.getExperimentSnapshot().originalId())).

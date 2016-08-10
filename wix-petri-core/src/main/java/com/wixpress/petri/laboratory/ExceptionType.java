@@ -7,6 +7,6 @@ package com.wixpress.petri.laboratory;
  */
 public enum ExceptionType {
     SpecScannerException , ExceptionReadingRequest, SlowExperiment, ErrorConductingExperiment, MalformedExperimentLog,
-    ErrorReadingFromServer, ErrorWritingToServer
+    ErrorReadingFromServer, ErrorWritingToServer, ErrorPersistingExperiments
 
 }

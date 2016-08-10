@@ -42,6 +42,12 @@ class PetriRpcServer(experimentsDao: ExperimentsDao,
     experimentsDao.fetchAllExperimentsGroupedByOriginalId
   }
 
+  override def fetchRecentlyEndedExperimentsDueToEndDate(minutesEnded: Int): util.List[Experiment] = {
+    val now = new DateTime
+    val intervalStart = now.minusMinutes(minutesEnded)
+    experimentsDao.fetchEndingBetween(intervalStart, now).filter(isTerminatedDueToEndDateReached)
+  }
+
   private def fetchNotNullExperiments(): Seq[Experiment] = {
     experimentsDao.fetch().filter(exp => exp != null)
   }
@@ -166,6 +172,11 @@ class PetriRpcServer(experimentsDao: ExperimentsDao,
         originalSpec.getOwner
       )
     }
+  }
+
+  private def isTerminatedDueToEndDateReached(experiment: Experiment): Boolean = {
+    val delta = 60*1000
+    Math.abs(experiment.getEndDate.getMillis - experiment.getLastUpdated.getMillis) > delta
   }
 
   override def getFullUserState(userGuid: UUID): UserState = {

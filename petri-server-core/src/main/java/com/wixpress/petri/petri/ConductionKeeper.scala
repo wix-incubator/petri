@@ -11,7 +11,7 @@ class ConductionKeeper(clock: Clock, metricsReportsDao: MetricsReportsDao,
                        scheduledInterval: Long,
                        notifier: PetriNotifier){
 
-  val triggerMessage = "Experiment paused due to conduction limit reach"
+  val triggerMessage = "Experiment paused due to conduction limit reached"
   val triggerOwner = "Conduction Keeper"
   val mailFromField = new InternetAddress("petri@wix.com")
 
@@ -35,7 +35,7 @@ class ConductionKeeper(clock: Clock, metricsReportsDao: MetricsReportsDao,
       val experiment = pauseCandidate.experiment
       val pausedExperiment = experiment.pause(pauseTrigger)
       updateExperimentInRepo(pausedExperiment)
-      notifier.notify(notifyMessage.title, notifyMessage.message, mailFromField, true, Seq(notifyMessage.updaterEmail))
+      notifier.notify(notifyMessage.title, notifyMessage.message, true, Seq(notifyMessage.updaterEmail))
     }
 
   }

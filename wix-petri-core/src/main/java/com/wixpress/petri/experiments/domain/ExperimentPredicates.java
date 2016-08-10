@@ -2,6 +2,7 @@ package com.wixpress.petri.experiments.domain;
 
 import com.google.common.base.Predicate;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 
 /**
  * @author: talyag
@@ -39,11 +40,32 @@ public class ExperimentPredicates {
 
         @Override
         public boolean apply(Experiment input) {
-            return input.getScope().equals(scope);
+            return input.getScopes().contains(scope);
         }
 
         public static IsInScope isInScope(String scope) {
             return new IsInScope(scope);
+        }
+    }
+
+    public static class IsEndedAutomaticallyInInterval implements Predicate<Experiment> {
+        private final DateTime start;
+        private final DateTime end;
+
+        public IsEndedAutomaticallyInInterval(DateTime start, DateTime end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public boolean apply(Experiment input) {
+            boolean isEndDateInInterval = new Interval(this.start, this.end.plusSeconds(2)).contains(input.getEndDate());
+            boolean isEndedDueToEndDateReached = Math.abs(end.getMillis() - input.getLastUpdated().getMillis()) > 60*1000;
+            return isEndDateInInterval && isEndedDueToEndDateReached;
+        }
+
+        public static IsEndedAutomaticallyInInterval isEndedAutomaticallyInInterval(DateTime start, DateTime end) {
+            return new IsEndedAutomaticallyInInterval(start, end);
         }
     }
 

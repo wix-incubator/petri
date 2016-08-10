@@ -21,8 +21,7 @@ import static com.natpryce.makeiteasy.MakeItEasy.with;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.anExperiment;
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.anExperimentSnapshot;
-import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.id;
-import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.key;
+import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.*;
 import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.anExperimentSpec;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -52,8 +51,10 @@ public abstract class PetriClientContractTest {
 
     //TODO - remove duplication with GP IT
     protected Experiment addExperimentWithKey(ExperimentSnapshotBuilder snapshotBuilder) {
-        ExperimentSnapshot snapshot = snapshotBuilder.build();
+        return addExperimentWithKey(snapshotBuilder.build());
+    }
 
+    protected Experiment addExperimentWithKey(ExperimentSnapshot snapshot) {
         SpecDefinition.ExperimentSpecBuilder builder =
                 new SpecDefinition.ExperimentSpecBuilder(snapshot.key(), new DateTime());
         fullPetriClient().addSpecs(asList(builder.build()));
@@ -262,5 +263,37 @@ public abstract class PetriClientContractTest {
         assertThat(synchPetriClient().getUserState(userGuid),is(cookieValue));
     }
 
+    @Test
+    public void returnsCorrectExperimentByID() {
+        Experiment expected = addExperimentWithKey(anActiveSnapshot);
+        addExperimentWithKey(anActiveSnapshot);
+        int experimentID = expected.getId();
 
+        assertThat(fullPetriClient().fetchExperimentById(experimentID), is(expected));
+    }
+
+    @Test
+    public void returnsRecentlyEndedExperimentsAndOnlyWhenDueToEndDateFromWithinInterval() {
+        DateTime now = new DateTime();
+        addExperimentWithKey(anActiveSnapshot.withKey("iAmActive"));
+        com.wixpress.petri.experiments.domain.Experiment endDateReached = addExperimentWithKey(
+                aValidExperiment.but(
+                        with(key, "iWasEndedDueToEndDateReached"),
+                        with(creationDate, now.minusDays(5)),
+                        with(startDate, now.minusDays(5)),
+                        with(endDate, (now.minusMinutes(10)))
+                ).make().getExperimentSnapshot());
+        Experiment toBeEndedByUser = addExperimentWithKey(
+                aValidExperiment.but(
+                        with(key, "iWasEndedByUser"),
+                        with(creationDate, now.minusDays(5)),
+                        with(startDate, now.minusDays(5)),
+                        with(endDate, (now.plusWeeks(1)))
+                ).make().getExperimentSnapshot());
+        fullPetriClient().updateExperiment(toBeEndedByUser.terminateAsOf(now, new Trigger("because", "talyag")));
+
+        List<com.wixpress.petri.experiments.domain.Experiment> actual = fullPetriClient().fetchRecentlyEndedExperimentsDueToEndDate(60);
+        assertThat(actual.size(), is(1));
+        assertThat(actual.get(0).getId(), is(endDateReached.getId()));
+    }
 }

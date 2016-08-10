@@ -18,6 +18,7 @@ import static com.google.common.collect.Multimaps.index;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.aCopyOf;
 import static com.wixpress.petri.experiments.domain.ExperimentBuilder.anExperiment;
 import static com.wixpress.petri.experiments.domain.ExperimentPredicates.HasID.hasID;
+import static com.wixpress.petri.experiments.domain.ExperimentPredicates.IsEndedAutomaticallyInInterval.isEndedAutomaticallyInInterval;
 import static com.wixpress.petri.experiments.domain.ExperimentPredicates.IsActivePredicate.isActiveNow;
 
 /**
@@ -150,6 +151,13 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
 
         store(newExperiment);
         return newExperiment;
+    }
+
+    @Override
+    public List<Experiment> fetchRecentlyEndedExperimentsDueToEndDate(int minutesEnded) {
+        DateTime now = new DateTime();
+        List<Experiment> allExperiments = fetchAllExperiments();
+        return newLinkedList(filter(allExperiments, isEndedAutomaticallyInInterval(now.minusMinutes(minutesEnded), now)));
     }
 
     private int nextID() {

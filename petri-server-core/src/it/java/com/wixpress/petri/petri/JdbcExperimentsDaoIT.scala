@@ -220,6 +220,38 @@ class JdbcExperimentsDaoIT extends SpecWithJUnit with JMock {
     }
   }
 
+  "fetchEndingBetween" should {
+    "return nothing when no ended experiments exist in interval" in new ctx {
+      givenExperimentWithSpec(snapshot)
+      dao.fetchEndingBetween(now.minusDays(3), now) must be_==(List())
+    }
+
+    "return experiment that has ended in the given interval" in new ctx {
+      givenExperimentWithSpec(snapshot)
+      val endedExpSnapshot = snapshot.copy(
+        key = "endingInsideInterval",
+        creationDate = now.minusMonths(1),
+        startDate = now.minusDays(5),
+        endDate = now.minusMinutes(1))
+      val endedExperiment = givenExperimentWithSpec(endedExpSnapshot)
+      dao.fetchEndingBetween(now.minusMinutes(5), now) must be_==(List(endedExperiment))
+    }
+
+    "regard only last version of id" in new ctx {
+      val endingExpSnapshotInsideIntervalMaker = experiment.but(
+        withA(ExperimentMakers.key, "endingInsideInterval"),
+        withA(creationDate, now.minusMonths(1)),
+        withA(startDate, now.minusDays(5)),
+        withA(endDate, now.minusMinutes(1)));
+      private val endingExpSnapshotInsideInterval = givenExperimentWithSpec(endingExpSnapshotInsideIntervalMaker.make().getExperimentSnapshot)
+
+      val editedToHaveEndOutsideInterval = endingExpSnapshotInsideInterval.terminateAsOf(now.minusMinutes(20), new Trigger("terminated out of interval",""))
+      dao.update(editedToHaveEndOutsideInterval, now.minusMinutes(20));
+
+      dao.fetchEndingBetween(now.minusMinutes(10), now) must beEmpty
+    }
+  }
+
   "fetchExperimentById" should {
 
     "return Some(None) if experiment does not exist" in new ctx {

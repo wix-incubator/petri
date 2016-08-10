@@ -26,4 +26,6 @@ trait ExperimentsDao {
   def migrateStartEndDates(): Int
 
   def fetchExperimentById(experimentId: Int) : Option[Experiment]
+
+  def fetchEndingBetween(from: DateTime, to: DateTime): Seq[Experiment]
 }

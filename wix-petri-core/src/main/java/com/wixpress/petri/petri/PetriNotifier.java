@@ -1,6 +1,5 @@
 package com.wixpress.petri.petri;
 
-import javax.mail.internet.InternetAddress;
 import java.util.List;
 
 /**
@@ -9,5 +8,5 @@ import java.util.List;
  */
 public interface PetriNotifier {
     void notify(String title, String message, String... users);
-    void notify(String title, String message, InternetAddress from, Boolean notifyCaptain,  List<String> recipients);
+    void notify(String title, String message, Boolean notifyCaptain,  List<String> recipients);
 }

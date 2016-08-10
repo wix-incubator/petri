@@ -3,9 +3,11 @@ package com.wixpress.petri.experiments.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import com.wixpress.petri.laboratory.ConductionContext;
 import com.wixpress.petri.laboratory.ConductionStrategy;
 import com.wixpress.petri.laboratory.UserInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
@@ -121,7 +123,16 @@ public class Experiment {
 
     @JsonIgnore
     public String getScope() {
+        if(experimentSnapshot.scopes().size() > 0 )
+            return StringUtils.join(experimentSnapshot.scopes(),",");
         return experimentSnapshot.scope();
+    }
+
+    @JsonIgnore
+    public List<String> getScopes() {
+        if(experimentSnapshot.scopes().size() > 0 )
+            return experimentSnapshot.scopes();
+        return ImmutableList.of(experimentSnapshot.scope());
     }
 
     @JsonIgnore
@@ -307,7 +318,7 @@ public class Experiment {
         return pause(trigger);
     }
 
-    private boolean canRelyOnPreviouslyConductedUid(List<Filter> newFilters) {
+    public boolean canRelyOnPreviouslyConductedUid(List<Filter> newFilters) {
         return isOnlyForLoggedInUsers() && noNewUsersFilter(newFilters);
     }
 

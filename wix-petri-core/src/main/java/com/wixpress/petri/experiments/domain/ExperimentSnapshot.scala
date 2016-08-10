@@ -20,7 +20,8 @@ case class ExperimentSnapshot(
                                startDate: DateTime,
                                endDate: DateTime,
                                groups: java.util.List[TestGroup],
-                               scope: String,
+                               @Deprecated scope: String,
+                               scopes: java.util.List[String],
                                @BooleanBeanProperty paused: Boolean,
                                name: String, //not needed for conductableExperiment
                                creator: String, //not needed for conductableExperiment

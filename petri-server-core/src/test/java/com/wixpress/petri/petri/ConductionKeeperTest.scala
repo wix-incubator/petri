@@ -90,7 +90,7 @@ class ConductionKeeperTest extends SpecificationWithJUnit with JMock {
       val message = s"Experiment:$name id:$id conduction:$total limit:$limit"
       val title = s"Experiment $name id:$id paused due to conduction limit reach"
       checking {
-        oneOf(notifier).notify(title, message, new InternetAddress("petri@wix.com"),true, Seq(experiment.getUpdater) )
+        oneOf(notifier).notify(title, message, true, Seq(experiment.getUpdater) )
       }
     }
 
