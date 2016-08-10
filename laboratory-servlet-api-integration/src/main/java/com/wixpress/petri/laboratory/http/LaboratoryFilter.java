@@ -1,6 +1,7 @@
 package com.wixpress.petri.laboratory.http;
 
 import com.wixpress.petri.PetriRPCClient;
+import com.wixpress.petri.amplitude.AmplitudeAdapter;
 import com.wixpress.petri.experiments.domain.ExternalDataFetchers;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
 import com.wixpress.petri.laboratory.*;
@@ -34,6 +35,8 @@ public class LaboratoryFilter implements Filter {
     private FilterParametersExtractorsConfig filterParametersExtractorsConfig;
     private UserRequestPetriClient userRequestPetriClient;
     private LaboratoryTopology laboratoryTopology;
+    private CompositeTestGroupAssignmentTracker tracker = CompositeTestGroupAssignmentTracker.create(new BILoggingTestGroupAssignmentTracker(new JodaTimeClock()));
+
 
     public LaboratoryFilter() {
     }
@@ -79,7 +82,6 @@ public class LaboratoryFilter implements Filter {
 
     private Laboratory laboratory(UserInfoStorage storage) throws MalformedURLException {
         Experiments experiments = new CachedExperiments(new PetriClientExperimentSource(petriClient));
-        TestGroupAssignmentTracker tracker = new BILoggingTestGroupAssignmentTracker(new JodaTimeClock());
         return new TrackableLaboratory(experiments, tracker, storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, laboratoryTopology, new ExternalDataFetchers(null));
     }
 
@@ -99,6 +101,15 @@ public class LaboratoryFilter implements Filter {
         readProperties();
 
         filterParametersExtractorsConfig = FilterParametersExtractorsConfig.readConfig(context);
+
+        String amplitudeUrl = laboratoryProperties.getProperty("amplitude.url");
+        String amplitudeApiKey = laboratoryProperties.getProperty("amplitude.api.key");
+        String amplitudeTimeoutMs = laboratoryProperties.getProperty("amplitude.timeout.ms");
+
+        if (amplitudeUrl != null && amplitudeApiKey != null) {
+            tracker = tracker.add(new AmplitudeTestGroupAssignmentTracker(
+                    AmplitudeAdapter.create(amplitudeUrl, amplitudeApiKey, amplitudeTimeoutMs)));
+        }
 
         try {
             petriClient = PetriRPCClient.makeFor(laboratoryTopology.getPetriUrl());
@@ -136,7 +147,9 @@ public class LaboratoryFilter implements Filter {
             }
 
             @Override
-            public String getAuthorizationServiceUrl() {return "";}
+            public String getAuthorizationServiceUrl() {
+                return "";
+            }
 
         };
     }

@@ -41,7 +41,7 @@ public class TestBuilders {
                 withFilters(Collections.singletonList(new GeoFilter(Collections.singletonList("IL"))));
     }
 
-    static ExperimentBuilder updateExperimentState(Experiment experiment, final TestGroup... testGroups) {
+    public static ExperimentBuilder updateExperimentState(Experiment experiment, final TestGroup... testGroups) {
         return aCopyOf(experiment).
                 withExperimentSnapshot(ExperimentSnapshotBuilder.aCopyOf(experiment.getExperimentSnapshot())
                         .withGroups(Arrays.asList(testGroups)).build()

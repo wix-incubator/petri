@@ -1,0 +1,8 @@
+---
+configs:
+  Country:
+  - - "Header"
+    - "KUKU"
+  UserId:
+  - - "Cookie"
+    - "laboratory_user_id"

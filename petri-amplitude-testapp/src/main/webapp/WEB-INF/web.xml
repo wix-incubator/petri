@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <servlet>
+        <servlet-name>samplePetriApp</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/applicationContext.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>samplePetriApp</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SpecsSynchronizerServlet</servlet-name>
+        <servlet-class>com.wixpress.petri.SpecsSynchronizerServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SpecsSynchronizerServlet</servlet-name>
+        <url-pattern>/sync-specs</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>laboratoryFilter</filter-name>
+        <filter-class>com.wixpress.petri.laboratory.http.LaboratoryFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>laboratoryFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <context-param>
+        <param-name>laboratoryConfig</param-name>
+        <param-value>/WEB-INF/laboratory.properties</param-value>
+    </context-param>
+
+</web-app>
