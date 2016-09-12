@@ -2,6 +2,13 @@ language: java
 script: mvn clean verify
 jdk:
     - oraclejdk8
+
+before_install:
+# os x - workaround for JAVA_HOME not set and mvn missing
+ - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
+# linux - installing libaio1
+ - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq && sudo apt-get install -y libaio1; fi
+
 notifications:
   email:
     - talyag@wix.com
