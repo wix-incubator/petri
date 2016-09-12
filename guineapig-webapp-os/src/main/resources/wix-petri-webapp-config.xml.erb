@@ -1,0 +1,55 @@
+<configuration>
+    <serviceTopology>
+        <petriStaticsUrl><%= ssl_static_url("com.wixpress.wix-petri-statics")%></petriStaticsUrl>
+    </serviceTopology>
+    <clientTopology>
+      <petriHome>https://guineapig.<%= base_domain %>/wix-petri-webapp/petri</petriHome>
+      <petriApiUrl>https://guineapig.<%= base_domain %>/wix-petri-webapp</petriApiUrl>
+      <petriPartialsUrl>https://guineapig.<%= base_domain %>/_partials/wix-petri-statics/<%= static_version("com.wixpress.wix-petri-statics") %></petriPartialsUrl>
+      <staticPetriBaseUrl><%= ssl_static_url("com.wixpress.wix-petri-statics") %></staticPetriBaseUrl>
+      <production><%= node[:node_environment] == "production" || base_domain == "munchie.wixpress.com" %></production>
+      <redirectUri>https://guineapig.<%= base_domain %>/wix-petri-webapp/bopetri</redirectUri>
+
+  </clientTopology>
+  <servicesTopology>
+      <mailServiceUrl>http://assets.wix.com/common-services/MailingService</mailServiceUrl>
+      <petriMailingList><%= node[:node_environment] == "production" ? "to:petri@wix.com;cc:all@wix.com+captain@wix.com" : "to:avgarm@wix.com" %></petriMailingList>
+      <jiraUrl><%= node[:node_environment] == "production" ? "http://itayjiraapp.appspot.com/updateabtestpetri":"" %></jiraUrl>
+      <petriUrl>https://guineapig.<%= base_domain %>/wix-petri-webapp/petri#/home/active</petriUrl>
+      <biExposureUrl>http://api.<%= api_base_domain%>/bi-catalog-webapp/ExposureEventsClient</biExposureUrl>
+  </servicesTopology>
+
+  <auth2>
+      <applicationName>petri</applicationName>
+      <clientId>70383603219-guuv1rqhq8uo1c5ks9clpi9tdeeugmrb.apps.googleusercontent.com</clientId>
+      <clientSecret><%= databag_passwd("com.wixpress.common.wix-petri-webapp","googleClientSecret") %></clientSecret>
+      <redirectUri>https://guineapig.<%= base_domain %>/wix-petri-webapp/api/v1/authenticationCallBack</redirectUri>
+  </auth2>
+  <db>
+      <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+      <url>jdbc:mysql://<%= db_host("com.wixpress.common.wix-petri-webapp")%>:3306/wix_petri_wa_guineapig</url>
+      <username><%= db_user("com.wixpress.common.wix-petri-webapp")%></username>
+      <password><%= db_pass("com.wixpress.common.wix-petri-webapp")%></password>
+  </db>
+  <jiraExperiments>
+      <jiraServerUrl>https://jira.wixpress.com/rest/api/2/issue/</jiraServerUrl>
+      <internalJiraUrl>http://itayjiraapp.appspot.com/api/v1/petri/petriticket?</internalJiraUrl>
+      <petriJiraUser><%= databag_passwd("com.wixpress.common.wix-petri-webapp","petriJiraUser") %></petriJiraUser>
+      <petriJiraPass><%= databag_passwd("com.wixpress.common.wix-petri-webapp","petriJiraPass") %></petriJiraPass>
+   </jiraExperiments>
+   <rpc>
+       <signing>
+           <password><%= rpc_signing_password %></password>
+       </signing>
+   </rpc>
+   <topology>
+     <templatesFileSystemLocations>
+        <petri><%= local_files_path("com.wixpress.wix-petri-statics") %></petri>
+     </templatesFileSystemLocations>
+     <killerFeatureUrl>http://api.<%= api_base_domain%>/wix-killer-feature-webapp/</killerFeatureUrl>
+     <publicStaticBaseUri><%= static_url("com.wixpress.static.wix-public")%></publicStaticBaseUri>
+     <staticUrl><%= static_url("com.wixpress.wix-petri-statics") %></staticUrl>
+     <authorizationServiceUrl><%= service_url("com.wixpress.authorization-server") %></authorizationServiceUrl>
+   </topology>
+   <%= static_usage_stats %>
+</configuration>
