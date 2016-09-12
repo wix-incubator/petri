@@ -22,7 +22,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class MetaDataDaoTests extends DaoSupport {
+public class MetaDataDaoIT extends DaoSupport {
 
     MetaDataDao metaDataDao;
 
@@ -41,7 +41,7 @@ public class MetaDataDaoTests extends DaoSupport {
     private ObjectMapper anObjectMapperWithScalaSupport() {
         return ObjectMapperFactory.makeObjectMapper();
     }
-
+    
     @Test
     public void addFirstUserAgentRegex() throws IOException, ClassNotFoundException {
         UserAgentRegex userAgentRegex = new UserAgentRegex("(*)test(*)", "This is a Test Regex");
