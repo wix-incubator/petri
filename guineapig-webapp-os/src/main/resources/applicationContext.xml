@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	   		http://www.springframework.org/schema/context
+	   		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+			 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--<context:property-placeholder location="classpath*:config.properties"/>-->
+
+    <context:component-scan base-package="com.wixpress.guineapig.spi"/>
+    <context:component-scan base-package="com.wixpress.guineapig.services"/>
+    <context:component-scan base-package="com.wixpress.guineapig.web">
+        <context:include-filter type="regex" expression=".*Controller"/>
+    </context:component-scan>
+
+    <context:annotation-config/>
+    <aop:aspectj-autoproxy/>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="defaultObjectMapper"/>
+                <property name="prefixJson" value="false"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--<bean class="com.wixpress.petri.petri.FullPetriClientConfig"/>-->
+
+    <bean class="com.wixpress.guineapig.spring.AppConfig"/>
+
+    <bean class="com.wixpress.guineapig.spring.ClientsConfig"/>
+
+    <bean class="com.wixpress.guineapig.velocity.FileResourceLoader"/>
+
+
+    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>-->
+
+</beans>

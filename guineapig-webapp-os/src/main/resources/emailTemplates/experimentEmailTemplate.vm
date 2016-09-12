@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+
+        td, th
+        {
+            padding-left:25px;
+        }
+    </style>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+
+<div style="font-family:sans-serif, width:400px">
+
+<table style="border:0px;border-radius: 5px;padding-right: 119px;font-family:sans-serif">
+        <tr>
+            <td style="color: #085A74;">Updated by: $experiment.updater</td>
+            #if ($display_comment=='block')
+            <tr style="color:#187691;height:50px;">
+                <td style="color: #085A74;">Comment : $experiment.comment</td>
+            <tr>
+            #end
+        <tr>
+    </table>
+
+    <table  style="border:0px;border-radius: 7px;background-color: #318FAA;color: #ffffff;font-family:sans-serif;width: 100%;">
+        <tr style="color:orange;height:50px;background:#187691">
+            <td style="font-size:25px;font-weight: bold;width: 100%;">$experiment.name ( id: $experiment.id ) <span style="font-weight: 100;font-size:15px;height:30px;width: 100%;color:orange"> $description</span>
+          #if ($display_description=='block')<del style="font-weight: 100;font-size:15px;height:30px;color:rgb(202, 173, 163)">$original_description</del>#end
+        </tr>
+        <tr>
+
+        <td colspan="2">
+                <table style="width: 100%">
+
+                    <tr style="height:30px">
+                        <td style="width: 145px">Product: </td><td style="max-width: 175px;text-overflow:ellipsis;overflow: hidden"> <span style="font-weight: bold" title="$experiment.scope">$experiment.scope</span></td>
+                    </tr>
+                    <tr style="height:30px">
+                        <td style="width: 145px">Spec:    </td>
+                        <td style="max-width: 175px;text-overflow:ellipsis;overflow: hidden;font-weight: bold" title="$experiment.key">$experiment.key</td>
+                    </tr>
+
+                    <tr style="height:22px">
+                        <td style="width: 145px">from: </td><td> <span >$startDate #if ($display_startDate=='block')<del style="color:rgb(202, 173, 163)">$original_startDate</del>#end
+                    </tr>
+                    <tr style="height:22px">
+                        <td style="width: 145px">till:</td><td> <span >$endDate  #if ($display_endDate=='block')<del style="color:rgb(202, 173, 163)">$original_endDate</del>#end
+                    </tr>
+                    <tr style="height:22px">
+                        <tdstyle="width: 145px">State: </td>
+                        <td><span style="font-size: 12px;">$state</span></td>
+                    </tr>
+                    <tr style="height:22px">
+                        <tdstyle="width: 145px">Period:</td>
+                        <td><span style="font-weight: bold;">$period</span> #if ($display_period=='block')<del style="color:rgb(202, 173, 163)">$original_period</del>#end days</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+
+    </table>
+    <table  style="border:0px;border-radius: 7px;background-color: #187691;color: #ffffff;font-family:sans-serif;margin-top: 15px;width:100%">
+        <tr style="color:orange;height:50px;background:#187691">
+            <td style="font-size:20px;font-weight: bold;width: 100%;">Test Groups
+            </td>
+        <tr>
+    </table>
+
+    <table  style="border:0px;border-top-left-radius: 7px;border-top-right-radius: 7px;background-color: #ffffff ;color: #085A74;font-family:sans-serif;margin-top: 15px;;width:100%">
+
+            <td colspan="2">
+                <table  border="0" cellspacing="8">
+                    <tr>
+                        <td style="font-weight: bold">ID </td>
+                        <td style="font-weight: bold"">Value</td>
+                        <td style="font-weight: bold">Chunk</td>
+                    </tr>
+                  #foreach( $key in $groups.keySet())
+                      <tr>
+                          <td style="">$groups.get($key).id </td>
+                          <td style="text-overflow: ellipsis;overflow: hidden"  title="$groups.get($key).value">$groups.get($key).value</td>
+                          <td style=";width: 40px ">$groups.get($key).chunk %</td>
+                          <td style="color: #18AAD3;width: 40px">#if ($display_groups=='block') <del style="color:rgb(202, 173, 163)">$original_groups.get($key).chunk %</del>#end</td>
+                      </tr>
+                  #end
+                </table>
+            </td>
+
+        </tr>
+    </table>
+
+    <table  style="border:0px;border-radius: 7px;background-color: #187691;color: #ffffff;font-family:sans-serif;margin-top: 15px;width:100%">
+        <tr style="color:orange;height:50px;background:#187691">
+            <td style="font-size:20px;font-weight: bold;width: 100%">Filters
+            </td>
+        <tr>
+    </table>
+    <table  style="border:0px;border-bottom-left-radius: 7px;border-top-right-radius: 7px;background-color: #ffffff ;color: #085A74;font-family:sans-serif;margin-top: 15px;width:100%">
+
+      <tr>
+        <td colspan="2">
+            <table>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;;font-weight: bold">users</td>
+                    <td>$users  #if ($display_users=='block')<del style="color:rgb(202, 173, 163)">$original_users</del>#end</td>
+                </tr>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;;font-weight: bold">wix</td>
+                    <td>$wixUsers   #if ($display_wixUsers=='block')<del style="color:rgb(202, 173, 163)">$original_wixUsers</del>#end</td>
+                </tr>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;font-weight: bold">$excludeGeo #if ($display_excludeGeo=='block')<del style="color:rgb(202, 173, 163)">$original_excludeGeo</del>#end geo </td>
+                    <td>$geo <span style="color:#FFFFFF;color: rgb(0, 139, 0);">$added_geo</span><del style="color:#FFFFFF;color:rgb(202, 173, 163);padding-left: 7px">$removed_geo</del></td>
+                </tr>
+
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;font-weight: bold">languages</td>
+                    <td>$languages <span style="color:#FFFFFF;color: rgb(0, 139, 0)">$added_languages</span><del style="color:#FFFFFF;color:rgb(202, 173, 163);padding-left: 7px">$removed_languages</del></td>
+
+                </tr>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;font-weight: bold">hosts</td>
+                    <td>$hosts <span style="color:#FFFFFF;color: rgb(0, 139, 0)">$added_hosts</span><del style="color:#FFFFFF;color:rgb(202, 173, 163);padding-left: 7px">$removed_hosts</del></td>
+
+                </tr>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;;font-weight: bold">Inc. Guids</td>
+                    <td>$included_guids <span style="color:#FFFFFF;color: rgb(0, 139, 0)">$added_included_guids</span><del style="color:#FFFFFF;color:rgb(202, 173, 163);padding-left: 7px">$removed_included_guids</del></td>
+
+                </tr>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;;font-weight: bold">Ex. Guids</td>
+                    <td>$excluded_guids <span style="color:#FFFFFF;color: rgb(0, 139, 0)">$added_excluded_guids</span><del style="color:#FFFFFF;color:rgb(202, 173, 163);padding-left: 7px">$removed_excluded_guids</del></td>
+
+                </tr>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;font-weight: bold">$excludeMetaSiteIds #if ($display_excludeMetaSiteIds=='block')<del style="color:rgb(202, 173, 163)">$original_excludeMetaSiteIds</del>#end MetaSiteIds </td>
+                    <td>$metaSiteIds <span style="color:#FFFFFF;color: rgb(0, 139, 0)">$added_metaSiteIds</span><del style="color:#FFFFFF;color:rgb(202, 173, 163);padding-left: 7px">$removed_metaSiteIds</del></del></td>
+
+                </tr>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;;font-weight: bold">Inc. UserAgent Regexes</td>
+                    <td>$included_userAgentRegexes <span style="color:#FFFFFF;color: rgb(0, 139, 0)">$added_included_userAgentRegexes</span><del style="color:#FFFFFF;color:rgb(202, 173, 163);padding-left: 7px">$removed_included_userAgentRegexes</del></del></td>
+
+                </tr>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;;font-weight: bold">Ex. UserAgent Regexes</td>
+                    <td>$excluded_userAgentRegexes <span style="color:#FFFFFF;color: rgb(0, 139, 0)">$added_excluded_userAgentRegexes</span><del style="color:#FFFFFF;color:rgb(202, 173, 163);padding-left: 7px">$removed_excluded_userAgentRegexes</del></del></td>
+
+                </tr>
+                <tr style="height:22px">
+                    <td style="vertical-align: baseline;min-width: 70px;font-weight: bold">$conductionLimit #if ($display_conductionLimit=='block')<del style="color:rgb(202, 173, 163)">$original_conductionLimit</del>#end Conduction Limit </td>
+                </tr>
+            </table>
+
+        </td>
+      </tr>
+
+
+    </table>
+  #if ($display=='block')
+    <table style="border:0px;border-radius: 5px;padding-left: 7px;font-family:sans-serif;font-size: 10px">
+        <tr style="height:10px">
+            <td style="padding-left: 14px;background-color:#085a74"></td>
+            <td style="padding-left: 14px;text-indent:-27px;">No change</td>
+        <tr>
+        <tr style="height:10px">
+            <td style="padding-left: 14px;background-color: rgb(0, 139, 0)"></td>
+            <td style="padding-left: 14px;text-indent:-27px;">added</td>
+        <tr>
+        <tr style="height:10px">
+            <td style="padding-left: 14px;background-color:rgb(202, 173, 163) "></td>
+            <td style="padding-left: 14px;text-indent:-27px;">deleted</td>
+        <tr>
+
+    </table>
+    #end
+
+    <table style="border:0px;border-radius: 5px;padding-right: 119px;font-family:sans-serif">
+        <tr>
+            <td style="color: #085A74;">Creator: $experiment.creator</td>
+
+        <tr>
+    </table>
+    <span><small>GuineaPig : $guineapig</small></span>
+
+</div>
+</html>

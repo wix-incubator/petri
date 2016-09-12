@@ -1,0 +1,33 @@
+"errorCode":0,
+"errorDescription":"OK",
+"success":true,
+"payload":[
+  {
+    "id":1,
+    "key":"very-first-spec",
+    "creationDate":1385470305438,
+    "description":"some description",
+    "startDate":1385470305438,
+    "endDate":1417006305438,
+    "anonymousOnly":false,
+    "groups":[
+    {
+      "id":1,
+      "chunk":50,
+      "value":"group1",
+      "default":false,
+      "lastUpdated":"2013-11-26T14:51:45.437+02:00"
+    },
+    {
+      "id":2,
+      "chunk":50,
+      "value":"group1",
+      "default":false,
+    "lastUpdated":"2013-11-26T14:51:45.437+02:00"
+    }
+    ],
+    "scopes":[
+    ]
+  }
+]
+}

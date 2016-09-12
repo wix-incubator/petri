@@ -76,5 +76,6 @@
         <module>runnable-petri-server</module>
         <module>petri-amplitude-testapp</module>
         <module>petri-backoffice-core</module>
+        <module>guineapig-webapp-os</module>
     </modules>
 </project>
