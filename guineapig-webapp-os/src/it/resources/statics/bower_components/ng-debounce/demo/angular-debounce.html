@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <script src="http://code.angularjs.org/1.2.14/angular.js"></script>
+    <script src="../angular-debounce.js"></script>
+  </head>
+
+  <body ng-app="debounce" ng-init="blah='123'">
+    <input type="text" ng-model="blah" debounce="500"></input>
+    <div ng-click="blah=blah+'1'">{{blah}}</div>
+  </body>
+
+</html>

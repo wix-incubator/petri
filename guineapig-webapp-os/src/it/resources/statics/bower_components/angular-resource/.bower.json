@@ -1,0 +1,20 @@
+{
+  "name": "angular-resource",
+  "version": "1.2.30",
+  "license": "MIT",
+  "main": "./angular-resource.js",
+  "ignore": [],
+  "dependencies": {
+    "angular": "1.2.30"
+  },
+  "homepage": "https://github.com/angular/bower-angular-resource",
+  "_release": "1.2.30",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.2.30",
+    "commit": "50433e6792c9834c8b6098e1579fee30b28d90e3"
+  },
+  "_source": "https://github.com/angular/bower-angular-resource.git",
+  "_target": "~1.2.6",
+  "_originalSource": "angular-resource"
+}

@@ -1,0 +1,8 @@
+<button class='rename-btn' wix-permission-if='rename'>This button will be visible in case the user has 'rename' permission</button>
+<button class='edit-btn' wix-permission-if='edit'>This button will be visible in case the user has 'edit' permission</button>
+<button class='copy-btn' wix-permission-disabled='!copy'>This button will be disabled in case the user doesn't have 'copy' permission</button>
+<button class='copy-btn2' wix-permission-disabled='copy'>This button will be disabled in case the user does have 'copy' permission</button>
+<div class='permissions-classes' permission-values="{true: 'rename-class', false:'some-other-class'}" wix-permission-class='rename'>rename</div>
+<div class='permissions-classes-2' permission-values="{false: 'yoba'}" wix-permission-class='somePermissionUserDontHave'>rename</div>
+<a class='permissions-anchor' ng-href="{{'http://www.someurl.com' | isPermitted:'copy':''}}">This anchor will be disabled in case the user doesn't have 'copy' permission</a>
+<a class='permissions-anchor-2' ng-href="{{'http://www.someurl.com' | isPermitted:'!copy':''}}">This anchor will be disabled in case the user does have 'copy' permission</a>

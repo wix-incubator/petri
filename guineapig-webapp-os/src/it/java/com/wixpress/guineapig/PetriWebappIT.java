@@ -54,43 +54,43 @@ public class PetriWebappIT extends BrokenITBase {
     }
 
     private ExperimentReport getExperimentReport(int experimentId) throws IOException {
-        JsonResponse response = httpDriver.get(BASE_IP + "Experiments/report/" + experimentId);
+        JsonResponse response = httpDriver.get(BASE_API_URL + "Experiments/report/" + experimentId);
         return extractPayload(response, new TypeReference<ExperimentReport>() {
         });
     }
 
     private UiExperiment getExperiment(int experimentId) throws IOException {
-        JsonResponse response2 = httpDriver.get(BASE_IP + "Experiment/" + experimentId);
+        JsonResponse response2 = httpDriver.get(BASE_API_URL + "Experiment/" + experimentId);
         return extractPayload(response2, new TypeReference<UiExperiment>() {
         });
     }
 
     private boolean update(UiExperiment uiExperiment) {
-        final JsonResponse response = httpDriver.put(BASE_IP + "Experiment/THIS_SEEMS_UNNECESSARY", uiExperiment);
+        final JsonResponse response = httpDriver.put(BASE_API_URL + "Experiment/THIS_SEEMS_UNNECESSARY", uiExperiment);
         JSONObject responseJson = response.getBodyJson();
         return responseJson.getBoolean("success");
     }
 
     private boolean add(UiExperiment uiExperiment) {
-        final JsonResponse response = httpDriver.post(BASE_IP + "Experiments", uiExperiment);
+        final JsonResponse response = httpDriver.post(BASE_API_URL + "Experiments", uiExperiment);
         JSONObject responseJson = response.getBodyJson();
         return responseJson.getBoolean("success");
     }
 
     private boolean restExperimentCommand(int id, String command) {
-        final JsonResponse response = httpDriver.post(BASE_IP + "Experiment/" + id + "/" + command, id);
+        final JsonResponse response = httpDriver.post(BASE_API_URL + "Experiment/" + id + "/" + command, id);
         JSONObject responseJson = response.getBodyJson();
         return responseJson.getBoolean("success");
     }
 
 
     private JSONObject restExperimentCommandReturnPayload(int id, String command) {
-        return httpDriver.post(BASE_IP + "Experiment/" + id + "/" + command, id).getBodyJson();
+        return httpDriver.post(BASE_API_URL + "Experiment/" + id + "/" + command, id).getBodyJson();
     }
 
 
     public String getSpecExposurIdAsString() {
-        JsonResponse response = httpDriver.get(BASE_IP + "specExposures");
+        JsonResponse response = httpDriver.get(BASE_API_URL + "specExposures");
         JSONObject responseJson = response.getBodyJson();
         return responseJson.get("payload").toString();
     }

@@ -1,0 +1,89 @@
+<style type="text/css">
+    .modal .modal-dialog { width: 753px; }
+</style>
+<div class="modal-content ">
+
+    <div class="modal-header" style="">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel(dismiss)">×</button>
+            <h4>{{experimentName}} - History <span class="pull-right">Test id : <span style="font-weight: bold;padding-right: 55px;" >{{id}}</span></span></h4>
+    </div>
+    <div class="modal-body history" >
+        <div load-pane='dataLoading'></div>
+        <span style="font-weight: bold">Creator : {{creator}}</span>
+        <div class="HistoryTable" >
+            <table>
+                    <tr ng-repeat="experiment in history">
+                        <td >
+                            <table>
+                                <tr>
+                                    <td style="width:30px ">
+                                        <div class="fa fa-fw" ng-class="{'fa-pause':experiment.state=='paused','fa-stop':experiment.state=='ended','fa-play':experiment.state=='active','fa-forward':experiment.state=='future'}">{{}}
+                                        </div>
+                                    </td >
+                                    <td style="width: 160px">
+                                        <div>
+                                            <table class="infoTable" style="max-width: 160px;">
+                                                <tr ng-repeat="line in experiment.timeInfo" >
+                                                    <td style="overflow-y: hidden; color:#767575">
+                                                        {{line}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div >
+                                            <table class="infoTable" >
+                                                <tr ng-repeat="line in experiment.info.lines">
+                                                    <td style="max-width: 55px;" title="{{line.value}}">
+                                                        {{line.value}}
+                                                    </td>
+                                                    <td style="">
+                                                        :{{ experiment.info.id}}
+                                                    </td>
+                                                    <td style="">
+                                                        #{{line.idValue}}
+                                                    </td>
+                                                    <td style="">
+                                                        ({{line.chunk}}%)
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <div >
+                                            <table  class="infoTable">
+                                                <tr ng-repeat="line in experiment.filterInfo">
+                                                    <td style="width: 70px;color:#767575;font-size: x-small">
+                                                        {{line.k}}:
+                                                    </td>
+                                                    <td  title="{{line.v}}" style="max-width:100px;color:#767575;" class="ngCellText">
+                                                        {{line.v}}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr ng-show="0 < experiment.comment.length || 0 < experiment.updater.length">
+                                    <td colspan="4" style="background-color:rgba(9, 140, 163, 0.2);padding-left: 5px">{{experiment.updater}} : {{experiment.comment}}</td>
+                                </tr>
+
+                                </tr>
+                            </table>
+                        </td>
+
+
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer" style="background-color:#f5f5f5;max-height:0px;min-height:0;border-top: none"  >
+
+    </div>
+    <!--<div>-->
+        <!--<button class="btn btn-link" ng-click="form.isCollapsed = !form.isCollapsed">debug data</button>-->
+    <!--</div>-->
+</div>
+
+

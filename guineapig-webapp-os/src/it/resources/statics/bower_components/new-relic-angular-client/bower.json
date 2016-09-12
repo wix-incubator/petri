@@ -1,0 +1,28 @@
+{
+  "name": "new-relic-angular-client",
+  "version": "1.1.15",
+  "homepage": "https://github.com/wix/new-relic-angular-client",
+  "authors": [
+    ""
+  ],
+  "description": "New Relic Angular Client",
+  "main": [
+    "dist/nr-ng-client.js"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src",
+    "test",
+    "gulpfile.js",
+    "karma.conf.js",
+    "examples"
+  ],
+  "dependencies": {
+    "angular": ">=1.2.18"
+  },
+  "devDependencies": {
+    "angular-mocks": ">=1.2.18"
+  }
+}

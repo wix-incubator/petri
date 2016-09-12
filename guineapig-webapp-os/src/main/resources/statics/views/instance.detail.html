@@ -1,0 +1,28 @@
+<div   ng-show="experiment.id" class="row well inset">
+    <!--ng-show="gridOptions.selectedItems.length"-->
+
+    <h4 class="truncate" style="clear:left;">Experiment {{experiment.id}}</h4>
+    <label class="slabel truncate"  >Spec. key </label> {{experiment.key}}</p>
+    <div style="height: 60px;overflow-y: auto;">
+
+        <label class="slabel truncate"  >Description </label>
+        <p> {{experiment.description}}</p>
+
+    </div>
+
+    <table class="table  table-condensed table-bordered" style="width: 100%" >
+
+        <tbody >
+        <tr  >
+            <th scope="col" title="Test groups">Test Group</th>
+            <th scope="col"   title="%">%</th>
+        </tr>
+        <tr ng-repeat="group in experiment.groups" class="active">
+            <td  >{{group.value}}</td>
+            <td >{{group.chunk}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+

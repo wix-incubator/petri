@@ -31,7 +31,7 @@ public class ExperimentsControllerTest {
     private final GuineapigExperimentMgmtService experimentService = context.mock(GuineapigExperimentMgmtService.class);
     private final SpecService specService = context.mock(SpecService.class);
     private final HardCodedScopesProvider hardCodedScopesProvider = new MockHardCodedScopesProvider();
-    private final ExperimentsController controller = new ExperimentsController(specService, experimentService, hardCodedScopesProvider);
+    private final ExperimentsController controller = new ExperimentsController(specService, experimentService, hardCodedScopesProvider, null);
 
     private final DateTime now = new DateTime();
     private String key = "someKey";

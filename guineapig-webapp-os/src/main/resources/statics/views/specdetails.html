@@ -1,0 +1,23 @@
+<div class="container bs-callout" ng-show="0<selectedSpecTemplate.testGroups.length" >
+        <h4 style="width: 400px">Spec <span style="color: #474747;font-style: italic"  tooltip="{{selectedSpecTemplate.key}}"> {{selectedSpecTemplate.key|trunc:true:20:'...'}}</span> Details</h4>
+
+                <table class="table table-striped table-bordered" style="width: 100%" >
+
+                    <tbody >
+                    <tr  >
+                        <th style="width:200px"title="Test groups">Test Group</th>
+                        <th  style="width:30px" title="%">%</th>
+                        <th style="width:40px"  title="default">default</th>
+                        <th style="width:80px"   title="update">update</th>
+                    </tr>
+                    <tr ng-repeat="group in selectedSpecTemplate.testGroups" class="active">
+                        <td ><span tooltip-placement="bottom" tooltip="{{tgroup.value}}">{{group.value |trunc:true:40:'...'}}</span></td>
+                        <td >{{group.chunk}}</td>
+                        <td >{{group.default}}</td>
+                        <td >{{group.lastUpdate}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+</div>
+
+

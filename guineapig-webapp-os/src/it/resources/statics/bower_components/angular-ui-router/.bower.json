@@ -1,0 +1,18 @@
+{
+  "name": "angular-ui-router",
+  "version": "0.2.7",
+  "main": "./release/angular-ui-router.js",
+  "dependencies": {
+    "angular": ">= 1.1.5"
+  },
+  "homepage": "https://github.com/angular-ui/angular-ui-router-bower",
+  "_release": "0.2.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.2.7",
+    "commit": "577d1eca11ca768e33c19cf14feb4f6be2887f3f"
+  },
+  "_source": "https://github.com/angular-ui/angular-ui-router-bower.git",
+  "_target": "0.2.7",
+  "_originalSource": "angular-ui-router"
+}

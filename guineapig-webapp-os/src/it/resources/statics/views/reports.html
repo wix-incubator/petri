@@ -1,0 +1,44 @@
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel(dismiss)">×</button>
+    <h4>{{content.header}}</h4>
+</div>
+<div class="reports-body" id="reports-modal">
+    <div class="reports-title" ng-show="reportsUrlExists"> Existing Reports:
+        <div>
+            <a ng-init="getReportUrl()" href="{{reportsUrl}}" target="_blank">Click Here</a>
+        </div>
+    </div>
+    <div ng-switch="reportsStatus">
+        <div ng-switch-default>
+            <div class="reports-title">Upload New Report:
+            </div>
+            <div>
+            <button class="btn upload-button upload-file" type="file" ng-file-select="onFileSelect($files)">Choose File</button>
+            </div>
+            <div ng-file-drop
+                 class="drop-box"
+                 ng-file-change="onFileSelect($files)"
+                 stopPropagation="true|false">
+                Drop File
+                <div>Here</div>
+            </div>
+        </div>
+        <i class="fa fa-spinner fa-3" ng-switch-when="uploadingReport">
+            Uploading ...
+        </i>
+        <div class="reports-title" ng-switch-when="uploadedSuccessfully"> File Uploaded Successfully :)
+        </div>
+        <div class="reports-title" ng-switch-when="problemUploadingFile"> There was a problem uploading the file :(
+            <div>Error: {{uploadError.errorDescription}}</div>
+            <div>Please try again later or contact the Petri team.</div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer"  >
+    <button  class="btn btn-primary"  ng-class="" style="margin-left: 55px" ng-click="apply(dismiss)">{{content.okText.text}}</button>
+</div>
+
+
+
