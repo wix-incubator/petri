@@ -75,5 +75,6 @@
         <module>e2e-tests</module>
         <module>runnable-petri-server</module>
         <module>petri-amplitude-testapp</module>
+        <module>petri-backoffice-core</module>
     </modules>
 </project>
