@@ -32,12 +32,6 @@ class ExperimentsControllerIT extends SpecificationWithEnvSupport {
       val getExperimentResponse = httpDriver.get(s"http://localhost:9901/v1/Experiment/1")
       getExperimentResponse.getSuccess must beTrue
     }
-  
-    "get index vm" in new Context {
-      val response = httpDriver.getRaw("http://localhost:9901/v1/index")
-      response.getStatusLine.getStatusCode === 200
-      
-    }
 
     "update an existing experiment" in pending
 

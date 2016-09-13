@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+
 
 @Controller
 public class MetaDataController extends BaseController {
@@ -44,6 +46,12 @@ public class MetaDataController extends BaseController {
     @ResponseBody
     public GuineapigResult getScopeToSpecMap() throws Exception {
         return success(metaDataService.createScopeToSpecMap());
+    }
+
+    @RequestMapping(value = "/exposures", method = RequestMethod.GET)
+    @ResponseBody
+    public GuineapigResult getExposuresFromBiSystem() throws Exception {
+        return success(new ArrayList());
     }
 
 }

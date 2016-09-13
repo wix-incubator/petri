@@ -93,7 +93,7 @@ angular.module('uiPetri', [
 
 'use strict';
 angular.module('uiPetriServices', ['ngResource', 'ng'])
-  .constant('BASE_API', '/wix-petri-webapp/v1/')
+  .constant('BASE_API', '/v1/')
 
   .factory('specs', ["$resource", "api", function ($resource, api) {
 
@@ -404,7 +404,7 @@ angular.module('uiPetriServices', ['ngResource', 'ng'])
     api.scopesmap = BASE_API + 'productmap';
     api.exposures = BASE_API + 'exposures';
     api.specExposure = BASE_API + 'specExposure';
-    api.isAuthenticated = '/wix-petri-webapp/auth/isAuthenticated';
+    api.isAuthenticated = '/auth/isAuthenticated';
     return api;
   }]).factory('utils', function () {
     return {
@@ -492,7 +492,7 @@ angular.module('uiPetriServices', ['ngResource', 'ng'])
     return $window._;
   }])
   .factory('AuthenticationService', ["$http", "clientConfig", function ($http, clientConfig) {
-    var serverUrl = '/wix-petri-webapp/v1';
+    var serverUrl = '/v1';
     var login =  {
       login: false,
       action: '',
@@ -2955,8 +2955,8 @@ angular.module('uiPetri')
     };
 
     var apiMapping = [
-        '/wix-petri-webapp/v1/' + 'Experiments',
-        '/wix-petri-webapp/v1/' + 'Specs'
+        '/v1/' + 'Experiments',
+        '/v1/' + 'Specs'
     ];
 
     function errorHandler(response) {

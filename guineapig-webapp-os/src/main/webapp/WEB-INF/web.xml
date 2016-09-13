@@ -18,7 +18,6 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
@@ -27,5 +26,26 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>*.css,*.js,*.png,*.gzip,*.otf,*.eot,*.svg,*.ttf,*.woff,*.html</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- Other XML Configuration -->
+    <!-- Load by Spring ContextLoaderListener -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            /WEB-INF/spring-servlet.xml
+        </param-value>
+    </context-param>
+
+    <!-- Spring ContextLoaderListener -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+
 
 </web-app>

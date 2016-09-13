@@ -13,7 +13,6 @@
     <name>Runnable Petri Server</name>
     <description>Wrapper for creating a Runnable jar for Petri Server</description>
 
-
     <dependencies>
         <dependency>
             <groupId>com.wix</groupId>
@@ -61,7 +60,6 @@
             <version>1.9.31</version>
             <scope>test</scope>
         </dependency>
-
 
     </dependencies>
 

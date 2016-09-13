@@ -8,13 +8,11 @@ import com.wixpress.guineapig.services.SpecService;
 import com.wixpress.guineapig.spi.HardCodedScopesProvider;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
-import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import scala.collection.JavaConversions;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -34,17 +32,14 @@ public class ExperimentsController extends BaseController {
     private SpecService specService;
     private HardCodedScopesProvider hardCodedScopesProvider;
     private ExperimentConverter converter;
-    private VelocityEngine velocityEngine;
 
 
     @Autowired
-    public ExperimentsController(SpecService specService, GuineapigExperimentMgmtService experimentService, HardCodedScopesProvider hardCodedScopesProvider,
-                                 VelocityEngine velocityEngine) {
+    public ExperimentsController(SpecService specService, GuineapigExperimentMgmtService experimentService, HardCodedScopesProvider hardCodedScopesProvider) {
         this.experimentService = experimentService;
         this.specService = specService;
         this.hardCodedScopesProvider = hardCodedScopesProvider;
         converter = new ExperimentConverter(new AlwaysTrueIsEditablePredicate(), new NoOpFilterAdapterExtender());
-        this.velocityEngine = velocityEngine;
     }
 
     @RequestMapping(value = "/ExperimentSkeleton", method = RequestMethod.GET)
@@ -155,7 +150,7 @@ public class ExperimentsController extends BaseController {
     @RequestMapping(value = "/experiments/editStatus", method = {RequestMethod.GET})
     @ResponseBody
     public GuineapigResult<Boolean> getEditStatus() throws JsonProcessingException {
-        return success(false);
+        return success(true);
     }
 
     @RequestMapping(value = "/Experiments/report/{experimentId}", method = RequestMethod.GET)
@@ -164,11 +159,6 @@ public class ExperimentsController extends BaseController {
         return success(experimentService.getExperimentReport(experimentId));
     }
 
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public String getIndex() throws Exception {
-        velocityEngine.getTemplate("index.vm");
-        return "index.vm";
-    }
 
     Experiment convertToExperiment(UiExperiment uiExperiment, String user, boolean isNew) throws IOException {
         ExperimentSpec spec = experimentService.getSpecForExperiment(uiExperiment.getKey());

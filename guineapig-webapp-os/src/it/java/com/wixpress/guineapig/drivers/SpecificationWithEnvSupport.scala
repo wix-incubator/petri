@@ -47,3 +47,9 @@ object GlobalEnv {
 
   }
 }
+
+object MainTest {
+  def main(args: Array[String]) {
+    GlobalEnv.ensureStarted()
+  }
+}

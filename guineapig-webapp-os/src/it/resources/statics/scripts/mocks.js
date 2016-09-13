@@ -333,21 +333,21 @@ angular.module('uiPetriMocks', ['ngMockE2E', 'ng', 'uiPetriObjectMocks'])
   }])
   .run(["$httpBackend", "mockServer", "$log", "_", function ($httpBackend, mockServer, $log, _) {
 
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/experiments\/editStatus/).respond(function () {
+    $httpBackend.whenGET(/.*\/v1\/experiments\/editStatus/).respond(function () {
       return [200, mockServer.editStatus(true)];
     });
 
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/auth\/isAuthenticated/).respond(200, mockServer.success({
+    $httpBackend.whenGET(/.*\/auth\/isAuthenticated/).respond(200, mockServer.success({
       login: true,
       user: 'avgarm@wix.com'
     }));
 
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/ExperimentSkeleton/).respond(200, mockServer.success(mockServer.skelaton));
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/Experiments\/report/).respond(function () {
+    $httpBackend.whenGET(/.*\/v1\/ExperimentSkeleton/).respond(200, mockServer.success(mockServer.skelaton));
+    $httpBackend.whenGET(/.*\/v1\/Experiments\/report/).respond(function () {
       return [200, mockServer.getReportMatric()];
     });
 
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/Experiments/).respond(function () {
+    $httpBackend.whenGET(/.*\/v1\/Experiments/).respond(function () {
       var all = mockServer.experiments;
       _.each(all, function (e) {
         e.state = mockServer.objectMocker.state(e.startDate, e.endDate, e.state, e.paused);
@@ -356,64 +356,64 @@ angular.module('uiPetriMocks', ['ngMockE2E', 'ng', 'uiPetriObjectMocks'])
       return [200, mockServer.success(mockServer.experiments)];
     });
 
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/geo/).respond(200, mockServer.success(mockServer.geo));
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/userGroups/).respond(200, mockServer.success(mockServer.excludeUserGroups));
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/languages/).respond(200, mockServer.success(mockServer.languages));
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/productmap/).respond(200, mockServer.success(mockServer.productmap));
+    $httpBackend.whenGET(/.*\/v1\/geo/).respond(200, mockServer.success(mockServer.geo));
+    $httpBackend.whenGET(/.*\/v1\/userGroups/).respond(200, mockServer.success(mockServer.excludeUserGroups));
+    $httpBackend.whenGET(/.*\/v1\/languages/).respond(200, mockServer.success(mockServer.languages));
+    $httpBackend.whenGET(/.*\/v1\/productmap/).respond(200, mockServer.success(mockServer.productmap));
     //200,mockServer.success(mockServer.experiments));
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/Experiment\/\d+\s*$/).respond(function (method, url) {
+    $httpBackend.whenGET(/.*\/v1\/Experiment\/\d+\s*$/).respond(function (method, url) {
       var arr = url.match(/\d/g);
       var id = parseInt(arr[arr.length - 1], 10);
       var experiment = mockServer.findExperiment(id);
       return [200, mockServer.success(experiment)];
     });
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/Experiment\/History\/\d+\s*$/).respond(function (method, url) {
+    $httpBackend.whenGET(/.*\/v1\/Experiment\/History\/\d+\s*$/).respond(function (method, url) {
       var arr = url.match(/\d/g);
       var id = parseInt(arr[arr.length - 1], 10);
       var experiments = mockServer.findExperimentHistory(id);
       return [200, mockServer.success(experiments)];
     });
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/Spec\/.+\s*$/).respond(function (method, url) {
+    $httpBackend.whenGET(/.*\/v1\/Spec\/.+\s*$/).respond(function (method, url) {
       var key = url.substring(url.lastIndexOf('/') + 1);
       var spec = mockServer.findSpec(key);
       return [200, mockServer.success(spec)];
     });
 
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/Specs/).respond(200, mockServer.success(mockServer.specsList));
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/exposures/).respond(function () {
+    $httpBackend.whenGET(/.*\/v1\/Specs/).respond(200, mockServer.success(mockServer.specsList));
+    $httpBackend.whenGET(/.*\/v1\/exposures/).respond(function () {
       return [200, mockServer.exposures()];
     });
-    $httpBackend.whenPOST(/.*\/wix-petri-webapp\/v1\/specExposure/).respond(function (method, url, data) {
+    $httpBackend.whenPOST(/.*\/v1\/specExposure/).respond(function (method, url, data) {
       return [200, mockServer.success(angular.fromJson(data).exposureId)];
     });
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/reports\/\d+$/).respond(200, mockServer.success(mockServer.reports));
-    $httpBackend.whenGET(/.*\/wix-petri-webapp\/v1\/userAgentRegexes/).respond(200, mockServer.success(mockServer.userAgentRegexes));
-    $httpBackend.whenPOST(/.*\/wix-petri-webapp\/v1\/Experiments/).respond(function (method, url, data) {
+    $httpBackend.whenGET(/.*\/v1\/reports\/\d+$/).respond(200, mockServer.success(mockServer.reports));
+    $httpBackend.whenGET(/.*\/v1\/userAgentRegexes/).respond(200, mockServer.success(mockServer.userAgentRegexes));
+    $httpBackend.whenPOST(/.*\/v1\/Experiments/).respond(function (method, url, data) {
       $log.log('new experiment :', method, url, data);
       mockServer.save(angular.fromJson(data));
       return [200, mockServer.success(undefined)];
     });
 
-    $httpBackend.whenPUT(/.*\/wix-petri-webapp\/v1\/Experiment\/\d+\s*$/).respond(function (method, url, data) {
+    $httpBackend.whenPUT(/.*\/v1\/Experiment\/\d+\s*$/).respond(function (method, url, data) {
       $log.log('update experiment :', method, url, data);
       mockServer.edit(angular.fromJson(data));
       return [200, mockServer.success(undefined)];
     });
 
-    $httpBackend.whenPOST(/.*\/wix-petri-webapp\/v1\/Experiment\/\d+\/terminate\s*$/).respond(function (method, url, data) {
+    $httpBackend.whenPOST(/.*\/v1\/Experiment\/\d+\/terminate\s*$/).respond(function (method, url, data) {
       $log.log('terminate experiment :', method, url, data);
       var arr = url.split('/');
       mockServer.stop(parseInt(arr[arr.length - 2], 10));
       return [200, mockServer.terminateSpecReply(true)];
     });
 
-    $httpBackend.whenPOST(/.*\/wix-petri-webapp\/v1\/Experiment\/\d+\/pause\s*$/).respond(function (method, url, data) {
+    $httpBackend.whenPOST(/.*\/v1\/Experiment\/\d+\/pause\s*$/).respond(function (method, url, data) {
       $log.log('pause experiment :', method, url, data);
       var arr = url.split('/');
       mockServer.pause(parseInt(arr[arr.length - 2], 10));
       return [200, mockServer.success(undefined)];
     });
-    $httpBackend.whenPOST(/.*\/wix-petri-webapp\/v1\/Experiment\/\d+\/resume\s*$/).respond(function (method, url, data) {
+    $httpBackend.whenPOST(/.*\/v1\/Experiment\/\d+\/resume\s*$/).respond(function (method, url, data) {
       $log.log('resume experiment :', method, url, data);
       var arr = url.split('/');
       mockServer.resume(parseInt(arr[arr.length - 2], 10));
@@ -424,7 +424,7 @@ angular.module('uiPetriMocks', ['ngMockE2E', 'ng', 'uiPetriObjectMocks'])
     //    if (angular.isfunction (test.passThrough)) {
     //      test.passThrough();
     //    }
-    $httpBackend.whenPOST(/.*\/wix-petri-webapp\/v1\/deleteSpecs/).respond(function () {
+    $httpBackend.whenPOST(/.*\/v1\/deleteSpecs/).respond(function () {
       return [200, mockServer.deleteSpecs()];
     });
 
