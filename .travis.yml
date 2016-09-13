@@ -12,6 +12,3 @@ before_install:
 notifications:
   email:
     - talyag@wix.com
-    - dalias@wix.com
-    - dmitryk@wix.com
-    - karenc@wix.com
