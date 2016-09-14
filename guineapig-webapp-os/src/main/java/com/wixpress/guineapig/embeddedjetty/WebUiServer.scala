@@ -1,7 +1,6 @@
 package com.wixpress.guineapig.embeddedjetty
 
 import java.io.File
-import com.wixpress.guineapig.embeddedjetty.JettyServerException
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.util.resource.ResourceCollection
 import org.eclipse.jetty.webapp.WebAppContext

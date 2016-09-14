@@ -31,7 +31,7 @@ class WebUiControllerIT extends SpecificationWithEnvSupport {
   "find gif resources" in new Context {
     val response = httpDriver.getRaw("http://localhost:9901/resources/statics/images/ajax-loader.gif")
     val imgArr = EntityUtils.toByteArray(response.getEntity)
-    val img = ImageIO.read(new ByteArrayInputStream(imgArr));
+    val img = ImageIO.read(new ByteArrayInputStream(imgArr))
     img.getHeight === 32
     img.getWidth === 32
   }
