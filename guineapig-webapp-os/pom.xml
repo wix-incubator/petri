@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>guineapig-webapp</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <org.springframework.security.version>3.1.4.RELEASE</org.springframework.security.version>

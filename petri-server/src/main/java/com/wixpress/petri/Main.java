@@ -50,13 +50,21 @@ public class Main {
 
             petriServerFactory.makeConductionKeeper(conductionLimitIntervalInMillis());
 
+
+//            webUiServer = WebUiServer.apply(config.getInt("uiserver.port"));
+//            webUiServer.start();
+
+
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
+
     }
 
     public void stop() throws Exception {
         rpcServer.stop();
+
     }
 
 
