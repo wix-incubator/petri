@@ -1,0 +1,23 @@
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel(dismiss)">×</button>
+    <h4>{{content.header}}</h4>
+</div>
+<div class="overide-body">
+    <div style="padding-left:5px">
+        <table>
+            <tr ng-repeat="line in content.body.lines">
+                <td>
+                    {{'petri_ovr='+content.body.key+':'+ line.value}}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="modal-footer"  >
+    <button class="btn  btn-default btn-cancel" ng-class="content.cancelText.class" ng-click="cancel(dismiss)">{{content.cancelText.text}}</button>
+    <button  class="btn btn-primary"  ng-class="" style="margin-left: 55px" ng-click="apply(dismiss)">{{content.okText.text}}</button>
+</div>
+
+
+

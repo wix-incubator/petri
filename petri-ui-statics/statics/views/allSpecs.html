@@ -1,0 +1,41 @@
+
+<div class="container ng-scope"  ng-if="show" class="show">
+    <div class="row form-group">
+              <div class="topButtonPannel">
+                  <a id="home"  ui-sref="login.h({state: 'active'})"><small><strong>Home</strong></small></a>
+                  <a id="specs" style="color: orange" ui-sref="login.specs"><small><strong >View Specs</strong></small></a>
+                  <a id="faq" href="http://kb.wixpress.com/display/hoopoe/FAQ"><small><strong>Petri - FAQ</strong></small></a>
+
+        </div>
+    </div>
+
+    <!--<div class="col-xs-12 fullView" style="padding-top: 54px;background: #D6D4D8;border-top-right-radius: 6px;border-top-left-radius: 6px">-->
+        <div class="leftSide" id="sidebar" role="navigation" >
+
+
+            <div class="list-group sidePanel">
+
+            </div>
+
+        </div><!--/span-->
+        <div class="rightSide ">
+            <div load-pane='dataLoading'></div>
+            <form  role="form">
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <input class="form-control petri-filter" id="filter" name="filterInput" debounce="300" type="text" ng-change="onSelectedChange()" ng-model="selected.text" placeholder="filter..."
+                               title="search pattern : [<columnName :> text]; [<columnName :> text]...">
+                        <div class="input-group-addon fa  fa-lg fa-search"></div>
+                    </div>
+                </div>
+
+            </form>
+            <div class="topPanel"><span>{{class}} Specs ({{allSpecs.length}})</span></div>
+            <div class="gridStyle"  ng-grid="gridOptions">
+
+            </div>
+        </div>
+    <!--</div>-->
+
+</div>

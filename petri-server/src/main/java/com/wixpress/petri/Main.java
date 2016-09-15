@@ -1,9 +1,9 @@
 package com.wixpress.petri;
 
+import com.wixpress.guineapig.embeddedjetty.WebUiServer;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-
 import static com.wixpress.petri.DBConfig.makeDBConfig;
 
 /**
@@ -32,12 +32,12 @@ public class Main {
         return new Main(getPropertiesConfiguration());
     }
 
-
     public Main(PropertiesConfiguration config) {
         this.config = config;
     }
 
     private JsonRPCServer rpcServer;
+    private WebUiServer webUiServer;
 
     public void start() {
         try {
@@ -50,16 +50,18 @@ public class Main {
 
             petriServerFactory.makeConductionKeeper(conductionLimitIntervalInMillis());
 
+            webUiServer = WebUiServer.createServer(config.getInt("uiserver.port"));
+            webUiServer.start();
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
     }
 
     public void stop() throws Exception {
         rpcServer.stop();
+        webUiServer.stop();
     }
-
-
 
     private int port() {
         return config.getInt("server.port");
@@ -68,7 +70,6 @@ public class Main {
     private int conductionLimitIntervalInMillis() {
         return config.getInt("server.conductionLimitIntervalInMillis", 150000);
     }
-
 
     private DBConfig dbConfig() {
         final String username = config.getString("db.username");
@@ -80,5 +81,4 @@ public class Main {
     public String getDatabaseUrl() {
         return config.getString("db.url");
     }
-
 }

@@ -178,6 +178,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.wix</groupId>
+            <artifactId>guineapig-webapp</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

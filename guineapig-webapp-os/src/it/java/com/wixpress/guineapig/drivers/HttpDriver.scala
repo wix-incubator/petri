@@ -35,6 +35,11 @@ class HttpDriver {
   def put[T](uri: String, jsonPayload: T): JsonResponse = {
     executeMethod(new HttpPut(uri), jsonPayload)
   }
+  
+  def getRaw(uri: String): HttpResponse = {
+    val httpMethod = new HttpGet(uri)
+    client.execute(httpMethod)
+  }
 
   private def executeMethod[T](httpMethod: HttpEntityEnclosingRequestBase, jsonPayload: T): JsonResponse = {
     val stringWriter = new StringWriter()

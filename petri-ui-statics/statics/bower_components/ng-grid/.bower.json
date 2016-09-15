@@ -1,0 +1,17 @@
+{
+  "name": "ng-grid",
+  "main": [
+    "./ng-grid.min.css",
+    "./build/ng-grid.min.js"
+  ],
+  "homepage": "https://github.com/gilamran/ng-grid",
+  "_release": "48499acaba",
+  "_resolution": {
+    "type": "branch",
+    "branch": "v2.0.7.searchfix",
+    "commit": "48499acaba262c724c2a7607c8af87d6ef4c52a5"
+  },
+  "_source": "git@github.com:gilamran/ng-grid.git",
+  "_target": "v2.0.7.searchfix",
+  "_originalSource": "git@github.com:gilamran/ng-grid.git"
+}

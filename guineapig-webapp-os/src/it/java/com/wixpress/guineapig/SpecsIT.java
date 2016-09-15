@@ -31,7 +31,7 @@ public class SpecsIT extends BrokenITBase {
     }
 
     private List<UiSpec> getSpecs() throws IOException {
-        JsonResponse response = httpDriver.get(BASE_IP + "Specs");
+        JsonResponse response = httpDriver.get(BASE_API_URL + "Specs");
         return extractCollectionPayload(response, new TypeReference<List<UiSpec>>() {
         });
     }
@@ -53,7 +53,7 @@ public class SpecsIT extends BrokenITBase {
         givenPetriContainsSpec(specKey);
 
 
-        JsonResponse response = httpDriver.post(BASE_IP + "deleteSpecs/" + specKey);
+        JsonResponse response = httpDriver.post(BASE_API_URL + "deleteSpecs/" + specKey);
 
         assertTrue(response.getSuccess());
 

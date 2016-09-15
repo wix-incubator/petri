@@ -13,7 +13,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import scala.collection.JavaConversions;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -33,6 +32,7 @@ public class ExperimentsController extends BaseController {
     private SpecService specService;
     private HardCodedScopesProvider hardCodedScopesProvider;
     private ExperimentConverter converter;
+
 
     @Autowired
     public ExperimentsController(SpecService specService, GuineapigExperimentMgmtService experimentService, HardCodedScopesProvider hardCodedScopesProvider) {
@@ -150,7 +150,7 @@ public class ExperimentsController extends BaseController {
     @RequestMapping(value = "/experiments/editStatus", method = {RequestMethod.GET})
     @ResponseBody
     public GuineapigResult<Boolean> getEditStatus() throws JsonProcessingException {
-        return success(false);
+        return success(true);
     }
 
     @RequestMapping(value = "/Experiments/report/{experimentId}", method = RequestMethod.GET)
@@ -158,6 +158,7 @@ public class ExperimentsController extends BaseController {
     public GuineapigResult getExperimentsReport(@PathVariable("experimentId") final int experimentId) throws Exception {
         return success(experimentService.getExperimentReport(experimentId));
     }
+
 
     Experiment convertToExperiment(UiExperiment uiExperiment, String user, boolean isNew) throws IOException {
         ExperimentSpec spec = experimentService.getSpecForExperiment(uiExperiment.getKey());

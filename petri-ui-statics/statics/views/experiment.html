@@ -1,0 +1,496 @@
+<div class="modal-content " style="position: fixed">
+<!--<div ng-show="!newExpCtrl.form.isCollapsed">-->
+<!--<pre class="debug" style="text-align: left">-->
+<!--<small>ab feture :{{newExpCtrl.newExperiment.type.value==='abTest'}}</small>-->
+<!--<small> diable filters :{{newExpCtrl.newExperiment.openToAll.value===true}}</small>-->
+<!--<small style="color: blue">{{newExpCtrl.newExperiment|json}}</small>-->
+<!--<small style="color: #008000">{{newExpCtrl.form|json}}</small>-->
+<!--</pre>-->
+<!--</div>-->
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="newExpCtrl.close(dismiss)">×</button>
+    <h4>{{newExpCtrl.header}} {{newExpCtrl.yael}}</h4>
+    <span ng-class="{timeError:!newExpCtrl.form.invalid}" class="help-inline text-error"><small>{{newExpCtrl.form.error.text}}</small></span>
+
+</div>
+<div class="experiment-body tab" ng-class="{tall:'newExpCtrl.filters && newExpCtrl.filters.show',short : !newExpCtrl.filters || !newExpCtrl.filters.show}"  id="tab0" style="display: block">
+<div load-pane='newExpCtrl.dataLoading'></div>
+<div>
+    <alert ng-repeat="alert in newExpCtrl.alerts" type="alert.type" close="newExpCtrl.closeAlert($index)">
+        <p>{{alert.msg}}</p>
+        <p>{{alert.msgEx}}</p>
+    </alert>
+</div>
+<form  class="form-horizontal" role="form" name="myForm" novalidate>
+
+<div class="group" style="border-top-color: transparent">
+    <div class="row">
+        <div class="col-xs-2 starLabbel">
+            <label for="name">Name</label>
+        </div>
+        <div class="col-xs-5">
+            <input class="box" id="name" name="name" type="text" ng-disabled="newExpCtrl.newExperiment.name.disabled" ng-model="newExpCtrl.newExperiment.name.value" ng-required="true" ng-minlength="2"/>
+            <ul ng-show="!myForm.$valid && newExpCtrl.showErrors" class="error-list">
+
+                <li ng-show="myForm.name.$error.required">
+                    <strong>Name</strong> is required.
+                </li>
+                <li ng-show="myForm.name.$error.minlength">
+                    At least 2 characters.
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-2">
+            <input type="radio"   ng-model="newExpCtrl.newExperiment.type.value"value='abTest' ng-change="newExpCtrl.onAbTest()" ><label style="padding-left: 5px">AB Test</label>
+        </div>
+        <div class="col-xs-3">
+            <input type="radio"   ng-model="newExpCtrl.newExperiment.type.value" value='featureToggle' ng-change="newExpCtrl.onFeatureToggle()"><label style="padding-left: 5px">Feature Toggle</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2 starLabbel">
+            <label for="spec">Product</label>
+        </div>
+        <div class="col-md-10">
+            <select  class="form-select" ui-select2  id="product" data-placeholder="{{newExpCtrl.form.scopeSelectTest}}"
+                     ng-disabled="newExpCtrl.newExperiment.scope.disabled"
+                     ng-model="newExpCtrl.newExperiment.scope.value"
+                     ng-change="newExpCtrl.productChanged()" >
+                <option value=""></option>
+                <option ng-repeat="product in newExpCtrl.form.scopes" value="{{product}}">{{product}}</option>
+            </select>
+            <ul ng-show="newExpCtrl.form.invalid && newExpCtrl.showErrors" class="error-list">
+
+                <li ng-show="newExpCtrl.newExperiment.scope.invalid">
+                    <strong>Product</strong> is required.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-2 starLabbel">
+            <label for="spec">Spec</label>
+        </div>
+        <div class="col-md-10" ng-show="!newExpCtrl.newExperiment.isPublicScope">
+            <select  class="form-select" ui-select2  id="spec" data-placeholder="{{newExpCtrl.form.specSelectTest}}"  ng-disabled="newExpCtrl.newExperiment.key.disabled"  ng-model="newExpCtrl.newExperiment.key.value"  ng-change="newExpCtrl.keyChanged()">
+                <option value=""></option>
+                <option ng-repeat="spec in newExpCtrl.form.allspecs" value="{{spec.key}}">{{spec.key}}</option>
+            </select>
+            <ul ng-show="newExpCtrl.form.invalid && newExpCtrl.showErrors" class="error-list">
+
+                <li ng-show="newExpCtrl.newExperiment.key.invalid">
+                    <strong>Spec</strong> {{newExpCtrl.newExperiment.key.error}}.
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-10" ng-show="newExpCtrl.newExperiment.isPublicScope">
+            <input  class="box"  name="userSpec" id="userSpec" placeholder = "{{newExpCtrl.placeHolderForFreeKey}}"  ng-disabled="newExpCtrl.newExperiment.key.disabled"
+                    ng-model="newExpCtrl.newExperiment.key.value2" ng-pattern="newExpCtrl.urlPattern" ng-required="true">
+            <ul ng-show="newExpCtrl.form.invalid && newExpCtrl.showErrors" class="error-list">
+
+                <li ng-show="myForm.userSpec.$error.required">
+                    <strong>Spec</strong> is required.
+                </li>
+                <li ng-show="myForm.userSpec.$error.pattern">
+                    <strong>{{newExpCtrl.placeHolderForFreeKey}}</strong> is required.
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2 starLabbel">
+            <label for="exposureId">Exposure Id</label>
+        </div>
+        <div class="col-md-10 starLabbel">
+            <label id="exposureId" class="current-exposure">{{newExpCtrl.exposureObj.name}}</label>
+        </div>
+    </div>
+    <div class="row" ng-switch="newExpCtrl.exposureStatus">
+        <div class="col-xs-2 starLabbel"></div>
+        <div class="col-md-10" ng-switch-default>
+            <button class="btn-link exposure-id-link exposure-id-update-link" id="updateExposureIdButton" ng-disabled="newExpCtrl.newExperiment.key.value === '' && newExpCtrl.newExperiment.key.value2 === ''" ng-click="newExpCtrl.prepareToUpdateExposure()" title="Exposure Id can only be updated when a spec is chosen">Update exposure Id</button>
+        </div>
+        <div class="col-md-10 exposure-id-update-form" ng-switch-when="update">
+            <div>
+                <select class="form-select" ui-select2 data-placeholder="Choose" ng-model="newExpCtrl.exposureIdForServer" id="updateExposureId">
+                    <option value="{{null}}">None</option>
+                    <option ng-repeat="exposure in newExpCtrl.allExposures" value="{{exposure.id}}">{{exposure.name}} (owner-{{exposure.owner}})</option>
+                </select>
+                <div class="flex-container">
+                    <div class="align-to-right-in-flex btn-margin-top">
+                        <button class="btn btn-primary btn-margin-bottom" ng-disabled="newExpCtrl.exposureIdForServer === newExpCtrl.exposureObj.id" ng-click="newExpCtrl.updateExposureInServer(newExpCtrl.newExperiment, newExpCtrl.exposureIdForServer)">Apply</button>
+                        <button class="btn btn-primary btn-margin-bottom" ng-click="newExpCtrl.closeExposureIdUpdateStatusMessage()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 flex-container" ng-switch-when="error">
+            <ul class="error-list">
+                <li>
+                    <strong>There was a problem updating the exposure id. Please contact us.</strong>
+                </li>
+            </ul>
+            <button class="btn-link exposure-id-link exposure-id-error-ok" ng-click="newExpCtrl.closeExposureIdUpdateStatusMessage()">ok</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 starLabbel">
+            <label for="linkedToEdit">Link To</label>
+        </div>
+        <div class="col-md-10">
+            <select  class="form-select" ui-select2  id="linkedToEdit" data-placeholder="Choose"  ng-model="newExpCtrl.newExperiment.linkId"  ng-show="newExpCtrl.applyButtonText === 'Create Experiment'" ng-change="newExpCtrl.onChangeLinkId()" ng-disabled="true">
+                <option value=0>None</option>
+                <option ng-repeat="experiment in newExpCtrl.allexperiments | filter: {state: '!ended'}" value="{{experiment.originalId}}">{{experiment.name}} (id-{{experiment.id}}) (originalId-{{experiment.originalId}})</option>
+            </select>
+            <input  class="box" id="linkedTo" ng-disabled="true"  ng-model="newExpCtrl.newExperiment.linkId" ng-show="newExpCtrl.applyButtonText !== 'Create Experiment'">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2 starLabbel">
+            <label for="description">Description</label>
+        </div>
+        <div class="col-md-10">
+            <textarea id="description" placeholder="description..." rows="3"  style="resize: none; "  ng-model="newExpCtrl.newExperiment.description.value" required></textarea>
+        </div>
+    </div>
+
+</div>
+<div class="group" >
+    <div ng-show="newExpCtrl.newExperiment.type.value==='abTest'">
+        <label class="section">Ab Testing Feature</label>
+        <div class="row">
+            <div  class ="col-md-2 starLabbel " ng-show="newExpCtrl.newExperiment.groups.value.length">
+                <label>{{newExpCtrl.newExperiment.groups.length }} Test Groups</label>
+            </div>
+            <div  class="col-md-8 " >
+
+                <table class="dynTestGroup">
+                    <tr ng-repeat="tgroup in newExpCtrl.newExperiment.groups.value" style=";margin: 0px;direction: ltr;">
+                        <td>
+                            <input  type="number" ng-model="tgroup.chunk" class="box" style="width: 43px" ng-change="newExpCtrl.onAbChanged()">
+
+                        </td>
+                        <td style="width: 150px">
+                            <span  ng-click="newExpCtrl.editTestGroup(tgroup,'#testGroup'+tgroup.id)" ng-show="tgroup.value && !tgroup.edit">{{tgroup.value}}</span>
+                            <form ng-submit="newExpCtrl.editTestGroupDone(tgroup,'testGroup'+tgroup.id)">
+                                <input id="{{'testGroup'+tgroup.id}}" class="box" placeholder="value..." ng-show="!tgroup.value || tgroup.edit"
+                                       input-escape="newExpCtrl.editTestGroupRevert(tgroup,'testGroup'+tgroup.id)"
+                                       ng-blur="newExpCtrl.editTestGroupDone(tgroup,'testGroup'+tgroup.id)"
+                                       input-focus="tgroup == newExpCtrl.editedTgroup">
+
+                            </form>
+
+                        </td>
+                        <td>
+                            <button class="btn btn-default fa  fa-times fa-fw pull-right" ng-click="newExpCtrl.removeTestGroup(tgroup)" ng-show="tgroup.userTestGroup"></button>
+                            <button class="btn btn-default fa  fa-edit fa-fw pull-right" ng-click="newExpCtrl.editTestGroup(tgroup,'testGroup'+tgroup.id)" ng-show="tgroup.userTestGroup"></button>
+                        </td>
+                    </tr>
+                </table>
+                <ul ng-show="newExpCtrl.form.invalid && newExpCtrl.showErrors" class="error-list">
+
+                    <li ng-show="newExpCtrl.newExperiment.groups.invalid">
+                        <strong>Chunk </strong> should sum to <strong>100%</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div ng-show="newExpCtrl.newExperiment.type.value==='featureToggle'">
+        <label class="section">Feature Toggle </label>
+        <div class="row">
+            <div  class ="col-md-2 starLabbel" ng-show="newExpCtrl.newExperiment.groups.value.length">
+                <label>{{newExpCtrl.newExperiment.groups.length }} Test Groups</label>
+            </div>
+            <div  class="col-md-8" >
+                <table class="dynTestGroup">
+                    <tr ng-repeat="tgroup in newExpCtrl.newExperiment.groups.value" style=";margin: 0px;direction: ltr;">
+                        <td>
+                            <input type="radio" ng-model="newExpCtrl.newExperiment.featureValue.value" value="{{tgroup.value}}"  ng-change="newExpCtrl.onFeatureToggleChange()">
+                        </td>
+                        <td style="width: 150px">
+                            <span  ng-click="newExpCtrl.editTestGroup(tgroup,'#testGroupFT'+tgroup.id)" ng-show="tgroup.value && !tgroup.edit">{{tgroup.value}}</span>
+                            <form ng-submit="newExpCtrl.editTestGroupDone(tgroup,'testGroupFT'+tgroup.id)">
+                                <input id="{{'testGroupFT'+tgroup.id}}" class="box" placeholder="value..." ng-show="!tgroup.value || tgroup.edit"
+                                       input-escape="newExpCtrl.editTestGroupRevert(tgroup,'testGroupFT'+tgroup.id)"
+                                       ng-blur="newExpCtrl.editTestGroupDone(tgroup,'testGroupFT'+tgroup.id)"
+                                       input-focus="tgroup == newExpCtrl.editedTgroup">
+                            </form>
+                        </td>
+                        <td>
+                            <button class="btn btn-default fa  fa-times fa-fw pull-right" ng-click="newExpCtrl.removeTestGroup(tgroup)" ng-show="tgroup.userTestGroup"></button>
+                            <button class="btn btn-default fa  fa-edit fa-fw pull-right" ng-click="newExpCtrl.editTestGroup(tgroup,'testGroupFT'+tgroup.id)" ng-show="tgroup.userTestGroup"></button>
+                        </td>
+                    </tr>
+                </table>
+                <ul ng-show="newExpCtrl.form.invalid && newExpCtrl.showErrors" class="error-list">
+
+                    <li ng-show="newExpCtrl.newExperiment.groups.invalid">
+                        <strong>1 Test group </strong> should be selected</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div >
+        <button class="btn-link addTestGroup" ng-click="newExpCtrl.addNewTestGroup()" ng-show="newExpCtrl.enableAddTestGroup">Add New Test Group</button>
+    </div>
+</div>
+<div class="group">
+    <label class="section">Time Frame Configuration</label>
+    <div class="row startRow" >
+        <div class="col-md-2 starLabbel" >
+            <label for="start">From</label>
+        </div>
+        <div class="col-md-6 " >
+            <input id="start" class="input-small datePicker  box" type="text" datepicker-popup="dd / MM / yyyy" close-on-date-selection="false"
+                   ng-model="newExpCtrl.newExperiment.startDate.value" ng-change="newExpCtrl.onStartChanged()"
+                   is-open="newExpCtrl.form.openedfrom" min="newExpCtrl.form.minDateTime"  disabled="disabled" datepicker-options="newExpCtrl.dateOptions"
+                   show-weeks="false"  date-disabled="disabled(date, mode)" required/>
+            <button  class="box" ng-click="newExpCtrl.openfrom()" ng-disabled="newExpCtrl.newExperiment.startDate.disabled"><i class="fa fa-calendar fa-align-left" ></i></button>
+        </div>
+        <div class="col-md-4 " style="max-height: 50px" >
+            <div id="timeFrom" class="time123" ng-model="newExpCtrl.newExperiment.startDate.value"  ng-change="newExpCtrl.onStartChanged()" style="display:inline-block;">
+                <timepicker hour-step="newExpCtrl.form.timePickerOptions.hstep" minute-step="newExpCtrl.form.timePickerOptions.mstep" show-meridian="false" mousewheel=false ></timepicker>
+            </div>
+        </div>
+    </div>
+    <ul id="datetimeFromError" ng-show="newExpCtrl.form.invalid && newExpCtrl.showErrors" class="error-list">
+
+        <li ng-show="newExpCtrl.newExperiment.startDate.invalid">
+            <span>{{newExpCtrl.newExperiment.startDate.error}}</span>
+        </li>
+    </ul>
+
+    <div class="row endRow" >
+        <div class="col-md-2 starLabbel " >
+            <label  for="end" >To</label>
+        </div>
+        <div class="col-md-6 " >
+            <input id="end" class="input-small datePicker box" type="text" datepicker-popup="dd / MM / yyyy" close-on-date-selection="false"
+                   ng-model="newExpCtrl.newExperiment.endDate.value" ng-change="newExpCtrl.onEndChanged()"
+                   name="endDate"  is-open="newExpCtrl.form.openedto" min="newExpCtrl.form.minDateTimeTo" disabled="disabled" datepicker-options="newExpCtrl.dateOptions"  show-weeks="false"  date-disabled="disabled(date, mode)" required/>
+            <button ng-click="newExpCtrl.opento()"><i class="fa fa-calendar fa-align-left"></i></button>
+
+        </div>
+        <div class="col-md-4 " style="max-height: 50px" >
+
+            <div id="timeTo"  class="time123" ng-model="newExpCtrl.newExperiment.endDate.value"    ng-change="newExpCtrl.onEndChanged()" style="display:inline-block;">
+                <timepicker hour-step="newExpCtrl.form.timePickerOptions.hstep" minute-step="newExpCtrl.form.timePickerOptions.mstep" show-meridian="false" mousewheel=false></timepicker>
+            </div>
+        </div>
+
+    </div>
+
+    <ul id="datetimeToError" ng-show="newExpCtrl.form.invalid && newExpCtrl.showErrors" class="error-list">
+
+        <li ng-show="newExpCtrl.newExperiment.endDate.invalid">
+            <span>{{newExpCtrl.newExperiment.endDate.error}}</span>
+        </li>
+    </ul>
+</div>
+<div  class="group" style="border-bottom: none" ng-show="newExpCtrl.filters && newExpCtrl.filters.show" id="filters" >
+    <!--<div class="row ">-->
+    <!--<div class="col-md-6 " >-->
+    <!--<label class="section">Filters</label>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="row ">
+        <div class="col-md-2 " >
+            <label class="section">Filters</label>
+        </div>
+        <div class="col-md-10 " >
+            <div class="bs-glyphicons">
+                <ul class="bs-glyphicons-list">
+                    <li ng-modal="buttons" ng-repeat="button in newExpCtrl.filters.buttons()" ng-show="button.show" ng-class="{active:newExpCtrl.filters.btn.id==button.id}" ng-click="newExpCtrl.onClick(button.id)" title="{{button.title}}">
+                        <a class="glyphicon-class"  type="radio"  ng-disabled="button.disabled"> {{button.text}} </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="filters" ng-show="newExpCtrl.filters.text !=='Open To All'" >
+        <div class="row " ng-show="newExpCtrl.filters.controllers.conductLimit.show">
+            <div class="col-md-2 " >
+                <label>Conduct Limit</label>
+                <div class="fa fa-question-circle petri-question-circle"  title="{{newExpCtrl.filters.controllers.conductLimit.title}}"></div>
+            </div>
+            <div class="col-md-5 petri-top-small">
+              <span class="input-symbol-tilde">
+                <input
+                type="number" id="conductLimit" min="0" max="1000000000" class="box petri-align-text-right petri-width-110" ng-model="newExpCtrl.newExperiment.conductLimit.value">
+
+                </input>
+              </span>
+              <td><span style="font-size:11px;position: relative;top:5px">(Zero means unlimited)</span></td>
+            </div>
+        </div>
+        <div class="row " ng-show="newExpCtrl.filters.controllers.excludeGuids.show">
+            <div class="col-md-2 " >
+                <label>Ex. Guids</label>
+                <div class="fa fa-question-circle petri-question-circle"  title="{{newExpCtrl.filters.controllers.excludeGuids.title}}"></div>
+            </div>
+            <div class="col-md-10">
+                <input
+                    type="text"
+                    id="excludeGuid" ui-select2="newExpCtrl.guiIdOptions" class="form-select" ng-model="newExpCtrl.newExperiment.excludeGuids.value">
+                </input>
+            </div>
+        </div>
+        <div class="row " ng-show="newExpCtrl.filters.controllers.includeGuids.show">
+            <div class="col-md-2 " >
+                <label>In. Guids</label>
+                <div class="fa fa-question-circle petri-question-circle"  title="{{newExpCtrl.filters.controllers.includeGuids.title}}"></div>
+            </div>
+            <div class="col-md-10">
+                <input
+                    type="text"
+                    id="includeGuid" ui-select2="newExpCtrl.guiIdOptions" class="form-select" ng-model="newExpCtrl.newExperiment.includeGuids.value">
+                </input>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="group">
+    <div class="row " ng-show="newExpCtrl.filters.controllers.geo.show.label">
+        <div class="col-md-2 " >
+            <label></label>
+        </div>
+        <div class="col-md-10" >
+            <label class="bold-text">{{newExpCtrl.filters.controllers.geo.show.label}}</label>
+        </div>
+    </div>
+    <div class="row" ng-show="newExpCtrl.filters.controllers.lang.show">
+
+        <div class="col-md-2 " >
+            <label for="lang">Languages</label>
+        </div>
+        <div class="col-md-10" >
+            <input
+                class="form-select" id="lang"  value="newExpCtrl.newExperiment.languages.value" data-placeholder="choose languages..." >
+            </input>
+        </div>
+    </div>
+    <div class="row " ng-show="newExpCtrl.filters.controllers.geo.show">
+        <div class="col-md-2 ">
+            <label for="geo">Geo</label>
+        </div>
+        <div class="col-md-10 " >
+            <input
+                class="form-select" id="geo"  value="newExpCtrl.newExperiment.geo.value" data-placeholder="choose countries..." >
+            </input>
+            <td><input style="height: 10px;position: relative;top:-3px" type="checkbox" ng-model="newExpCtrl.newExperiment.excludeGeo.value">  <span style="font-size:11px;position: relative;top:-5px">(exclude)</span></td>
+
+        </div>
+    </div>
+    <div class="row " ng-show="newExpCtrl.filters.controllers.excludeUserGroups.show">
+        <div class="col-md-2 ">
+            <label for="exclude-user-groups">Ex. User Groups</label>
+        </div>
+        <div class="col-md-10 " >
+            <input
+                class="form-select" id="exclude-user-groups"  value="newExpCtrl.newExperiment.excludeUserGroups.value" data-placeholder="choose user groups to exclude..." >
+            </input>
+        </div>
+    </div>
+    <div class="row " ng-show="newExpCtrl.filters.controllers.includeUserAgentRegexes.show">
+        <div class="col-md-2 ">
+            <label for="include-user-agents">In. User Agents</label>
+        </div>
+        <div class="col-md-10 " >
+            <input
+                class="form-select" id="include-user-agents"  value="newExpCtrl.newExperiment.includeUserAgentRegexes.value" data-placeholder="choose user agents to include..." >
+            </input>
+        </div>
+    </div>
+    <div class="row " ng-show="newExpCtrl.filters.controllers.excludeUserAgentRegexes.show">
+        <div class="col-md-2 ">
+            <label for="exclude-user-agents">Ex. User Agents</label>
+        </div>
+        <div class="col-md-10 " >
+            <input
+                class="form-select" id="exclude-user-agents"  value="newExpCtrl.newExperiment.excludeUserAgentRegexes.value" data-placeholder="choose user agents to exclude..." >
+            </input>
+        </div>
+    </div>
+    <div class="row" ng-show="newExpCtrl.filters.controllers.hosts.show">
+
+        <div class="col-md-2 " >
+            <label for="hosts">Hosts</label>
+            <div class="fa fa-question-circle petri-question-circle"  title="{{newExpCtrl.filters.controllers.hosts.title}}"></div>
+        </div>
+        <div class="col-md-10" >
+            <textarea
+                class="box" rows="2" id="hosts"  ng-model="newExpCtrl.newExperiment.hosts.value" data-placeholder="choose hosts..." title="list of hosts seperated with ','" >
+            </textarea>
+        </div>
+    </div>
+    <div class="row " ng-show="newExpCtrl.filters.controllers.metaSiteIds.show">
+        <div class="col-md-2 " >
+            <label>In. Meta Sites</label>
+            <div class="fa fa-question-circle petri-question-circle"  title="{{newExpCtrl.filters.controllers.metaSiteIds.title}}"></div>
+        </div>
+        <div class="col-md-10">
+            <input
+                type="text"
+                id="metaSiteIds" ui-select2="newExpCtrl.selectMetaSiteOptions" class="form-select" ng-model="newExpCtrl.newExperiment.metaSiteIds.value">
+            </input>
+            <td><input style="height: 10px;position: relative;top:-3px" type="checkbox" ng-model="newExpCtrl.newExperiment.excludeMetaSiteIds.value">  <span style="font-size:11px;position: relative;top:-5px">(exclude)</span></td>
+        </div>
+    </div>
+    <div class="row " ng-show="newExpCtrl.filters.controllers.metaSiteIds.show">
+        <div class="col-md-2 " >
+            <label></label>
+        </div>
+        <div class="col-md-10" >
+            <label>PLEASE NOTE - if you need MetaSiteId filter talk to your developer for adding the param</label>
+        </div>
+    </div>
+    <div class="row" ng-show="newExpCtrl.filters.invalid">
+        <div class="col-md-2 " >
+            <label></label>
+        </div>
+        <div class="col-md-10 " >
+            <ul  class="error-list">
+                <li >
+                    <span>{{newExpCtrl.filters.btn.error}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="bottom"></div>
+</form>
+
+</div>
+<div class="experiment-body tab" ng-class="{tall:'newExpCtrl.filters && newExpCtrl.filters.show',short : !newExpCtrl.filters || !newExpCtrl.filters.show}" id="tab1" style="display: none">
+    <div class="row">
+        <div class="col-md-2 starLabbel">
+            <label for="comment">Comment</label>
+        </div>
+        <div class="col-md-10">
+            <textarea id="comment" placeholder="comment..." rows="3"  style="resize: none; "   ng-model="newExpCtrl.comment.value" required></textarea>
+        </div>
+    </div>
+    <alert ng-repeat="alert in newExpCtrl.alerts" type="alert.type" close="newExpCtrl.closeAlert($index)">
+        <p>{{alert.msg}}</p>
+        <p>{{alert.msgEx}}</p>
+    </alert>
+
+
+</div>
+<div class="modal-footer"  >
+    <button class="btn btn-cancel" ng-click="newExpCtrl.cancel(dismiss)">{{newExpCtrl.cancelButtonText}}</button>
+    <button ng-disabled="!newExpCtrl.newExperiment.editable || newExpCtrl.applyDisabled" class="btn btn-primary" style="margin-left: 55px" ng-click="newExpCtrl.apply(dismiss)">{{newExpCtrl.applyButtonText}}</button>
+</div>
+
+</div>
+
+

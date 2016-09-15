@@ -1,0 +1,60 @@
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="cancel(dismiss)">×</button>
+    <h4 id="report-metric-modal-title">{{content.header}} (Id {{reportMetric.experimentId}})</h4>
+</div>
+<div class="reports-body" id="reports-metric-modal" style="height: 400px">
+    <div style="height: 200px" ng-init="getReportMetricData()">
+        <div style="overflow-y: hidden; color:#767575; font-weight: bold">Total: {{reportMetric.totalCount}}</div>
+        <div style="overflow-y: hidden; color:#767575; font-weight: bold">Total in last five minutes: {{reportMetric.fiveMinuteCount}}</div>
+        <div style="overflow-y: hidden; color:#767575; font-weight: bold">Last time conducted: {{reportMetric.lastUpdated | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+        <div class="HistoryTable" style="text-align: center">
+            <table>
+                <tr ng-repeat="reportPerVal in reportMetric.reportsPerValue">
+                    <td>
+                        <div>
+                            <table class="infoTableTitle">
+                                <div class="report-metric-margin-top-bottom">
+                                    <td colspan="4" class="report-metric-val-title">Value: {{reportPerVal.experimentValue}}</td>
+                                    <td colspan="4" class="report-metric-val-title">Total: {{reportPerVal.totalCount}}</td>
+                                    <td colspan="4" class="report-metric-val-title">Total in last five minutes: {{reportPerVal.fiveMinuteCount}}</td>
+                                    <td colspan="4" class="report-metric-val-title">Last time conducted: {{reportPerVal.lastUpdated | date:'MM-dd HH:mm:ss'}}</td>
+                                </div>
+                                <table class="infoTable" style="margin-top: 20px">
+                                    <td style="overflow-y: hidden; color:#767575; font-weight: bold">
+                                        Server
+                                    </td>
+                                    <td style="overflow-y: hidden; color:#767575; font-weight: bold">
+                                        Total
+                                    </td>
+                                    <td style="overflow-y: hidden; color:#767575; font-weight: bold">
+                                        Total in last five minutes
+                                    </td>
+                                    <td style="overflow-y: hidden; color:#767575; font-weight: bold">
+                                        Last time conducted
+                                    </td>
+                                    <tr ng-repeat="serverData in reportPerVal.reportsPerServer" >
+                                        <td style="overflow-y: hidden; color:#767575">
+                                            {{serverData.serverName}}
+                                        </td>
+                                        <td style="overflow-y: hidden; color:#767575">
+                                            {{serverData.totalCount}}
+                                        </td>
+                                        <td style="overflow-y: hidden; color:#767575">
+                                            {{serverData.fiveMinuteCount}}
+                                        </td>
+                                        <td style="overflow-y: hidden; color:#767575">
+                                            {{serverData.lastUpdated | date:'MM-dd HH:mm:ss'}}
+                                        </td>
+                                    </tr>
+                                </table>
+                        </div>
+                    </td>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal-footer"  >
+    <button  class="btn btn-primary"  ng-class="" style="margin-left: 55px" ng-click="apply(dismiss)">{{content.okText.text}}</button>
+</div>
+

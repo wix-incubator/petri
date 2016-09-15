@@ -31,7 +31,8 @@ import static com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder.aNew
 @RunWith(JUnit4.class)
 abstract public class BrokenITBase {
 
-    protected static final String BASE_IP = "http://127.0.0.1:9901/api/v1/";
+    protected static final String BASE_URL = "http://127.0.0.1:9901/";
+    protected static final String BASE_API_URL = BASE_URL + "api/v1/";
 
     @Autowired
     protected RAMPetriClient ramPetriClient;
@@ -55,7 +56,7 @@ abstract public class BrokenITBase {
     public ObjectMapper om = ObjectMapperFactory.makeObjectMapper();
 
     protected List<UiExperiment> getExperiments() throws IOException {
-        JsonResponse response = httpDriver.get(BASE_IP + "Experiments");
+        JsonResponse response = httpDriver.get(BASE_API_URL + "Experiments");
 
         return extractCollectionPayload(response, new TypeReference<List<UiExperiment>>() {
         });

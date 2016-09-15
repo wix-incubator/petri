@@ -1,0 +1,31 @@
+<div class="container" style="top: 174px;">
+
+    <div id="reconnect">
+        <button class="btn btn-default reload" ui-sref="login.h({state: 'active'})">Reload</button><button class="btn btn-default more" ng-click="showMore()">{{buttonMoreText}}</button>
+
+    </div>
+    <div id="details" ng-show="buttonMoreText==='Less'">
+        <h4>Error Code</h4>
+    <span style="margin: 5px 10px 20px 50px;" >
+           {{response.data.errorCode}}
+    </span>
+        <h4>Status</h4>
+    <span style="margin: 5px 10px 20px 50px;" >
+           {{response.status}}
+    </span>
+        <h4>Description</h4>
+    <span style="margin: 5px 10px 20px 50px;" >
+           {{response.data.errorDescription}}
+    </span>
+        <h4>More details</h4>
+    <span style="margin: 5px 10px 20px 50px;" >
+           {{response.config.method}} : {{response.config.url}}
+    </span>
+        <h4>message</h4>
+    <span style="margin: 5px 10px 20px 50px;" >
+           {{response.message}}
+    </span>
+    </div>
+    <img id="reconnectLogo" class="petriLogo logoSize" relative-src="images/petri.png" >
+</div>
+

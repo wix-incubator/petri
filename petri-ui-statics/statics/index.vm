@@ -1,0 +1,127 @@
+<!--
+  #if( false )
+  DO NOT TOUCH!!
+  --------------
+  #end
+  #set( $staticsUrl = $clientTopology.staticPetriBaseUrl )
+-->
+<!-- shahar -->
+<!doctype html>
+<html ng-app="uiPetri">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>wixPetri</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+
+    <link href="${staticsUrl}bower_components/select2/select2.css" rel="stylesheet">
+    <link href="${staticsUrl}bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+        <!-- #if( !${debug} ) -->
+    <link rel="stylesheet" href="${staticsUrl}styles/main.css">
+        <!-- #else -#if( false )#end->
+    <link rel="stylesheet" href="${staticsUrl}_debug_styles/main.css">
+    <link rel="stylesheet" href="${staticsUrl}_debug_styles/ng-grid.css">
+    <link rel="stylesheet" href="${staticsUrl}_debug_styles/icons.css">
+    <link rel="stylesheet" href="${staticsUrl}_debug_styles/font-awesome.css">
+    <link rel="stylesheet" href="${staticsUrl}_debug_styles/progress.css">
+    <link rel="stylesheet" href="${staticsUrl}_debug_styles/modal.css"><!-- #end -->
+
+        <!-- #if( false ) -->
+    <script>
+        /* jshint ignore:start */
+        ENABLE_MOCKS = ${enableMocks};
+    </script>
+        <!-- #end -->
+
+</head>
+<body>
+<div class="navbar" ng-class="{staging: !clientConfig.production}" >
+    <img relative-src="images/logo.png" class="wixlogo">
+    <!--div ui-view="login"></div-->
+    <div ui-view />
+</div>
+<div class="navbarBottom"></div>
+<div class="mainView" ></div>
+
+<script src="${staticsUrl}bower_components/jquery/jquery#if(!${debug}).min#{end}.js"></script>
+<script src="${staticsUrl}bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="${staticsUrl}bower_components/angular/angular#if(!${debug}).min#{end}.js"></script>
+        <!-- #if( !${debug} ) -->
+<script src="${staticsUrl}scripts/modules.js"></script>
+        <!-- #else -#if( false )#end->
+<script src="${staticsUrl}bower_components/uri.js/src/URI.js"></script>
+<script src="${staticsUrl}bower_components/wix-angular/dist/wix-angular.js"></script>
+<script src="${staticsUrl}bower_components/angular-translate/angular-translate#if(!${debug}).min#{end}.js"></script>
+<script src="${staticsUrl}bower_components/angular-resource/angular-resource#if(!${debug}).min#{end}.js"></script>
+<script src="${staticsUrl}bower_components/underscore/underscore-min.js"></script>
+<script src="${staticsUrl}bower_components/angular-cookies/angular-cookies#if(!${debug}).min#{end}.js"></script>
+<script src="${staticsUrl}bower_components/angular-sanitize/angular-sanitize#if(!${debug}).min#{end}.js"></script>
+<script src="${staticsUrl}bower_components/angular-bootstrap/ui-bootstrap-tpls#if(!${debug}).min#{end}.js"></script>
+<script src="${staticsUrl}bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="${staticsUrl}bower_components/ng-grid/build/ng-grid.debug.js"></script>
+<script src="${staticsUrl}bower_components/select2/select2.js"></script>
+<script src="${staticsUrl}bower_components/angular-ui-select2/src/select2.js"></script>
+<script src="${staticsUrl}bower_components/ng-file-upload/angular-file-upload.min.js"></script>
+<script src="${staticsUrl}bower_components/ng-file-upload-shim/angular-file-upload.min.js"></script>
+<script src="${staticsUrl}bower_components/ng-debounce/angular-debounce.js"></script><!-- #end -->
+        <!-- #if( !${debug} ) -->
+<script src="${staticsUrl}scripts/scripts.js"></script>
+        <!-- #else -#if( false )#end->
+<script src="${staticsUrl}_debug_scripts/app.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/factory.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/gridService.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/alertsService.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/tmService.js"></script>
+<script src="${staticsUrl}_debug_scripts/directives/directives.js"></script>
+<script src="${staticsUrl}_debug_scripts/directives/inputEscape.js"></script>
+<script src="${staticsUrl}_debug_scripts/directives/inputFocus.js"></script>
+<script src="${staticsUrl}_debug_scripts/controllers/newExperimentController.js"></script>
+<script src="${staticsUrl}_debug_scripts/controllers/historyController.js"></script>
+<script src="${staticsUrl}_debug_scripts/controllers/allexperiments.js"></script>
+<script src="${staticsUrl}_debug_scripts/controllers/allSpecs.js"></script>
+<script src="${staticsUrl}_debug_scripts/controllers/experimentView.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/modalHelper.js"></script>
+<script src="${staticsUrl}_debug_scripts/controllers/modalController.js"></script>
+<script src="${staticsUrl}_debug_scripts/controllers/loginController.js"></script>
+<script src="${staticsUrl}_debug_scripts/controllers/reconnectController.js"></script>
+<script src="${staticsUrl}_debug_scripts/filters.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/payload-stripper.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/specFilters.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/experimentFormService.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/modalWizard.js"></script>
+<script src="${staticsUrl}_debug_scripts/services/config.js"></script><!-- #end -->
+
+        <!-- #if( false ) -->
+<script src="bower_components/angular-mocks/angular-mocks.js"></script>
+        <!-- #if( !${debug} ) -->
+    <script src="scripts/mocks.js"></script>
+            <!-- #else -#if( false )#end->
+    <script src="mock/petri-api.js"></script>
+    <script src="mock/petri-object-mocker.js"></script><!-- #end -->
+<script>
+    if (ENABLE_MOCKS) {
+        angular.module('uiPetri').requires.push('uiPetriMocks');
+    }
+</script>
+        <!-- #end -->
+
+<script>
+    angular.module('uiPetri').config(function (wixAngularProvider) {
+        wixAngularProvider.setStaticsUrl('${staticsUrl}');
+    });
+    angular.module('uiPetri').constant('clientConfig', {
+        useBoAuthenticationServer: '${clientTopology.useBoAuthenticationServer}' == 'true',
+        production: '${clientTopology.production}' == 'true',
+        boredirectUri: '${clientTopology.redirectUri}',
+
+        auth: {
+            applicationName: '${auth.applicationName}',
+            clientId: '${auth.clientId}',
+            clientSecret: '${auth.clientSecret}',
+            redirectUri: '${auth.redirectUri}'
+        }
+    });
+</script>
+</body>
+</html>

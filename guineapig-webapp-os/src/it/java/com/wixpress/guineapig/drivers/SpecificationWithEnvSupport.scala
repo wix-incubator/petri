@@ -1,8 +1,7 @@
 package com.wixpress.guineapig.drivers
 
 import java.util.concurrent.atomic.AtomicBoolean
-
-import com.wixpress.embeddedjetty.JettyServer
+import com.wixpress.guineapig.embeddedjetty.WebUiServer
 import com.wixpress.guineapig.util.ITEmbeddedMysql
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory
 import org.specs2.mutable.{Before, SpecificationWithJUnit}
@@ -26,7 +25,7 @@ trait SpecificationWithEnvSupport extends SpecificationWithJUnit with Before {
 object GlobalEnv {
   private final val started = new AtomicBoolean(false)
   private final val embeddedMySql: ITEmbeddedMysql = new ITEmbeddedMysql(3316)
-  private final val server = JettyServer()
+  private final val server = WebUiServer()
 
   def ensureStarted() = {
     if (!started.get()) {

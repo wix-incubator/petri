@@ -77,5 +77,6 @@
         <module>petri-amplitude-testapp</module>
         <module>petri-backoffice-core</module>
         <module>guineapig-webapp-os</module>
+        <module>petri-ui-statics</module>
     </modules>
 </project>
