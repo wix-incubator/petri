@@ -110,7 +110,9 @@ class WebUiServer {
 
 object WebUiServer {
 
-  def apply(port: Int): WebUiServer = WebUiServer(port)
+  def createServer(port: Int): WebUiServer = {
+    WebUiServer(port)
+  }
 
   def apply(port: Int = DefaultPort,
             webXmlLocation: String = WebXmlLocation,

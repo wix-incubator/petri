@@ -10,7 +10,6 @@ import com.wixpress.guineapig.topology.ClientTopology;
 import com.wixpress.guineapig.topology.GuineapigDBTopology;
 import com.wixpress.guineapig.topology.ServerTopology;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
-import com.wixpress.petri.petri.Clock;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.JodaTimeClock;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +21,7 @@ import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 
 @Configuration
-@Import({VelocityConfig.class})
+@Import({VelocityConfig.class, SpringConfig.class})
 public class AppConfig {
 
     @Bean

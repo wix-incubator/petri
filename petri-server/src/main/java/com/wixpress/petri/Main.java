@@ -50,7 +50,7 @@ public class Main {
 
             petriServerFactory.makeConductionKeeper(conductionLimitIntervalInMillis());
 
-            webUiServer = WebUiServer.apply(config.getInt("uiserver.port"));
+            webUiServer = WebUiServer.createServer(config.getInt("uiserver.port"));
             webUiServer.start();
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
