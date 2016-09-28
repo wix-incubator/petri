@@ -25,7 +25,6 @@ import java.util.List;
 
 import static com.natpryce.makeiteasy.MakeItEasy.*;
 import static com.wixpress.guineapig.entities.ui.UiExperimentBuilder.aCopyOf;
-import static com.wixpress.guineapig.services.MetaDataConsts.PUBLIC_URL;
 import static com.wixpress.petri.laboratory.dsl.ExperimentMakers.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -227,7 +226,7 @@ public class PetriWebappIT extends BrokenITBase {
         UiExperiment uiExperiment = make(a(UiExperimentMakers.UiExperiment,
                 with(UiExperimentMakers.conductionLimit, 1),
                 with(UiExperimentMakers.specKey, false),
-                with(UiExperimentMakers.scope, PUBLIC_URL)));
+                with(UiExperimentMakers.scope, "someScope")));
 
         add(uiExperiment);
 

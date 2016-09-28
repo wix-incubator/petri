@@ -6,8 +6,9 @@ import com.google.common.collect.ImmutableList;
 import com.natpryce.makeiteasy.MakeItEasy;
 import com.natpryce.makeiteasy.Maker;
 import com.wixpress.guineapig.dsl.ExperimentBuilders;
-import com.wixpress.guineapig.dsl.TestGroupMakers;
-import com.wixpress.guineapig.entities.ui.*;
+import com.wixpress.guineapig.entities.ui.ExperimentConverter;
+import com.wixpress.guineapig.entities.ui.ExperimentReport;
+import com.wixpress.guineapig.entities.ui.UiExperiment;
 import com.wixpress.guineapig.spi.HardCodedScopesProvider;
 import com.wixpress.guineapig.util.MockHardCodedScopesProvider;
 import com.wixpress.guineapig.util.ReportMatchers;
@@ -34,6 +35,7 @@ import java.util.List;
 
 import static com.wixpress.guineapig.util.Matchers.isForAction;
 import static com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder.anExperimentSnapshot;
+import static com.wixpress.petri.laboratory.dsl.TestGroupMakers.TEST_GROUPS_WITH_SECOND_ALWAYS_WINNING;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.empty;
 
@@ -152,7 +154,7 @@ public class ExperimentMgmtServiceTest {
                 withScopes(ImmutableList.of(someScope.getName())).
                 withKey(someKey).
                 withOnlyForLoggedInUsers(false).
-                withGroups(TestGroupMakers.TEST_GROUPS_FOR_CLIENT_WITH_NEW_WINNING).
+                withGroups(TEST_GROUPS_WITH_SECOND_ALWAYS_WINNING).
                 withFeatureToggle(false).
                 withStartDate(now).
                 withEndDate(now.plusMinutes(5)).

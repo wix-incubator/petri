@@ -1,7 +1,9 @@
 package com.wixpress.guineapig.web
 
 import java.util.{Arrays, List => JList}
+
 import com.wixpress.guineapig.drivers.{JsonResponse, SpecificationWithEnvSupport}
+import com.wixpress.guineapig.dsl.TestGroupMakers
 import com.wixpress.guineapig.entities.ui.{UiExperiment, UiExperimentBuilder, UiTestGroup}
 import org.joda.time.DateTime
 import org.specs2.specification.Scope
@@ -12,7 +14,7 @@ class ExperimentsControllerIT extends SpecificationWithEnvSupport {
 
     val url = "http://localhost:9901/v1"
 
-    def createExperiment(experimentId: Int, groups: JList[UiTestGroup] = Arrays.asList(new UiTestGroup(1, "old", 0), new UiTestGroup(2, "new", 100))): UiExperiment = {
+    def createExperiment(experimentId: Int, groups: JList[UiTestGroup] = TestGroupMakers.UI_TEST_GROUPS_FOR_CLIENT_WITH_NEW_WINNING): UiExperiment = {
         UiExperimentBuilder
           .anUiExperiment()
           .withid(experimentId)

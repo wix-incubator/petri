@@ -1,16 +1,27 @@
 package com.wixpress.petri;
 
 import com.google.common.collect.ImmutableList;
+import com.wixpress.guineapig.drivers.HttpDriver;
+import com.wixpress.guineapig.drivers.JsonResponse;
+import com.wixpress.guineapig.entities.ui.UiExperiment;
+import com.wixpress.guineapig.entities.ui.UiExperimentBuilder;
+import com.wixpress.guineapig.entities.ui.UiTestGroup;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
 import com.wixpress.petri.petri.*;
+import org.hamcrest.CoreMatchers;
+import org.joda.time.DateTime;
 import org.junit.*;
 
 import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -26,6 +37,8 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     private final PetriClient petriClient;
     private final UserRequestPetriClient userRequestPetriClient;
     private static DBDriver dbDriver;
+    private final HttpDriver httpDriver;
+    private static final String BASE_SERVER_UI_ADDRESS = "http://localhost:9011";
 
     @BeforeClass
     public static void startPetriServer() throws Exception {
@@ -49,11 +62,12 @@ public class RPCPetriServerTest extends PetriClientContractTest {
 
     }
 
-    public RPCPetriServerTest() throws Exception{
-        String serviceUrl = "http://localhost:9011/petri";
+    public RPCPetriServerTest() throws Exception {
+        String serviceUrl = BASE_SERVER_UI_ADDRESS + "/petri";
         fullPetriClient = PetriRPCClient.makeFullClientFor(serviceUrl);
         petriClient = PetriRPCClient.makeFor(serviceUrl);
         userRequestPetriClient = PetriRPCClient.makeUserRequestFor(serviceUrl);
+        httpDriver = new HttpDriver();
     }
 
     @Before
@@ -99,5 +113,39 @@ public class RPCPetriServerTest extends PetriClientContractTest {
         //TODO - once PetriNotifier is implemented properly by sending emails or something, add test for the title and recipients
         //String expectedTitle = "Experiment "+ experiment.getName() + " id:" + experiment.getId() + " paused due to conduction limit reach";
         //assert something on recipients
+    }
+
+    @Test
+    public void testUiEndpoints() throws Exception {
+        //OR!!! - if this can be selenium then i am literally DONE :)
+        String someExpKey = "someExpKey";
+        createExperimentViaUiEndpoint(someExpKey);
+
+        experimentExistsInPetriServer(someExpKey);
+        experimentAccessibleFromUi(someExpKey);
+    }
+
+    private void experimentAccessibleFromUi(String someExpKey) {
+        JsonResponse jsonResponse = httpDriver.get(BASE_SERVER_UI_ADDRESS + "/v1/Experiment/1");
+        assertThat(jsonResponse.getBodyRaw(), containsString(someExpKey));
+    }
+
+    private void experimentExistsInPetriServer(String someExpKey) {
+        List<Experiment> experiments = fullPetriClient.fetchAllExperiments();
+        assertThat(experiments, hasSize(1));
+        assertThat(experiments.get(0).getExperimentSnapshot().key(), CoreMatchers.is(someExpKey));
+    }
+
+    private void createExperimentViaUiEndpoint(String someExperimentName){
+        UiExperiment uiExperiment = UiExperimentBuilder
+                .anUiExperiment()
+                .withKey(someExperimentName)
+                .withSpecKey(false)
+                .withScope("publicUrl")
+                .withGroups(Arrays.asList(new UiTestGroup(1, "old", 0), new UiTestGroup(2, "new", 100)))
+                .withEndDate(new DateTime().plusYears(1).getMillis())
+                .build();
+
+        httpDriver.post(BASE_SERVER_UI_ADDRESS + "/v1/Experiments", uiExperiment);
     }
 }

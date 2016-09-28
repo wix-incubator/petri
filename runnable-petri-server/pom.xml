@@ -35,14 +35,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.wix</groupId>
-            <artifactId>guineapig-webapp</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <version>${hamcrest-version}</version>

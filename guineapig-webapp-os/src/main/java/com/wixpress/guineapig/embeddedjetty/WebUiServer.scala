@@ -24,7 +24,7 @@ class WebUiServer {
   @BeanProperty
   var contextRoot: String = "/"
 
-  var server: Server = _
+  private var server: Server = _
   private var context: WebAppContext = _
   private val logger = LoggerFactory.getLogger(classOf[WebUiServer])
   private var additionalResources: Seq[String] = Nil

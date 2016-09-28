@@ -2,7 +2,6 @@ package com.wixpress.petri;
 
 
 import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.AsyncHttpClient.BoundRequestBuilder;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.test.TestBuilders;
 import org.apache.commons.io.FileUtils;
@@ -30,7 +29,6 @@ public class RunnableServerIT {
 
     private FullPetriClient fullPetriClient;
 
-
     private Process petriServerProcess;
 
     @Before
@@ -55,6 +53,7 @@ public class RunnableServerIT {
     public void testServerPersistence() throws Exception {
         fullPetriClient.addSpecs(Collections.singletonList(TestBuilders.abSpecBuilder("someSpec").build()));
         assertThat(fullPetriClient.fetchSpecs(), hasSize(1));
+
         restartServer();
         assertThat(fullPetriClient.fetchSpecs(), hasSize(1));
     }
@@ -90,7 +89,7 @@ public class RunnableServerIT {
                 .collect(Collectors.toList());
         assertThat(runnableJarFiles.size(), is(1));
         String[] command = ("java -jar target/" + runnableJarFiles.get(0).getName()).split(" ");
-        petriServerProcess = new ProcessBuilder(command).start();
+        petriServerProcess = new ProcessBuilder(command).redirectError(ProcessBuilder.Redirect.INHERIT).redirectOutput(ProcessBuilder.Redirect.INHERIT).start();
     }
 
     private void stopPetriServer() throws Exception {
@@ -99,7 +98,7 @@ public class RunnableServerIT {
     }
 
     private void waitForServer(ServerState expected) throws Exception {
-        final BoundRequestBuilder request = new AsyncHttpClient().prepareGet(BASE_SERVER_ADDRESS);
+        final AsyncHttpClient.BoundRequestBuilder request = new AsyncHttpClient().prepareGet(BASE_SERVER_ADDRESS);
         for (int i = 0; i < SERVER_STARTUP_RETRIES; i++) {
             ServerState res;
             try {
