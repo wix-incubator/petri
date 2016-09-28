@@ -12,3 +12,4 @@ before_install:
 notifications:
   email:
     - talyag@wix.com
+    
