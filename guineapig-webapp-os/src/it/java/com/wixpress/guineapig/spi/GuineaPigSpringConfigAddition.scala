@@ -2,10 +2,9 @@ package com.wixpress.guineapig.spi
 
 import java.util
 
-import com.wixpress.guineapig.dao.MetaDataDao
 import com.wixpress.guineapig.dto.SpecExposureIdViewDto
 import com.wixpress.guineapig.entities.ui.UiSpecForScope
-import com.wixpress.guineapig.services.MetaDataService
+import com.wixpress.guineapig.topology.GuineapigDBTopology
 import com.wixpress.petri.experiments.domain.ScopeDefinition
 import com.wixpress.petri.petri.{FullPetriClient, RAMPetriClient}
 import org.springframework.context.annotation.{Bean, Configuration}
@@ -13,20 +12,10 @@ import org.springframework.context.annotation.{Bean, Configuration}
 import scala.collection.JavaConversions._
 
 @Configuration
-class UserAppConfig {
+class GuineaPigSpringConfigAddition {
 
   @Bean
   def petriClientMock: FullPetriClient = new RAMPetriClient
-
-
-  @Bean
-  private[guineapig] def metaDataService(metaDataDao: MetaDataDao,
-                                         fullPetriClient: FullPetriClient,
-                                         hardCodedSpecsProvider: HardCodedScopesProvider,
-                                         specExposureIdRetriever: SpecExposureIdRetriever,
-                                         languageResolver: SupportedLanguagesProvider,
-                                         globalGroupsManagementService: GlobalGroupsManagementService): MetaDataService =
-    new MetaDataService(metaDataDao, fullPetriClient, hardCodedSpecsProvider, specExposureIdRetriever, languageResolver, globalGroupsManagementService)
 
   // SPI BEANS
 
@@ -51,4 +40,9 @@ class UserAppConfig {
     new GlobalGroupsManagementService() {
       def allGlobalGroups: Seq[String] = Seq.empty
     }
+
+  @Bean
+  private[guineapig] def dataSourceTopology: GuineapigDBTopology = {
+    new GuineapigDBTopology
+  }
 }

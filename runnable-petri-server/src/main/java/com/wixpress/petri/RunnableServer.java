@@ -1,11 +1,13 @@
 package com.wixpress.petri;
 
+import com.google.common.collect.ImmutableList;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,12 +40,15 @@ public class RunnableServer {
     private final static String CREATE_IF_NOT_EXISTS = "CREATE TABLE IF NOT EXISTS ";
 
     static void initDatabase(String databaseUrl) throws SQLException {
-        List<String> queries = Arrays.asList(
+        List<String> queries = new ArrayList<String>(Arrays.asList(
                 "experiments (   id INT AUTO_INCREMENT,   experiment MEDIUMTEXT,   last_update_date BIGINT,   orig_id INT,   start_date BIGINT DEFAULT 0,   end_date BIGINT DEFAULT 4102444800000,   PRIMARY KEY(id, last_update_date) )",
                 "specs (   id INT PRIMARY KEY AUTO_INCREMENT,   fqn VARCHAR (255) NOT NULL,   spec MEDIUMTEXT,   UNIQUE KEY (fqn) )",
                 "metricsReport (   server_name VARCHAR (255) NOT NULL,   experiment_id INT NOT NULL,   experiment_value VARCHAR (255) NOT NULL,   total_count BIGINT,   five_minutes_count BIGINT,   last_update_date BIGINT,   PRIMARY KEY (server_name, experiment_id, experiment_value) )",
                 "userState (   user_id VARCHAR (50) NOT NULL,   state VARCHAR (4096),   date_updated BIGINT NOT NULL,   PRIMARY KEY(user_id) )"
-        );
+        ));
+
+        List<String> backOfficeQueries = ImmutableList.of("meta_data ( data_type VARCHAR(32), data_value varchar(16000), PRIMARY KEY(data_type) )");
+        queries.addAll(backOfficeQueries);
 
         try (Connection conn = DriverManager.getConnection(databaseUrl)) {
             SingleConnectionDataSource dataSource = new SingleConnectionDataSource(conn, false);

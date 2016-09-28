@@ -5,8 +5,6 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.util.resource.ResourceCollection
 import org.eclipse.jetty.webapp.WebAppContext
 import org.slf4j.LoggerFactory
-import org.springframework.context.ApplicationContext
-import org.springframework.web.servlet.DispatcherServlet
 import scala.annotation.varargs
 import scala.beans.BeanProperty
 
@@ -26,15 +24,13 @@ class WebUiServer {
   @BeanProperty
   var contextRoot: String = "/"
 
-  private var server: Server = _
+  var server: Server = _
   private var context: WebAppContext = _
   private val logger = LoggerFactory.getLogger(classOf[WebUiServer])
   private var additionalResources: Seq[String] = Nil
 
-  def getSpringContext: ApplicationContext = {
-    context.getServletHandler.getServlets.map(_.getServletInstance) collectFirst {
-      case ds: DispatcherServlet => ds.getWebApplicationContext
-    } getOrElse serverError(s"DispatcherServlet not found for webapp at [$webXmlFile]")
+  def getSpringContext: WebAppContext = {
+    context
   }
 
   @throws[Exception]
@@ -45,15 +41,13 @@ class WebUiServer {
   }
 
   @throws[Exception]
-  def start(): Unit = {
-    logger.info("starting JettyServer")
+  def initServer(): Unit = {
+    logger.info("validating and initing JettyServer")
 
     validateWebXmlFile()
     validateWarRoot()
-    initServer()
+    init()
     validateServer()
-
-    logger.info("JettyServer started")
   }
 
   @varargs
@@ -61,16 +55,20 @@ class WebUiServer {
     additionalResources = resources
   }
 
-  private def initServer(): Unit = {
+  private def init(): Unit = {
     server = new Server(port)
     context = new WebAppContext
     context.setDescriptor(webXmlFile.getAbsolutePath)
-    context.setContextPath(contextRoot)
     context.setParentLoaderPriority(true)
     context.setBaseResource(baseResources)
+    context.setContextPath(contextRoot)
     server.setHandler(context)
+  }
 
+  def startServer: Unit = {
+    logger.info("starting JettyServer")
     server.start()
+    logger.info("JettyServer started")
   }
 
   private def baseResources = {

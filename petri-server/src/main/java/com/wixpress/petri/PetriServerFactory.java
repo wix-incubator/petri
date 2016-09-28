@@ -1,7 +1,6 @@
 package com.wixpress.petri;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.*;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,14 +31,13 @@ class PetriServerFactory {
         this.port = port;
     }
 
-    public JsonRPCServer makePetriServer() {
+    public PetriRpcServer makePetriServer(ObjectMapper objectMapper) {
         BasicDataSource ds = new BasicDataSource();
         ds.setUsername(dbConfig.username);
         ds.setPassword(dbConfig.password);
         ds.setUrl(dbConfig.url);
         JdbcTemplate jdbcTemplate = new JdbcTemplate(ds);
 
-        ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
         MappingErrorHandler mappingErrorHandler = new ConsoleMappingErrorHandler();
         PetriMapper experimentMapper = new ExperimentMapper(objectMapper,mappingErrorHandler);
         experimentsDao = new JdbcExperimentsDao(jdbcTemplate, experimentMapper);
@@ -49,8 +47,7 @@ class PetriServerFactory {
         notifier = new NoopPetriNotifier();
         metricsReportsDao = new JdbcMetricsReportsDao(jdbcTemplate, lookBackForReportsDelta);
         UserStateDao userStateDao = new JdbcUserStateDao(jdbcTemplate);
-        PetriRpcServer petri = new PetriRpcServer(experimentsDao,clock,specsDao, notifier, metricsReportsDao, userStateDao);
-        return new JsonRPCServer(petri, objectMapper, port);
+        return new PetriRpcServer(experimentsDao,clock,specsDao, notifier, metricsReportsDao, userStateDao);
     }
 
     public ConductionKeeper makeConductionKeeper(int conductionLimitIntervalInMillis){
@@ -59,6 +56,8 @@ class PetriServerFactory {
                 new ScheduledThreadPoolExecutor(1), conductionLimitIntervalInMillis,
                 notifier);
     }
+
+
 
     private static class NoopPetriNotifier implements PetriNotifier {
         @Override

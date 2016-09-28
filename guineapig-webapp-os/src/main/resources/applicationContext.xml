@@ -33,7 +33,7 @@
 
     <!--<bean class="com.wixpress.petri.petri.FullPetriClientConfig"/>-->
 
-    <bean class="com.wixpress.guineapig.spring.AppConfig"/>
+    <bean class="com.wixpress.guineapig.spring.GuineaPigSpringConfig"/>
 
     <bean class="com.wixpress.guineapig.spring.ClientsConfig"/>
 

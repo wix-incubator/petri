@@ -5,7 +5,10 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.wixpress.guineapig.dao.MetaDataDao;
 import com.wixpress.guineapig.dao.MySqlMetaDataDao;
 import com.wixpress.guineapig.services.*;
+import com.wixpress.guineapig.spi.GlobalGroupsManagementService;
 import com.wixpress.guineapig.spi.HardCodedScopesProvider;
+import com.wixpress.guineapig.spi.SpecExposureIdRetriever;
+import com.wixpress.guineapig.spi.SupportedLanguagesProvider;
 import com.wixpress.guineapig.topology.ClientTopology;
 import com.wixpress.guineapig.topology.GuineapigDBTopology;
 import com.wixpress.guineapig.topology.ServerTopology;
@@ -21,8 +24,8 @@ import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 
 @Configuration
-@Import({VelocityConfig.class, SpringConfig.class})
-public class AppConfig {
+@Import({VelocityConfig.class})
+public class GuineaPigSpringConfig {
 
     @Bean
     public ClientTopology clientTopology() {
@@ -37,11 +40,6 @@ public class AppConfig {
     @Bean
     public ExperimentEventPublisher experimentEventPublisher() {
         return new ExperimentEventPublisher((exception, action, source) -> exception.printStackTrace());
-    }
-
-    @Bean
-    public GuineapigDBTopology dataSourceTopology() {
-        return new GuineapigDBTopology();
     }
 
     @Bean
@@ -94,4 +92,16 @@ public class AppConfig {
     public ExperimentMgmtService experimentMgmtService(EventPublisher experimentEventPublisher, FullPetriClient fullPetriClient, HardCodedScopesProvider hardCodedScopesProvider){
         return new ExperimentMgmtService(new JodaTimeClock(), experimentEventPublisher, fullPetriClient, hardCodedScopesProvider);
     }
+
+    @Bean
+    public MetaDataService metaDataService(MetaDataDao metaDataDao,
+                                           FullPetriClient fullPetriClient,
+                                           HardCodedScopesProvider hardCodedSpecsProvider,
+                                           SpecExposureIdRetriever specExposureIdRetriever,
+                                           SupportedLanguagesProvider languageResolver,
+                                           GlobalGroupsManagementService globalGroupsManagementService) {
+        return new MetaDataService(metaDataDao, fullPetriClient, hardCodedSpecsProvider, specExposureIdRetriever, languageResolver, globalGroupsManagementService);
+    }
+
+
 }

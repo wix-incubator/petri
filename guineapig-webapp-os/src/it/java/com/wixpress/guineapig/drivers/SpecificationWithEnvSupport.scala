@@ -32,7 +32,8 @@ object GlobalEnv {
       started.compareAndSet(false, true)
 
       embeddedMySql.start()
-      server.start()
+      server.initServer()
+      server.startServer
     }
   }
 

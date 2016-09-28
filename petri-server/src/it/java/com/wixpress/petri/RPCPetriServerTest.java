@@ -4,10 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
 import com.wixpress.petri.petri.*;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.net.MalformedURLException;
 import java.sql.SQLException;
