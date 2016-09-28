@@ -1,12 +1,16 @@
 package com.wixpress.petri.laboratory;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Sets;
+import com.google.common.collect.Sets.SetView;
 import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.laboratory.converters.StringConverter;
 import com.wixpress.petri.petri.MetricsReporter;
 import com.wixpress.petri.petri.LaboratoryTopology;
 import com.wixpress.petri.petri.SpecDefinition;
 import com.wixpress.petri.petri.UserRequestPetriClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.Option;
 import scala.Some;
 
@@ -19,6 +23,8 @@ import static java.lang.String.valueOf;
  * @since 8/7/13
  */
 public class TrackableLaboratory implements Laboratory {
+
+    Logger log = LoggerFactory.getLogger(TrackableLaboratory.class);
 
     private final int maxConductionTimeMillis;
     private final Experiments experiments;
@@ -272,7 +278,12 @@ public class TrackableLaboratory implements Laboratory {
                     suspectKeys.add(key);
             }
         }
-        return !existingKeys.containsAll(suspectKeys);
+
+        SetView<String> missingKeys = Sets.difference(suspectKeys, existingKeys);
+        if (!missingKeys.isEmpty() && log.isTraceEnabled()) {
+            log.trace(String.format("Going to fetch state from server due to missing keys: [%s]", missingKeys));
+        }
+        return !missingKeys.isEmpty();
     }
 
 }

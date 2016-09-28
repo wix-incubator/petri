@@ -12,4 +12,5 @@ public class TestGroupMakers {
 
     public static final List<UiTestGroup> UI_TEST_GROUPS_FOR_CLIENT_WITH_NEW_WINNING =
             Arrays.asList(new UiTestGroup(1, "old", 0), new UiTestGroup(2, "new", 100));
+
 }

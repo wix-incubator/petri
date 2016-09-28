@@ -24,6 +24,7 @@ public class ClasspathSpecDefinitionsIT {
     public static final String INVALID_SPECS_PACKAGE = "specs.invalid";
     public static final String VALID_AND_INVALID_SPECS_PACKAGE = "specs";
     public static final String ABSTRACT_SPECS_PACKAGE = "specs.abstracts";
+
     @Rule
     public JUnitRuleMockery context = new JUnitRuleMockery();
 

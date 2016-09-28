@@ -22,10 +22,15 @@ import static com.google.common.collect.Lists.newArrayList;
  */
 public abstract class SpecDefinition {
 
-    public ExperimentSpec create(DateTime updateDate) {
-        ExperimentSpecBuilder builder = new ExperimentSpecBuilder(this.getClass().getName(), updateDate);
+    public final ExperimentSpec create(DateTime updateDate) {
+        ExperimentSpecBuilder builder = new ExperimentSpecBuilder(generateSpecKey(), updateDate);
         customize(builder);
         return builder.build();
+    }
+
+    //package-visible intentionally - used for synthetic server framework specs
+    String generateSpecKey() {
+        return getClass().getName();
     }
 
     protected ExperimentSpecBuilder customize(ExperimentSpecBuilder builder) {

@@ -5,7 +5,6 @@ import com.wixpress.guineapig.dao.MetaDataDao;
 import com.wixpress.guineapig.dao.MySqlMetaDataDao;
 import com.wixpress.guineapig.dto.UserAgentRegex;
 import com.wixpress.guineapig.util.DaoSupport;
-import com.wixpress.guineapig.util.DaoTestSuiteIT;
 import com.wixpress.guineapig.util.GuineaPigDBDriver;
 import com.wixpress.guineapig.util.MetaDataTable;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
@@ -41,7 +40,7 @@ public class MetaDataDaoIT extends DaoSupport {
     private ObjectMapper anObjectMapperWithScalaSupport() {
         return ObjectMapperFactory.makeObjectMapper();
     }
-    
+
     @Test
     public void addFirstUserAgentRegex() throws IOException, ClassNotFoundException {
         UserAgentRegex userAgentRegex = new UserAgentRegex("(*)test(*)", "This is a Test Regex");
