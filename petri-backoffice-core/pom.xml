@@ -70,7 +70,7 @@
         <dependency>
             <groupId>com.wix</groupId>
             <artifactId>wix-embedded-mysql</artifactId>
-            <version>2.0.3-SNAPSHOT</version>
+            <version>${wix-embedded-mysql}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
