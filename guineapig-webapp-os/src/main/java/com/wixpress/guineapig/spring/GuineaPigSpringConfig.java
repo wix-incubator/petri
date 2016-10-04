@@ -11,7 +11,6 @@ import com.wixpress.guineapig.spi.SpecExposureIdRetriever;
 import com.wixpress.guineapig.spi.SupportedLanguagesProvider;
 import com.wixpress.guineapig.topology.ClientTopology;
 import com.wixpress.guineapig.topology.GuineapigDBTopology;
-import com.wixpress.guineapig.topology.ServerTopology;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.JodaTimeClock;
@@ -30,11 +29,6 @@ public class GuineaPigSpringConfig {
     @Bean
     public ClientTopology clientTopology() {
         return new ClientTopology();
-    }
-
-    @Bean
-    public ServerTopology serverTopology() {
-        return new ServerTopology();
     }
 
     @Bean

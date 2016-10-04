@@ -14,7 +14,6 @@ public class WebUiController extends BaseController {
     public String getIndex(Model model) throws Exception {
 
         ClientTopology clientTopology = new ClientTopology();
-        clientTopology.redirectUri = "";
 
         AuthTopology auth = new AuthTopology("", "", "", "");
 

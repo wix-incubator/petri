@@ -1,9 +1,9 @@
 package com.wixpress.guineapig.spring
 
-import java.util.{Collections, Properties}
-import com.wixpress.guineapig.velocity.WixResourceManager
+import java.util.Properties
+
 import org.apache.velocity.app.VelocityEngine
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+
 import scala.collection.JavaConversions._
 
 case class VelocityEngineBuilder(velocityFileSystemLocations: Map[String, String] = Map.empty,

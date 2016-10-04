@@ -4,8 +4,7 @@ package com.wixpress.guineapig.topology;
  * @author dalias
  * @since 9/28/14
  */
-//@Configurable(namespace = "db")
-public class GuineapigDBTopology { //extends ComboPooledDataSourceTopology {
+public class GuineapigDBTopology {
     public String username;
     public String password;
     public String url;

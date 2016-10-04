@@ -1,8 +1,5 @@
 package com.wixpress.guineapig.spring
 
-import javax.annotation.Resource
-
-import com.wixpress.guineapig.topology.ServerTopology
 import org.apache.velocity.app.VelocityEngine
 import org.springframework.context.annotation._
 import org.springframework.context.support.ReloadableResourceBundleMessageSource
@@ -13,8 +10,6 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
  * Time: 3:18 PM
  */
 class VelocityConfig {
-
-  @Resource var serverTopology: ServerTopology = _
 
   @Bean
   def velocityEngine: VelocityEngine = VelocityEngineBuilder().build()
