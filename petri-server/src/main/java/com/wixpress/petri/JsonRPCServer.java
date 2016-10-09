@@ -8,6 +8,7 @@ import com.wixpress.petri.petri.UserRequestPetriClient;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 
 /**
@@ -17,19 +18,31 @@ import org.eclipse.jetty.servlet.ServletHolder;
 * Time: 11:54 AM
 * To change this template use File | Settings | File Templates.
 */
-public class JsonRPCServer {
+public class JsonRPCServer  {
     private final Server server;
+    public final ServletContextHandler context;
 
-    public JsonRPCServer(PetriRpcServer serviceImpl, ObjectMapper objectMapper, int port) {
+    public JsonRPCServer(PetriRpcServer serviceImpl, ObjectMapper objectMapper, int port, Boolean addBackOfficeWebapp) {
         this.server = new Server(port);
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context = createContext(addBackOfficeWebapp);
         context.setContextPath("/");
         server.setHandler(context);
 
         addServlets(serviceImpl, objectMapper, context);
     }
 
-    public static void addServlets(PetriRpcServer serviceImpl, ObjectMapper objectMapper, ServletContextHandler context) {
+    private ServletContextHandler createContext(Boolean addBackOfficeWebapp) {
+        if (addBackOfficeWebapp){
+            WebAppContext webAppContext = new WebAppContext();
+            webAppContext.setResourceBase("src/main/webapp");
+            return webAppContext;
+        }
+        else{
+            return new ServletContextHandler(ServletContextHandler.SESSIONS);
+        }
+    }
+
+    private void addServlets(PetriRpcServer serviceImpl, ObjectMapper objectMapper, ServletContextHandler context) {
 
         context.addServlet(new ServletHolder(new JsonRPCServlet(serviceImpl,objectMapper, FullPetriClient.class)),"/petri/full_api");
         context.addServlet(new ServletHolder(new JsonRPCServlet(serviceImpl,objectMapper, PetriClient.class)),"/petri/api");
@@ -44,5 +57,6 @@ public class JsonRPCServer {
     public void stop() throws Exception {
         server.stop();
     }
+
 
 }

@@ -20,6 +20,7 @@ public class PetriConfigFile {
     private int port = 9090;
     private final File properties = new File("petri.properties");
     private int conductionLimitIntervalInMillis = 5000;
+    private boolean addBackOfficeWebapp = false;
 
     PetriConfigFile() {
     }
@@ -48,6 +49,11 @@ public class PetriConfigFile {
         return this;
     }
 
+    public PetriConfigFile withAddBackOfficeWebapp(boolean addBackOfficeWebapp) {
+        this.addBackOfficeWebapp = addBackOfficeWebapp;
+        return this;
+    }
+
     public void save() throws ConfigurationException, IOException {
         properties.createNewFile();
         PropertiesConfiguration config = new PropertiesConfiguration(properties);
@@ -56,6 +62,7 @@ public class PetriConfigFile {
         config.setProperty("db.url", url);
         config.setProperty("server.port", port);
         config.setProperty("server.conductionLimitIntervalInMillis", conductionLimitIntervalInMillis);
+        config.setProperty("server.addBackOfficeWebapp", addBackOfficeWebapp);
         config.save();
     }
 

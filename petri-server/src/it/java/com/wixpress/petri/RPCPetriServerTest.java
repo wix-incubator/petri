@@ -50,6 +50,7 @@ public class RPCPetriServerTest extends PetriClientContractTest {
                 withPassword("sa").
                 withUrl("jdbc:h2:mem:test").
                 withPort(9011).
+                withAddBackOfficeWebapp(true).
                 save();
 
         Main.main();
