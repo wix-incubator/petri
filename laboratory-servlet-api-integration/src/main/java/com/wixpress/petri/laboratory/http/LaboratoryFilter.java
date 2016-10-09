@@ -52,6 +52,15 @@ public class LaboratoryFilter implements Filter {
         public void write(int param) throws IOException {
             baos.write(param);
         }
+
+        @Override
+        public boolean isReady() {
+            return false;
+        }
+
+        @Override
+        public void setWriteListener(WriteListener writeListener) {
+        }
     }
 
 
@@ -66,13 +75,13 @@ public class LaboratoryFilter implements Filter {
         httpServletRequest.getSession().setAttribute(PETRI_USER_INFO_STORAGE, storage);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final HttpServletResponseWrapper response = new CachingHttpResponse(resp, new ByteArrayServletStream(baos), new PrintWriter(baos));
+        final HttpServletResponseWrapper wrappedResponse = new CachingHttpResponse(resp, new ByteArrayServletStream(baos), new PrintWriter(baos));
 
-        chain.doFilter(req, response);
+        chain.doFilter(req, wrappedResponse);
 
         final UserInfo userInfo = storage.read();
         final UserInfo originalUserInfo = storage.readOriginal();
-        userInfo.saveExperimentState(new CookieExperimentStateStorage(response, laboratoryProperties.getPetriCookieName()), originalUserInfo);
+        userInfo.saveExperimentState(new CookieExperimentStateStorage(wrappedResponse, laboratoryProperties.getPetriCookieName()), originalUserInfo);
         if (laboratoryTopology.isWriteStateToServer()) {
             userInfo.saveExperimentState(new ServerStateExperimentStateStorage(petriClient), originalUserInfo);
         }

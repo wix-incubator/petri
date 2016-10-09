@@ -90,7 +90,8 @@ class PageWithButtonController {
   }
 
   private def getUserId(request: HttpServletRequest) = {
-    val cookie = request.getCookies.toSet.find(_.getName == labUserIdField).map(_.getValue)
+    val cookies: Array[Cookie] = request.getCookies
+    val cookie = if(cookies == null) None else cookies.toSet.find(_.getName == labUserIdField).map(_.getValue)
     Option(request.getParameter(labUserIdField)).orElse(cookie)
   }
 }
