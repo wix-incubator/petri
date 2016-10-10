@@ -2,11 +2,12 @@ package com.wixpress.guineapig.spi
 
 import java.util
 
+import com.wixpress.guineapig.drivers.GlobalEnv
 import com.wixpress.guineapig.dto.SpecExposureIdViewDto
 import com.wixpress.guineapig.entities.ui.UiSpecForScope
 import com.wixpress.guineapig.topology.GuineapigDBTopology
 import com.wixpress.petri.experiments.domain.ScopeDefinition
-import com.wixpress.petri.petri.{FullPetriClient, RAMPetriClient}
+import com.wixpress.petri.petri.{FullPetriClient}
 import org.springframework.context.annotation.{Bean, Configuration}
 
 import scala.collection.JavaConversions._
@@ -15,7 +16,7 @@ import scala.collection.JavaConversions._
 class GuineaPigSpringConfigAddition {
 
   @Bean
-  def petriClientMock: FullPetriClient = new RAMPetriClient
+  def petriClientMock: FullPetriClient = GlobalEnv.fullPetriClient
 
   // SPI BEANS
 

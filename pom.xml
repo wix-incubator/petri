@@ -57,7 +57,7 @@
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
         <eclipse-jetty-version>9.2.19.v20160908</eclipse-jetty-version>
         <commons-io.version>2.4</commons-io.version>
-        <http-client-version>4.3.5</http-client-version>
+        <http-client-version>4.5.2</http-client-version>
         <jmock-version>2.8.1</jmock-version>
         <jmock-specs2-version>0.1.16</jmock-specs2-version>
         <make-it-easy-version>3.1.0</make-it-easy-version>
@@ -82,4 +82,5 @@
         <module>guineapig-webapp-os</module>
         <module>petri-ui-statics</module>
     </modules>
+
 </project>

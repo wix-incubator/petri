@@ -3,11 +3,13 @@ package com.wixpress.guineapig.web
 import java.io.ByteArrayInputStream
 import javax.imageio.ImageIO
 
-import com.wixpress.guineapig.drivers.SpecificationWithEnvSupport
+import com.wixpress.guineapig.drivers.{PetriBackofficeUiDriver, SpecificationWithEnvSupport}
 import org.apache.http.util.EntityUtils
 import org.specs2.specification.Scope
 
 class WebUiControllerIT extends SpecificationWithEnvSupport {
+
+  val petriBackofficeUiDriver = new PetriBackofficeUiDriver(9901)
 
   trait Context extends Scope
 
@@ -34,5 +36,9 @@ class WebUiControllerIT extends SpecificationWithEnvSupport {
     val img = ImageIO.read(new ByteArrayInputStream(imgArr))
     img.getHeight === 32
     img.getWidth === 32
+  }
+
+  "show number of active experiments" in new Context {
+    petriBackofficeUiDriver.numberOfActiveExperimentsIs(0)
   }
 }
