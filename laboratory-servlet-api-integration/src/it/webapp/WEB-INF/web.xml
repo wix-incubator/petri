@@ -36,6 +36,17 @@
         <url-pattern>/sync-specs</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>koboshiRegistry</servlet-name>
+        <servlet-class>com.wix.hoopoe.koboshi.servlet.ResilientCacheRegistryEndpoint</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>koboshiRegistry</servlet-name>
+        <url-pattern>/koboshi/*</url-pattern>
+    </servlet-mapping>
+
     <filter>
         <filter-name>laboratoryFilter</filter-name>
         <filter-class>com.wixpress.petri.laboratory.http.LaboratoryFilter</filter-class>
@@ -50,5 +61,6 @@
         <param-name>laboratoryConfig</param-name>
         <param-value>/WEB-INF/laboratory.properties</param-value>
     </context-param>
+
 
 </web-app>

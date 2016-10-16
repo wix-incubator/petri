@@ -63,6 +63,12 @@
 
         <dependency>
             <groupId>com.wix.hoopoe.koboshi</groupId>
+            <artifactId>koboshi-servlet_2.11</artifactId>
+            <version>0.0.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.wix.hoopoe.koboshi</groupId>
             <artifactId>koboshi-bootstrap_2.11</artifactId>
             <version>0.0.4</version>
         </dependency>
@@ -144,6 +150,13 @@
             <scope>test</scope>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.wix.hoopoe.koboshi</groupId>
+            <artifactId>koboshi-testkit_2.11</artifactId>
+            <version>0.0.4</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -1,5 +1,6 @@
 package com.wixpress.common.petri.e2e;
 
+import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.petri.DBDriver;
 import com.wixpress.petri.petri.FullPetriClient;
@@ -30,6 +31,8 @@ public abstract class BaseTest {
     protected static final String SAMPLE_WEBAPP_PATH = PetriReportsTest.class.getResource("/").getPath() + "../../../sample-petri-app/src/main/webapp";
     protected static SampleAppRunner sampleAppRunner ;
     protected static DBDriver dbDriver;
+
+    protected RemoteDataFetcherDriver remoteDataFetcherDriver;
     protected FullPetriClient fullPetriClient;
     protected PetriClient petriClient;
 
@@ -64,6 +67,7 @@ public abstract class BaseTest {
     public void start() throws MalformedURLException {
         petriClient = petriClient();
         fullPetriClient = fullPetriClient();
+        remoteDataFetcherDriver = RemoteDataFetcherDriver.apply("localhost", SAMPLE_APP_PORT);
 
         dbDriver.emptyTables();
     }

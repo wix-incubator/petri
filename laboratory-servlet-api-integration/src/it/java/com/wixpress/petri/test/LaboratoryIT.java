@@ -1,10 +1,9 @@
 package com.wixpress.petri.test;
 
+import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver;
 import com.wixpress.petri.NonSerializableServerException;
 import com.wixpress.petri.PetriRPCClient;
-import com.wixpress.petri.experiments.domain.Experiment;
-import com.wixpress.petri.experiments.domain.ExperimentSpec;
-import com.wixpress.petri.experiments.domain.TestGroup;
+import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.fakeserver.FakePetriServer;
 import com.wixpress.petri.util.ConductExperimentSummaryMatcher;
 import org.apache.http.HttpResponse;
@@ -48,7 +47,7 @@ public class LaboratoryIT {
 
     private final SampleAppRunner sampleApp = new SampleAppRunner(SAMPLE_APP_PORT);
     private final FakePetriServer petri = new FakePetriServer(PETRI_PORT);
-
+    private final RemoteDataFetcherDriver remoteDataFetcherDriver = RemoteDataFetcherDriver.apply("localhost",SAMPLE_APP_PORT);
     @Before
     public void startServers() throws Exception {
         petri.start();
@@ -61,8 +60,12 @@ public class LaboratoryIT {
         petri.stop();
     }
 
-    private void addSpecToPetri(){
+    //TODO I don't like that it's on top, aligning with current code
+    private Experiment setupExperiment(final ExperimentSnapshotBuilder experimentBuilder) {
         petri.addSpec(abSpecBuilder(THE_KEY));
+        final Experiment experiment = petri.addExperiment(experimentBuilder);
+        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
+        return experiment;
     }
 
     private void assertConductExperimentReported(Experiment experiment) throws UnknownHostException, InterruptedException {
@@ -80,16 +83,14 @@ public class LaboratoryIT {
 
     @Test
     public void conductingASimpleExperiment() throws Exception {
-        addSpecToPetri();
-        petri.addExperiment(experimentWithFirstWinning(THE_KEY));
+        setupExperiment(experimentWithFirstWinning(THE_KEY));
         String testResult = sampleApp.conductExperiment(THE_KEY, "FALLBACK");
         assertThat(testResult, is("a"));
     }
 
     @Test
     public void experimentsResultsArePreservedAcrossDifferentRequests() throws Exception {
-        addSpecToPetri();
-        Experiment experiment = petri.addExperiment(experimentWithFirstWinning(THE_KEY));
+        final Experiment experiment = setupExperiment(experimentWithFirstWinning(THE_KEY));
 
         // this causes the experiment to be persisted
         sampleApp.conductExperiment(THE_KEY, "FALLBACK");
@@ -102,8 +103,7 @@ public class LaboratoryIT {
 
     @Test
     public void experimentsResultsArePreservedAcrossDifferentRequestsForRegisteredUsers() throws Exception {
-        addSpecToPetri();
-        Experiment experiment = petri.addExperiment(experimentOnRegisteredWithFirstWinning(THE_KEY));
+        final Experiment experiment = setupExperiment(experimentOnRegisteredWithFirstWinning(THE_KEY));
 
         // this causes the experiment to be persisted
         final UUID uuid = UUID.randomUUID();
@@ -118,8 +118,7 @@ public class LaboratoryIT {
 
     @Test
     public void conductsExperimentAndReportIt() throws IOException, InterruptedException {
-        addSpecToPetri();
-        Experiment experiment = petri.addExperiment(experimentWithFirstWinning(THE_KEY));
+        final Experiment experiment = setupExperiment(experimentWithFirstWinning(THE_KEY));
         sampleApp.conductExperiment(THE_KEY, "FALLBACK");
         assertConductExperimentReported(experiment);
     }
@@ -139,6 +138,15 @@ public class LaboratoryIT {
         assertThat(specs.get(0).getKey(), CoreMatchers.is(ValidStubSpecDefinition_1.class.getName()));
         assertThat(specs.get(0).getTestGroups(), CoreMatchers.is(ValidStubSpecDefinition_1.testGroups));
         assertThat(specs.get(0).getScopes(), CoreMatchers.is(Arrays.asList(ValidStubSpecDefinition_1.scopeDefinitions)));
+    }
+
+    @Test
+    public void resilientToPetriServerDowntime() throws Exception {
+        setupExperiment(experimentWithFirstWinning(THE_KEY));
+        petri.failNextReuqest();
+        //TODO Is there a less verbose way of saying "succesful conduction"?
+        String testResult = sampleApp.conductExperiment(THE_KEY, "FALLBACK");
+        assertThat(testResult, is("a"));
     }
 
 }

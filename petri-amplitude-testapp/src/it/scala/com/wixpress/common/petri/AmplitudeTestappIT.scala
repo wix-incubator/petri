@@ -4,7 +4,8 @@ import java.util.Arrays._
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import com.github.tomakehurst.wiremock.client.VerificationException
-import com.wixpress.petri.experiments.domain.TestGroup
+import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver
+import com.wixpress.petri.experiments.domain.{ConductibleExperiments, TestGroup}
 import com.wixpress.petri.fakeserver.FakePetriServer
 import com.wixpress.petri.laboratory.{AmplitudeDriver, AmplitudePetriEvent}
 import com.wixpress.petri.test.{SampleAppRunner, TestBuilders}
@@ -21,10 +22,12 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
   val appRunner = new SampleAppRunner(webappPort, webappPath, 1, true, amplitudeDriver.amplitudeUrl)
   val sampleAppViewDriver = new SampleAppViewDriver(webappPort)
   val petriDriver = new PetriDriver(9010)
+  val remoteDataFetcherDriver = RemoteDataFetcherDriver("localhost", webappPort)
 
   "AmplitudeTestapp" should {
     "enter the page, click the button and check that petri event + business bi event were logged in amplitude" in {
       petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
+      remoteDataFetcherDriver.fetch[ConductibleExperiments]()
 
       sampleAppViewDriver.enterThePageAndClickButton()
 

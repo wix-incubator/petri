@@ -1,5 +1,6 @@
 package com.wixpress.common.petri.e2e;
 
+import com.wixpress.petri.experiments.domain.ConductibleExperiments;
 import com.wixpress.petri.test.TestBuilders;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -42,6 +43,8 @@ public class FilterParametersConfigTest extends BaseTest {
     public void conductingAnExperimentWithGeoFilterWithCustomizedDataExtractor() throws IOException {
         addSpec("THE_KEY");
         fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndFilter("THE_KEY").build());
+        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
+
         String testResult = sampleAppRunner.conductExperimentWithGeoHeader("THE_KEY", "FALLBACK_VALUE", "IL");
         assertThat(testResult, is("a"));
     }
