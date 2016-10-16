@@ -3,6 +3,7 @@ package com.wixpress.guineapig.drivers
 import java.util.concurrent.atomic.AtomicBoolean
 import com.wixpress.common.petri.testutils.ServerRunner
 import com.wixpress.guineapig.util.ITEmbeddedMysql
+import com.wixpress.guineapig.web.GuineaPigDispatcherServlet
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory
 import com.wixpress.petri.petri.RAMPetriClient
 import org.specs2.mutable.{Before, SpecificationWithJUnit}
@@ -35,6 +36,7 @@ object GlobalEnv {
       started.compareAndSet(false, true)
 
       embeddedMySql.start()
+      GuineaPigDispatcherServlet.addGuineaPigServlet(server.context)
       server.start()
     }
   }

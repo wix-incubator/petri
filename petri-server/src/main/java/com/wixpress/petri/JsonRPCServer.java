@@ -1,6 +1,7 @@
 package com.wixpress.petri;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wixpress.guineapig.web.GuineaPigDispatcherServlet$;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.petri.PetriClient;
 import com.wixpress.petri.petri.PetriRpcServer;
@@ -8,7 +9,6 @@ import com.wixpress.petri.petri.UserRequestPetriClient;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.webapp.WebAppContext;
 
 
 /**
@@ -32,14 +32,11 @@ public class JsonRPCServer  {
     }
 
     private ServletContextHandler createContext(Boolean addBackOfficeWebapp) {
+        ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         if (addBackOfficeWebapp){
-            WebAppContext webAppContext = new WebAppContext();
-            webAppContext.setResourceBase("src/main/webapp");
-            return webAppContext;
+            GuineaPigDispatcherServlet$.MODULE$.addGuineaPigServlet(servletContextHandler);
         }
-        else{
-            return new ServletContextHandler(ServletContextHandler.SESSIONS);
-        }
+        return servletContextHandler;
     }
 
     private void addServlets(PetriRpcServer serviceImpl, ObjectMapper objectMapper, ServletContextHandler context) {

@@ -12,7 +12,7 @@
 
 
     <!-- Register the annotated components in the container eg : annotated controllers -->
-    <context:component-scan base-package="com.wixpress.guineapig.web.*" />
+    <context:component-scan base-package="com.wixpress.guineapig.*" />
 
     <!-- Tell the container that we are going to use annotations -->
     <context:annotation-config />
