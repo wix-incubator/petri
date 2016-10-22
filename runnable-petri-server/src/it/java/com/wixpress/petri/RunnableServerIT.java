@@ -2,6 +2,7 @@ package com.wixpress.petri;
 
 
 import com.ning.http.client.AsyncHttpClient;
+import com.wixpress.guineapig.drivers.PetriBackofficeUiDriver;
 import com.wixpress.petri.petri.FullPetriClient;
 import com.wixpress.petri.test.TestBuilders;
 import org.apache.commons.io.FileUtils;
@@ -24,17 +25,20 @@ import static org.hamcrest.Matchers.hasSize;
 public class RunnableServerIT {
 
     private static final int SERVER_STARTUP_RETRIES = 60;
-    private static final String BASE_SERVER_ADDRESS = "http://localhost:9011/";
+    private static int petriServerPort = 9011;
+    private static final String BASE_SERVER_ADDRESS = "http://localhost:" + petriServerPort + "/";
     private static final String BASE_PETRI_API_ADDRESS = BASE_SERVER_ADDRESS + "petri";
 
     private FullPetriClient fullPetriClient;
 
     private Process petriServerProcess;
+    private PetriBackofficeUiDriver petriBackofficeUiDriver;
 
     @Before
     public void setUp() throws Exception {
         removeDBFile();
         fullPetriClient = PetriRPCClient.makeFullClientFor(BASE_PETRI_API_ADDRESS);
+        petriBackofficeUiDriver = new PetriBackofficeUiDriver(petriServerPort);
         runServer();
     }
 
@@ -47,6 +51,7 @@ public class RunnableServerIT {
     @Test
     public void testServerInit() throws Exception {
         assertThat(fullPetriClient.fetchAllExperiments(), hasSize(0));
+        petriBackofficeUiDriver.numberOfActiveExperimentsIs(0);
     }
 
     @Test

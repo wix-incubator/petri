@@ -14,11 +14,12 @@ public class ServerRunner {
 
     private final Server server;
     private final String pathToWebapp;
+    public final WebAppContext context;
 
     public ServerRunner(int port, String pathToWebapp) {
         this.server = new Server(port);
         this.pathToWebapp = pathToWebapp;
-        WebAppContext context = new WebAppContext();
+        context = new WebAppContext();
 
         context.setContextPath("/");
         context.setParentLoaderPriority(true);

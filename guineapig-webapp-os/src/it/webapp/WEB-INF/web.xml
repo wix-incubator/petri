@@ -4,6 +4,8 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
 
+    <!-- need https://java.net/jira/browse/SERVLET_SPEC-70 to be solved to kill this part of web.xml -->
+    <!-- TODO - or just give up and set it on the BaseController for every handled request -->
     <session-config>
         <session-timeout>1200</session-timeout>
     </session-config>

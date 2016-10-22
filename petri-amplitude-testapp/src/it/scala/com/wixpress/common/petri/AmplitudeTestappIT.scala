@@ -48,9 +48,8 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
   }
 
   class SampleAppViewDriver(port: Int) {
-    private val driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6)
+    private val driver = new HtmlUnitDriver(BrowserVersion.CHROME, true)
     private val pageUrl = s"http://localhost:$port/test"
-    driver.setJavascriptEnabled(true)
 
     def enterThePageAndClickButton() = {
       driver.get(pageUrl)
@@ -64,7 +63,7 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
   }
 
   def assertButtonWasNotRenderedOnFallbackColor(button: WebElement) =
-    button.getCssValue("color") must be_==("red")
+    button.getAttribute("style") must contain("color: red")
 
   class PetriDriver(port: Int) {
     private val petri = new FakePetriServer(port)

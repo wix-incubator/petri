@@ -3,6 +3,7 @@ package com.wixpress.petri;
 import com.google.common.collect.ImmutableList;
 import com.wixpress.guineapig.drivers.HttpDriver;
 import com.wixpress.guineapig.drivers.JsonResponse;
+import com.wixpress.guineapig.drivers.PetriBackofficeUiDriver;
 import com.wixpress.guineapig.entities.ui.UiExperiment;
 import com.wixpress.guineapig.entities.ui.UiExperimentBuilder;
 import com.wixpress.guineapig.entities.ui.UiTestGroup;
@@ -33,12 +34,14 @@ import static org.junit.Assert.assertTrue;
  */
 public class RPCPetriServerTest extends PetriClientContractTest {
 
+    private static final int petriServerPort = 9011;
     private final FullPetriClient fullPetriClient;
     private final PetriClient petriClient;
     private final UserRequestPetriClient userRequestPetriClient;
     private static DBDriver dbDriver;
     private final HttpDriver httpDriver;
-    private static final String BASE_SERVER_UI_ADDRESS = "http://localhost:9011";
+    private static final String BASE_SERVER_UI_ADDRESS = "http://localhost:" + petriServerPort;
+    private final PetriBackofficeUiDriver petriBackofficeUiDriver;
 
     @BeforeClass
     public static void startPetriServer() throws Exception {
@@ -49,7 +52,8 @@ public class RPCPetriServerTest extends PetriClientContractTest {
                 withUsername("auser").
                 withPassword("sa").
                 withUrl("jdbc:h2:mem:test").
-                withPort(9011).
+                withPort(petriServerPort).
+                withAddBackOfficeWebapp(true).
                 save();
 
         Main.main();
@@ -68,6 +72,7 @@ public class RPCPetriServerTest extends PetriClientContractTest {
         petriClient = PetriRPCClient.makeFor(serviceUrl);
         userRequestPetriClient = PetriRPCClient.makeUserRequestFor(serviceUrl);
         httpDriver = new HttpDriver();
+        petriBackofficeUiDriver = new PetriBackofficeUiDriver(petriServerPort);
     }
 
     @Before
@@ -117,7 +122,6 @@ public class RPCPetriServerTest extends PetriClientContractTest {
 
     @Test
     public void testUiEndpoints() throws Exception {
-        //OR!!! - if this can be selenium then i am literally DONE :)
         String someExpKey = "someExpKey";
         createExperimentViaUiEndpoint(someExpKey);
 
@@ -128,6 +132,8 @@ public class RPCPetriServerTest extends PetriClientContractTest {
     private void experimentAccessibleFromUi(String someExpKey) {
         JsonResponse jsonResponse = httpDriver.get(BASE_SERVER_UI_ADDRESS + "/v1/Experiment/1");
         assertThat(jsonResponse.getBodyRaw(), containsString(someExpKey));
+
+        petriBackofficeUiDriver.numberOfActiveExperimentsIs(1);
     }
 
     private void experimentExistsInPetriServer(String someExpKey) {
