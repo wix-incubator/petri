@@ -1,10 +1,6 @@
 package com.wixpress.petri.laboratory.http;
 
 import com.wix.hoopoe.koboshi.cache.ReadOnlyTimestampedLocalCache;
-import com.wix.hoopoe.koboshi.cache.defaults.ResilientCaches;
-import com.wix.hoopoe.koboshi.registry.RemoteDataFetcherRegistry;
-import com.wix.hoopoe.koboshi.remote.RemoteDataSource;
-import com.wix.hoopoe.koboshi.servlet.ResilientCacheRegistryEndpoint$;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.amplitude.AmplitudeAdapter;
 import com.wixpress.petri.experiments.domain.ConductibleExperiments;
@@ -12,18 +8,15 @@ import com.wixpress.petri.experiments.domain.ExternalDataFetchers;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
 import com.wixpress.petri.laboratory.*;
 import com.wixpress.petri.petri.*;
-import scala.Tuple2;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
-import java.nio.file.Paths;
 import java.util.concurrent.Executors;
 
 
@@ -143,26 +136,7 @@ public class LaboratoryFilter implements Filter {
         startMetricsReporterScheduler(laboratoryTopology.getReportsScheduleTimeInMillis());
 
         FilterTypeIdResolver.useDynamicFilterClassLoading();
-        cache = setupKoboshiCache(context);
-    }
-
-    private ReadOnlyTimestampedLocalCache<ConductibleExperiments> setupKoboshiCache(final ServletContext context) {
-        File koboshiCacheFolder = getKoboshiCacheFolder();
-        final Tuple2<com.wix.hoopoe.koboshi.cache.ResilientCaches, RemoteDataFetcherRegistry> cachesAndRegistry =
-                ResilientCaches.resilientCachesAndRegistry(koboshiCacheFolder);
-
-        context.setAttribute(ResilientCacheRegistryEndpoint$.MODULE$.RegistryKey(), cachesAndRegistry._2());
-
-        return cachesAndRegistry._1()
-                .aResilientCacheBuilder(ConductibleExperiments.class, new PetriClientRemoteDataSource(petriClient))
-                .withTimestampedData()
-                .build();
-    }
-
-    private File getKoboshiCacheFolder() {
-        File koboshiCacheFolder = Paths.get(System.getProperty("user.home"), "koboshi").toFile();
-        koboshiCacheFolder.mkdirs();
-        return koboshiCacheFolder;
+        cache = KoboshiServletSetup.setupKoboshiCache(context, petriClient);
     }
 
     private void readProperties() {
@@ -222,16 +196,4 @@ public class LaboratoryFilter implements Filter {
         }
     }
 
-    private static class PetriClientRemoteDataSource implements RemoteDataSource<ConductibleExperiments> {
-        private final PetriClient petriClient;
-
-        public PetriClientRemoteDataSource(PetriClient petriClient) {
-            this.petriClient = petriClient;
-        }
-
-        @Override
-        public ConductibleExperiments fetch() {
-            return new ConductibleExperiments(petriClient.fetchActiveExperiments());
-        }
-    }
 }
