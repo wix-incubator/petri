@@ -84,8 +84,7 @@ public class LaboratoryIT {
     @Test
     public void conductingASimpleExperiment() throws Exception {
         setupExperiment(experimentWithFirstWinning(THE_KEY));
-        String testResult = sampleApp.conductExperiment(THE_KEY, "FALLBACK");
-        assertThat(testResult, is("a"));
+        assertThat(sampleApp.conductExperiment(THE_KEY, "FALLBACK"), is("a"));
     }
 
     @Test
@@ -141,12 +140,10 @@ public class LaboratoryIT {
     }
 
     @Test
-    public void resilientToPetriServerDowntime() throws Exception {
+    public void doesNotUsePetriServerOnUserRequest() throws Exception {
         setupExperiment(experimentWithFirstWinning(THE_KEY));
         petri.failNextReuqest();
-        //TODO Is there a less verbose way of saying "succesful conduction"?
-        String testResult = sampleApp.conductExperiment(THE_KEY, "FALLBACK");
-        assertThat(testResult, is("a"));
+        assertThat(sampleApp.conductExperiment(THE_KEY, "FALLBACK"), is("a"));
     }
 
 }
