@@ -150,12 +150,6 @@
             <scope>test</scope>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.wix.hoopoe.koboshi</groupId>
-            <artifactId>koboshi-testkit_2.11</artifactId>
-            <version>0.0.4</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 

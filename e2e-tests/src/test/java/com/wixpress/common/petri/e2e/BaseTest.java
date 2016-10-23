@@ -1,6 +1,6 @@
 package com.wixpress.common.petri.e2e;
 
-import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver;
+import com.wixpress.petri.Main;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.petri.DBDriver;
 import com.wixpress.petri.petri.FullPetriClient;
@@ -14,7 +14,6 @@ import org.junit.BeforeClass;
 import java.net.MalformedURLException;
 
 import static com.wixpress.petri.PetriConfigFile.aPetriConfigFile;
-import com.wixpress.petri.Main;
 import static java.util.Arrays.asList;
 
 /**
@@ -32,7 +31,6 @@ public abstract class BaseTest {
     protected static SampleAppRunner sampleAppRunner ;
     protected static DBDriver dbDriver;
 
-    protected RemoteDataFetcherDriver remoteDataFetcherDriver;
     protected FullPetriClient fullPetriClient;
     protected PetriClient petriClient;
 
@@ -67,7 +65,6 @@ public abstract class BaseTest {
     public void start() throws MalformedURLException {
         petriClient = petriClient();
         fullPetriClient = fullPetriClient();
-        remoteDataFetcherDriver = RemoteDataFetcherDriver.apply("localhost", SAMPLE_APP_PORT);
 
         dbDriver.emptyTables();
     }

@@ -4,8 +4,7 @@ import java.util.Arrays._
 
 import com.gargoylesoftware.htmlunit.BrowserVersion
 import com.github.tomakehurst.wiremock.client.VerificationException
-import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver
-import com.wixpress.petri.experiments.domain.{ConductibleExperiments, TestGroup}
+import com.wixpress.petri.experiments.domain.TestGroup
 import com.wixpress.petri.fakeserver.FakePetriServer
 import com.wixpress.petri.laboratory.{AmplitudeDriver, AmplitudePetriEvent}
 import com.wixpress.petri.test.{SampleAppRunner, TestBuilders}
@@ -18,16 +17,15 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
   val webappPath = classOf[AmplitudeTestappIT].getResource("/").getPath + "../../../petri-amplitude-testapp/src/main/webapp"
   val webappPort = 9811
   val amplitudePort = 11981
+  var petriServerPort = 9010
   val amplitudeDriver = new AmplitudeDriver(amplitudePort)
   val appRunner = new SampleAppRunner(webappPort, webappPath, 1, true, amplitudeDriver.amplitudeUrl)
   val sampleAppViewDriver = new SampleAppViewDriver(webappPort)
-  val petriDriver = new PetriDriver(9010)
-  val remoteDataFetcherDriver = RemoteDataFetcherDriver("localhost", webappPort)
+  val petriDriver = new PetriDriver()
 
   "AmplitudeTestapp" should {
     "enter the page, click the button and check that petri event + business bi event were logged in amplitude" in {
       petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
-      remoteDataFetcherDriver.fetch[ConductibleExperiments]()
 
       sampleAppViewDriver.enterThePageAndClickButton()
 
@@ -39,9 +37,9 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
   }
 
   override def beforeAll(): Unit = {
-    appRunner.start()
     petriDriver.start()
     amplitudeDriver.start()
+    appRunner.start()
   }
 
   override def afterAll(): Unit = {
@@ -65,11 +63,12 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
     }
   }
 
-  def assertButtonWasNotRenderedOnFallbackColor(button: WebElement) =
+  def assertButtonWasNotRenderedOnFallbackColor(button: WebElement) = {
     button.getAttribute("style") must contain("color: red")
+  }
 
-  class PetriDriver(port: Int) {
-    private val petri = new FakePetriServer(port)
+  class PetriDriver() {
+    private val petri = new FakePetriServer(petriServerPort, webappPort)
 
     def start() = petri.start()
 
@@ -78,7 +77,7 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
     def addSpecAndExperiment(key: String) = {
       petri.addSpec(TestBuilders.abSpecBuilder(key))
 
-      petri.addExperiment(TestBuilders.experimentWithFirstWinning(key).withScope("SampleAppFTW").
+      petri.addExperiment(TestBuilders.experimentWithFirstWinning(key).
         withGroups(asList(new TestGroup(1, 100, "red"), new TestGroup(2, 0, "blue"))))
     }
   }

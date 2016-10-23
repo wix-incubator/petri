@@ -1,7 +1,5 @@
 package com.wixpress.common.petri.e2e;
 
-import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver;
-import com.wixpress.petri.experiments.domain.ConductibleExperiments;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.petri.ConductExperimentSummary;
 import com.wixpress.petri.petri.HostResolver;
@@ -32,7 +30,7 @@ public class PetriReportsTest extends BaseTest {
     public void reportsASingleExperiment() throws Exception {
         addSpec("THE_KEY");
         Experiment experiment = fullPetriClient.insertExperiment(experimentWithFirstWinning("THE_KEY").build());
-        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
+        sampleAppRunner.updateTheCacheNow();
 
         final String experimentResult = sampleAppRunner.conductExperiment("THE_KEY", "FALLBACK_VALUE");
         assertThat(experimentResult,  is("a"));

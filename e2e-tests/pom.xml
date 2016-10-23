@@ -73,12 +73,6 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.wix.hoopoe.koboshi</groupId>
-            <artifactId>koboshi-testkit_2.11</artifactId>
-            <version>0.0.4</version>
-            <scope>test</scope>
-        </dependency>
 
         <!-- jsonrpc4j -->
         <dependency>

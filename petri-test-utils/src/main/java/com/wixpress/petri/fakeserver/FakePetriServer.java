@@ -1,9 +1,7 @@
 package com.wixpress.petri.fakeserver;
 
-import com.wixpress.petri.experiments.domain.Experiment;
-import com.wixpress.petri.experiments.domain.ExperimentBuilder;
-import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
-import com.wixpress.petri.experiments.domain.ExperimentSpec;
+import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver;
+import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.petri.ConductExperimentSummary;
 import com.wixpress.petri.petri.RAMPetriClient;
 import com.wixpress.petri.petri.SpecDefinition;
@@ -23,10 +21,12 @@ import static java.util.Arrays.asList;
 public class FakePetriServer {
     private final TestJsonRPCServer petriServer;
     private RAMPetriClient petriClient;
+    private RemoteDataFetcherDriver remoteDataFetcherDriver;
 
-    public FakePetriServer(int port) {
+    public FakePetriServer(int port, int portOfSUT) {
         petriClient = new RAMPetriClient();
         petriServer = new TestJsonRPCServer(petriClient, makeObjectMapper(), port);
+        remoteDataFetcherDriver = new RemoteDataFetcherDriver("localhost", portOfSUT);
     }
 
     public void start() throws Exception {
@@ -42,11 +42,14 @@ public class FakePetriServer {
     }
 
     public Experiment addExperiment(ExperimentSnapshotBuilder experiment) {
-        return petriClient.insertExperiment(experiment.build());
+        Experiment createdExperiment = petriClient.insertExperiment(experiment.build());
+        updateTheAppsCacheNow();
+        return createdExperiment;
     }
 
     public void updateExperiment(ExperimentBuilder experimentBuilder) {
         petriClient.updateExperiment(experimentBuilder.build());
+        updateTheAppsCacheNow();
     }
 
     public List<ConductExperimentSummary> getConductExperimentReport(int experimentId) {
@@ -61,4 +64,7 @@ public class FakePetriServer {
         return petriClient.fetchSpecs();
     }
 
+    public void updateTheAppsCacheNow() {
+        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
+    }
 }

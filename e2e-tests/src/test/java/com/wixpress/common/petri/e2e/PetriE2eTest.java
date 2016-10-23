@@ -55,7 +55,7 @@ public class PetriE2eTest extends BaseTest {
     public void conductingASimpleExperiment() throws Exception {
         addSpec("THE_KEY");
         fullPetriClient.insertExperiment(experimentWithFirstWinning("THE_KEY").build());
-        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
+        sampleAppRunner.updateTheCacheNow();
 
         assertThat(petriClient.fetchActiveExperiments().size(), is(1));
 
@@ -69,7 +69,7 @@ public class PetriE2eTest extends BaseTest {
 
         ExperimentSnapshot experiment = experimentWithFirstWinning("THE_KEY").build();
         petriJsonClient().invoke("insertExperiment", new JsonNode[]{experimentWithCustomUserTypeFilter(experiment)});
-        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
+        sampleAppRunner.updateTheCacheNow();
 
         String testResult = sampleAppRunner.conductExperimentWithCustomContext("THE_KEY", "FALLBACK_VALUE");
         assertThat(testResult, is("a"));
@@ -79,7 +79,8 @@ public class PetriE2eTest extends BaseTest {
     public void afterPauseUserDoesNotLooseExperienceEvenWhenNoCookie_akaServerSideState() throws IOException {
         addSpec("THE_KEY");
         fullPetriClient.insertExperiment(experimentOnRegisteredWithFirstWinning("THE_KEY").build());
-        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
+        sampleAppRunner.updateTheCacheNow();
+
 
         UUID uuid = UUID.randomUUID();
 
@@ -98,7 +99,7 @@ public class PetriE2eTest extends BaseTest {
 
     @Test
     public void validateSpecSyncAvailability() throws Exception {
-         String syncSpecsUrl = "http://localhost:" + SAMPLE_APP_PORT + "/sync-specs";
+        String syncSpecsUrl = "http://localhost:" + SAMPLE_APP_PORT + "/sync-specs";
 
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(syncSpecsUrl);

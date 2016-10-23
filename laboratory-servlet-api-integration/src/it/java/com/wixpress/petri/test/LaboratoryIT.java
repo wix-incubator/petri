@@ -1,9 +1,11 @@
 package com.wixpress.petri.test;
 
-import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver;
 import com.wixpress.petri.NonSerializableServerException;
 import com.wixpress.petri.PetriRPCClient;
-import com.wixpress.petri.experiments.domain.*;
+import com.wixpress.petri.experiments.domain.Experiment;
+import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
+import com.wixpress.petri.experiments.domain.ExperimentSpec;
+import com.wixpress.petri.experiments.domain.TestGroup;
 import com.wixpress.petri.fakeserver.FakePetriServer;
 import com.wixpress.petri.util.ConductExperimentSummaryMatcher;
 import org.apache.http.HttpResponse;
@@ -46,8 +48,8 @@ public class LaboratoryIT {
     public static final String THE_KEY = "THE_KEY";
 
     private final SampleAppRunner sampleApp = new SampleAppRunner(SAMPLE_APP_PORT);
-    private final FakePetriServer petri = new FakePetriServer(PETRI_PORT);
-    private final RemoteDataFetcherDriver remoteDataFetcherDriver = RemoteDataFetcherDriver.apply("localhost",SAMPLE_APP_PORT);
+    private final FakePetriServer petri = new FakePetriServer(PETRI_PORT, SAMPLE_APP_PORT);
+
     @Before
     public void startServers() throws Exception {
         petri.start();
@@ -58,21 +60,6 @@ public class LaboratoryIT {
     public void stopServers() throws Exception {
         sampleApp.stop();
         petri.stop();
-    }
-
-    //TODO I don't like that it's on top, aligning with current code
-    private Experiment setupExperiment(final ExperimentSnapshotBuilder experimentBuilder) {
-        petri.addSpec(abSpecBuilder(THE_KEY));
-        final Experiment experiment = petri.addExperiment(experimentBuilder);
-        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
-        return experiment;
-    }
-
-    private void assertConductExperimentReported(Experiment experiment) throws UnknownHostException, InterruptedException {
-        sleep(10000);
-        System.out.println(petri.getConductExperimentReport(experiment.getId()));
-        assertThat(petri.getConductExperimentReport(experiment.getId()),
-                contains(ConductExperimentSummaryMatcher.hasSummary(InetAddress.getLocalHost().getHostName(), experiment.getId(), "a", 1l)));
     }
 
     @Test(expected = NonSerializableServerException.class)
@@ -144,6 +131,20 @@ public class LaboratoryIT {
         setupExperiment(experimentWithFirstWinning(THE_KEY));
         petri.failNextReuqest();
         assertThat(sampleApp.conductExperiment(THE_KEY, "FALLBACK"), is("a"));
+    }
+
+
+    private Experiment setupExperiment(final ExperimentSnapshotBuilder experimentBuilder) {
+        petri.addSpec(abSpecBuilder(THE_KEY));
+        final Experiment experiment = petri.addExperiment(experimentBuilder);
+        return experiment;
+    }
+
+    private void assertConductExperimentReported(Experiment experiment) throws UnknownHostException, InterruptedException {
+        sleep(10000);
+        System.out.println(petri.getConductExperimentReport(experiment.getId()));
+        assertThat(petri.getConductExperimentReport(experiment.getId()),
+                contains(ConductExperimentSummaryMatcher.hasSummary(InetAddress.getLocalHost().getHostName(), experiment.getId(), "a", 1l)));
     }
 
 }

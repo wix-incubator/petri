@@ -1,10 +1,8 @@
 package com.wixpress.petri.test;
 
-import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver;
-import com.wixpress.petri.experiments.domain.ConductibleExperiments;
-import com.wixpress.petri.fakeserver.FakePetriServer;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
+import com.wixpress.petri.fakeserver.FakePetriServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,8 +31,7 @@ public class LaboratoryServerSideStateIT {
     public static final String THE_KEY = "THE_KEY";
 
     private SampleAppRunner sampleApp;
-    private final FakePetriServer petri = new FakePetriServer(PETRI_PORT);
-    private final RemoteDataFetcherDriver remoteDataFetcherDriver = RemoteDataFetcherDriver.apply("localhost",SAMPLE_APP_PORT);
+    private final FakePetriServer petri = new FakePetriServer(PETRI_PORT, SAMPLE_APP_PORT);
 
     @Before
     public void startFakeServer() throws Exception {
@@ -53,15 +50,12 @@ public class LaboratoryServerSideStateIT {
 
     private void twoConsecutiveCallsFromDifferentBrowsersShareResult(boolean shareResult) throws IOException, InterruptedException {
         Experiment experiment = petri.addExperiment(experimentOnRegisteredWithFirstWinning(THE_KEY));
-        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
 
         final UUID uuid = UUID.randomUUID();
-
         sampleApp.conductExperimentByUser(THE_KEY, "FALLBACK", uuid);
         waitForAsynchStateUpdateToServer();
         // flip the toggle so that group 'b' is now the winning group
         petri.updateExperiment(updateExperimentState(experiment, new TestGroup(1, 0, "a"), new TestGroup(2, 100, "b")));
-        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
 
         String expectedValue = shareResult ? "a" : "b";
         assertThat(sampleApp.conductExperimentByUserWithNoPreviousCookies(THE_KEY, "FALLBACK", uuid), is(expectedValue));
