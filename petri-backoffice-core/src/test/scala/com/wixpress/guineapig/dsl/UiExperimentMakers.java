@@ -32,6 +32,7 @@ public class UiExperimentMakers {
     public static final Property<UiExperiment, List<String>> includeUserAgentRegexes = newProperty();
     public static final Property<UiExperiment, List<String>> excludeUserAgentRegexes = newProperty();
     public static final Property<UiExperiment, List<String>> hosts = newProperty();
+    public static final Property<UiExperiment, List<String>> artifacts = newProperty();
     public static final Property<UiExperiment, List<String>> excludeGuids = newProperty();
     public static final Property<UiExperiment, List<String>> includeGuids = newProperty();
     public static final Property<UiExperiment, Boolean> excludeMetaSiteIds = newProperty();
@@ -66,6 +67,7 @@ public class UiExperimentMakers {
                     .withExcludeMetaSiteIds(lookup.valueOf(excludeMetaSiteIds, false))
                     .withMetaSiteIds(lookup.valueOf(metaSiteIds, new ArrayList<String>()))
                     .withHosts(lookup.valueOf(hosts, new ArrayList<String>()))
+                    .withArtifacts(lookup.valueOf(artifacts, new ArrayList<String>()))
                     .withConductLimit(lookup.valueOf(conductionLimit, 0))
                     .withExcludeUserGroups(lookup.valueOf(excludeUserGroups, new ArrayList<String>()))
                     .build();

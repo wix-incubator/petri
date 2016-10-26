@@ -39,6 +39,7 @@ public class UiExperiment {
     final private List<String> geo;
     final private List<String> languages;
     final private List<String> hosts;
+    final private List<String> artifacts;
     final private List<String> includeGuids;
     final private List<String> excludeGuids;
     final private long parentStartTime;
@@ -89,6 +90,7 @@ public class UiExperiment {
             List<String> geo,
             List<String> languages,
             List<String> hosts,
+            List<String> artifacts,
             //editing constrains
 
             //rules
@@ -124,6 +126,7 @@ public class UiExperiment {
         this.geo = geo;
         this.languages = languages;
         this.hosts = hosts;
+        this.artifacts = artifacts;
         this.includeGuids = includeGuids;
         this.excludeGuids = excludeGuids;
         this.wixUsers = wixUsers;
@@ -180,6 +183,10 @@ public class UiExperiment {
 
     public List<String> getHosts() {
         return hosts;
+    }
+
+    public List<String> getArtifacts() {
+        return artifacts;
     }
 
     public boolean isExcludeGeo() {
@@ -332,6 +339,7 @@ public class UiExperiment {
         if (geo != null ? !geo.equals(that.geo) : that.geo != null) return false;
         if (languages != null ? !languages.equals(that.languages) : that.languages != null) return false;
         if (hosts != null ? !hosts.equals(that.hosts) : that.hosts != null) return false;
+        if (artifacts != null ? !artifacts.equals(that.artifacts) : that.artifacts != null) return false;
         if (includeGuids != null ? !includeGuids.equals(that.includeGuids) : that.includeGuids != null) return false;
         if (excludeGuids != null ? !excludeGuids.equals(that.excludeGuids) : that.excludeGuids != null) return false;
         if (includeUserAgentRegexes != null ? !includeUserAgentRegexes.equals(that.includeUserAgentRegexes) : that.includeUserAgentRegexes != null)
@@ -373,6 +381,7 @@ public class UiExperiment {
         result = 31 * result + (geo != null ? geo.hashCode() : 0);
         result = 31 * result + (languages != null ? languages.hashCode() : 0);
         result = 31 * result + (hosts != null ? hosts.hashCode() : 0);
+        result = 31 * result + (artifacts != null ? artifacts.hashCode() : 0);
         result = 31 * result + (includeGuids != null ? includeGuids.hashCode() : 0);
         result = 31 * result + (excludeGuids != null ? excludeGuids.hashCode() : 0);
         result = 31 * result + (int) (parentStartTime ^ (parentStartTime >>> 32));

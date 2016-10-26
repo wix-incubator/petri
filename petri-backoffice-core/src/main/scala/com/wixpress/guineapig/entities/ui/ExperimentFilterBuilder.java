@@ -58,6 +58,9 @@ public class ExperimentFilterBuilder {
         if (0 < uiExperiment.getHosts().size()) {
             filters.add(new HostFilter(uiExperiment.getHosts()));
         }
+        if (0 < uiExperiment.getArtifacts().size()) {
+            filters.add(new ArtifactFilter(uiExperiment.getArtifacts()));
+        }
         if (0 < uiExperiment.getIncludeUserAgentRegexes().size() || 0 < uiExperiment.getExcludeUserAgentRegexes().size()) {
             filters.add(new UserAgentRegexFilter(uiExperiment.getIncludeUserAgentRegexes(),
                     uiExperiment.getExcludeUserAgentRegexes()));
