@@ -39,7 +39,6 @@ public class UiExperimentBuilder {
     private List<String> excludeGuids = new ArrayList<String>();
     private List<String> languages = new ArrayList<String>();
     private List<String> hosts = new ArrayList<String>();
-    private List<String> artifacts = new ArrayList<String>();
     private boolean wixUsers = false;
     private long parentStartTime = -1;
     private int originalId = Experiment.NO_ID;
@@ -174,11 +173,6 @@ public class UiExperimentBuilder {
         return this;
     }
 
-    public UiExperimentBuilder withArtifacts(List<String> artifacts) {
-        this.artifacts = artifacts;
-        return this;
-    }
-
     public UiExperimentBuilder withIncludeGuids(List<String> guids) {
         this.includeGuids = guids;
         return this;
@@ -280,7 +274,6 @@ public class UiExperimentBuilder {
                 withExcludeGeo(uiExperiment.isExcludeGeo()).
                 withLanguages(uiExperiment.getLanguages()).
                 withHosts(uiExperiment.getHosts()).
-                withArtifacts(uiExperiment.getArtifacts()).
                 withIncludeGuids(uiExperiment.getIncludeGuids()).
                 withExcludeGuids(uiExperiment.getExcludeGuids()).
                 withWixUsers(uiExperiment.isWixUsers()).
@@ -299,11 +292,7 @@ public class UiExperimentBuilder {
 
 
     public UiExperiment build() {
-        UiExperiment uiExperiment = new UiExperiment(id, updater, originalId, linkId, name, type, creator, scope,
-                lastUpdated, key, specKey, creationDate, description, comment, startDate, endDate, groups, state,
-                paused, parentStartTime, editable, wixUsers, allRegistered, newRegistered, anonymous, includeGuids,
-                excludeGuids, isExcludeGeo, geo, languages, hosts, artifacts, includeUserAgentRegexes,
-                excludeUserAgentRegexes, isExcludeMetaSite, metaSiteIds, conductLimit, nonRegistered, excludeUserGroups);
+        UiExperiment uiExperiment = new UiExperiment(id, updater, originalId, linkId, name, type, creator, scope, lastUpdated, key, specKey, creationDate, description, comment, startDate, endDate, groups, state, paused, parentStartTime, editable, wixUsers, allRegistered, newRegistered, anonymous, includeGuids, excludeGuids, isExcludeGeo, geo, languages, hosts, includeUserAgentRegexes, excludeUserAgentRegexes, isExcludeMetaSite, metaSiteIds, conductLimit, nonRegistered, excludeUserGroups);
         return uiExperiment;
     }
 }

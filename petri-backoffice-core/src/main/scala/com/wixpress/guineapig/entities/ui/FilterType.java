@@ -19,7 +19,6 @@ public enum FilterType {
     EXCLUDE_GEO("geo"),
     LANGUAGE("language"),
     HOST("hosts"),
-    ARTIFACT("artifacts"),
     INCLUDE_ID("include guids"),
     EXCLUDE_ID("exclude guids"),
     USER_AGENT_REGEX("User Agent Regex"),

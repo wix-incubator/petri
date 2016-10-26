@@ -109,13 +109,6 @@ public class UiExperimentFilterBuilder {
         return new ArrayList<>();
     }
 
-    public List<String> getArtifacts() {
-        if (filters.containsKey(FilterType.ARTIFACT)) {
-            return ((ArtifactFilter) this.filters.get(FilterType.ARTIFACT)).getArtifacts();
-        }
-        return new ArrayList<>();
-    }
-
     public List<String> getIncludeGuids() {
         List<String> ids = new ArrayList<>();
         if (filters.containsKey(FilterType.INCLUDE_ID)) {
@@ -147,9 +140,6 @@ public class UiExperimentFilterBuilder {
         }
         if (filter.getClass() == HostFilter.class) {
             return FilterType.HOST;
-        }
-        if (filter.getClass() == ArtifactFilter.class) {
-            return FilterType.ARTIFACT;
         }
         if (filter.getClass() == WixEmployeesFilter.class) {
             return FilterType.WIX_USERS;

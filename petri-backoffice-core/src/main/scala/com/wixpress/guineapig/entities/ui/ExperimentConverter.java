@@ -63,7 +63,6 @@ public class ExperimentConverter {
                 .withExcludeGeo(adapter.getGeo().isExclude())
                 .withLanguages(adapter.getLanguages())
                 .withHosts(adapter.getHosts())
-                .withArtifacts(adapter.getArtifacts())
                 .withIncludeGuids(adapter.getIncludeGuids())
                 .withExcludeGuids(adapter.getExcludeGuids())
                 .withAllRegistered(adapter.getUsers().equals(FilterType.REGISTERED_USERS.getType()))
