@@ -1,7 +1,9 @@
 package com.wixpress.petri.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wix.hoopoe.koboshi.it.RemoteDataFetcherDriver;
 import com.wixpress.common.petri.testutils.ServerRunner;
+import com.wixpress.petri.experiments.domain.ConductibleExperiments;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -31,6 +33,7 @@ public class SampleAppRunner {
     public static final String DEFAULT_PATH_TO_WEBAPP = ServerRunner.class.getResource("/").getPath() + "../../src/it/webapp";
     private final ServerRunner sampleAppServer;
     private final int port;
+    private final RemoteDataFetcherDriver remoteDataFetcherDriver;
     private final HttpClient client;
     public static final String GEO_HEADER = "GEO_HEADER";
 
@@ -59,6 +62,7 @@ public class SampleAppRunner {
 
     public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState, String amplitudeUrl) {
         this.port = port;
+        this.remoteDataFetcherDriver = new RemoteDataFetcherDriver("localhost", port);
         this.sampleAppServer = new ServerRunner(port, pathToWebapp);
         this.client = HttpClientBuilder.create().build();
 
@@ -120,6 +124,10 @@ public class SampleAppRunner {
     private void revertChangesToLoboratoryPropertiesFile() throws IOException {
         Files.copy(tempPropertiesFilePath, originalPropertiesFile, StandardCopyOption.REPLACE_EXISTING);
         Files.deleteIfExists(tempPropertiesFilePath);
+    }
+
+    public void updateTheCacheNow() {
+        remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
     }
 
     private HttpClient newClient(){

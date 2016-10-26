@@ -61,6 +61,12 @@
             <version>${http-client-version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.wix.hoopoe.koboshi</groupId>
+            <artifactId>koboshi-servlet_2.11</artifactId>
+            <version>0.0.4</version>
+        </dependency>
+
         <!-- test dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -138,6 +144,7 @@
             <scope>test</scope>
             <version>${project.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>

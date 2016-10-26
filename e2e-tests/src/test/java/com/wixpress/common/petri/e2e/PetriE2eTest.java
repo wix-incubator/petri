@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.wixpress.petri.PetriRPCClient;
-import com.wixpress.petri.experiments.domain.Experiment;
-import com.wixpress.petri.experiments.domain.ExperimentBuilder;
-import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
-import com.wixpress.petri.experiments.domain.ExperimentSpec;
+import com.wixpress.petri.experiments.domain.*;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -58,6 +55,7 @@ public class PetriE2eTest extends BaseTest {
     public void conductingASimpleExperiment() throws Exception {
         addSpec("THE_KEY");
         fullPetriClient.insertExperiment(experimentWithFirstWinning("THE_KEY").build());
+        sampleAppRunner.updateTheCacheNow();
 
         assertThat(petriClient.fetchActiveExperiments().size(), is(1));
 
@@ -71,6 +69,7 @@ public class PetriE2eTest extends BaseTest {
 
         ExperimentSnapshot experiment = experimentWithFirstWinning("THE_KEY").build();
         petriJsonClient().invoke("insertExperiment", new JsonNode[]{experimentWithCustomUserTypeFilter(experiment)});
+        sampleAppRunner.updateTheCacheNow();
 
         String testResult = sampleAppRunner.conductExperimentWithCustomContext("THE_KEY", "FALLBACK_VALUE");
         assertThat(testResult, is("a"));
@@ -80,6 +79,8 @@ public class PetriE2eTest extends BaseTest {
     public void afterPauseUserDoesNotLooseExperienceEvenWhenNoCookie_akaServerSideState() throws IOException {
         addSpec("THE_KEY");
         fullPetriClient.insertExperiment(experimentOnRegisteredWithFirstWinning("THE_KEY").build());
+        sampleAppRunner.updateTheCacheNow();
+
 
         UUID uuid = UUID.randomUUID();
 
@@ -98,7 +99,7 @@ public class PetriE2eTest extends BaseTest {
 
     @Test
     public void validateSpecSyncAvailability() throws Exception {
-         String syncSpecsUrl = "http://localhost:" + SAMPLE_APP_PORT + "/sync-specs";
+        String syncSpecsUrl = "http://localhost:" + SAMPLE_APP_PORT + "/sync-specs";
 
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(syncSpecsUrl);

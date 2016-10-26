@@ -30,8 +30,10 @@ public class PetriReportsTest extends BaseTest {
     public void reportsASingleExperiment() throws Exception {
         addSpec("THE_KEY");
         Experiment experiment = fullPetriClient.insertExperiment(experimentWithFirstWinning("THE_KEY").build());
+        sampleAppRunner.updateTheCacheNow();
 
-        sampleAppRunner.conductExperiment("THE_KEY", "FALLBACK_VALUE");
+        final String experimentResult = sampleAppRunner.conductExperiment("THE_KEY", "FALLBACK_VALUE");
+        assertThat(experimentResult,  is("a"));
 
         waitForReporter();
         List<ConductExperimentSummary> experimentReport = fullPetriClient.getExperimentReport(experiment.getId());

@@ -1,7 +1,9 @@
 package com.wixpress.petri.laboratory.http;
 
+import com.wix.hoopoe.koboshi.cache.ReadOnlyTimestampedLocalCache;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.amplitude.AmplitudeAdapter;
+import com.wixpress.petri.experiments.domain.ConductibleExperiments;
 import com.wixpress.petri.experiments.domain.ExternalDataFetchers;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
 import com.wixpress.petri.laboratory.*;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.util.concurrent.Executors;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,6 +39,7 @@ public class LaboratoryFilter implements Filter {
     private UserRequestPetriClient userRequestPetriClient;
     private LaboratoryTopology laboratoryTopology;
     private CompositeTestGroupAssignmentTracker tracker = CompositeTestGroupAssignmentTracker.create(new BILoggingTestGroupAssignmentTracker(new JodaTimeClock()));
+    private ReadOnlyTimestampedLocalCache<ConductibleExperiments> cache;
 
 
     public LaboratoryFilter() {
@@ -90,7 +94,8 @@ public class LaboratoryFilter implements Filter {
 
 
     private Laboratory laboratory(UserInfoStorage storage) throws MalformedURLException {
-        Experiments experiments = new CachedExperiments(new PetriClientExperimentSource(petriClient));
+        Experiments experiments = new CachedExperiments(new TransientCacheExperimentSource(cache, new JodaTimeClock()));
+
         return new TrackableLaboratory(experiments, tracker, storage, new DefaultErrorHandler(), 50, metricsReporter, userRequestPetriClient, laboratoryTopology, new ExternalDataFetchers(null));
     }
 
@@ -103,6 +108,7 @@ public class LaboratoryFilter implements Filter {
     public void destroy() {
         metricsReporter.stopScheduler();
     }
+
 
     public void init(FilterConfig filterConfig) throws ServletException {
         final ServletContext context = filterConfig.getServletContext();
@@ -130,6 +136,7 @@ public class LaboratoryFilter implements Filter {
         startMetricsReporterScheduler(laboratoryTopology.getReportsScheduleTimeInMillis());
 
         FilterTypeIdResolver.useDynamicFilterClassLoading();
+        cache = KoboshiServletSetup.setupKoboshiCache(context, petriClient);
     }
 
     private void readProperties() {

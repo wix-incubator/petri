@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class RunnableServerIT {
 
-    private static final int SERVER_STARTUP_RETRIES = 60;
+    private static final int SERVER_STARTUP_RETRIES = 20;
     private static int petriServerPort = 9011;
     private static final String BASE_SERVER_ADDRESS = "http://localhost:" + petriServerPort + "/";
     private static final String BASE_PETRI_API_ADDRESS = BASE_SERVER_ADDRESS + "petri";
@@ -113,7 +113,11 @@ public class RunnableServerIT {
                 if (e.getCause() instanceof ConnectException) res = ServerState.STOPPED;
                 else throw new Exception("waiting for server got unexpected error: " + e.getMessage(), e);
             }
-            if (res == expected) return;
+            if (res == expected) {
+                System.out.println("good, petri server started");
+                return;
+            }
+            System.out.println("still waiting for petri server to start..");
             Thread.sleep(1000);
         }
         throw new Exception("Server did not change to " + expected + " state");

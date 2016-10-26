@@ -3,6 +3,7 @@ package com.wixpress.petri.test;
 import com.wixpress.petri.NonSerializableServerException;
 import com.wixpress.petri.PetriRPCClient;
 import com.wixpress.petri.experiments.domain.Experiment;
+import com.wixpress.petri.experiments.domain.ExperimentSnapshotBuilder;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import com.wixpress.petri.experiments.domain.TestGroup;
 import com.wixpress.petri.fakeserver.FakePetriServer;
@@ -47,7 +48,7 @@ public class LaboratoryIT {
     public static final String THE_KEY = "THE_KEY";
 
     private final SampleAppRunner sampleApp = new SampleAppRunner(SAMPLE_APP_PORT);
-    private final FakePetriServer petri = new FakePetriServer(PETRI_PORT);
+    private final FakePetriServer petri = new FakePetriServer(PETRI_PORT, SAMPLE_APP_PORT);
 
     @Before
     public void startServers() throws Exception {
@@ -61,17 +62,6 @@ public class LaboratoryIT {
         petri.stop();
     }
 
-    private void addSpecToPetri(){
-        petri.addSpec(abSpecBuilder(THE_KEY));
-    }
-
-    private void assertConductExperimentReported(Experiment experiment) throws UnknownHostException, InterruptedException {
-        sleep(10000);
-        System.out.println(petri.getConductExperimentReport(experiment.getId()));
-        assertThat(petri.getConductExperimentReport(experiment.getId()),
-                contains(ConductExperimentSummaryMatcher.hasSummary(InetAddress.getLocalHost().getHostName(), experiment.getId(), "a", 1l)));
-    }
-
     @Test(expected = NonSerializableServerException.class)
     public void throwsSpecialExceptionIfServerExceptionIsNotSerializable() throws MalformedURLException {
         petri.failNextReuqest();
@@ -80,16 +70,13 @@ public class LaboratoryIT {
 
     @Test
     public void conductingASimpleExperiment() throws Exception {
-        addSpecToPetri();
-        petri.addExperiment(experimentWithFirstWinning(THE_KEY));
-        String testResult = sampleApp.conductExperiment(THE_KEY, "FALLBACK");
-        assertThat(testResult, is("a"));
+        setupExperiment(experimentWithFirstWinning(THE_KEY));
+        assertThat(sampleApp.conductExperiment(THE_KEY, "FALLBACK"), is("a"));
     }
 
     @Test
     public void experimentsResultsArePreservedAcrossDifferentRequests() throws Exception {
-        addSpecToPetri();
-        Experiment experiment = petri.addExperiment(experimentWithFirstWinning(THE_KEY));
+        final Experiment experiment = setupExperiment(experimentWithFirstWinning(THE_KEY));
 
         // this causes the experiment to be persisted
         sampleApp.conductExperiment(THE_KEY, "FALLBACK");
@@ -102,8 +89,7 @@ public class LaboratoryIT {
 
     @Test
     public void experimentsResultsArePreservedAcrossDifferentRequestsForRegisteredUsers() throws Exception {
-        addSpecToPetri();
-        Experiment experiment = petri.addExperiment(experimentOnRegisteredWithFirstWinning(THE_KEY));
+        final Experiment experiment = setupExperiment(experimentOnRegisteredWithFirstWinning(THE_KEY));
 
         // this causes the experiment to be persisted
         final UUID uuid = UUID.randomUUID();
@@ -118,8 +104,7 @@ public class LaboratoryIT {
 
     @Test
     public void conductsExperimentAndReportIt() throws IOException, InterruptedException {
-        addSpecToPetri();
-        Experiment experiment = petri.addExperiment(experimentWithFirstWinning(THE_KEY));
+        final Experiment experiment = setupExperiment(experimentWithFirstWinning(THE_KEY));
         sampleApp.conductExperiment(THE_KEY, "FALLBACK");
         assertConductExperimentReported(experiment);
     }
@@ -139,6 +124,27 @@ public class LaboratoryIT {
         assertThat(specs.get(0).getKey(), CoreMatchers.is(ValidStubSpecDefinition_1.class.getName()));
         assertThat(specs.get(0).getTestGroups(), CoreMatchers.is(ValidStubSpecDefinition_1.testGroups));
         assertThat(specs.get(0).getScopes(), CoreMatchers.is(Arrays.asList(ValidStubSpecDefinition_1.scopeDefinitions)));
+    }
+
+    @Test
+    public void doesNotUsePetriServerOnUserRequest() throws Exception {
+        setupExperiment(experimentWithFirstWinning(THE_KEY));
+        petri.failNextReuqest();
+        assertThat(sampleApp.conductExperiment(THE_KEY, "FALLBACK"), is("a"));
+    }
+
+
+    private Experiment setupExperiment(final ExperimentSnapshotBuilder experimentBuilder) {
+        petri.addSpec(abSpecBuilder(THE_KEY));
+        final Experiment experiment = petri.addExperiment(experimentBuilder);
+        return experiment;
+    }
+
+    private void assertConductExperimentReported(Experiment experiment) throws UnknownHostException, InterruptedException {
+        sleep(10000);
+        System.out.println(petri.getConductExperimentReport(experiment.getId()));
+        assertThat(petri.getConductExperimentReport(experiment.getId()),
+                contains(ConductExperimentSummaryMatcher.hasSummary(InetAddress.getLocalHost().getHostName(), experiment.getId(), "a", 1l)));
     }
 
 }

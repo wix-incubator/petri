@@ -42,6 +42,8 @@ public class FilterParametersConfigTest extends BaseTest {
     public void conductingAnExperimentWithGeoFilterWithCustomizedDataExtractor() throws IOException {
         addSpec("THE_KEY");
         fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndFilter("THE_KEY").build());
+        sampleAppRunner.updateTheCacheNow();
+
         String testResult = sampleAppRunner.conductExperimentWithGeoHeader("THE_KEY", "FALLBACK_VALUE", "IL");
         assertThat(testResult, is("a"));
     }

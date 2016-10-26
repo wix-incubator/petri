@@ -1,8 +1,8 @@
 package com.wixpress.petri.test;
 
-import com.wixpress.petri.fakeserver.FakePetriServer;
 import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.TestGroup;
+import com.wixpress.petri.fakeserver.FakePetriServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class LaboratoryServerSideStateIT {
     public static final String THE_KEY = "THE_KEY";
 
     private SampleAppRunner sampleApp;
-    private final FakePetriServer petri = new FakePetriServer(PETRI_PORT);
+    private final FakePetriServer petri = new FakePetriServer(PETRI_PORT, SAMPLE_APP_PORT);
 
     @Before
     public void startFakeServer() throws Exception {
@@ -52,7 +52,6 @@ public class LaboratoryServerSideStateIT {
         Experiment experiment = petri.addExperiment(experimentOnRegisteredWithFirstWinning(THE_KEY));
 
         final UUID uuid = UUID.randomUUID();
-
         sampleApp.conductExperimentByUser(THE_KEY, "FALLBACK", uuid);
         waitForAsynchStateUpdateToServer();
         // flip the toggle so that group 'b' is now the winning group

@@ -10,7 +10,7 @@ object MainAmplitudeSampleApp {
   def main(args: Array[String]) {
     val webappPath = classOf[AmplitudeTestappConfig].getResource("/").getPath + "../../../petri-amplitude-testapp/src/main/webapp"
     val appRunner = new SampleAppRunner(9811, webappPath, 1, true)
-    val petriDriver = new PetriDriver(9010)
+    val petriDriver = new PetriDriver()
     val experiment = petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
 
     petriDriver.updateExperiment(experiment, new TestGroup(1, 50, "red"), new TestGroup(2, 50, "blue"))
@@ -21,8 +21,8 @@ object MainAmplitudeSampleApp {
   }
 }
 
-class PetriDriver(port: Int) {
-  private val petri = new FakePetriServer(port)
+class PetriDriver() {
+  private val petri = new FakePetriServer(9010, 9811)
 
   def start() = petri.start()
 
