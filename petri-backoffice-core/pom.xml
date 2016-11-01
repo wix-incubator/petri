@@ -119,7 +119,6 @@
                         </configuration>
                     </execution>
                 </executions>
-                <version>2.6</version>
             </plugin>
         </plugins>
     </build>
