@@ -56,12 +56,6 @@
 
         <!-- test dependencies -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${org.springframework.version}</version>
@@ -76,24 +70,12 @@
         <dependency>
             <groupId>com.wix</groupId>
             <artifactId>specs2-jmock_${scala.dependencies.version}</artifactId>
-            <version>0.1.21</version>
+            <version>${jmock-specs2-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jmock</groupId>
             <artifactId>jmock-junit4</artifactId>
-            <version>${jmock-version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-library</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.wix</groupId>

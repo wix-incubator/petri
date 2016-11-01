@@ -27,12 +27,6 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <artifactId>petri-test-utils</artifactId>
             <groupId>com.wix</groupId>
             <version>${project.version}</version>
