@@ -27,12 +27,6 @@
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <artifactId>petri-test-utils</artifactId>
             <groupId>com.wix</groupId>
             <version>${project.version}</version>
@@ -76,18 +70,6 @@
         <dependency>
             <groupId>com.natpryce</groupId>
             <artifactId>make-it-easy</artifactId>
-            <version>${make-it-easy-version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-library</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
