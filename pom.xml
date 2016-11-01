@@ -105,7 +105,8 @@
                 <groupId>com.github.tomakehurst</groupId>
                 <artifactId>wiremock</artifactId>
                 <version>1.57</version>
-                <scope>test</scope>
+                <!-- this is compile scope for the test-utils module -->
+                <scope>compile</scope>
                 <exclusions>
                     <exclusion>
                         <groupId>org.mortbay.jetty</groupId>
