@@ -115,7 +115,6 @@
         <dependency>
             <groupId>com.natpryce</groupId>
             <artifactId>make-it-easy</artifactId>
-            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.wix</groupId>

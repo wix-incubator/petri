@@ -69,13 +69,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>1.9.5</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.wix</groupId>
             <artifactId>petri-test-utils</artifactId>
             <version>${project.version}</version>
@@ -122,8 +115,6 @@
         <dependency>
             <groupId>com.natpryce</groupId>
             <artifactId>make-it-easy</artifactId>
-            <version>${make-it-easy-version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.wix</groupId>
