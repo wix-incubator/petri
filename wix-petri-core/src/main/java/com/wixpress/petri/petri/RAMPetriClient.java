@@ -126,7 +126,7 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
     }
 
     @Override
-    public List<Experiment> fetchAllExperimentsGroupedByOriginalId() {
+    public synchronized List<Experiment> fetchAllExperimentsGroupedByOriginalId() {
         List<Experiment> allExperiments = fetchAllExperiments();
         final ImmutableListMultimap<Integer, Experiment> groupedByOriginalId = index(allExperiments, originalId());
         return newArrayList(transform(groupedByOriginalId.asMap().values(), mostRecent()));
