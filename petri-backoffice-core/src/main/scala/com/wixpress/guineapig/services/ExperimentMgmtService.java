@@ -123,6 +123,7 @@ public class ExperimentMgmtService implements GuineapigExperimentMgmtService {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         log.error("getExperiment with id = " + experimentId + " not found !!!");
