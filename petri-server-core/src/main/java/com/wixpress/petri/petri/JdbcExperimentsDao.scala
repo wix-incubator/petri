@@ -18,6 +18,10 @@ import scala.util.control.NonFatal
  */
 class JdbcExperimentsDao(jdbcTemplateRW: JdbcTemplate, jdbcTemplateRO: JdbcTemplate, mapper: PetriMapper[Experiment]) extends ExperimentsDao {
 
+  def this(jdbcTemplate: JdbcTemplate, mapper: PetriMapper[Experiment]) { // for OSS compatibility
+    this(jdbcTemplate, jdbcTemplate, mapper)
+  }
+
   override def add(spec: ExperimentSnapshot): Experiment = {
     val serialized = serializeWrapException(spec)
 
