@@ -335,13 +335,19 @@ class JdbcExperimentsDaoIT extends SpecWithJUnit with JMock {
   trait BaseCtx extends Before {
     val now = nowTime
 
-    val dbDriver = DBDriver.dbDriver(DBDriver.JDBC_H2_IN_MEM_CONNECTION_STRING)
+    private val jdbcConnectionString: String = DBDriver.JDBC_H2_IN_MEM_CONNECTION_STRING
+    val dbDriver = DBDriver.dbDriver(jdbcConnectionString)
+    dbDriver.createSchema()
+    dbDriver.createReadOnlyH2User()
     val objectMapper = ObjectMapperFactory.makeObjectMapper
     val mappingErrorHandler = mock[MappingErrorHandler]
-    val dao = new JdbcExperimentsDao(dbDriver.jdbcTemplate, new ExperimentMapper(objectMapper, mappingErrorHandler))
+    val jdbcTemplateRW = dbDriver.jdbcTemplate
+    val jdbcTemplateRO = dbDriver.getJdbcTemplateRO(jdbcConnectionString)
+    val dao = new JdbcExperimentsDao(jdbcTemplateRW, jdbcTemplateRO, new ExperimentMapper(objectMapper, mappingErrorHandler))
 
     override def before: Any = {
       dbDriver.createSchema()
+      dbDriver.createReadOnlyH2User()
     }
 
     def givenSpec(key: String) = {
