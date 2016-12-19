@@ -2,7 +2,7 @@ package com.wixpress.common.petri
 
 import javax.servlet.http.HttpSession
 
-import com.wixpress.petri.amplitude.AmplitudeAdapter
+import com.wixpress.petri.amplitude.AmplitudeAdapterBuilder
 import com.wixpress.petri.laboratory.Laboratory
 import com.wixpress.petri.laboratory.http.LaboratoryFilter._
 import org.springframework.context.annotation.{Bean, Configuration, Scope, ScopedProxyMode}
@@ -19,7 +19,7 @@ class AmplitudeTestappConfig {
     def property(property: String) =
       Source.fromFile(propertiesPath).getLines().find(line => line.startsWith(property)).map(_.split("=").last).orNull
 
-    AmplitudeAdapter.create(property("amplitude.url"), property("amplitude.api.key"), property("amplitude.timeout.ms"))
+    AmplitudeAdapterBuilder.create(property("amplitude.url"), property("amplitude.api.key"), property("amplitude.timeout.ms"))
   }
 
 

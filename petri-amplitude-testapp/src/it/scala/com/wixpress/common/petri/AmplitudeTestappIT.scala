@@ -6,7 +6,7 @@ import com.gargoylesoftware.htmlunit.BrowserVersion
 import com.github.tomakehurst.wiremock.client.VerificationException
 import com.wixpress.petri.experiments.domain.TestGroup
 import com.wixpress.petri.fakeserver.FakePetriServer
-import com.wixpress.petri.laboratory.{AmplitudeDriver, AmplitudePetriEvent}
+import com.wixpress.petri.laboratory.{BiServerDriver, BiPetriEvent}
 import com.wixpress.petri.test.{SampleAppRunner, TestBuilders}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.{By, WebElement}
@@ -18,7 +18,7 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
   val webappPort = 9811
   val amplitudePort = 11981
   var petriServerPort = 9010
-  val amplitudeDriver = new AmplitudeDriver(amplitudePort)
+  val amplitudeDriver = new BiServerDriver(amplitudePort, "httpapi", "amplitude")
   val appRunner = new SampleAppRunner(webappPort, webappPath, 1, true, amplitudeDriver.amplitudeUrl)
   val sampleAppViewDriver = new SampleAppViewDriver(webappPort)
   val petriDriver = new PetriDriver()
@@ -30,8 +30,8 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
       sampleAppViewDriver.enterThePageAndClickButton()
 
       eventually {
-        amplitudeDriver.assertThatAmplitudeWasCalledWith(partialBody = ButtonClickedEvent.eventType) must not(throwA[VerificationException])
-        amplitudeDriver.assertThatAmplitudeWasCalledWith(partialBody = AmplitudePetriEvent.petriBiEventType) must not(throwA[VerificationException])
+        amplitudeDriver.assertThatBiServerWasCalledWith(partialBody = ButtonClickedEvent.eventType) must not(throwA[VerificationException])
+        amplitudeDriver.assertThatBiServerWasCalledWith(partialBody = BiPetriEvent.petriBiEventType) must not(throwA[VerificationException])
       }
     }
   }

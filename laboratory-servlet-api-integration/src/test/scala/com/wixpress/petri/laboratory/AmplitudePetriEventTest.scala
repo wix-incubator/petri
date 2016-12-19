@@ -34,13 +34,13 @@ class AmplitudePetriEventTest extends SpecificationWithJUnit {
 
   "AmplitudeEvent" should {
     "be created from an assignment" in new Context {
-      AmplitudePetriEvent.fromAssignment(assignment) must be_===(AmplitudePetriEvent(
-        eventType = s"${AmplitudePetriEvent.petriBiEventType}-123",
+      BiPetriEvent.fromAssignment(assignment) must be_===(BiPetriEvent(
+        eventType = s"${BiPetriEvent.petriBiEventType}-123",
         language = "THE_LANGUAGE",
         country = "THE_COUNTRY",
         ip = "THE_IP",
         userId = userUuid.toString,
-        eventProperties = AmplitudePetriEventProperties(
+        eventProperties = PetriEventProperties(
           experimentId = 123,
           productName = "PRODUCT_NAME",
           url = "THE_URL",

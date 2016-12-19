@@ -2,10 +2,11 @@ package com.wixpress.petri.laboratory.http;
 
 import com.wix.hoopoe.koboshi.cache.ReadOnlyTimestampedLocalCache;
 import com.wixpress.petri.PetriRPCClient;
-import com.wixpress.petri.amplitude.AmplitudeAdapter;
+import com.wixpress.petri.amplitude.AmplitudeAdapterBuilder;
 import com.wixpress.petri.experiments.domain.ConductibleExperiments;
 import com.wixpress.petri.experiments.domain.ExternalDataFetchers;
 import com.wixpress.petri.experiments.domain.FilterTypeIdResolver;
+import com.wixpress.petri.google_analytics.GoogleAnalyticsAdapterBuilder;
 import com.wixpress.petri.laboratory.*;
 import com.wixpress.petri.petri.*;
 
@@ -121,9 +122,18 @@ public class LaboratoryFilter implements Filter {
         String amplitudeApiKey = laboratoryProperties.getProperty("amplitude.api.key");
         String amplitudeTimeoutMs = laboratoryProperties.getProperty("amplitude.timeout.ms");
 
+        String googleAnalyticsUrl = laboratoryProperties.getProperty("google.analytics.url");
+        String googleAnalyticsTrackingId = laboratoryProperties.getProperty("google.analytics.tracking.id");
+        String googleAnalyticsTimeoutMs = laboratoryProperties.getProperty("google.analytics.timeout.ms");
+
+
         if (amplitudeUrl != null && amplitudeApiKey != null) {
-            tracker = tracker.add(new AmplitudeTestGroupAssignmentTracker(
-                    AmplitudeAdapter.create(amplitudeUrl, amplitudeApiKey, amplitudeTimeoutMs)));
+            tracker = tracker.add(new BiTestGroupAssignmentTracker(
+                    AmplitudeAdapterBuilder.create(amplitudeUrl, amplitudeApiKey, amplitudeTimeoutMs)));
+        }
+        if (googleAnalyticsUrl != null && googleAnalyticsTrackingId != null) {
+            tracker = tracker.add(new BiTestGroupAssignmentTracker(
+                    GoogleAnalyticsAdapterBuilder.create(googleAnalyticsUrl, googleAnalyticsTrackingId, googleAnalyticsTimeoutMs)));
         }
 
         try {

@@ -7,10 +7,10 @@ import javax.servlet.http.{Cookie, HttpServletRequest, HttpServletResponse}
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.wixpress.common.petri.PageWithButtonController.labUserIdField
-import com.wixpress.petri.amplitude.{AmplitudeAdapter, BaseAmplitudeEvent}
+import com.wixpress.petri.amplitude.AmplitudeAdapter
 import com.wixpress.petri.laboratory.converters.StringConverter
 import com.wixpress.petri.laboratory.http.LaboratoryFilter.PETRI_USER_INFO_STORAGE
-import com.wixpress.petri.laboratory.{Laboratory, RegisteredUserInfoType, UserInfo, UserInfoStorage}
+import com.wixpress.petri.laboratory.{BaseBiEvent, Laboratory, RegisteredUserInfoType, UserInfo, UserInfoStorage}
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.{RequestMapping, RequestMethod, ResponseBody}
 
@@ -32,7 +32,7 @@ class PageWithButtonController {
     renderedPageForRegisteredUser(theUserId)
   }
 
-  def copyUserWithNewId(userId: UUID, u:UserInfo) = new UserInfo(u.experimentsLog, userId, u.clientId, u.ip, u.url, u.userAgent, new RegisteredUserInfoType(userId), u.language, u.country, u.dateCreated, u.companyEmployee, u.anonymousExperimentsLog, u.isRecurringUser, u.experimentOverrides, u.isRobot, u.host, new util.HashMap[UUID, String](), u.potentialOtherUserExperimentsLogFromCookies, u.registeredUserExists, u.globalSessionId)
+  def copyUserWithNewId(userId: UUID, u:UserInfo) = new UserInfo(u.experimentsLog, userId, u.clientId, u.ip, u.url, u.userAgent, RegisteredUserInfoType(userId), u.language, u.country, u.dateCreated, u.companyEmployee, u.anonymousExperimentsLog, u.isRecurringUser, u.experimentOverrides, u.isRobot, u.host, new util.HashMap[UUID, String](), u.potentialOtherUserExperimentsLogFromCookies, u.registeredUserExists, u.globalSessionId)
 
   private def renderedPageForRegisteredUser(userId:String) = {
     val color = colorFromExperiment()
@@ -79,7 +79,7 @@ class PageWithButtonController {
   @ResponseBody
   def buttonClicked(request: HttpServletRequest, response: HttpServletResponse): Unit = {
     getUserId(request).foreach { userId =>
-      amplitudeAdapter.sendEvent(AmplitudeEvent(ButtonClickedEvent.eventType, "1.1.1.1", "en", "us", userId))
+      amplitudeAdapter.sendEvent(BiEvent(ButtonClickedEvent.eventType, "1.1.1.1", "en", "us", userId))
     }
   }
 
@@ -104,6 +104,6 @@ object PageWithButtonController {
   val labUserIdField = "laboratory_user_id"
 }
 
-case class AmplitudeEvent(@JsonProperty("event_type") eventType: String,
-                          ip: String, language: String, country: String,
-                          @JsonProperty("user_id") userId: String) extends BaseAmplitudeEvent
+case class BiEvent(@JsonProperty("event_type") eventType: String,
+                   ip: String, language: String, country: String,
+                   @JsonProperty("user_id") userId: String) extends BaseBiEvent
