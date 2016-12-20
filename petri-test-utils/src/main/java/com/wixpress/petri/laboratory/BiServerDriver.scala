@@ -5,10 +5,10 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.common.SingleRootFileSource
 import com.github.tomakehurst.wiremock.standalone.JsonFileMappingsLoader
 
-class BiServerDriver(port: Int, urlPath: String, testResourceDirectory: String) {
-  private val biServerWireMock = new BiServerWireMock(port, testResourceDirectory)
+class BiServerDriver(port: Int, urlPath: String) {
+  private val biServerWireMock = new BiServerWireMock(port)
 
-  val amplitudeUrl = s"http://localhost:$port/$urlPath"
+  val biServerUrl = s"http://localhost:$port/$urlPath"
 
   def start() = biServerWireMock.start()
 
@@ -23,9 +23,9 @@ class BiServerDriver(port: Int, urlPath: String, testResourceDirectory: String) 
   }
 }
 
-private class BiServerWireMock(port: Int, testResourceDirectory: String) extends WireMockServer(port) {
+private class BiServerWireMock(port: Int) extends WireMockServer(port) {
   override def start(): Unit = {
-    loadMappingsUsing(new JsonFileMappingsLoader(new SingleRootFileSource(s"target/test-classes/$testResourceDirectory")))
+    loadMappingsUsing(new JsonFileMappingsLoader(new SingleRootFileSource(s"target/test-classes")))
     super.start()
   }
 }

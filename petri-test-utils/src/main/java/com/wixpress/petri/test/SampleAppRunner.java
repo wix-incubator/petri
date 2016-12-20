@@ -73,9 +73,9 @@ public class SampleAppRunner {
         }
         addServerSideToProperties(propertiesFile, useServerSideState);
 
-        if (amplitudeUrl != null) {
-            overrideAmplitudeUrl(propertiesFile, amplitudeUrl);
-        }
+//        if (amplitudeUrl != null) {
+//            overrideAmplitudeUrl(propertiesFile, amplitudeUrl);
+//        }
     }
 
     private File getLaboratoryPropertiesFile(String pathToWebapp)  {

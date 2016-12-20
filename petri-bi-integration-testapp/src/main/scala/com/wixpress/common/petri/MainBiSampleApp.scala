@@ -8,7 +8,7 @@ class MainAmplitudeSampleApp
 
 object MainAmplitudeSampleApp {
   def main(args: Array[String]) {
-    val webappPath = classOf[AmplitudeTestappConfig].getResource("/").getPath + "../../../petri-amplitude-testapp/src/main/webapp"
+    val webappPath = classOf[AmplitudeTestappConfig].getResource("/").getPath + "../../../petri-bi-integration-testapp/src/main/webapp"
     val appRunner = new SampleAppRunner(9811, webappPath, 1, true)
     val petriDriver = new PetriDriver()
     val experiment = petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")

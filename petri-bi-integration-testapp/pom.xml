@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>petri-amplitude-testapp</artifactId>
+    <artifactId>petri-bi-integration-testapp</artifactId>
     <packaging>war</packaging>
     <name>Sample Petri App with Amplitude reporting</name>
     <description>Example app using amplitude as the bi target</description>

@@ -6,51 +6,51 @@ import com.gargoylesoftware.htmlunit.BrowserVersion
 import com.github.tomakehurst.wiremock.client.VerificationException
 import com.wixpress.petri.experiments.domain.TestGroup
 import com.wixpress.petri.fakeserver.FakePetriServer
-import com.wixpress.petri.laboratory.{BiServerDriver, BiPetriEvent}
+import com.wixpress.petri.laboratory.{BiPetriEvent, BiServerDriver}
 import com.wixpress.petri.test.{SampleAppRunner, TestBuilders}
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 import org.openqa.selenium.{By, WebElement}
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.BeforeAfterAll
 
-class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
-  val webappPath = classOf[AmplitudeTestappIT].getResource("/").getPath + "../../../petri-amplitude-testapp/src/main/webapp"
+class GoogleAnalyticsTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
+  val webappPath = classOf[GoogleAnalyticsTestappIT].getResource("/").getPath + "../../../petri-bi-integration-testapp/src/main/webapp"
   val webappPort = 9811
-  val amplitudePort = 11981
+  val googleAnalyticsPort = 11981
   var petriServerPort = 9010
-  val amplitudeDriver = new BiServerDriver(amplitudePort, "httpapi", "amplitude")
-  val appRunner = new SampleAppRunner(webappPort, webappPath, 1, true, amplitudeDriver.amplitudeUrl)
+  val googleAnalyticsDriver = new BiServerDriver(googleAnalyticsPort, "collect")
+  val appRunner = new SampleAppRunner(webappPort, webappPath, 1, true, googleAnalyticsDriver.biServerUrl)
   val sampleAppViewDriver = new SampleAppViewDriver(webappPort)
   val petriDriver = new PetriDriver()
 
-  "AmplitudeTestapp" should {
-    "enter the page, click the button and check that petri event + business bi event were logged in amplitude" in {
+  "GoogleAnalyticsTestapp" should {
+    "enter the page, click the button and check that petri event + business bi event were logged in google analytics" in {
       petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
 
       sampleAppViewDriver.enterThePageAndClickButton()
 
       eventually {
-        amplitudeDriver.assertThatBiServerWasCalledWith(partialBody = ButtonClickedEvent.eventType) must not(throwA[VerificationException])
-        amplitudeDriver.assertThatBiServerWasCalledWith(partialBody = BiPetriEvent.petriBiEventType) must not(throwA[VerificationException])
+        googleAnalyticsDriver.assertThatBiServerWasCalledWith(partialBody = ButtonClickedEvent.eventType) must not(throwA[VerificationException])
+        googleAnalyticsDriver.assertThatBiServerWasCalledWith(partialBody = BiPetriEvent.petriBiEventType) must not(throwA[VerificationException])
       }
     }
   }
 
   override def beforeAll(): Unit = {
     petriDriver.start()
-    amplitudeDriver.start()
+    googleAnalyticsDriver.start()
     appRunner.start()
   }
 
   override def afterAll(): Unit = {
-    amplitudeDriver.stop()
+    googleAnalyticsDriver.stop()
     petriDriver.stop()
     appRunner.stop()
   }
 
   class SampleAppViewDriver(port: Int) {
     private val driver = new HtmlUnitDriver(BrowserVersion.CHROME, true)
-    private val pageUrl = s"http://localhost:$port/test"
+    private val pageUrl = s"http://localhost:$port/testGoogleAnalytics"
 
     def enterThePageAndClickButton() = {
       driver.get(pageUrl)
@@ -81,10 +81,4 @@ class AmplitudeTestappIT extends SpecificationWithJUnit with BeforeAfterAll {
         withGroups(asList(new TestGroup(1, 100, "red"), new TestGroup(2, 0, "blue"))))
     }
   }
-
 }
-
-
-
-
-

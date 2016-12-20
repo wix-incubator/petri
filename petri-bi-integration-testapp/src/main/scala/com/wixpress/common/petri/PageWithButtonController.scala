@@ -8,6 +8,7 @@ import javax.servlet.http.{Cookie, HttpServletRequest, HttpServletResponse}
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.wixpress.common.petri.PageWithButtonController.labUserIdField
 import com.wixpress.petri.amplitude.AmplitudeAdapter
+import com.wixpress.petri.google_analytics.GoogleAnalyticsAdapter
 import com.wixpress.petri.laboratory.converters.StringConverter
 import com.wixpress.petri.laboratory.http.LaboratoryFilter.PETRI_USER_INFO_STORAGE
 import com.wixpress.petri.laboratory.{BaseBiEvent, Laboratory, RegisteredUserInfoType, UserInfo, UserInfoStorage}
@@ -20,21 +21,40 @@ class PageWithButtonController {
   var amplitudeAdapter: AmplitudeAdapter = _
 
   @Resource
+  var googleAnalyticsAdapter: GoogleAnalyticsAdapter = _
+
+  @Resource
   var laboratory: Laboratory = _
 
-  @RequestMapping(value = Array("/test"), method = Array(RequestMethod.GET), produces = Array("text/html"))
+  @RequestMapping(value = Array("/testAmplitude"), method = Array(RequestMethod.GET), produces = Array("text/html"))
   @ResponseBody
-  def test(request: HttpServletRequest, response: HttpServletResponse): String = {
+  def testAmplitude(request: HttpServletRequest, response: HttpServletResponse) = {
+    val amplitudeUrl = "https://amplitude.com/app/151746/funnels?fid=20206&sset=%7B%22byProp%22:%22a%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%22b%22,%22segmentIndex%22:0%7D&cg=User&range=Last%207%20Days&i=1&dets=0"
+    val amplitudeUser = "nimrodl@wix.com"
+    val amplitudePassword = "GNK5OdwkZzh5Qw7f9qPB"
+    test(request, response, amplitudeUrl, amplitudeUser, amplitudePassword, "amplitude")
+  }
+
+  @RequestMapping(value = Array("/testGoogleAnalytics"), method = Array(RequestMethod.GET), produces = Array("text/html"))
+  @ResponseBody
+  def testGoogleAnalytics(request: HttpServletRequest, response: HttpServletResponse) = {
+    val googleAnalyticsUrl = "https://analytics.google.com/analytics/web/?authuser=0#realtime/rt-event/a89204848w132385051p136346283/"
+    val googleAnalyticsUser = "wix.petri.os@gmail.com"
+    val googleAnalyticsPassword = "pRDm1E18Mr"
+    test(request, response, googleAnalyticsUrl, googleAnalyticsUser, googleAnalyticsPassword, "google")
+  }
+
+  private def test(request: HttpServletRequest, response: HttpServletResponse, url: String, user: String, password: String, biType: String): String = {
     val theUserId = getOrPutUserId(request, response)
     val userInfo = request.getSession.getAttribute(PETRI_USER_INFO_STORAGE).asInstanceOf[UserInfoStorage]
     userInfo.write(copyUserWithNewId(UUID.fromString(theUserId), userInfo.read()))
 
-    renderedPageForRegisteredUser(theUserId)
+    renderedPageForRegisteredUser(theUserId, url, user, password, biType)
   }
 
   def copyUserWithNewId(userId: UUID, u:UserInfo) = new UserInfo(u.experimentsLog, userId, u.clientId, u.ip, u.url, u.userAgent, RegisteredUserInfoType(userId), u.language, u.country, u.dateCreated, u.companyEmployee, u.anonymousExperimentsLog, u.isRecurringUser, u.experimentOverrides, u.isRobot, u.host, new util.HashMap[UUID, String](), u.potentialOtherUserExperimentsLogFromCookies, u.registeredUserExists, u.globalSessionId)
 
-  private def renderedPageForRegisteredUser(userId:String) = {
+  private def renderedPageForRegisteredUser(userId:String, url: String, user: String, password: String, biType: String) = {
     val color = colorFromExperiment()
     s"""
        |<html>
@@ -58,12 +78,12 @@ class PageWithButtonController {
        |    $$("#buttonId").click(function() {
        |       $$("#buttonId").hide();
        |       $$("#resultText").html("working on it... wait!");
-       |       $$.post( "/buttonClicked", function(res) {
-       |         $$("#resultText").html('Finished! checkout results <a href="https://amplitude.com/app/151746/funnels?fid=20206&sset=%7B%22byProp%22:%22a%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%22b%22,%22segmentIndex%22:0%7D&cg=User&range=Last%207%20Days&i=1&dets=0">here!</a>');
-       |         $$("#userDetails").html('to login: User: nimrodl@wix.com , Password: GNK5OdwkZzh5Qw7f9qPB');
+       |       $$.post( "/${biType}ButtonClicked", function(res) {
+       |         $$("#resultText").html('Finished! checkout results <a href="$url">here!</a>');
+       |         $$("#userDetails").html('to login: User: $user , Password: $password');
        |       }).fail(function(error) {
-       |             $$("#resultText").html('Sorry! timeout contacting amplitude service. checkout results <a href="https://amplitude.com/app/151746/funnels?fid=20206&sset=%7B%22byProp%22:%22a%22,%22segmentIndex%22:0%7D&sset=%7B%22byProp%22:%22b%22,%22segmentIndex%22:0%7D&cg=User&range=Last%207%20Days&i=1&dets=0">here!</a>');
-       |             $$("#userDetails").html('to login: User: nimrodl@wix.com , Password: GNK5OdwkZzh5Qw7f9qPB');
+       |             $$("#resultText").html('Sorry! timeout contacting amplitude service. checkout results <a href="$url">here!</a>');
+       |             $$("#userDetails").html('to login: User: $user , Password: $password');
        |         })
        |     });
        |});
@@ -75,11 +95,19 @@ class PageWithButtonController {
   def colorFromExperiment() =
     laboratory.conductExperiment("BUTTON_COLOR_SPEC", "yellow", new StringConverter)
 
-  @RequestMapping(value = Array("/buttonClicked"), method = Array(RequestMethod.POST))
+  @RequestMapping(value = Array("/amplitudeButtonClicked"), method = Array(RequestMethod.POST))
   @ResponseBody
-  def buttonClicked(request: HttpServletRequest, response: HttpServletResponse): Unit = {
+  def amplitudeButtonClicked(request: HttpServletRequest, response: HttpServletResponse): Unit = {
     getUserId(request).foreach { userId =>
       amplitudeAdapter.sendEvent(BiEvent(ButtonClickedEvent.eventType, "1.1.1.1", "en", "us", userId))
+    }
+  }
+
+  @RequestMapping(value = Array("/googleButtonClicked"), method = Array(RequestMethod.POST))
+  @ResponseBody
+  def googleButtonClicked(request: HttpServletRequest, response: HttpServletResponse): Unit = {
+    getUserId(request).foreach { userId =>
+      googleAnalyticsAdapter.sendEvent(BiEvent(ButtonClickedEvent.eventType, "1.1.1.1", "en", "us", userId))
     }
   }
 
