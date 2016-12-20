@@ -56,7 +56,7 @@ public class FakePetriServer {
         return petriClient.getExperimentReport(experimentId);
     }
 
-    public void failNextReuqest() {
+    public void failNextRequest() {
         petriClient.setBlowUp(true);
     }
 

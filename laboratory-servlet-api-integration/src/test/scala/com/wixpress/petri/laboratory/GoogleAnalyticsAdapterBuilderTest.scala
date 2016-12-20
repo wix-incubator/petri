@@ -1,7 +1,7 @@
 package com.wixpress.petri.laboratory
 
-import com.wixpress.petri.google_analytics.{GoogleAnalyticsAdapter, GoogleAnalyticsAdapterBuilder}
 import com.wixpress.petri.google_analytics.GoogleAnalyticsAdapterBuilder._
+import com.wixpress.petri.google_analytics.{GoogleAnalyticsAdapter, GoogleAnalyticsAdapterBuilder}
 import org.specs2.mutable.SpecificationWithJUnit
 
 class GoogleAnalyticsAdapterBuilderTest extends SpecificationWithJUnit {

@@ -70,9 +70,9 @@ public class ExperimentSnapshotTest {
 
 
     @Test
-    public void canBeSerializedFromNewVersionWithUnkownFiled() throws IOException {
+    public void canBeSerializedFromNewVersionWithUnknownFiled() throws IOException {
         ObjectMapper objectMapper = ObjectMapperFactory.makeObjectMapper();
-        String jsonWithUnknownField = "{\"unknown\":\"key\",\"key\":\"key\",\"creationDate\":\"2013-12-04T14:56:34.039+02:00\",\"description\":\"lbl\",\"startDate\":\"2013-12-04T14:56:34.063+02:00\",\"endDate\":\"2013-12-04T14:56:34.063+02:00\",\"groups\":[{\"id\":1,\"chunk\":50,\"value\":\"\"},{\"id\":2,\"chunk\":50,\"value\":\"\"}],\"scopes\":[\"somescope\"],\"filters\":[],\"onlyForLoggedInUsers\":\"true\", \"someUnkonwn\":[]}";
+        String jsonWithUnknownField = "{\"unknown\":\"key\",\"key\":\"key\",\"creationDate\":\"2013-12-04T14:56:34.039+02:00\",\"description\":\"lbl\",\"startDate\":\"2013-12-04T14:56:34.063+02:00\",\"endDate\":\"2013-12-04T14:56:34.063+02:00\",\"groups\":[{\"id\":1,\"chunk\":50,\"value\":\"\"},{\"id\":2,\"chunk\":50,\"value\":\"\"}],\"scopes\":[\"somescope\"],\"filters\":[],\"onlyForLoggedInUsers\":\"true\", \"someUnknown\":[]}";
         ExperimentSnapshot deSerialized = objectMapper.readValue(jsonWithUnknownField, new TypeReference<ExperimentSnapshot>() {
         });
         assertThat(deSerialized, is(notNullValue()));

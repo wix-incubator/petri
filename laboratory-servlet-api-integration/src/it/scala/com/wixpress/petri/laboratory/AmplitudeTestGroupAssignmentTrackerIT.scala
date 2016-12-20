@@ -51,4 +51,3 @@ class AmplitudeTestGroupAssignmentTrackerIT extends SpecificationWithJUnit with 
     }
   }
 }
-

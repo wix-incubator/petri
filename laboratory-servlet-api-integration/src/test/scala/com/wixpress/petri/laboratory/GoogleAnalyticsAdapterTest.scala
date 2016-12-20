@@ -12,19 +12,19 @@ class GoogleAnalyticsAdapterTest extends SpecificationWithJUnit {
   "GoogleAnalyticsAdapter" should {
     "convert PetriBiEvent to google analytics body String" in new Context {
       googleAnalyticsAdapter.getBodyString(createBiPetriEvent()) must_==
-        s"v=1&tid=UA-89204848-1&t=event&el=PetriBiEvent-123&uip=THE_IP&ul=THE_LANGUAGE&geoid=THE_COUNTRY&cid=$userGuid" +
-        s"&uid=$userGuid&ec=PRODUCT_NAME&ea=red&ua=THE_UA&dl=THE_URL"
+        "v=1&tid=UA-89204848-1&t=event&el=PetriBiEvent-123&uip=THE_IP&ul=THE_LANGUAGE&geoid=THE_COUNTRY" +
+          s"&cid=$userGuid&uid=$userGuid&ec=PRODUCT_NAME&ea=red&ua=THE_UA&dl=THE_URL"
     }
 
-    "convert custom Bi event to google analytics body String when fields have custom names" in new Context{
+    "convert custom Bi event to google analytics body String when fields have custom names" in new Context {
       googleAnalyticsAdapter.getBodyString(createCustomBiEvent()) must_==
-      s"v=1&tid=UA-89204848-1&t=event&el=customBiEvent&ul=en&geoid=UK&cid=$userGuid&uid=$userGuid"
-    }
-    "convert custom Bi event to google analytics body String when fields have google property names" in new Context{
-      googleAnalyticsAdapter.getBodyString(createCustomGooglePropertyBiEvent()) must_==
-      s"v=1&tid=UA-89204848-1&t=event&el=customBiEvent&ul=en&geoid=UK&cid=$userGuid&uid=$userGuid"
+        s"v=1&tid=UA-89204848-1&t=event&el=customBiEvent&ul=en&geoid=UK&cid=$userGuid&uid=$userGuid"
     }
 
+    "convert custom Bi event to google analytics body String when fields have google property names" in new Context {
+      googleAnalyticsAdapter.getBodyString(createCustomGooglePropertyBiEvent()) must_==
+        s"v=1&tid=UA-89204848-1&t=event&el=customBiEvent&ul=en&geoid=UK&cid=$userGuid&uid=$userGuid"
+    }
   }
 
   class Context extends Scope {
@@ -66,5 +66,4 @@ class GoogleAnalyticsAdapterTest extends SpecificationWithJUnit {
       }
     }
   }
-
 }

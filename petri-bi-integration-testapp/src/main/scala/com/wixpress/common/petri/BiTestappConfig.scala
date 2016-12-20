@@ -13,16 +13,19 @@ import scala.io.Source
 
 @Configuration
 class BiTestappConfig {
+
   import BiTestappConfig._
 
   @Bean
   def amplitudeAdapter = {
-    AmplitudeAdapterBuilder.create(property("amplitude.url"), property("amplitude.api.key"), property("amplitude.timeout.ms"))
+    AmplitudeAdapterBuilder.create(
+      property("amplitude.url"), property("amplitude.api.key"), property("amplitude.timeout.ms"))
   }
 
   @Bean
   def googleAnalyticsAdapter = {
-    GoogleAnalyticsAdapterBuilder.create(property("google.analytics.url"), property("google.analytics.tracking.id"), property("google.analytics.timeout.ms"))
+    GoogleAnalyticsAdapterBuilder.create(
+      property("google.analytics.url"), property("google.analytics.tracking.id"), property("google.analytics.timeout.ms"))
   }
 
   @Bean

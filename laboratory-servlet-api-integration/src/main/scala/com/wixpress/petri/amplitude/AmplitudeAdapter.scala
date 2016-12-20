@@ -7,8 +7,7 @@ case class AmplitudeAdapter(url: String, key: String, timeoutMs: Int) extends Bi
 
   override def adapterType: String = "Amplitude"
 
-  override def getBodyString(event: BaseBiEvent): String =
-    s"api_key=$key&event=${asJson(event)}"
+  override def getBodyString(event: BaseBiEvent): String = s"api_key=$key&event=${asJson(event)}"
 }
 
 object AmplitudeAdapterBuilder extends BiAdapterBuilder {

@@ -19,6 +19,7 @@ class GoogleAnalyticsTestappIT extends BaseTestapp {
     super.afterAll()
     appRunner.stop()
   }
+
   "GoogleAnalyticsTestapp" should {
     "enter the page, click the button and check that petri event + business bi event were logged in google analytics" in {
       petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
@@ -31,6 +32,4 @@ class GoogleAnalyticsTestappIT extends BaseTestapp {
       }
     }
   }
-
-
 }

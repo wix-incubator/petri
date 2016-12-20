@@ -42,11 +42,11 @@ trait BiAdapter {
   }
 }
 
-
 trait BaseBiEvent {
   def eventType: String
 
   def userId: String
 }
 
-class FailedToPostBiEventException(resultCode: Int, adapterType: String) extends Exception(s"Failed to post bi event to $adapterType - returned code $resultCode")
+class FailedToPostBiEventException(resultCode: Int, adapterType: String)
+  extends Exception(s"Failed to post bi event to $adapterType - returned code $resultCode")

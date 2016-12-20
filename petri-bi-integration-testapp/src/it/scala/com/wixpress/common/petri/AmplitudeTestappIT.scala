@@ -27,11 +27,8 @@ class AmplitudeTestappIT extends BaseTestapp {
 
       eventually {
         biServerDriver.assertThatBiServerWasCalledWith(partialBody = ButtonClickedEvent.eventType, "httpapi") must not(throwA[VerificationException])
-        biServerDriver.assertThatBiServerWasCalledWith(partialBody = BiPetriEvent.petriBiEventType,  "httpapi") must not(throwA[VerificationException])
+        biServerDriver.assertThatBiServerWasCalledWith(partialBody = BiPetriEvent.petriBiEventType, "httpapi") must not(throwA[VerificationException])
       }
     }
   }
-
-
-
 }

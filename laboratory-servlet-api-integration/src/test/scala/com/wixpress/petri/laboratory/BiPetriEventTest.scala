@@ -4,12 +4,12 @@ import java.util.UUID
 
 import com.natpryce.makeiteasy.MakeItEasy._
 import com.wixpress.petri.experiments.domain.{Assignment, TestGroup}
-import com.wixpress.petri.laboratory.dsl.{ExperimentMakers, UserInfoMakers}
 import com.wixpress.petri.laboratory.dsl.UserInfoMakers._
+import com.wixpress.petri.laboratory.dsl.{ExperimentMakers, UserInfoMakers}
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.Scope
 
-class AmplitudePetriEventTest extends SpecificationWithJUnit {
+class BiPetriEventTest extends SpecificationWithJUnit {
 
   class Context extends Scope {
     val userUuid = UUID.randomUUID()
@@ -32,7 +32,7 @@ class AmplitudePetriEventTest extends SpecificationWithJUnit {
     val assignment = new Assignment(userInfo, null, null, testGroup, experiment, 0)
   }
 
-  "AmplitudeEvent" should {
+  "BiPetriEvent" should {
     "be created from an assignment" in new Context {
       BiPetriEvent.fromAssignment(assignment) must be_===(BiPetriEvent(
         eventType = s"${BiPetriEvent.petriBiEventType}-123",

@@ -52,9 +52,13 @@ class PageWithButtonController {
     renderedPageForRegisteredUser(theUserId, url, user, password, biType)
   }
 
-  def copyUserWithNewId(userId: UUID, u:UserInfo) = new UserInfo(u.experimentsLog, userId, u.clientId, u.ip, u.url, u.userAgent, RegisteredUserInfoType(userId), u.language, u.country, u.dateCreated, u.companyEmployee, u.anonymousExperimentsLog, u.isRecurringUser, u.experimentOverrides, u.isRobot, u.host, new util.HashMap[UUID, String](), u.potentialOtherUserExperimentsLogFromCookies, u.registeredUserExists, u.globalSessionId)
+  def copyUserWithNewId(userId: UUID, u: UserInfo) =
+    new UserInfo(u.experimentsLog, userId, u.clientId, u.ip, u.url, u.userAgent, RegisteredUserInfoType(userId),
+      u.language, u.country, u.dateCreated, u.companyEmployee, u.anonymousExperimentsLog, u.isRecurringUser,
+      u.experimentOverrides, u.isRobot, u.host, new util.HashMap[UUID, String](),
+      u.potentialOtherUserExperimentsLogFromCookies, u.registeredUserExists, u.globalSessionId)
 
-  private def renderedPageForRegisteredUser(userId:String, url: String, user: String, password: String, biType: String) = {
+  private def renderedPageForRegisteredUser(userId: String, url: String, user: String, password: String, biType: String) = {
     val color = colorFromExperiment()
     s"""
        |<html>
@@ -119,7 +123,7 @@ class PageWithButtonController {
 
   private def getUserId(request: HttpServletRequest) = {
     val cookies: Array[Cookie] = request.getCookies
-    val cookie = if(cookies == null) None else cookies.toSet.find(_.getName == labUserIdField).map(_.getValue)
+    val cookie = if (cookies == null) None else cookies.toSet.find(_.getName == labUserIdField).map(_.getValue)
     Option(request.getParameter(labUserIdField)).orElse(cookie)
   }
 }

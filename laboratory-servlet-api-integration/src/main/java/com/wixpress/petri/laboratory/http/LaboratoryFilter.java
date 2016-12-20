@@ -43,8 +43,7 @@ public class LaboratoryFilter implements Filter {
     private ReadOnlyTimestampedLocalCache<ConductibleExperiments> cache;
 
 
-    public LaboratoryFilter() {
-    }
+    public LaboratoryFilter() {}
 
     private static class ByteArrayServletStream extends ServletOutputStream {
 
@@ -67,7 +66,6 @@ public class LaboratoryFilter implements Filter {
         public void setWriteListener(WriteListener writeListener) {
         }
     }
-
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
 
@@ -93,7 +91,6 @@ public class LaboratoryFilter implements Filter {
         resp.getOutputStream().write(baos.toByteArray());
     }
 
-
     private Laboratory laboratory(UserInfoStorage storage) throws MalformedURLException {
         Experiments experiments = new CachedExperiments(new TransientCacheExperimentSource(cache, new JodaTimeClock()));
 
@@ -109,7 +106,6 @@ public class LaboratoryFilter implements Filter {
     public void destroy() {
         metricsReporter.stopScheduler();
     }
-
 
     public void init(FilterConfig filterConfig) throws ServletException {
         final ServletContext context = filterConfig.getServletContext();
@@ -176,7 +172,6 @@ public class LaboratoryFilter implements Filter {
             public String getAuthorizationServiceUrl() {
                 return "";
             }
-
         };
     }
 
@@ -205,5 +200,4 @@ public class LaboratoryFilter implements Filter {
             return pw;
         }
     }
-
 }

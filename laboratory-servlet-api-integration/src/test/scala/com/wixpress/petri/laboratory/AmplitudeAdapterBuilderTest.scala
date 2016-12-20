@@ -1,7 +1,7 @@
 package com.wixpress.petri.laboratory
 
-import com.wixpress.petri.amplitude.{AmplitudeAdapter, AmplitudeAdapterBuilder}
 import com.wixpress.petri.amplitude.AmplitudeAdapterBuilder._
+import com.wixpress.petri.amplitude.{AmplitudeAdapter, AmplitudeAdapterBuilder}
 import org.specs2.mutable.SpecificationWithJUnit
 
 class AmplitudeAdapterBuilderTest extends SpecificationWithJUnit {
