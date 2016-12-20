@@ -5,20 +5,18 @@ import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.common.SingleRootFileSource
 import com.github.tomakehurst.wiremock.standalone.JsonFileMappingsLoader
 
-class BiServerDriver(port: Int, urlPath: String) {
+class BiServerDriver(port: Int) {
   private val biServerWireMock = new BiServerWireMock(port)
-
-  val biServerUrl = s"http://localhost:$port/$urlPath"
 
   def start() = biServerWireMock.start()
 
   def stop() = biServerWireMock.stop()
 
-  def assertThatBiServerWasCalled() = {
+  def assertThatBiServerWasCalled(urlPath: String) = {
     biServerWireMock.verify(postRequestedFor(urlPathEqualTo(s"/$urlPath")))
   }
 
-  def assertThatBiServerWasCalledWith(partialBody: String) = {
+  def assertThatBiServerWasCalledWith(partialBody: String, urlPath: String) = {
     biServerWireMock.verify(postRequestedFor(urlPathEqualTo(s"/$urlPath")).withRequestBody(containing(partialBody)))
   }
 }

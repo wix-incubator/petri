@@ -13,7 +13,7 @@ import org.specs2.specification.{BeforeAfterAll, Scope}
 // the stub for the amplitude wiremock is file-based - it's located in test/resources/*mapping.json
 class AmplitudeTestGroupAssignmentTrackerIT extends SpecificationWithJUnit with BeforeAfterAll {
   val port = 11981
-  val amplitudeDriver = new BiServerDriver(port, "httpapi")
+  val amplitudeDriver = new BiServerDriver(port)
 
   override def beforeAll(): Unit = amplitudeDriver.start()
 
@@ -47,7 +47,7 @@ class AmplitudeTestGroupAssignmentTrackerIT extends SpecificationWithJUnit with 
   "AmplitudeTestGroupAssignmentTracker" should {
     "upon newAssignment, post an http request to amplitude fake server" in new Context {
       amplitudeTestGroupAssignmentTracker.newAssignment(assignment)
-      amplitudeDriver.assertThatBiServerWasCalled()
+      amplitudeDriver.assertThatBiServerWasCalled("httpapi")
     }
   }
 }

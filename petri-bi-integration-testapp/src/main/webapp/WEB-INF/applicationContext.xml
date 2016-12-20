@@ -13,7 +13,7 @@
 
     <context:annotation-config/>
 
-    <bean class="com.wixpress.common.petri.AmplitudeTestappConfig"/>
+    <bean class="com.wixpress.common.petri.BiTestappConfig"/>
 
     <bean name = "samplePetriApp" class="com.wixpress.common.petri.PageWithButtonController"/>
 

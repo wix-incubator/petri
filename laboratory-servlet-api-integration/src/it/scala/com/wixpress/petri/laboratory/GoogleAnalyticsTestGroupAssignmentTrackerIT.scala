@@ -13,7 +13,7 @@ import org.specs2.specification.{BeforeAfterAll, Scope}
 // the stub for the google analytics wiremock is file-based - it's located in test/resources/*mapping.json
 class GoogleAnalyticsTestGroupAssignmentTrackerIT extends SpecificationWithJUnit with BeforeAfterAll {
   val port = 11981
-  val googleAnalyticsDriver = new BiServerDriver(port, "collect")
+  val googleAnalyticsDriver = new BiServerDriver(port)
 
   override def beforeAll(): Unit = googleAnalyticsDriver.start()
 
@@ -47,7 +47,7 @@ class GoogleAnalyticsTestGroupAssignmentTrackerIT extends SpecificationWithJUnit
   "GoogleAnalyticsTestGroupAssignmentTracker" should {
     "upon newAssignment, post an http request to google analytics fake server" in new Context {
       googleAnalyticsTestGroupAssignmentTracker.newAssignment(assignment)
-      googleAnalyticsDriver.assertThatBiServerWasCalled()
+      googleAnalyticsDriver.assertThatBiServerWasCalled("collect")
     }
   }
 }

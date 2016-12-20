@@ -12,24 +12,16 @@ import scala.io.Source
 
 
 @Configuration
-class AmplitudeTestappConfig {
+class BiTestappConfig {
+  import BiTestappConfig._
+
   @Bean
   def amplitudeAdapter = {
-    val propertiesPath = AmplitudeTestappConfig.webappPath + "/WEB-INF/laboratory.properties"
-
-    def property(property: String) =
-      Source.fromFile(propertiesPath).getLines().find(line => line.startsWith(property)).map(_.split("=").last).orNull
-
     AmplitudeAdapterBuilder.create(property("amplitude.url"), property("amplitude.api.key"), property("amplitude.timeout.ms"))
   }
 
   @Bean
   def googleAnalyticsAdapter = {
-    val propertiesPath = AmplitudeTestappConfig.webappPath + "/WEB-INF/laboratory.properties"
-
-    def property(property: String) =
-      Source.fromFile(propertiesPath).getLines().find(line => line.startsWith(property)).map(_.split("=").last).orNull
-
     GoogleAnalyticsAdapterBuilder.create(property("google.analytics.url"), property("google.analytics.tracking.id"), property("google.analytics.timeout.ms"))
   }
 
@@ -39,6 +31,10 @@ class AmplitudeTestappConfig {
     session.getAttribute(PETRI_LABORATORY).asInstanceOf[Laboratory]
 }
 
-object AmplitudeTestappConfig {
-  val webappPath = classOf[AmplitudeTestappConfig].getResource("/").getPath + "../../../petri-bi-integration-testapp/src/main/webapp"
+object BiTestappConfig {
+  val webappPath = classOf[BiTestappConfig].getResource("/").getPath + "../../../petri-bi-integration-testapp/src/main/webapp"
+  val propertiesPath = BiTestappConfig.webappPath + "/WEB-INF/laboratory.properties"
+
+  def property(property: String) =
+    Source.fromFile(propertiesPath).getLines().find(line => line.startsWith(property)).map(_.split("=").last.trim).orNull
 }

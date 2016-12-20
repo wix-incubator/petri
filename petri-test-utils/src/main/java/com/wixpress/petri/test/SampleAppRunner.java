@@ -57,10 +57,10 @@ public class SampleAppRunner {
     }
 
     public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState) {
-        this(port, pathToWebapp, reporterInterval, useServerSideState, null);
+        this(port, pathToWebapp, reporterInterval, useServerSideState, null, null);
     }
 
-    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState, String amplitudeUrl) {
+    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState, String amplitudeUrl, String googleAnalyticsUrl) {
         this.port = port;
         this.remoteDataFetcherDriver = new RemoteDataFetcherDriver("localhost", port);
         this.sampleAppServer = new ServerRunner(port, pathToWebapp);
@@ -73,10 +73,15 @@ public class SampleAppRunner {
         }
         addServerSideToProperties(propertiesFile, useServerSideState);
 
-//        if (amplitudeUrl != null) {
-//            overrideAmplitudeUrl(propertiesFile, amplitudeUrl);
-//        }
+        if (amplitudeUrl != null) {
+            overrideAmplitudeUrl(propertiesFile, amplitudeUrl);
+        }
+
+        if (googleAnalyticsUrl != null) {
+            overrideGoogleAnalyticsUrl(propertiesFile, googleAnalyticsUrl);
+        }
     }
+
 
     private File getLaboratoryPropertiesFile(String pathToWebapp)  {
         try {
@@ -89,8 +94,12 @@ public class SampleAppRunner {
         }
     }
 
-    private void overrideAmplitudeUrl(File propertiesFile, String amplitudeUrl) {
-        setProperty(propertiesFile, amplitudeUrl, "amplitude.url");
+    private void overrideAmplitudeUrl(File propertiesFile, String url) {
+        setProperty(propertiesFile, url, "amplitude.url");
+    }
+
+    private void overrideGoogleAnalyticsUrl(File propertiesFile, String url) {
+        setProperty(propertiesFile, url, "google.analytics.url");
     }
 
     private void addServerSideToProperties(File propertiesFile, boolean useServerSideState) {

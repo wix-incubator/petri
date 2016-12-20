@@ -24,8 +24,8 @@ case class GoogleAnalyticsAdapter(url: String, key: String, timeoutMs: Int) exte
         case "userId" => s"&cid=$fieldValue&uid=$fieldValue"
         case "eventType" => s"&el=$fieldValue"
         case "ip" => s"&uip=$fieldValue"
-        case "language" => s"ul=$fieldValue"
-        case "country" => s"geoid=$fieldValue"
+        case "language" => s"&ul=$fieldValue"
+        case "country" => s"&geoid=$fieldValue"
       }
     }
     }.mkString("")
