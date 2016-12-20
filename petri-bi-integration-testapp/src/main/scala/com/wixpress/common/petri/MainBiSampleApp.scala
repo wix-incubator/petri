@@ -4,20 +4,22 @@ import com.wixpress.petri.experiments.domain.{Experiment, TestGroup}
 import com.wixpress.petri.fakeserver.FakePetriServer
 import com.wixpress.petri.test.{SampleAppRunner, TestBuilders}
 
-class MainAmplitudeSampleApp
+class MainBiSampleApp
 
-object MainAmplitudeSampleApp {
+object MainBiSampleApp {
   def main(args: Array[String]) {
     val webappPath = classOf[BiTestappConfig].getResource("/").getPath + "../../../petri-bi-integration-testapp/src/main/webapp"
     val appRunner = new SampleAppRunner(9811, webappPath, 1, true)
     val petriDriver = new PetriDriver()
-    val experiment = petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
-
-    petriDriver.updateExperiment(experiment, new TestGroup(1, 50, "red"), new TestGroup(2, 50, "blue"))
 
     petriDriver.start()
     appRunner.start()
-    println("Open your browser and go to http://localhost:9811/test to see a live experiment!")
+
+    val experiment = petriDriver.addSpecAndExperiment("BUTTON_COLOR_SPEC")
+    petriDriver.updateExperiment(experiment, new TestGroup(1, 50, "red"), new TestGroup(2, 50, "blue"))
+
+    println("Open your browser and go to http://localhost:9811/testGoogleAnalytics or to " +
+      "http://localhost:9811/testAmplitude to see a live experiment!")
   }
 }
 
@@ -37,4 +39,3 @@ class PetriDriver() {
     petri.updateExperiment(TestBuilders.updateExperimentState(experiment, testGroups: _*))
   }
 }
-

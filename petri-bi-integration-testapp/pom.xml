@@ -11,7 +11,7 @@
 
     <artifactId>petri-bi-integration-testapp</artifactId>
     <packaging>war</packaging>
-    <name>Sample Petri App with Amplitude reporting</name>
+    <name>Sample Petri App with BI reporting</name>
     <description>Example app using amplitude as the bi target</description>
 
     <dependencies>
@@ -41,7 +41,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet-api.version}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <dependency>
