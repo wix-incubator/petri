@@ -3,7 +3,7 @@
     "url" : "/collect",
     "method" : "POST",
     "bodyPatterns" : [ {
-      "equalTo" : "v=1&tid=UA-89204848-1&t=event&cid=ba8f170a-fe2e-4453-92bf-e7a6aa6a1443&uid=ba8f170a-fe2e-4453-92bf-e7a6aa6a1443&ec=PRODUCT_NAME&ea=red&el=PetriBiEvent-123&uip=THE_IP&ua=THE_UA&geoid=THE_COUNTRY&ul=THE_LANGUAGE&dl=THE_URL"
+      "equalTo" : "v=1&tid=UA-89204848-1&t=event&el=PetriBiEvent-123&uip=THE_IP&ul=THE_LANGUAGE&geoid=THE_COUNTRY&cid=ba8f170a-fe2e-4453-92bf-e7a6aa6a1443&uid=ba8f170a-fe2e-4453-92bf-e7a6aa6a1443&ec=PRODUCT_NAME&ea=red&ua=THE_UA&dl=THE_URL"
     } ]
   },
   "response" : {

@@ -5,7 +5,7 @@ import com.wixpress.petri.google_analytics.GoogleAnalyticsAdapterBuilder._
 import org.specs2.mutable.SpecificationWithJUnit
 
 class GoogleAnalyticsAdapterBuilderTest extends SpecificationWithJUnit {
-  "GoogleAnalyticsAdapter" should {
+  "GoogleAnalyticsAdapterBuilder" should {
     "be created from default values if no configuration values are present" in {
       GoogleAnalyticsAdapterBuilder.create(null, null, null) === GoogleAnalyticsAdapter(defaultUrl, defaultTrackingId, defaultTimeout)
     }

@@ -2,39 +2,30 @@ package com.wixpress.petri.google_analytics
 
 import java.lang.reflect.Field
 
-import com.wixpress.petri.laboratory.{BaseBiEvent, BiAdapter, BiAdapterBuilder, BiPetriEvent, FailedToPostBiEventException}
+import com.wixpress.petri.laboratory.{BaseBiEvent, BiAdapter, BiAdapterBuilder, PetriEventProperties}
 
 case class GoogleAnalyticsAdapter(url: String, key: String, timeoutMs: Int) extends BiAdapter {
 
+  val googleAnalyticsFieldsMap = Map("userId" -> "cid", "eventType" -> "el", "ip" -> "uip", "language" -> "ul", "country" -> "geoid")
+
   override def adapterType: String = "GoogleAnalytics"
 
-  override def getBodyString(event: BaseBiEvent): String = {
-    event match {
-      case event: BiPetriEvent => s"v=1&tid=$key&t=event${convertPetriEventToGoogleAnalyticsUrlParameters(event)}"
-      case event: BaseBiEvent => s"v=1&tid=$key&t=event${convertBaseBiEventToGoogleAnalyticsParameters(event)}"
-      case _ => throw new FailedToPostBiEventException(0, adapterType)
-    }
-  }
+  override def getBodyString(event: BaseBiEvent): String =
+    s"v=1&tid=$key&t=event${convertBaseBiEventToGoogleAnalyticsParameters(event)}"
 
   private def convertBaseBiEventToGoogleAnalyticsParameters(event: BaseBiEvent): String = {
     event.getClass.getDeclaredFields.map { field: Field => {
       field.setAccessible(true)
-      val fieldValue = field.get(event).asInstanceOf[String]
       field.getName match {
-        case "userId" => s"&cid=$fieldValue&uid=$fieldValue"
-        case "eventType" => s"&el=$fieldValue"
-        case "ip" => s"&uip=$fieldValue"
-        case "language" => s"&ul=$fieldValue"
-        case "country" => s"&geoid=$fieldValue"
+        case "eventProperties" => val fieldValue = field.get(event).asInstanceOf[PetriEventProperties]
+          s"&ec=${fieldValue.productName}&ea=${fieldValue.testGroup}&ua=${fieldValue.userAgent}&dl=${fieldValue.url}"
+        case "userId" => val fieldValue = field.get(event).asInstanceOf[String]
+          s"&cid=$fieldValue&uid=$fieldValue"
+        case name => val fieldValue = field.get(event).asInstanceOf[String]
+          s"&${googleAnalyticsFieldsMap.getOrElse(name, name)}=$fieldValue"
       }
     }
     }.mkString("")
-  }
-
-  private def convertPetriEventToGoogleAnalyticsUrlParameters(event: BiPetriEvent): String = {
-    s"&cid=${event.userId}&uid=${event.userId}&ec=${event.eventProperties.productName}" +
-      s"&ea=${event.eventProperties.testGroup}&el=${event.eventType}&uip=${event.ip}&ua=${event.eventProperties.userAgent}" +
-      s"&geoid=${event.country}&ul=${event.language}&dl=${event.eventProperties.url}"
   }
 }
 

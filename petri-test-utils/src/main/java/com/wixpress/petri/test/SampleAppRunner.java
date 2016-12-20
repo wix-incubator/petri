@@ -127,10 +127,10 @@ public class SampleAppRunner {
 
     public void stop() throws Exception {
         sampleAppServer.stop();
-        revertChangesToLoboratoryPropertiesFile();
+        revertChangesToLaboratoryPropertiesFile();
     }
 
-    private void revertChangesToLoboratoryPropertiesFile() throws IOException {
+    private void revertChangesToLaboratoryPropertiesFile() throws IOException {
         Files.copy(tempPropertiesFilePath, originalPropertiesFile, StandardCopyOption.REPLACE_EXISTING);
         Files.deleteIfExists(tempPropertiesFilePath);
     }
