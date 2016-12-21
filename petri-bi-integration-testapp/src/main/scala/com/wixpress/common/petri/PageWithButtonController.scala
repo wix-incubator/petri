@@ -111,7 +111,7 @@ class PageWithButtonController {
   @ResponseBody
   def googleButtonClicked(request: HttpServletRequest, response: HttpServletResponse): Unit = {
     getUserId(request).foreach { userId =>
-      googleAnalyticsAdapter.sendEvent(BiEvent(ButtonClickedEvent.eventType, "1.1.1.1", "en", "us", userId))
+      googleAnalyticsAdapter.sendEvent(GoogleAnalyticsBiEvent(ButtonClickedEvent.eventType, "1.1.1.1", "en", "us", userId, "ButtonClicked"))
     }
   }
 
@@ -139,3 +139,8 @@ object PageWithButtonController {
 case class BiEvent(@JsonProperty("event_type") eventType: String,
                    ip: String, language: String, country: String,
                    @JsonProperty("user_id") userId: String) extends BaseBiEvent
+
+case class GoogleAnalyticsBiEvent(@JsonProperty("event_type") eventType: String,
+                   ip: String, language: String, country: String,
+                   @JsonProperty("user_id") userId: String,
+                   ec: String) extends BaseBiEvent
