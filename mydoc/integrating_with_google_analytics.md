@@ -31,15 +31,15 @@ For instructions on how to integrate and send events to Google Analytics read [t
 ### Live Examples
 
 #### A live demo with Petri and Google Analytics
-
-1. Run [MainBiSampleApp](petri/petri-bi-integration-testapp/src/main/scala/com/wixpress/common/petri/MainBiSampleApp.scala)
-2. Using your browser, go to `http://localhost:9811/testGoogleAnalytics`. As Petri uses cookies to track users you may do one of the following to mimic multiple users coming into this site: 
+1. Edit [laboratory.properties](https://github.com/wix/petri/blob/master/petri-bi-integration-testapp/src/main/webapp/WEB-INF/laboratory.properties) and uncomment the google.analytics.url parameter.
+2. Run [MainBiSampleApp](https://github.com/wix/petri/blob/master/petri-bi-integration-testapp/src/main/scala/com/wixpress/common/petri/MainBiSampleApp.scala)
+3. Using your browser, go to `http://localhost:9811/testGoogleAnalytics`. As Petri uses cookies to track users you may do one of the following to mimic multiple users coming into this site: 
 	- Open the same url from different browsers
 	- Open the url in incognito mode several times
 	- Delete your browser's cookies after each visit
-3. See the funnel created from your reported events on [Google Analytics](https://analytics.google.com/analytics/web/?authuser=0#realtime/rt-event/a89204848w132385051p136346283/)
+4. See the funnel created from your reported events on [Google Analytics](https://analytics.google.com/analytics/web/?authuser=0#realtime/rt-event/a89204848w132385051p136346283/)
 
 #### A Petri + Google Analytics integrated application 
 
-An application that is integrated with both Petri and Google Analytics, and sends both Petri BI events and relevant application BI events can be found in [GoogleAnalyticsTestappIT](petri/petri-bi-integration-testapp/src/it/scala/com/wixpress/common/petri/GoogleAnalyticsTestappIT.scala) 
+An application that is integrated with both Petri and Google Analytics, and sends both Petri BI events and relevant application BI events can be found in [GoogleAnalyticsTestappIT](https://github.com/wix/petri/blob/master/petri-bi-integration-testapp/src/it/scala/com/wixpress/common/petri/GoogleAnalyticsTestappIT.scala) 
 
