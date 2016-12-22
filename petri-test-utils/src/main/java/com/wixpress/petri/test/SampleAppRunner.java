@@ -23,12 +23,12 @@ import java.util.HashMap;
 import java.util.UUID;
 
 /**
-* Created with IntelliJ IDEA.
-* User: sagyr
-* Date: 9/2/14
-* Time: 11:55 AM
-* To change this template use File | Settings | File Templates.
-*/
+ * Created with IntelliJ IDEA.
+ * User: sagyr
+ * Date: 9/2/14
+ * Time: 11:55 AM
+ * To change this template use File | Settings | File Templates.
+ */
 public class SampleAppRunner {
     public static final String DEFAULT_PATH_TO_WEBAPP = ServerRunner.class.getResource("/").getPath() + "../../src/it/webapp";
     private final ServerRunner sampleAppServer;
@@ -40,11 +40,11 @@ public class SampleAppRunner {
     private Path tempPropertiesFilePath;
     private Path originalPropertiesFile;
 
-    SampleAppRunner(int port){
+    SampleAppRunner(int port) {
         this(port, DEFAULT_PATH_TO_WEBAPP);
     }
 
-    private SampleAppRunner(int port, String pathToWebapp){
+    private SampleAppRunner(int port, String pathToWebapp) {
         this(port, pathToWebapp, 0, false);
     }
 
@@ -57,10 +57,11 @@ public class SampleAppRunner {
     }
 
     public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState) {
-        this(port, pathToWebapp, reporterInterval, useServerSideState, null);
+        this(port, pathToWebapp, reporterInterval, useServerSideState, null, null);
     }
 
-    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState, String amplitudeUrl) {
+    public SampleAppRunner(int port, String pathToWebapp, int reporterInterval, boolean useServerSideState,
+                           String amplitudeUrl, String googleAnalyticsUrl) {
         this.port = port;
         this.remoteDataFetcherDriver = new RemoteDataFetcherDriver("localhost", port);
         this.sampleAppServer = new ServerRunner(port, pathToWebapp);
@@ -76,9 +77,13 @@ public class SampleAppRunner {
         if (amplitudeUrl != null) {
             overrideAmplitudeUrl(propertiesFile, amplitudeUrl);
         }
+
+        if (googleAnalyticsUrl != null) {
+            overrideGoogleAnalyticsUrl(propertiesFile, googleAnalyticsUrl);
+        }
     }
 
-    private File getLaboratoryPropertiesFile(String pathToWebapp)  {
+    private File getLaboratoryPropertiesFile(String pathToWebapp) {
         try {
             tempPropertiesFilePath = Files.createTempFile("laboratory-temp", "properties");
             originalPropertiesFile = Paths.get(pathToWebapp + "/WEB-INF/laboratory.properties");
@@ -89,8 +94,12 @@ public class SampleAppRunner {
         }
     }
 
-    private void overrideAmplitudeUrl(File propertiesFile, String amplitudeUrl) {
-        setProperty(propertiesFile, amplitudeUrl, "amplitude.url");
+    private void overrideAmplitudeUrl(File propertiesFile, String url) {
+        setProperty(propertiesFile, url, "amplitude.url");
+    }
+
+    private void overrideGoogleAnalyticsUrl(File propertiesFile, String url) {
+        setProperty(propertiesFile, url, "google.analytics.url");
     }
 
     private void addServerSideToProperties(File propertiesFile, boolean useServerSideState) {
@@ -118,10 +127,10 @@ public class SampleAppRunner {
 
     public void stop() throws Exception {
         sampleAppServer.stop();
-        revertChangesToLoboratoryPropertiesFile();
+        revertChangesToLaboratoryPropertiesFile();
     }
 
-    private void revertChangesToLoboratoryPropertiesFile() throws IOException {
+    private void revertChangesToLaboratoryPropertiesFile() throws IOException {
         Files.copy(tempPropertiesFilePath, originalPropertiesFile, StandardCopyOption.REPLACE_EXISTING);
         Files.deleteIfExists(tempPropertiesFilePath);
     }
@@ -130,7 +139,7 @@ public class SampleAppRunner {
         remoteDataFetcherDriver.fetch(ConductibleExperiments.class);
     }
 
-    private HttpClient newClient(){
+    private HttpClient newClient() {
         return HttpClientBuilder.create().build();
     }
 
@@ -141,7 +150,7 @@ public class SampleAppRunner {
                 key +
                 "&fallback=" +
                 fallback;
-        HttpGet request  = new HttpGet(uri);
+        HttpGet request = new HttpGet(uri);
         HttpResponse response = client.execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
@@ -153,7 +162,7 @@ public class SampleAppRunner {
                 key +
                 "&fallback=" +
                 fallback;
-        HttpGet request  = new HttpGet(uri);
+        HttpGet request = new HttpGet(uri);
         request.setHeader(GEO_HEADER, userGeo);
         HttpResponse response = client.execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
@@ -177,12 +186,11 @@ public class SampleAppRunner {
                 uuid.toString() +
                 "&fallback=" +
                 fallback;
-        HttpGet request  = new HttpGet(uri);
+        HttpGet request = new HttpGet(uri);
         HttpClient clientToUse = freshClient ? newClient() : client;
         HttpResponse response = clientToUse.execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
-
 
     public String conductExperimentWithCustomContext(String key, String fallback) throws IOException {
         String uri = "http://localhost:" +
@@ -191,7 +199,7 @@ public class SampleAppRunner {
                 key +
                 "&fallback=" +
                 fallback;
-        HttpPost request  = new HttpPost(uri);
+        HttpPost request = new HttpPost(uri);
         request.setHeader("Content-type", "application/json");
         HashMap<String, String> customContextMap = new HashMap<String, String>() {{
             put("userType", "special");
@@ -200,7 +208,4 @@ public class SampleAppRunner {
         HttpResponse response = newClient().execute(request);
         return EntityUtils.toString(response.getEntity(), "UTF-8");
     }
-
-
-
 }

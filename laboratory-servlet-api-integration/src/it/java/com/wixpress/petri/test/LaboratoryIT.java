@@ -64,7 +64,7 @@ public class LaboratoryIT {
 
     @Test(expected = NonSerializableServerException.class)
     public void throwsSpecialExceptionIfServerExceptionIsNotSerializable() throws MalformedURLException {
-        petri.failNextReuqest();
+        petri.failNextRequest();
         PetriRPCClient.makeFor("http://localhost:" + PETRI_PORT + "/petri").fetchActiveExperiments();
     }
 
@@ -129,7 +129,7 @@ public class LaboratoryIT {
     @Test
     public void doesNotUsePetriServerOnUserRequest() throws Exception {
         setupExperiment(experimentWithFirstWinning(THE_KEY));
-        petri.failNextReuqest();
+        petri.failNextRequest();
         assertThat(sampleApp.conductExperiment(THE_KEY, "FALLBACK"), is("a"));
     }
 

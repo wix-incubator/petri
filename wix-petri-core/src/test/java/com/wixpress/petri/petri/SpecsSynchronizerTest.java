@@ -32,7 +32,7 @@ public class SpecsSynchronizerTest {
     private SpecsSynchronizer specsSynchronizer;
     private Clock fakeClock;
 
-    private void petriClientShouldRecieve(final ExperimentSpec... expectedSpecs) {
+    private void petriClientShouldReceive(final ExperimentSpec... expectedSpecs) {
         context.checking(new Expectations() {{
             oneOf(petriClient).addSpecs(asList(expectedSpecs));
         }});
@@ -86,7 +86,7 @@ public class SpecsSynchronizerTest {
         assumingSpecDefs(TestableSpecDef.ofTestGroups(testGroups));
         final ExperimentSpec expectedSpec = anExperimentSpec(TestableSpecDef.class.getName(), fakeClock.getCurrentDateTime())
                 .withTestGroups(testGroups).build();
-        petriClientShouldRecieve(expectedSpec);
+        petriClientShouldReceive(expectedSpec);
         assertThat(specsSynchronizer.syncSpecs(), hasItem(expectedSpec.getKey()));
     }
 
@@ -109,7 +109,7 @@ public class SpecsSynchronizerTest {
         final ExperimentSpec expectedSpec2 = expectedSpecs.build();
 
         assumingSpecDefs(TestableSpecDef.ofTestGroups(testGroups), TestableSpecDef.ofTestGroups(testGroups));
-        petriClientShouldRecieve(expectedSpec1, expectedSpec2);
+        petriClientShouldReceive(expectedSpec1, expectedSpec2);
         assertThat(specsSynchronizer.syncSpecs(), hasItems(expectedSpec1.getKey(), expectedSpec2.getKey()) );
     }
 

@@ -1,0 +1,21 @@
+{
+  "request" : {
+    "url" : "/collect",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalTo" : "v=1&tid=UA-89204848-1&t=event&el=PetriBiEvent-123&uip=THE_IP&ul=THE_LANGUAGE&geoid=THE_COUNTRY&cid=ba8f170a-fe2e-4453-92bf-e7a6aa6a1443&uid=ba8f170a-fe2e-4453-92bf-e7a6aa6a1443&ec=PRODUCT_NAME&ea=red&ua=THE_UA&dl=THE_URL"
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "tracker_it_response.txt",
+    "headers" : {
+      "Access-Control-Allow-Origin" : "*",
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Tue, 02 Aug 2016 14:15:17 GMT",
+      "Server" : "TornadoServer/3.2.2",
+      "Content-Length" : "7",
+      "Connection" : "keep-alive"
+    }
+  }
+}

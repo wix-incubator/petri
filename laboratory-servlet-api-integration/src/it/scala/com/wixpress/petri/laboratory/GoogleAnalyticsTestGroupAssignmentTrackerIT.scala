@@ -3,27 +3,27 @@ package com.wixpress.petri.laboratory
 import java.util.UUID
 
 import com.natpryce.makeiteasy.MakeItEasy._
-import com.wixpress.petri.amplitude.AmplitudeAdapterBuilder
 import com.wixpress.petri.experiments.domain.{Assignment, TestGroup}
+import com.wixpress.petri.google_analytics.GoogleAnalyticsAdapterBuilder
 import com.wixpress.petri.laboratory.dsl.UserInfoMakers._
 import com.wixpress.petri.laboratory.dsl.{ExperimentMakers, UserInfoMakers}
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.{BeforeAfterAll, Scope}
 
-// the stub for the amplitude wiremock is file-based - it's located in test/resources/*mapping.json
-class AmplitudeTestGroupAssignmentTrackerIT extends SpecificationWithJUnit with BeforeAfterAll {
+// the stub for the google analytics wiremock is file-based - it's located in test/resources/*mapping.json
+class GoogleAnalyticsTestGroupAssignmentTrackerIT extends SpecificationWithJUnit with BeforeAfterAll {
   val port = 11981
-  val amplitudeDriver = new BiServerDriver(port)
+  val googleAnalyticsDriver = new BiServerDriver(port)
 
-  override def beforeAll(): Unit = amplitudeDriver.start()
+  override def beforeAll(): Unit = googleAnalyticsDriver.start()
 
-  override def afterAll(): Unit = amplitudeDriver.stop()
+  override def afterAll(): Unit = googleAnalyticsDriver.stop()
 
   class Context extends Scope {
-    val amplitudeAdapter = AmplitudeAdapterBuilder.create(
-      s"http://localhost:$port/httpapi", "198e3469868de498f5d67581d6de4518", null)
+    val googleAnalyticsAdapter = GoogleAnalyticsAdapterBuilder.create(
+      s"http://localhost:$port/collect", "UA-89204848-1", null)
 
-    val amplitudeTestGroupAssignmentTracker = new BiTestGroupAssignmentTracker(amplitudeAdapter)
+    val googleAnalyticsTestGroupAssignmentTracker = new BiTestGroupAssignmentTracker(googleAnalyticsAdapter)
 
     val userInfo = a(UserInfoMakers.UserInfo,
       `with`(userId, UUID.fromString("ba8f170a-fe2e-4453-92bf-e7a6aa6a1443")),
@@ -44,10 +44,10 @@ class AmplitudeTestGroupAssignmentTrackerIT extends SpecificationWithJUnit with 
     val assignment = new Assignment(userInfo, null, null, testGroup, experiment, 0)
   }
 
-  "AmplitudeTestGroupAssignmentTracker" should {
-    "upon newAssignment, post an http request to amplitude fake server" in new Context {
-      amplitudeTestGroupAssignmentTracker.newAssignment(assignment)
-      amplitudeDriver.assertThatBiServerWasCalled("httpapi")
+  "GoogleAnalyticsTestGroupAssignmentTracker" should {
+    "upon newAssignment, post an http request to google analytics fake server" in new Context {
+      googleAnalyticsTestGroupAssignmentTracker.newAssignment(assignment)
+      googleAnalyticsDriver.assertThatBiServerWasCalled("collect")
     }
   }
 }

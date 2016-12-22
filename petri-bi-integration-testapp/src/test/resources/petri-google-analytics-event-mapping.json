@@ -1,0 +1,30 @@
+{
+  "request": {
+    "url": "/collect",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "contains": "v=1&tid=UA-89204848-1"
+      },
+      {
+        "contains": "el=PetriBiEvent"
+      },
+      {
+        "contains": "ea=red"
+      }
+    ]
+  },
+
+  "response": {
+    "status": 200,
+    "bodyFileName": "success.txt",
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "text/html; charset=UTF-8",
+      "Date": "Tue, 02 Aug 2016 14:09:31 GMT",
+      "Server": "TornadoServer/3.2.2",
+      "Content-Length": "7",
+      "Connection": "keep-alive"
+    }
+  }
+}
