@@ -49,5 +49,12 @@ class AmplitudeTestGroupAssignmentTrackerIT extends SpecificationWithJUnit with 
       amplitudeTestGroupAssignmentTracker.newAssignment(assignment)
       amplitudeDriver.assertThatBiServerWasCalled("httpapi")
     }
+
+    "don't throw an exception if failing to write to bi adapter" in new Context{
+      val failingAmplitudeAdapter = AmplitudeAdapterBuilder.create(
+        s"http://localhost:$port/notexisting", "198e3469868de498f5d67581d6de4518", null)
+      val failingAmplitudeTestGroupAssignmentTracker = new BiTestGroupAssignmentTracker(failingAmplitudeAdapter)
+      failingAmplitudeTestGroupAssignmentTracker.newAssignment(assignment) must not(throwA[Throwable])
+    }
   }
 }

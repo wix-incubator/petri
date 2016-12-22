@@ -9,7 +9,13 @@ import com.wixpress.petri.experiments.domain.Assignment
 class BiTestGroupAssignmentTracker(adapter: BiAdapter) extends TestGroupAssignmentTracker {
   override def newAssignment(assignment: Assignment): Unit = {
     val event = BiPetriEvent.fromAssignment(assignment)
-    adapter.sendEvent(event)
+    try {
+      adapter.sendEvent(event)
+    } catch {
+      case e: Throwable =>
+        println(s"Failed to write BI Event to: ${adapter.getClass.getName} for experiment ${assignment.getExperimentId}")
+        e.printStackTrace()
+    }
   }
 }
 
