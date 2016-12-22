@@ -6,7 +6,7 @@ import com.wixpress.petri.laboratory.{BaseBiEvent, BiAdapter, BiAdapterBuilder, 
 
 case class GoogleAnalyticsAdapter(url: String, key: String, timeoutMs: Int) extends BiAdapter {
 
-  val googleAnalyticsFieldsMap = Map("userId" -> "cid", "eventType" -> "el", "ip" -> "uip", "language" -> "ul", "country" -> "geoid")
+  val googleAnalyticsFieldsMap = Map("eventType" -> "el", "ip" -> "uip", "language" -> "ul", "country" -> "geoid")
 
   override def adapterType: String = "GoogleAnalytics"
 

@@ -103,7 +103,7 @@ class PageWithButtonController {
   @ResponseBody
   def amplitudeButtonClicked(request: HttpServletRequest, response: HttpServletResponse): Unit = {
     getUserId(request).foreach { userId =>
-      amplitudeAdapter.sendEvent(BiEvent(ButtonClickedEvent.eventType, "1.1.1.1", "en", "us", userId))
+      amplitudeAdapter.sendEvent(AmplitudeBiEvent(ButtonClickedEvent.eventType, "1.1.1.1", "en", "us", userId))
     }
   }
 
@@ -136,11 +136,12 @@ object PageWithButtonController {
   val labUserIdField = "laboratory_user_id"
 }
 
-case class BiEvent(@JsonProperty("event_type") eventType: String,
-                   ip: String, language: String, country: String,
-                   @JsonProperty("user_id") userId: String) extends BaseBiEvent
+case class AmplitudeBiEvent(@JsonProperty("event_type") eventType: String,
+                            ip: String, language: String, country: String,
+                            @JsonProperty("user_id") userId: String) extends BaseBiEvent
 
-case class GoogleAnalyticsBiEvent(@JsonProperty("event_type") eventType: String,
+//Note - BE CAREFUL WHEN RENAMING! (GoogleAnalyticsAdapter relies on some of these names)
+case class GoogleAnalyticsBiEvent(eventType: String,
                    ip: String, language: String, country: String,
-                   @JsonProperty("user_id") userId: String,
+                   userId: String,
                    ec: String) extends BaseBiEvent

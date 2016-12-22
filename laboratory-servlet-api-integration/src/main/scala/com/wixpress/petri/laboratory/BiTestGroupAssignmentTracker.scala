@@ -13,6 +13,7 @@ class BiTestGroupAssignmentTracker(adapter: BiAdapter) extends TestGroupAssignme
   }
 }
 
+//TODO - the jsonProperties here are to match amplitude request syntax. should be extracted into the AmplitudeAdapter..
 case class BiPetriEvent(@JsonProperty("event_type") eventType: String,
                         ip: String, language: String, country: String,
                         @JsonProperty("user_id") userId: String,
