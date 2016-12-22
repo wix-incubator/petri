@@ -32,12 +32,13 @@ For instructions on how to integrate and send events to Amplitude read [this](ht
 
 #### A live demo with Petri and Amplitude
 
-1. Run [MainBiSampleApp](petri/petri-bi-integration-testapp/src/main/scala/com/wixpress/common/petri/MainBiSampleApp.scala)
-2. Using your browser, go to `http://localhost:9811/testAmplitude`. As Petri uses cookies to track users you may do one of the following to mimic multiple users coming into this site: 
+1. Edit [laboratory.properties](https://github.com/wix/petri/blob/master/petri-bi-integration-testapp/src/main/webapp/WEB-INF/laboratory.properties) and uncomment the amplitude.url parameter.
+2. Run [MainBiSampleApp](https://github.com/wix/petri/blob/master/petri-bi-integration-testapp/src/main/scala/com/wixpress/common/petri/MainBiSampleApp.scala)
+3. Using your browser, go to `http://localhost:9811/testAmplitude`. As Petri uses cookies to track users you may do one of the following to mimic multiple users coming into this site: 
 	- Open the same url from different browsers
 	- Open the url in incognito mode several times
 	- Delete your browser's cookies after each visit
-3. See the funnel created from your reported events on [Amplitude.com](https://amplitude.com/app/151746/funnels?fid=20206&cg=User&range=Last%2030%20Days&i=1&dets=0)
+4. See the funnel created from your reported events on [Amplitude.com](https://amplitude.com/app/151746/funnels?fid=20206&cg=User&range=Last%2030%20Days&i=1&dets=0)
 
 #### A Petri + Amplitude integrated application 
 
