@@ -120,6 +120,13 @@ integrating_with_amplitude:
 
 
  
+integrating_with_google_analytics:
+  title: "Integrating Laboratory with Google Analytics"
+  url: "/petri/integrating_with_google_analytics/ 'Integrating Laboratory with Google Analytics'"
+  link: "<a href='/petri/integrating_with_google_analytics/' title='Integrating Laboratory with Google Analytics'>Integrating Laboratory with Google Analytics</a>"
+
+
+ 
 using_laboratory_as_a_service:
   title: "Using Laboratory As A Service"
   url: "/petri/using_laboratory_as_a_service/ 'Using Laboratory As A Service'"

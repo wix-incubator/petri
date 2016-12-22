@@ -69,7 +69,7 @@
 "title": "",
 "tags": "",
 "keywords": "",
-"url": "/petri/sample-petri-app/target/sample-petri-app-0.7.0-SNAPSHOT/WEB-INF/filters.yaml",
+"url": "/petri/petri-bi-integration-testapp/target/petri-bi-integration-testapp-0.7.0-SNAPSHOT/WEB-INF/filters.yaml",
 "summary": ""
 },
 
@@ -79,7 +79,7 @@
 "title": "",
 "tags": "",
 "keywords": "",
-"url": "/petri/petri-amplitude-testapp/target/petri-amplitude-testapp-0.7.0-SNAPSHOT/WEB-INF/filters.yaml",
+"url": "/petri/sample-petri-app/target/sample-petri-app-0.7.0-SNAPSHOT/WEB-INF/filters.yaml",
 "summary": ""
 },
 
@@ -110,6 +110,16 @@
 "tags": "",
 "keywords": "amplitude, bi, event",
 "url": "/petri/integrating_with_amplitude/",
+"summary": ""
+},
+
+
+
+{
+"title": "Integrating Laboratory with Google Analytics",
+"tags": "",
+"keywords": "google analytics, bi, event",
+"url": "/petri/integrating_with_google_analytics/",
 "summary": ""
 },
 

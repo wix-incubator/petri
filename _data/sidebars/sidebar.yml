@@ -85,6 +85,10 @@ entries:
       url: /integrating_with_amplitude/
       output: web
 
+    - title: Integrating Laboratory with Google Analytics
+      url: /integrating_with_google_analytics/
+      output: web
+
     - title: Using Laboratory As A Service
       url: /using_laboratory_as_a_service/
       output: web

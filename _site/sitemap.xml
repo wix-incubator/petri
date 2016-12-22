@@ -52,13 +52,13 @@
   
   
   <url>
-    <loc>wix.github.io/petri/sample-petri-app/target/sample-petri-app-0.7.0-SNAPSHOT/WEB-INF/filters.yaml</loc>
+    <loc>wix.github.io/petri/petri-bi-integration-testapp/target/petri-bi-integration-testapp-0.7.0-SNAPSHOT/WEB-INF/filters.yaml</loc>
   </url>
   
   
   
   <url>
-    <loc>wix.github.io/petri/petri-amplitude-testapp/target/petri-amplitude-testapp-0.7.0-SNAPSHOT/WEB-INF/filters.yaml</loc>
+    <loc>wix.github.io/petri/sample-petri-app/target/sample-petri-app-0.7.0-SNAPSHOT/WEB-INF/filters.yaml</loc>
   </url>
   
   
@@ -77,6 +77,12 @@
   
   <url>
     <loc>wix.github.io/petri/integrating_with_amplitude/</loc>
+  </url>
+  
+  
+  
+  <url>
+    <loc>wix.github.io/petri/integrating_with_google_analytics/</loc>
   </url>
   
   

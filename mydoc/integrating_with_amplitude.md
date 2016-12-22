@@ -32,8 +32,8 @@ For instructions on how to integrate and send events to Amplitude read [this](ht
 
 #### A live demo with Petri and Amplitude
 
-1. Run [MainAmplitudeSampleApp](petri/petri-amplitude-testapp/src/main/scala/com/wixpress/common/petri/MainAmplitudeSampleApp.scala)
-2. Using your browser, go to `http://localhost:9811/test`. As Petri uses cookies to track users you may do one of the following to mimic multiple users coming into this site: 
+1. Run [MainBiSampleApp](petri/petri-bi-integration-testapp/src/main/scala/com/wixpress/common/petri/MainBiSampleApp.scala)
+2. Using your browser, go to `http://localhost:9811/testAmplitude`. As Petri uses cookies to track users you may do one of the following to mimic multiple users coming into this site: 
 	- Open the same url from different browsers
 	- Open the url in incognito mode several times
 	- Delete your browser's cookies after each visit
@@ -41,5 +41,5 @@ For instructions on how to integrate and send events to Amplitude read [this](ht
 
 #### A Petri + Amplitude integrated application 
 
-An application that is integrated with both Petri and Amplitude, and sends both Petri BI events and relevant application BI events can be found in [AmplitudeTestappIT](petri/petri-amplitude-testapp/src/it/scala/com/wixpress/common/petri/AmplitudeTestappIT.scala) 
+An application that is integrated with both Petri and Amplitude, and sends both Petri BI events and relevant application BI events can be found in [AmplitudeTestappIT](petri/petri-bi-integration-testapp/src/it/scala/com/wixpress/common/petri/AmplitudeTestappIT.scala) 
 
