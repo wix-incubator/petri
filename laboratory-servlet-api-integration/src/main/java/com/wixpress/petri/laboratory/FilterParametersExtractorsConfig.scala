@@ -11,7 +11,7 @@ import scala.util.{Success, Try}
 
 
 object HttpRequestExtractionOptions extends Enumeration {
-  val Param, Header, Cookie = Value
+  val Param, Header, Cookie, Converter = Value
 }
 
 object FilterParameters extends Enumeration {

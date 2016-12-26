@@ -1,10 +1,15 @@
 package com.wixpress.petri.laboratory
 
+import java.util.Base64
 import javax.servlet.http.{Cookie, HttpServletRequest}
 
 import org.specs2.mutable.SpecificationWithJUnit
 import org.specs2.specification.Scope
 import org.springframework.mock.web.MockHttpServletRequest
+
+class Base64Converter extends Converter[String] {
+  def convert(value: String): String = new String(Base64.getDecoder.decode(value.getBytes))
+}
 
 class ResolversTest extends SpecificationWithJUnit {
 
@@ -95,7 +100,7 @@ class ResolversTest extends SpecificationWithJUnit {
       val resolver = new Resolver[Int] {
         override val filterParam: FilterParameters.Value = aFilterParam
         override def convert(value: String): Int = Integer.parseInt(value)
-        override def defaultResolution(request: HttpServletRequest): Int = 1
+        override def defaultResolution(request: HttpServletRequest): String = "1"
       }
 
       val config = FilterParametersExtractorsConfig(Map(aFilterParam.toString -> List(("Header", "SOME_HEADER"))))
@@ -103,5 +108,33 @@ class ResolversTest extends SpecificationWithJUnit {
 
       resolver.resolve(request, config) must beEqualTo(999)
     }
+
+    "resolve by some type with custom converter" in new Context {
+
+      val config = FilterParametersExtractorsConfig(Map(
+        aFilterParam.toString -> List(("Header", "SOME_HEADER"), (HttpRequestExtractionOptions.Converter.toString, classOf[Base64Converter].getName))))
+
+      request.addHeader("SOME_HEADER", new String(Base64.getEncoder.encode(someValue.getBytes)))
+
+      resolver.resolve(request, config) must beEqualTo(someValue)
+    }
+
+    "resolve by default resolution and custom converter" in  {
+
+      val someValue = "lala"
+      val aFilterParam = FilterParameters.Language
+      val request = new MockHttpServletRequest
+
+      val resolver = new StringResolver {
+        override def defaultResolution(request: HttpServletRequest): String = new String(Base64.getEncoder.encode(someValue.getBytes))
+        override val filterParam: FilterParameters.Value = aFilterParam
+      }
+
+      val config = FilterParametersExtractorsConfig(Map(
+        aFilterParam.toString -> List((HttpRequestExtractionOptions.Converter.toString, classOf[Base64Converter].getName))))
+
+      resolver.resolve(request, config)  must beEqualTo(someValue)
+    }
+
   }
 }

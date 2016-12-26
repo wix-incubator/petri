@@ -1,5 +1,6 @@
 package com.wixpress.common.petri.e2e;
 
+import com.wixpress.common.petri.SampleUserIdConverter;
 import com.wixpress.petri.test.TestBuilders;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -25,7 +27,7 @@ public class FilterParametersConfigTest extends BaseTest {
         original = Paths.get(BaseTest.SAMPLE_WEBAPP_PATH, "WEB-INF/filters.yaml");
         tempFile = Files.createTempFile("filters-temp", "yaml");
         copy(original, tempFile);
-        new FilterParametersExtractorsConfigTestUtil().replaceConfigWithGeoHeader(original.toFile());
+        new FilterParametersExtractorsConfigTestUtil().replaceConfigWithGeoHeaderAndUserIdConverter(original.toFile());
         BaseTest.startServers();
     }
 
@@ -39,12 +41,27 @@ public class FilterParametersConfigTest extends BaseTest {
     }
 
     @Test
-    public void conductingAnExperimentWithGeoFilterWithCustomizedDataExtractor() throws IOException {
+    public void conductingAnExperimentWithCustomGeoConverter() throws IOException {
         addSpec("THE_KEY");
-        fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndFilter("THE_KEY").build());
+        UUID userGuid = UUID.randomUUID();
+        String encodedUserId = SampleUserIdConverter.encode(userGuid);
+
+        fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndUserIdFilter("THE_KEY", userGuid).build());
         sampleAppRunner.updateTheCacheNow();
 
-        String testResult = sampleAppRunner.conductExperimentWithGeoHeader("THE_KEY", "FALLBACK_VALUE", "IL");
+        String testResult = sampleAppRunner.conductExperimentByCustomUserId("THE_KEY", "FALLBACK_VALUE", encodedUserId);
+        assertThat(testResult, is("a"));
+    }
+
+    @Test
+    public void conductingAnExperimentWithGeoFilterWithCustomizedDataExtractor() throws IOException {
+
+        String countyCode = "IL";
+        addSpec("THE_KEY");
+        fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndGeoFilter("THE_KEY", countyCode).build());
+        sampleAppRunner.updateTheCacheNow();
+
+        String testResult = sampleAppRunner.conductExperimentWithGeoHeader("THE_KEY", "FALLBACK_VALUE", countyCode);
         assertThat(testResult, is("a"));
     }
 }

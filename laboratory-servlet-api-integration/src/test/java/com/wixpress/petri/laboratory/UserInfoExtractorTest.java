@@ -138,4 +138,19 @@ public class UserInfoExtractorTest {
         assertThat(extractor.extract().getUserId(), is(someUser));
     }
 
+    @Test
+    public void customUserIdResolverIsUsed() {
+        final UUID someUser = UUID.randomUUID();
+        String encodedUserId = SampleUserIdConverter.encode(someUser);
+
+        stubRequest.addParameter("laboratory_user_id", encodedUserId);
+
+        FilterParametersExtractorsConfig config = FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.UserId(),
+                HttpRequestExtractionOptions.Converter(), SampleUserIdConverter.class.getName());
+
+        UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME, config);
+
+        assertThat(extractor.extract().getUserId(), is(someUser));
+    }
+
 }

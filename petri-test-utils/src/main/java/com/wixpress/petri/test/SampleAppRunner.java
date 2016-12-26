@@ -176,6 +176,20 @@ public class SampleAppRunner {
         return conductExperimentByUser(key, fallback, uuid, false);
     }
 
+    public String conductExperimentByCustomUserId(String key, String fallback, String userId) throws IOException {
+        String uri = "http://localhost:" +
+                port +
+                "/conductExperiment?key=" +
+                key +
+                "&laboratory_user_id=" +
+                userId +
+                "&fallback=" +
+                fallback;
+        HttpGet request = new HttpGet(uri);
+        HttpResponse response = client.execute(request);
+        return EntityUtils.toString(response.getEntity(), "UTF-8");
+    }
+
     // TODO: Remove duplication
     private String conductExperimentByUser(String key, String fallback, UUID uuid, boolean freshClient) throws IOException {
         String uri = "http://localhost:" +
