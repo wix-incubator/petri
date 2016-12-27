@@ -17,7 +17,7 @@ abstract class Resolver[T >: Null] {
 
   def convert(value: String): T
 
-  def resolve(request: HttpServletRequest, filterParametersExtractorsConfig: FilterParametersExtractorsConfig): T = {
+  def resolve(request: HttpServletRequest, filterParametersExtractorsConfig: FilterParametersExtractorsConfig, customConverters: CustomConverters): T = {
     val extractorConfig = filterParametersExtractorsConfig.configs.get(filterParam.toString)
 
     val extractedByConfig = extractorConfig.flatMap(_.collectFirst {
@@ -26,7 +26,7 @@ abstract class Resolver[T >: Null] {
 
     val extractedValue = extractedByConfig.getOrElse(defaultResolution(request))
 
-    Option(extractedValue).map(convertValue(_, extractorConfig)).orNull
+    Option(extractedValue).map(convertValue(_, customConverters)).orNull
   }
 
   private def extractBy(request: HttpServletRequest, config: (String, String)): Option[String] = {
@@ -43,16 +43,10 @@ abstract class Resolver[T >: Null] {
     extractedValue
   }
 
-  private def convertValue(extractedValue: String, extractorConfig: Option[List[(String, String)]]): T = {
+  private def convertValue(extractedValue: String, customConverters: CustomConverters): T = {
 
-    val converter = customConverter(extractorConfig)
-
+    val converter = customConverters.converters.get(filterParam.toString).asInstanceOf[Option[Converter[T]]]
     converter.map(_.convert(extractedValue)).getOrElse(convert(extractedValue))
-  }
-
-  private def customConverter(extractorConfig: Option[List[(String, String)]]): Option[Converter[T]] = {
-    val converterName = extractorConfig.flatMap(_.find(_._1 == Converter.toString)).map(_._2)
-    converterName.map(Class.forName(_).newInstance().asInstanceOf[Converter[T]])
   }
 }
 

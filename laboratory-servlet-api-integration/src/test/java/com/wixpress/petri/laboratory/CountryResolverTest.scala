@@ -9,20 +9,20 @@ class CountryResolverTest extends SpecificationWithJUnit{
   trait Context extends Scope {
     val resolver = CountryResolver()
     val request = new MockHttpServletRequest
+    val config = FilterParametersExtractorsConfig()
+    val converters = CustomConverters()
   }
 
   "CountryResolver" should {
     "resolve by default servlet default locale" in new Context {
-      val config = FilterParametersExtractorsConfig()
-      resolver.resolve(request, config) must beEqualTo(request.getLocale.getCountry)
+      resolver.resolve(request, config, converters) must beEqualTo(request.getLocale.getCountry)
     }
 
     "resolve by 'GEOIP_COUNTRY_CODE' header if filterParamConfig is empty" in new Context {
-      val config = FilterParametersExtractorsConfig()
 
       private val country =  "SomeCountry"
       request.addHeader("GEOIP_COUNTRY_CODE", country)
-      resolver.resolve(request, config) must beEqualTo(country)
+      resolver.resolve(request, config, converters) must beEqualTo(country)
     }
   }
 }

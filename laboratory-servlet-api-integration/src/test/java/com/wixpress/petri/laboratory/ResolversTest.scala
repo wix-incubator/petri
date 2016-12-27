@@ -24,13 +24,14 @@ class ResolversTest extends SpecificationWithJUnit {
     }
 
     val request = new MockHttpServletRequest
+    val emptyCustomConverters = CustomConverters()
+    val emptyConfig = FilterParametersExtractorsConfig()
   }
 
 
   "Resolver" should {
     "resolve by default resolution when configs empty" in new Context {
-      val config = FilterParametersExtractorsConfig()
-      resolver.resolve(request, config) must beEqualTo(aDefaultResolution)
+      resolver.resolve(request, emptyConfig, emptyCustomConverters) must beEqualTo(aDefaultResolution)
     }
 
     "resolve by header 'SOME_HEADER' when configured" in new Context {
@@ -38,7 +39,7 @@ class ResolversTest extends SpecificationWithJUnit {
 
       request.addHeader("SOME_HEADER", someValue)
 
-      resolver.resolve(request, config) must beEqualTo(someValue)
+      resolver.resolve(request, config, emptyCustomConverters) must beEqualTo(someValue)
     }
 
     "resolve by 'SOME_COOKIE_NAME' cookie if filterParamConfig defines filterParam Country cookie" in new Context {
@@ -47,7 +48,7 @@ class ResolversTest extends SpecificationWithJUnit {
 
       request.setCookies(new Cookie("SOME_COOKIE_NAME", someValue))
 
-      resolver.resolve(request, config) must beEqualTo(someValue)
+      resolver.resolve(request, config, emptyCustomConverters) must beEqualTo(someValue)
     }
 
     "resolve by param 'SOME_PARAM' when configuration before that are not present" in new Context {
@@ -59,7 +60,7 @@ class ResolversTest extends SpecificationWithJUnit {
 
       request.addParameter("SOME_PARAM", someValue)
 
-      resolver.resolve(request, config) must beEqualTo(someValue)
+      resolver.resolve(request, config, emptyCustomConverters) must beEqualTo(someValue)
     }
 
     "resolve by configuration order if first config is missing move to next" in new Context {
@@ -69,7 +70,7 @@ class ResolversTest extends SpecificationWithJUnit {
 
       request.addHeader("Some_Header", someValue)
 
-      resolver.resolve(request, config) must beEqualTo(someValue)
+      resolver.resolve(request, config, emptyCustomConverters) must beEqualTo(someValue)
     }
 
     "resolve by default behaviour when configuration before that are not present" in new Context {
@@ -79,7 +80,7 @@ class ResolversTest extends SpecificationWithJUnit {
             ("Cookie", "SOME_COOKIE"),
             ("Param", "SOME_PARAM"))))
 
-      resolver.resolve(request, config) must beEqualTo(aDefaultResolution)
+      resolver.resolve(request, config, emptyCustomConverters) must beEqualTo(aDefaultResolution)
     }
 
     "resolve by first applicable configuration -> Param" in new Context {
@@ -90,14 +91,12 @@ class ResolversTest extends SpecificationWithJUnit {
       request.addHeader("Some_Header", "someOtherValue")
       request.addParameter("Some_Param", someValue)
 
-      resolver.resolve(request, config) must beEqualTo(someValue)
+      resolver.resolve(request, config, emptyCustomConverters) must beEqualTo(someValue)
     }
 
-    "be able to resolve different types than String" in {
-      val aFilterParam = FilterParameters.Language
-      val request = new MockHttpServletRequest
+    "be able to resolve different types than String" in new Context {
 
-      val resolver = new Resolver[Integer] {
+       val intResolver = new Resolver[Integer] {
         override val filterParam: FilterParameters.Value = aFilterParam
         override def convert(value: String): Integer = Integer.parseInt(value)
         override def defaultResolution(request: HttpServletRequest): String = "1"
@@ -106,17 +105,17 @@ class ResolversTest extends SpecificationWithJUnit {
       val config = FilterParametersExtractorsConfig(Map(aFilterParam.toString -> List(("Header", "SOME_HEADER"))))
       request.addHeader("SOME_HEADER", "999")
 
-      resolver.resolve(request, config) must beEqualTo(999)
+      intResolver.resolve(request, config, emptyCustomConverters) must beEqualTo(999)
     }
 
     "resolve by some type with custom converter" in new Context {
 
-      val config = FilterParametersExtractorsConfig(Map(
-        aFilterParam.toString -> List(("Header", "SOME_HEADER"), (FilterParametersConfigOptions.Converter.toString, classOf[Base64Converter].getName))))
+      val config = FilterParametersExtractorsConfig(Map(aFilterParam.toString -> List(("Header", "SOME_HEADER"))))
+      val customConverters = CustomConverters(Map(aFilterParam.toString -> new Base64Converter()))
 
       request.addHeader("SOME_HEADER", new String(Base64.getEncoder.encode(someValue.getBytes)))
 
-      resolver.resolve(request, config) must beEqualTo(someValue)
+      resolver.resolve(request, config, customConverters) must beEqualTo(someValue)
     }
 
     "resolve by default resolution and custom converter" in new Context {
@@ -126,10 +125,9 @@ class ResolversTest extends SpecificationWithJUnit {
         override val filterParam: FilterParameters.Value = aFilterParam
       }
 
-      val config = FilterParametersExtractorsConfig(Map(
-        aFilterParam.toString -> List((FilterParametersConfigOptions.Converter.toString, classOf[Base64Converter].getName))))
+      val customConverters = CustomConverters(Map(aFilterParam.toString -> new Base64Converter()))
 
-      resolver.resolve(request, config)  must beEqualTo(someValue)
+      resolver.resolve(request, emptyConfig, customConverters)  must beEqualTo(someValue)
     }
 
     "resolve properly null values when converter does not handle null properly" in new Context {
@@ -141,9 +139,7 @@ class ResolversTest extends SpecificationWithJUnit {
         }
       }
 
-      val config = FilterParametersExtractorsConfig()
-
-      resolver.resolve(request, config) must not(throwA[Exception])
+      resolver.resolve(request, emptyConfig, emptyCustomConverters) must not(throwA[Exception])
     }
   }
 }

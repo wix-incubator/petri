@@ -34,7 +34,9 @@ public class UserInfoExtractorTest {
     @Before
     public void setup() {
         stubRequest = new MockHttpServletRequest();
-        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME, FilterParametersExtractorsConfig.apply());
+        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
+                FilterParametersExtractorsConfig.apply(),
+                CustomConverters.apply());
     }
 
     @Test
@@ -52,7 +54,9 @@ public class UserInfoExtractorTest {
 
     @Test
     public void extractAUserInfoForNullRequest() {
-        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null, PETRI_LOG_STORAGE_COOKIE_NAME, FilterParametersExtractorsConfig.apply());
+        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null, PETRI_LOG_STORAGE_COOKIE_NAME,
+                FilterParametersExtractorsConfig.apply(),
+                CustomConverters.apply());
         UserInfo userInfo = userInfoExtractor.extract();
         UserInfo expectedUserInfo = new UserInfo("", null, null, "", "", "",
                 new NullUserInfoType(), "", "", new DateTime(0), false, "", false, new HashMap<>(), false, HOST, false);
@@ -122,7 +126,8 @@ public class UserInfoExtractorTest {
         stubRequest.addParameter("Some_Param", someLang);
         UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
                 FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.Language(),
-                        HttpRequestExtractionOptions.Param(), "Some_Param"));
+                        HttpRequestExtractionOptions.Param(), "Some_Param"),
+                CustomConverters.apply());
 
         assertThat(extractor.extract().language, is(someLang));
     }
@@ -133,7 +138,8 @@ public class UserInfoExtractorTest {
         stubRequest.addParameter("Some_Param", someUser.toString());
         UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
                 FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.UserId(),
-                        HttpRequestExtractionOptions.Param(), "Some_Param"));
+                        HttpRequestExtractionOptions.Param(), "Some_Param"),
+                CustomConverters.apply());
 
         assertThat(extractor.extract().getUserId(), is(someUser));
     }

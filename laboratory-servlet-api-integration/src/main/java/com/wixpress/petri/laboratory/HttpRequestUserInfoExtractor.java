@@ -18,12 +18,16 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
     private final HttpServletRequest request;
     private final String petriCookieName;
     private FilterParametersExtractorsConfig filterParametersExtractorsConfig;
+    private CustomConverters customConverters;
     private final ExperimentOverridesUrlDecoder experimentOverridesUrlDecoder = new ExperimentOverridesUrlDecoder();
 
-    public HttpRequestUserInfoExtractor(HttpServletRequest request, String petriCookieName, FilterParametersExtractorsConfig filterParametersExtractorsConfig) {
+    public HttpRequestUserInfoExtractor(HttpServletRequest request, String petriCookieName,
+                                        FilterParametersExtractorsConfig filterParametersExtractorsConfig,
+                                        CustomConverters customConverters) {
         this.request = request;
         this.petriCookieName = petriCookieName;
         this.filterParametersExtractorsConfig = filterParametersExtractorsConfig;
+        this.customConverters = customConverters;
     }
 
     @Override
@@ -37,9 +41,9 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         boolean isRobot = checkForRobotHeader(userAgent);
         String url = getRequestURL();
         String ip = getIp();
-        String language = new LanguageResolver().resolve(request, filterParametersExtractorsConfig);
-        String country = new CountryResolver().resolve(request, filterParametersExtractorsConfig);
-        UUID userId = new UserIdResolver().resolve(request,filterParametersExtractorsConfig);
+        String language = new LanguageResolver().resolve(request, filterParametersExtractorsConfig, customConverters);
+        String country = new CountryResolver().resolve(request, filterParametersExtractorsConfig, customConverters);
+        UUID userId = new UserIdResolver().resolve(request,filterParametersExtractorsConfig, customConverters);
         String anonymousExperimentsLog = getCookieValue(petriCookieName);
         UserInfoType userInfoType = UserInfoTypeFactory.make(userId);
         Map<String, String> experimentOverrides =
