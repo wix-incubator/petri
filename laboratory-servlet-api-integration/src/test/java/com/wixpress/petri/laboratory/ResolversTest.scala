@@ -97,9 +97,9 @@ class ResolversTest extends SpecificationWithJUnit {
       val aFilterParam = FilterParameters.Language
       val request = new MockHttpServletRequest
 
-      val resolver = new Resolver[Int] {
+      val resolver = new Resolver[Integer] {
         override val filterParam: FilterParameters.Value = aFilterParam
-        override def convert(value: String): Int = Integer.parseInt(value)
+        override def convert(value: String): Integer = Integer.parseInt(value)
         override def defaultResolution(request: HttpServletRequest): String = "1"
       }
 
@@ -130,6 +130,20 @@ class ResolversTest extends SpecificationWithJUnit {
         aFilterParam.toString -> List((FilterParametersConfigOptions.Converter.toString, classOf[Base64Converter].getName))))
 
       resolver.resolve(request, config)  must beEqualTo(someValue)
+    }
+
+    "resolve properly null values when converter does not handle null properly" in new Context {
+      override val resolver = new StringResolver {
+        override def defaultResolution(request: HttpServletRequest): String = null
+        override val filterParam: FilterParameters.Value = aFilterParam
+        override def convert(value: String): String = {
+          if (value == null) throw new RuntimeException("cannot handle null value") else value
+        }
+      }
+
+      val config = FilterParametersExtractorsConfig()
+
+      resolver.resolve(request, config) must not(throwA[Exception])
     }
   }
 }

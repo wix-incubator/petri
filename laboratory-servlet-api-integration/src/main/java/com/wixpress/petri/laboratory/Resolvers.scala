@@ -10,7 +10,7 @@ trait Converter[T] {
   def convert(value: String): T
 }
 
-abstract class Resolver[T] {
+abstract class Resolver[T >: Null] {
   val filterParam: FilterParameters.Value
 
   def defaultResolution(request: HttpServletRequest): String
@@ -26,7 +26,7 @@ abstract class Resolver[T] {
 
     val extractedValue = extractedByConfig.getOrElse(defaultResolution(request))
 
-    convertValue(extractedValue, extractorConfig)
+    Option(extractedValue).map(convertValue(_, extractorConfig)).orNull
   }
 
   private def extractBy(request: HttpServletRequest, config: (String, String)): Option[String] = {
