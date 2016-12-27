@@ -41,27 +41,30 @@ public class FilterParametersConfigTest extends BaseTest {
     }
 
     @Test
-    public void conductingAnExperimentWithCustomGeoConverter() throws IOException {
-        addSpec("THE_KEY");
-        UUID userGuid = UUID.randomUUID();
-        String encodedUserId = SampleUserIdConverter.encode(userGuid);
-
-        fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndUserIdFilter("THE_KEY", userGuid).build());
-        sampleAppRunner.updateTheCacheNow();
-
-        String testResult = sampleAppRunner.conductExperimentByCustomUserId("THE_KEY", "FALLBACK_VALUE", encodedUserId);
-        assertThat(testResult, is("a"));
-    }
-
-    @Test
     public void conductingAnExperimentWithGeoFilterWithCustomizedDataExtractor() throws IOException {
 
-        String countyCode = "IL";
         addSpec("THE_KEY");
+        String countyCode = "IL";
         fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndGeoFilter("THE_KEY", countyCode).build());
         sampleAppRunner.updateTheCacheNow();
 
         String testResult = sampleAppRunner.conductExperimentWithGeoHeader("THE_KEY", "FALLBACK_VALUE", countyCode);
+
+        assertThat(testResult, is("a"));
+    }
+
+    @Test
+    public void conductingAnExperimentWithCustomGeoConverter() throws IOException {
+
+        addSpec("THE_KEY");
+        UUID userGuid = UUID.randomUUID();
+        fullPetriClient.insertExperiment(TestBuilders.experimentWithFirstWinningAndUserIdFilter("THE_KEY", userGuid).build());
+        sampleAppRunner.updateTheCacheNow();
+
+        String encodedUserId = SampleUserIdConverter.encode(userGuid);
+
+        String testResult = sampleAppRunner.conductExperimentByCustomUserId("THE_KEY", "FALLBACK_VALUE", encodedUserId);
+
         assertThat(testResult, is("a"));
     }
 }

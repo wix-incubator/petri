@@ -112,29 +112,24 @@ class ResolversTest extends SpecificationWithJUnit {
     "resolve by some type with custom converter" in new Context {
 
       val config = FilterParametersExtractorsConfig(Map(
-        aFilterParam.toString -> List(("Header", "SOME_HEADER"), (HttpRequestExtractionOptions.Converter.toString, classOf[Base64Converter].getName))))
+        aFilterParam.toString -> List(("Header", "SOME_HEADER"), (FilterParametersConfigOptions.Converter.toString, classOf[Base64Converter].getName))))
 
       request.addHeader("SOME_HEADER", new String(Base64.getEncoder.encode(someValue.getBytes)))
 
       resolver.resolve(request, config) must beEqualTo(someValue)
     }
 
-    "resolve by default resolution and custom converter" in  {
+    "resolve by default resolution and custom converter" in new Context {
 
-      val someValue = "lala"
-      val aFilterParam = FilterParameters.Language
-      val request = new MockHttpServletRequest
-
-      val resolver = new StringResolver {
+      override val resolver = new StringResolver {
         override def defaultResolution(request: HttpServletRequest): String = new String(Base64.getEncoder.encode(someValue.getBytes))
         override val filterParam: FilterParameters.Value = aFilterParam
       }
 
       val config = FilterParametersExtractorsConfig(Map(
-        aFilterParam.toString -> List((HttpRequestExtractionOptions.Converter.toString, classOf[Base64Converter].getName))))
+        aFilterParam.toString -> List((FilterParametersConfigOptions.Converter.toString, classOf[Base64Converter].getName))))
 
       resolver.resolve(request, config)  must beEqualTo(someValue)
     }
-
   }
 }

@@ -11,11 +11,15 @@ import scala.util.{Success, Try}
 
 
 object HttpRequestExtractionOptions extends Enumeration {
-  val Param, Header, Cookie, Converter = Value
+  val Param, Header, Cookie = Value
 }
 
 object FilterParameters extends Enumeration {
   val Country, Language, UserId = Value
+}
+
+object FilterParametersConfigOptions extends Enumeration {
+  val Converter = Value
 }
 
 case class FilterParametersExtractorsConfig(configs: Map[String, List[(String, String)]])

@@ -4,6 +4,7 @@ import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 
 import com.wixpress.petri.laboratory.HttpRequestExtractionOptions.{Cookie, Header, Param}
+import com.wixpress.petri.laboratory.FilterParametersConfigOptions.Converter
 
 trait Converter[T] {
   def convert(value: String): T
@@ -18,11 +19,12 @@ abstract class Resolver[T] {
 
   def resolve(request: HttpServletRequest, filterParametersExtractorsConfig: FilterParametersExtractorsConfig): T = {
     val extractorConfig = filterParametersExtractorsConfig.configs.get(filterParam.toString)
-    val filterParamByConfig = extractorConfig.flatMap(_.collectFirst {
+
+    val extractedByConfig = extractorConfig.flatMap(_.collectFirst {
       case config if extractBy(request, config).isDefined => extractBy(request, config)
     }).flatten
 
-    val extractedValue = filterParamByConfig.getOrElse(defaultResolution(request))
+    val extractedValue = extractedByConfig.getOrElse(defaultResolution(request))
 
     convertValue(extractedValue, extractorConfig)
   }
@@ -39,30 +41,18 @@ abstract class Resolver[T] {
       case _ => None
     }
     extractedValue
-
   }
 
   private def convertValue(extractedValue: String, extractorConfig: Option[List[(String, String)]]): T = {
 
-   // val converterName1: String = extractorConfig.get.filter(config => config._1.equals("Converter")).head._2
-   // val converterName = Option(converterName1)
+    val converter = customConverter(extractorConfig)
 
-    def extractConverter(config: (String, String)) = {
-      config match {
-        case ("Converter", name) => Option(name)
-        case _ => None
-      }
-    }
+    converter.map(_.convert(extractedValue)).getOrElse(convert(extractedValue))
+  }
 
-    val converterName: Option[String] = extractorConfig.flatMap(_.collectFirst {
-      case config if extractConverter(config).isDefined => extractConverter(config)
-    }).flatten
-
-
-      converterName.map { c =>
-        val converter = Class.forName(c).newInstance().asInstanceOf[Converter[T]]
-        converter.convert(extractedValue)
-      }.getOrElse(convert(extractedValue))
+  private def customConverter(extractorConfig: Option[List[(String, String)]]): Option[Converter[T]] = {
+    val converterName = extractorConfig.flatMap(_.find(_._1 == Converter.toString)).map(_._2)
+    converterName.map(Class.forName(_).newInstance().asInstanceOf[Converter[T]])
   }
 }
 
@@ -100,7 +90,7 @@ class UserIdResolver extends Resolver[UUID] {
   }
 
   override def defaultResolution(request: HttpServletRequest): String =
-      Option(request.getParameter("laboratory_user_id")).orNull
+    Option(request.getParameter("laboratory_user_id")).orNull
 }
 
 object UserIdResolver {
