@@ -14,6 +14,8 @@ public class OrFilter implements Filter {
 
     private final List<Filter> filters;
 
+    public List<Filter> getFilters() { return filters; }
+
     public OrFilter(final Filter... filter) {
         this.filters = asList(filter);
     }
