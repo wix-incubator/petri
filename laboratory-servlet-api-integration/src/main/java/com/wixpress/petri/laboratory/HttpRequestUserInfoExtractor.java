@@ -38,9 +38,9 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         boolean isRobot = checkForRobotHeader(userAgent);
         String url = getRequestURL();
         String ip = getIp();
-        String language = new LanguageResolver().resolve(request, filterParametersConfig);
-        String country = new CountryResolver().resolve(request, filterParametersConfig);
-        UUID userId = new UserIdResolver().resolve(request, filterParametersConfig);
+        String language = LanguageResolver$.MODULE$.resolve(request, filterParametersConfig);
+        String country = CountryResolver$.MODULE$.resolve(request, filterParametersConfig);
+        UUID userId = UserIdResolver$.MODULE$.resolve(request, filterParametersConfig);
         String anonymousExperimentsLog = getCookieValue(petriCookieName);
         UserInfoType userInfoType = UserInfoTypeFactory.make(userId);
         Map<String, String> experimentOverrides =

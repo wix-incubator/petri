@@ -53,28 +53,20 @@ trait StringResolver extends Resolver[String] {
   override def convert(value: String): String = value
 }
 
-class CountryResolver extends StringResolver {
+object CountryResolver extends StringResolver {
   override val filterParam = FilterParameters.Country
 
   override def defaultResolution(request: HttpServletRequest): String =
     Option(request.getHeader("GEOIP_COUNTRY_CODE")).getOrElse(request.getLocale.getCountry)
 }
 
-object CountryResolver {
-  def apply(): CountryResolver = new CountryResolver
-}
-
-class LanguageResolver extends StringResolver {
+object LanguageResolver extends StringResolver {
   override val filterParam = FilterParameters.Language
 
   override def defaultResolution(request: HttpServletRequest): String = request.getLocale.getLanguage
 }
 
-object LanguageResolver {
-  def apply(): LanguageResolver = new LanguageResolver()
-}
-
-class UserIdResolver extends Resolver[UUID] {
+object UserIdResolver extends Resolver[UUID] {
   override val filterParam = FilterParameters.UserId
 
   override def convert(value: String): UUID = {
@@ -84,8 +76,4 @@ class UserIdResolver extends Resolver[UUID] {
 
   override def defaultResolution(request: HttpServletRequest): String =
     Option(request.getParameter("laboratory_user_id")).orNull
-}
-
-object UserIdResolver {
-  def apply(): UserIdResolver = new UserIdResolver()
 }
