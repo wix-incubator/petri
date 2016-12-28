@@ -3,21 +3,20 @@ package com.wixpress.petri.laboratory
 import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 
-import com.wixpress.petri.laboratory.HttpRequestExtractionOptions.{Cookie, Header, Param}
 
 trait Converter[T] {
   def convert(value: String): T
 }
 
 abstract class Resolver[T >: Null] {
-  val filterParam: FilterParameters.Value
+  val filterParam: FilterParameter
 
   def defaultResolution(request: HttpServletRequest): String
 
   def convert(value: String): T
 
   def resolve(request: HttpServletRequest, filterParametersConfig: FilterParametersConfig): T = {
-    val extractorConfig = filterParametersConfig.extractors.get(filterParam.toString)
+    val extractorConfig = filterParametersConfig.extractors.get(filterParam)
 
     val extractedByConfig = extractorConfig.flatMap(_.collectFirst {
       case config if extractBy(request, config).isDefined => extractBy(request, config)
@@ -28,23 +27,20 @@ abstract class Resolver[T >: Null] {
     Option(extractedValue).map(convertValue(_, filterParametersConfig.converters)).orNull
   }
 
-  private def extractBy(request: HttpServletRequest, config: (String, String)): Option[String] = {
-    val header = Header.toString
-    val cookie = Cookie.toString
-    val param = Param.toString
+  private def extractBy(request: HttpServletRequest, config: (HttpRequestExtractionOption, String)): Option[String] = {
 
     val extractedValue = config match {
-      case (`header`, name) => Option(request.getHeader(name))
-      case (`cookie`, name) => Option(request.getCookies).flatMap(_.find(_.getName == name).map(_.getValue))
-      case (`param`, name) => Option(request.getParameter(name))
+      case (HeaderExtractionOption, name) => Option(request.getHeader(name))
+      case (CookieExtractionOption, name) => Option(request.getCookies).flatMap(_.find(_.getName == name).map(_.getValue))
+      case (ParamExtractionOption, name) => Option(request.getParameter(name))
       case _ => None
     }
     extractedValue
   }
 
-  private def convertValue(extractedValue: String, converters: Map[String, Converter[_]]): T = {
+  private def convertValue(extractedValue: String, converters: Map[FilterParameter, Converter[_]]): T = {
 
-    val converter = converters.get(filterParam.toString).asInstanceOf[Option[Converter[T]]]
+    val converter = converters.get(filterParam).asInstanceOf[Option[Converter[T]]]
     converter.map(_.convert(extractedValue)).getOrElse(convert(extractedValue))
   }
 }
@@ -54,20 +50,20 @@ trait StringResolver extends Resolver[String] {
 }
 
 object CountryResolver extends StringResolver {
-  override val filterParam = FilterParameters.Country
+  override val filterParam = CountryFilterParameter
 
   override def defaultResolution(request: HttpServletRequest): String =
     Option(request.getHeader("GEOIP_COUNTRY_CODE")).getOrElse(request.getLocale.getCountry)
 }
 
 object LanguageResolver extends StringResolver {
-  override val filterParam = FilterParameters.Language
+  override val filterParam = LanguageFilterParameter
 
   override def defaultResolution(request: HttpServletRequest): String = request.getLocale.getLanguage
 }
 
 object UserIdResolver extends Resolver[UUID] {
-  override val filterParam = FilterParameters.UserId
+  override val filterParam = UserIdFilterParameter
 
   override def convert(value: String): UUID = {
     if (value == null) null

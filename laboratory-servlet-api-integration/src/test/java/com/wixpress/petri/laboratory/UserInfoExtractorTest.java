@@ -122,8 +122,8 @@ public class UserInfoExtractorTest {
         final String someLang = "he";
         stubRequest.addParameter("Some_Param", someLang);
         UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
-                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.Language(),
-                        HttpRequestExtractionOptions.Param(), "Some_Param"));
+                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(LanguageFilterParameter$.MODULE$,
+                        ParamExtractionOption$.MODULE$, "Some_Param"));
 
         assertThat(extractor.extract().language, is(someLang));
     }
@@ -133,8 +133,8 @@ public class UserInfoExtractorTest {
         final UUID someUser = UUID.randomUUID();
         stubRequest.addParameter("Some_Param", someUser.toString());
         UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
-                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.UserId(),
-                        HttpRequestExtractionOptions.Param(), "Some_Param"));
+                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(UserIdFilterParameter$.MODULE$,
+                        ParamExtractionOption$.MODULE$, "Some_Param"));
 
         assertThat(extractor.extract().getUserId(), is(someUser));
     }
@@ -144,8 +144,8 @@ public class UserInfoExtractorTest {
         final String someCountry = "IL";
         stubRequest.addParameter("Some_Param", someCountry);
         UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
-                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.Country(),
-                        HttpRequestExtractionOptions.Param(), "Some_Param"));
+                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(CountryFilterParameter$.MODULE$,
+                        ParamExtractionOption$.MODULE$, "Some_Param"));
 
         assertThat(extractor.extract().country, is(someCountry));
     }
