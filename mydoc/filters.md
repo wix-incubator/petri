@@ -48,6 +48,26 @@ The configuration above means that the country value for the filter will be extr
 
 Setting default behaviour for a resolver is done using its `defaultResolution` function, as can be seen in [CountryResolver's defaultResolution function](https://github.com/wix/petri/blob/master/laboratory-servlet-api-integration/src/main/java/com/wixpress/petri/laboratory/Resolvers.scala#L44)
 
+In case you need any custom data conversion, you can add your own converter per each filter.
+For example, if userId is passed as base64 encoded in some header, you can write a custom Converter which decodes the user id: 
+```scala
+package com.mycomp.petri.converters
+class SampleBase64UserIdConverter extends Converter[UUID] {
+  def convert(value: String): UUID = UUID.fromString(new String(Base64.getDecoder.decode(value.getBytes)))
+}
+}
+```
+and add this to yaml configuration file:
+```yaml
+    configs:
+      UserId:
+      - - "Header"
+        - "SOME_HEADER_NAME"
+      - - "Converter"
+        - "com.mycomp.petri.converters.SampleBase64UserIdConverter"
+```
+
+
 
 ## Custom Filters
 
