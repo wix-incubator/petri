@@ -4,7 +4,6 @@ import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 
 import com.wixpress.petri.laboratory.HttpRequestExtractionOptions.{Cookie, Header, Param}
-import com.wixpress.petri.laboratory.FilterParametersConfigOptions.Converter
 
 trait Converter[T] {
   def convert(value: String): T
@@ -17,8 +16,8 @@ abstract class Resolver[T >: Null] {
 
   def convert(value: String): T
 
-  def resolve(request: HttpServletRequest, filterParametersExtractorsConfig: FilterParametersExtractorsConfig, customConverters: CustomConverters): T = {
-    val extractorConfig = filterParametersExtractorsConfig.configs.get(filterParam.toString)
+  def resolve(request: HttpServletRequest, filterParametersConfig: FilterParametersConfig): T = {
+    val extractorConfig = filterParametersConfig.extractors.get(filterParam.toString)
 
     val extractedByConfig = extractorConfig.flatMap(_.collectFirst {
       case config if extractBy(request, config).isDefined => extractBy(request, config)
@@ -26,7 +25,7 @@ abstract class Resolver[T >: Null] {
 
     val extractedValue = extractedByConfig.getOrElse(defaultResolution(request))
 
-    Option(extractedValue).map(convertValue(_, customConverters)).orNull
+    Option(extractedValue).map(convertValue(_, filterParametersConfig.converters)).orNull
   }
 
   private def extractBy(request: HttpServletRequest, config: (String, String)): Option[String] = {
@@ -43,9 +42,9 @@ abstract class Resolver[T >: Null] {
     extractedValue
   }
 
-  private def convertValue(extractedValue: String, customConverters: CustomConverters): T = {
+  private def convertValue(extractedValue: String, converters: Map[String, Converter[_]]): T = {
 
-    val converter = customConverters.converters.get(filterParam.toString).asInstanceOf[Option[Converter[T]]]
+    val converter = converters.get(filterParam.toString).asInstanceOf[Option[Converter[T]]]
     converter.map(_.convert(extractedValue)).getOrElse(convert(extractedValue))
   }
 }

@@ -36,8 +36,7 @@ public class LaboratoryFilter implements Filter {
     private ServerMetricsReporter metricsReporter;
     private PetriClient petriClient;
     private LaboratoryProperties laboratoryProperties;
-    private FilterParametersExtractorsConfig filterParametersExtractorsConfig;
-    private CustomConverters customConverters;
+    private FilterParametersConfig filterParametersConfig;
     private UserRequestPetriClient userRequestPetriClient;
     private LaboratoryTopology laboratoryTopology;
     private CompositeTestGroupAssignmentTracker tracker = CompositeTestGroupAssignmentTracker.create(new BILoggingTestGroupAssignmentTracker(new JodaTimeClock()));
@@ -101,7 +100,7 @@ public class LaboratoryFilter implements Filter {
     private RequestScopedUserInfoStorage userInfoStorage(HttpServletRequest httpServletRequest) {
         return new RequestScopedUserInfoStorage(
                 new HttpRequestUserInfoExtractor(
-                        httpServletRequest, laboratoryProperties.getPetriCookieName(), filterParametersExtractorsConfig, customConverters));
+                        httpServletRequest, laboratoryProperties.getPetriCookieName(), filterParametersConfig));
     }
 
     public void destroy() {
@@ -113,8 +112,7 @@ public class LaboratoryFilter implements Filter {
         laboratoryProperties = new DefaultLaboratoryProperties(context);
         readProperties();
 
-        filterParametersExtractorsConfig = FilterParametersExtractorsConfig.readConfig(context);
-        customConverters = FilterParametersExtractorsConfig.instantiateConverters(filterParametersExtractorsConfig);
+        filterParametersConfig = FilterParametersExtractorsConfigReader.readConfig(context);
 
         String amplitudeUrl = laboratoryProperties.getProperty("amplitude.url");
         String amplitudeApiKey = laboratoryProperties.getProperty("amplitude.api.key");

@@ -9,13 +9,12 @@ class LanguageResolverTest extends SpecificationWithJUnit {
   trait Context extends Scope {
     val resolver = LanguageResolver()
     val request = new MockHttpServletRequest
-    val converters = CustomConverters()
+    val config = FilterParametersConfig()
   }
 
   "LanguageResolver" should {
     "resolve by getLocal getLanguage with empty config" in new Context {
-      val config = FilterParametersExtractorsConfig()
-      resolver.resolve(request, config, converters) must beEqualTo (request.getLocale.getLanguage)
+      resolver.resolve(request, config) must beEqualTo (request.getLocale.getLanguage)
     }
   }
 }

@@ -24,40 +24,55 @@ object FilterParametersConfigOptions extends Enumeration {
 
 case class FilterParametersExtractorsConfig(configs: Map[String, List[(String, String)]])
 
-case class CustomConverters(converters: Map[String, Converter[_]])
-
-object CustomConverters {
-  def apply(): CustomConverters = new CustomConverters(Map.empty)
-}
-
 object FilterParametersExtractorsConfig {
   def apply(): FilterParametersExtractorsConfig = new FilterParametersExtractorsConfig(Map.empty)
+}
+
+//TODO: change all members to be more type specific
+case class FilterParametersConfig(extractors: Map[String, List[(String, String)]], converters: Map[String, Converter[_]])
+
+object FilterParametersConfig {
+  def apply(): FilterParametersConfig = new FilterParametersConfig(Map.empty, Map.empty)
+}
+
+object FilterParametersExtractorsConfigReader {
   lazy val yamlObjectMapper = {
     val mapper = new ObjectMapper(new YAMLFactory())
     mapper.registerModule(DefaultScalaModule)
     mapper
   }
 
-  def readConfig(context: ServletContext): FilterParametersExtractorsConfig = {
+  def readConfig(context: ServletContext): FilterParametersConfig = {
     val filtersConfigPath = "/WEB-INF/filters.yaml"
-    Try(yamlObjectMapper.readValue(fromInputStream(context.getResourceAsStream(filtersConfigPath)).mkString,
+    val extractorsConfig = Try(yamlObjectMapper.readValue(fromInputStream(context.getResourceAsStream(filtersConfigPath)).mkString,
       classOf[FilterParametersExtractorsConfig])) match {
       case Success(conf) => conf
       case _ => FilterParametersExtractorsConfig()
     }
+    buildFullConfig(extractorsConfig)
   }
 
-  def instantiateConverters(config: FilterParametersExtractorsConfig): CustomConverters = {
+  def buildFullConfig(config: FilterParametersExtractorsConfig): FilterParametersConfig = {
     val converters = collection.mutable.Map[String, Converter[_]]()
+    val extractors = collection.mutable.Map[String, List[(String, String)]]()
 
     config.configs.foreach {
-      filterParam => {
-        val converter = customConverter(filterParam._2)
+      case (filterParamName, filterParamConfig) => {
+        val extractorsConfig = extractorsOnly(filterParamConfig)
+        if (extractorsConfig.nonEmpty)
+          extractors.put(filterParamName, extractorsConfig)
+
+        val converter = customConverter(filterParamConfig)
         if (converter.isDefined)
-          converters.put(filterParam._1, converter.get)
+          converters.put(filterParamName, converter.get)
       }
     }
-    CustomConverters(converters = converters.toMap)
+    FilterParametersConfig(extractors.toMap, converters = converters.toMap)
+  }
+
+
+  private def extractorsOnly(extractorConfig: List[(String, String)]): List[(String, String)] = {
+    extractorConfig.filterNot(_._1 == FilterParametersConfigOptions.Converter.toString)
   }
 
   private def customConverter(extractorConfig: List[(String, String)]): Option[Converter[_]] = {
