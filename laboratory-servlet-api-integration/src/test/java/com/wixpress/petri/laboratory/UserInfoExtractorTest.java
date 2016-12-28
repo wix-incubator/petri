@@ -143,4 +143,16 @@ public class UserInfoExtractorTest {
 
         assertThat(extractor.extract().getUserId(), is(someUser));
     }
+
+    @Test
+    public void countryResolverIsUsed() {
+        final String someCountry = "IL";
+        stubRequest.addParameter("Some_Param", someCountry);
+        UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
+                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.Country(),
+                        HttpRequestExtractionOptions.Param(), "Some_Param"),
+                CustomConverters.apply());
+
+        assertThat(extractor.extract().country, is(someCountry));
+    }
 }
