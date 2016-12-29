@@ -46,11 +46,12 @@ The configuration above means that the country value for the filter will be extr
 
 *Note:* You may specify multiple header/cookie/param names and they will each be resolved by the order of the list. When the resolver finds a value, the solution process completes. In case the value is not resolved, the  reslover defaults to the default behaviour.
 
-Setting default behaviour for a resolver is done using its `defaultResolution` function, as can be seen in [CountryResolver's defaultResolution function](https://github.com/wix/petri/blob/master/laboratory-servlet-api-integration/src/main/java/com/wixpress/petri/laboratory/Resolvers.scala#L44)
+The default behaviour for a resolver can be found in its `defaultResolution` function, as can be seen for example in [CountryResolver's defaultResolution function](https://github.com/wix/petri/blob/master/laboratory-servlet-api-integration/src/main/java/com/wixpress/petri/laboratory/Resolvers.scala#L44)
 
 In case you need any custom data conversion, you can add your own converter per each filter.
 
 For example: if userId is passed as base64 encoded in some header, you can write a custom Converter which decodes the user id: 
+
 ```scala
 package com.mycomp.petri.converters
 class SampleBase64UserIdConverter extends Converter[UUID] {
@@ -58,6 +59,7 @@ class SampleBase64UserIdConverter extends Converter[UUID] {
 }
 ```
 and add this to yaml configuration file:
+
 ```yaml
     configs:
       UserId:
