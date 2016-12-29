@@ -48,6 +48,12 @@ class PetriRpcServer(experimentsDao: ExperimentsDao,
     experimentsDao.fetchEndingBetween(intervalStart, now).filter(isTerminatedDueToEndDateReached)
   }
 
+  override def fetchExperimentsGoingToEndDueToDate(minutesEnded: Int): util.List[Experiment] = {
+    val now = new DateTime
+    val intervalEnd = now.plusMinutes(minutesEnded)
+    experimentsDao.fetchEndingBetween(now, intervalEnd)
+  }
+
   private def fetchNotNullExperiments(): Seq[Experiment] = {
     experimentsDao.fetch().filter(exp => exp != null)
   }

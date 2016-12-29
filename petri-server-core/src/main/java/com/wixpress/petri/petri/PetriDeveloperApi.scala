@@ -1,8 +1,9 @@
 package com.wixpress.petri.petri
 
+import java.util
 import java.util.UUID
 
-import com.wixpress.petri.experiments.domain.ExperimentSpec
+import com.wixpress.petri.experiments.domain.{Experiment, ExperimentSpec}
 
 /**
  * @author Dalias
@@ -15,5 +16,7 @@ trait PetriDeveloperApi {
   def migrateStartEndDates(): Unit
 
   def addSpecNoValidation(spec :ExperimentSpec): Unit
+
+  def fetchExperimentsGoingToEndDueToDate(minutesEnded: Int): util.List[Experiment]
 
 }
