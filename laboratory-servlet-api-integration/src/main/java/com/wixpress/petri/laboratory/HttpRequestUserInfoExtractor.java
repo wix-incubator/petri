@@ -17,13 +17,14 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
 
     private final HttpServletRequest request;
     private final String petriCookieName;
-    private FilterParametersExtractorsConfig filterParametersExtractorsConfig;
+    private FilterParametersConfig filterParametersConfig;
     private final ExperimentOverridesUrlDecoder experimentOverridesUrlDecoder = new ExperimentOverridesUrlDecoder();
 
-    public HttpRequestUserInfoExtractor(HttpServletRequest request, String petriCookieName, FilterParametersExtractorsConfig filterParametersExtractorsConfig) {
+    public HttpRequestUserInfoExtractor(HttpServletRequest request, String petriCookieName,
+                                        FilterParametersConfig filterParametersConfig) {
         this.request = request;
         this.petriCookieName = petriCookieName;
-        this.filterParametersExtractorsConfig = filterParametersExtractorsConfig;
+        this.filterParametersConfig = filterParametersConfig;
     }
 
     @Override
@@ -37,9 +38,9 @@ public class HttpRequestUserInfoExtractor implements UserInfoExtractor {
         boolean isRobot = checkForRobotHeader(userAgent);
         String url = getRequestURL();
         String ip = getIp();
-        String language = new LanguageResolver().resolve(request, filterParametersExtractorsConfig);
-        String country = new CountryResolver().resolve(request, filterParametersExtractorsConfig);
-        UUID userId = new UserIdResolver().resolve(request,filterParametersExtractorsConfig);
+        String language = LanguageResolver$.MODULE$.resolve(request, filterParametersConfig);
+        String country = CountryResolver$.MODULE$.resolve(request, filterParametersConfig);
+        UUID userId = UserIdResolver$.MODULE$.resolve(request, filterParametersConfig);
         String anonymousExperimentsLog = getCookieValue(petriCookieName);
         UserInfoType userInfoType = UserInfoTypeFactory.make(userId);
         Map<String, String> experimentOverrides =

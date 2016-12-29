@@ -9,19 +9,19 @@ import org.springframework.mock.web.MockHttpServletRequest
 class UserIdResolverTest extends SpecificationWithJUnit {
 
   trait Context extends Scope {
-    val resolver = UserIdResolver()
     val request = new MockHttpServletRequest
+    val config = FilterParametersConfig()
   }
 
   "UserIdResolver" should {
     "resolve id by 'laboratory_user_id' url param when empty FilterParametersExtractorsConfig" in new Context {
       private val randomUUID = UUID.randomUUID()
       request.addParameter("laboratory_user_id", randomUUID.toString)
-      resolver.resolve(request, FilterParametersExtractorsConfig()) must be equalTo randomUUID
+      UserIdResolver.resolve(request, config) must be equalTo randomUUID
     }
 
     "resolve id to null when empty FilterParametersExtractorsConfig and 'laboratory_user_id' is missing" in new Context {
-      resolver.resolve(request, FilterParametersExtractorsConfig()) must beNull
+      UserIdResolver.resolve(request, config) must beNull
     }
   }
 }

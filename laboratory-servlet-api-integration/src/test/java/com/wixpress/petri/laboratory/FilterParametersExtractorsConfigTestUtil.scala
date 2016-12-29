@@ -1,7 +1,6 @@
 package com.wixpress.petri.laboratory
 
 object FilterParametersExtractorsConfigTestUtil {
-  def forParamOptionAndName(param: FilterParameters.Value, option: HttpRequestExtractionOptions.Value,
-                            name: String): FilterParametersExtractorsConfig =
-    new FilterParametersExtractorsConfig(Map(param.toString -> List((option.toString, name))))
+  def forParamOptionAndName(param: FilterParameter, option: HttpRequestExtractionOption, name: String): FilterParametersConfig =
+    new FilterParametersConfig(Map(param -> List((option, name))), Map.empty)
 }

@@ -3,37 +3,45 @@ package com.wixpress.petri.laboratory
 import java.util.UUID
 import javax.servlet.http.HttpServletRequest
 
-import com.wixpress.petri.laboratory.HttpRequestExtractionOptions.{Cookie, Header, Param}
 
-abstract class Resolver[T] {
-  val filterParam: FilterParameters.Value
+trait Converter[T] {
+  def convert(value: String): T
+}
 
-  def defaultResolution(request: HttpServletRequest): T
+abstract class Resolver[T >: Null] {
+  val filterParam: FilterParameter
+
+  def defaultResolution(request: HttpServletRequest): String
 
   def convert(value: String): T
 
-  def resolve(request: HttpServletRequest, filterParametersExtractorsConfig: FilterParametersExtractorsConfig): T = {
-    val extractorConfig = filterParametersExtractorsConfig.configs.get(filterParam.toString)
-    val filterParamByConfig = extractorConfig.flatMap(_.collectFirst {
+  def resolve(request: HttpServletRequest, filterParametersConfig: FilterParametersConfig): T = {
+    val extractorConfig = filterParametersConfig.extractors.get(filterParam)
+
+    val extractedByConfig = extractorConfig.flatMap(_.collectFirst {
       case config if extractBy(request, config).isDefined => extractBy(request, config)
     }).flatten
 
-    filterParamByConfig.getOrElse(defaultResolution(request))
+    val extractedValue = extractedByConfig.getOrElse(defaultResolution(request))
+
+    Option(extractedValue).map(convertValue(_, filterParametersConfig.converters)).orNull
   }
 
-  private def extractBy(request: HttpServletRequest, config: (String, String)): Option[T] = {
-    val header = Header.toString
-    val cookie = Cookie.toString
-    val param = Param.toString
+  private def extractBy(request: HttpServletRequest, config: (HttpRequestExtractionOption, String)): Option[String] = {
 
     val extractedValue = config match {
-      case (`header`, name) => Option(request.getHeader(name))
-      case (`cookie`, name) => Option(request.getCookies).flatMap(_.find(_.getName == name).map(_.getValue))
-      case (`param`, name) => Option(request.getParameter(name))
+      case (HeaderExtractionOption, name) => Option(request.getHeader(name))
+      case (CookieExtractionOption, name) => Option(request.getCookies).flatMap(_.find(_.getName == name).map(_.getValue))
+      case (ParamExtractionOption, name) => Option(request.getParameter(name))
       case _ => None
     }
+    extractedValue
+  }
 
-    extractedValue.map(convert)
+  private def convertValue(extractedValue: String, converters: Map[FilterParameter, Converter[_]]): T = {
+
+    val converter = converters.get(filterParam).asInstanceOf[Option[Converter[T]]]
+    converter.map(_.convert(extractedValue)).getOrElse(convert(extractedValue))
   }
 }
 
@@ -41,36 +49,27 @@ trait StringResolver extends Resolver[String] {
   override def convert(value: String): String = value
 }
 
-class CountryResolver extends StringResolver {
-  override val filterParam = FilterParameters.Country
+object CountryResolver extends StringResolver {
+  override val filterParam = CountryFilterParameter
 
   override def defaultResolution(request: HttpServletRequest): String =
     Option(request.getHeader("GEOIP_COUNTRY_CODE")).getOrElse(request.getLocale.getCountry)
 }
 
-object CountryResolver {
-  def apply(): CountryResolver = new CountryResolver
-}
-
-class LanguageResolver extends StringResolver {
-  override val filterParam = FilterParameters.Language
+object LanguageResolver extends StringResolver {
+  override val filterParam = LanguageFilterParameter
 
   override def defaultResolution(request: HttpServletRequest): String = request.getLocale.getLanguage
 }
 
-object LanguageResolver {
-  def apply(): LanguageResolver = new LanguageResolver()
-}
+object UserIdResolver extends Resolver[UUID] {
+  override val filterParam = UserIdFilterParameter
 
-class UserIdResolver extends Resolver[UUID] {
-  override val filterParam = FilterParameters.UserId
+  override def convert(value: String): UUID = {
+    if (value == null) null
+    else UUID.fromString(value)
+  }
 
-  override def convert(value: String): UUID = UUID.fromString(value)
-
-  override def defaultResolution(request: HttpServletRequest): UUID =
-    Option(request.getParameter("laboratory_user_id")).map(convert).orNull
-}
-
-object UserIdResolver {
-  def apply(): UserIdResolver = new UserIdResolver()
+  override def defaultResolution(request: HttpServletRequest): String =
+    Option(request.getParameter("laboratory_user_id")).orNull
 }

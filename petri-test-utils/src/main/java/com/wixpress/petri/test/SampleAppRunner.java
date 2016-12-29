@@ -169,21 +169,25 @@ public class SampleAppRunner {
     }
 
     public String conductExperimentByUserWithNoPreviousCookies(String key, String fallback, UUID uuid) throws IOException {
-        return conductExperimentByUser(key, fallback, uuid, true);
+        return conductExperimentByUser(key, fallback, uuid.toString(), true);
     }
 
     public String conductExperimentByUser(String key, String fallback, UUID uuid) throws IOException {
-        return conductExperimentByUser(key, fallback, uuid, false);
+        return conductExperimentByUser(key, fallback, uuid.toString(), false);
+    }
+
+    public String conductExperimentByCustomUserId(String key, String fallback, String customUserId) throws IOException {
+        return conductExperimentByUser(key, fallback, customUserId, true);
     }
 
     // TODO: Remove duplication
-    private String conductExperimentByUser(String key, String fallback, UUID uuid, boolean freshClient) throws IOException {
+    private String conductExperimentByUser(String key, String fallback, String userId, boolean freshClient) throws IOException {
         String uri = "http://localhost:" +
                 port +
                 "/conductExperiment?key=" +
                 key +
                 "&laboratory_user_id=" +
-                uuid.toString() +
+                userId +
                 "&fallback=" +
                 fallback;
         HttpGet request = new HttpGet(uri);

@@ -34,7 +34,7 @@ public class UserInfoExtractorTest {
     @Before
     public void setup() {
         stubRequest = new MockHttpServletRequest();
-        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME, FilterParametersExtractorsConfig.apply());
+        userInfoExtractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME, FilterParametersConfig.apply());
     }
 
     @Test
@@ -52,7 +52,8 @@ public class UserInfoExtractorTest {
 
     @Test
     public void extractAUserInfoForNullRequest() {
-        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null, PETRI_LOG_STORAGE_COOKIE_NAME, FilterParametersExtractorsConfig.apply());
+        UserInfoExtractor userInfoExtractor = new HttpRequestUserInfoExtractor(null, PETRI_LOG_STORAGE_COOKIE_NAME, FilterParametersConfig.apply());
+
         UserInfo userInfo = userInfoExtractor.extract();
         UserInfo expectedUserInfo = new UserInfo("", null, null, "", "", "",
                 new NullUserInfoType(), "", "", new DateTime(0), false, "", false, new HashMap<>(), false, HOST, false);
@@ -121,8 +122,8 @@ public class UserInfoExtractorTest {
         final String someLang = "he";
         stubRequest.addParameter("Some_Param", someLang);
         UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
-                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.Language(),
-                        HttpRequestExtractionOptions.Param(), "Some_Param"));
+                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(LanguageFilterParameter$.MODULE$,
+                        ParamExtractionOption$.MODULE$, "Some_Param"));
 
         assertThat(extractor.extract().language, is(someLang));
     }
@@ -132,10 +133,20 @@ public class UserInfoExtractorTest {
         final UUID someUser = UUID.randomUUID();
         stubRequest.addParameter("Some_Param", someUser.toString());
         UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
-                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(FilterParameters.UserId(),
-                        HttpRequestExtractionOptions.Param(), "Some_Param"));
+                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(UserIdFilterParameter$.MODULE$,
+                        ParamExtractionOption$.MODULE$, "Some_Param"));
 
         assertThat(extractor.extract().getUserId(), is(someUser));
     }
 
+    @Test
+    public void countryResolverIsUsed() {
+        final String someCountry = "IL";
+        stubRequest.addParameter("Some_Param", someCountry);
+        UserInfoExtractor extractor = new HttpRequestUserInfoExtractor(stubRequest, PETRI_LOG_STORAGE_COOKIE_NAME,
+                FilterParametersExtractorsConfigTestUtil.forParamOptionAndName(CountryFilterParameter$.MODULE$,
+                        ParamExtractionOption$.MODULE$, "Some_Param"));
+
+        assertThat(extractor.extract().country, is(someCountry));
+    }
 }
