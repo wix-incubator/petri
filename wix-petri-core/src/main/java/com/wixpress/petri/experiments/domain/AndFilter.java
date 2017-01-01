@@ -14,8 +14,6 @@ public class AndFilter implements Filter {
 
     private final List<Filter> filters;
 
-    public List<Filter> getFilters() { return filters; }
-
     public AndFilter(final Filter... filter) {
         this.filters = asList(filter);
     }

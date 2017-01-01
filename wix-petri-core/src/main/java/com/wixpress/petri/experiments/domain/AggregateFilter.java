@@ -20,8 +20,6 @@ public class AggregateFilter implements Filter {
     private final Filter aggregate;
     private final List<Filter> filters;
 
-    public List<Filter> getFilters() { return filters; }
-
     public AggregateFilter(List<Filter> filters) {
         this.filters = filters;
         this.aggregate = aggregate();
