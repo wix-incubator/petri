@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import static com.google.common.collect.Iterables.find;
 import static com.wixpress.guineapig.entities.ui.ExperimentReportBuilder.buildReport;
 import static com.wixpress.petri.experiments.domain.ExperimentPredicates.SpecHasKey.specHasKey;
+import com.wixpress.petri.petri.SearchParameters;
 
 public class ExperimentMgmtService implements GuineapigExperimentMgmtService {
     final EventPublisher experimentEventPublisher;
@@ -64,6 +65,11 @@ public class ExperimentMgmtService implements GuineapigExperimentMgmtService {
         List<Experiment> allExperiments = fullPetriClient.fetchAllExperimentsGroupedByOriginalId();
         log.info("getallExperiments !!!");
         return allExperiments;
+    }
+
+    @Override
+    public List<Experiment> searchExperiments(SearchParameters parameters) throws JsonProcessingException, ClassNotFoundException {
+        return fullPetriClient.searchExperiments(parameters);
     }
 
     // TODO: Throw exception here or use Option (instead of returning null)?

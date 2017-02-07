@@ -23,6 +23,8 @@ trait ExperimentsDao {
 
   def fetchAllExperimentsGroupedByOriginalId: Seq[Experiment]
 
+  def searchExperiments(parameters: SearchParameters): Seq[Experiment]
+
   def migrateStartEndDates(): Int
 
   def fetchExperimentById(experimentId: Int) : Option[Experiment]

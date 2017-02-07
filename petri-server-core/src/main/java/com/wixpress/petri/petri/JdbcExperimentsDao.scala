@@ -69,6 +69,10 @@ class JdbcExperimentsDao(jdbcTemplateRW: JdbcTemplate, jdbcTemplateRO: JdbcTempl
     jdbcTemplateRO.query(FETCH_SQL_GROUPED_BY_ORIGINAL_ID, rsExtractor)
   }
 
+  override def searchExperiments(parameters: SearchParameters): Seq[Experiment] = {
+    jdbcTemplateRO.query(SEARCH_SQL, rsExtractor, s"%${parameters.query}%", parameters.offset.toString, parameters.limit.toString)
+  }
+
   override def fetchExperimentById(experimentId: Int): Option[Experiment] = {
     jdbcTemplateRO.query(SELECT_SQL, rsExtractor, Int.box(experimentId)).headOption
   }
@@ -123,6 +127,23 @@ private object JdbcExperimentsDao {
     "  ON (experiments.id = maxt.id AND experiments.last_update_date = maxt.ts)) recents " +
     "JOIN (SELECT MAX(id) AS id FROM experiments GROUP BY orig_id) highest_orig " +
     "ON recents.id = highest_orig.id"
+
+  val SEARCH_SQL = " " +
+    "SELECT recents.id, recents.last_update_date, recents.experiment " +
+    "FROM (" +
+    "  SELECT experiments.id, experiments.last_update_date, experiments.experiment " +
+    "  FROM experiments " +
+    "  JOIN (" +
+    "    SELECT id, MAX(last_update_date) AS ts FROM experiments GROUP BY id" +
+    "  ) maxt " +
+    "  ON (experiments.id = maxt.id AND experiments.last_update_date = maxt.ts) " +
+    "  WHERE experiments.experiment LIKE ? LIMIT ?,?" +
+    ") recents " +
+    "JOIN (" +
+    "  SELECT MAX(id) AS id FROM experiments GROUP BY orig_id" +
+    ") highest_orig " +
+    "ON recents.id = highest_orig.id " +
+    "ORDER BY recents.last_update_date DESC"
 
   val HISTORY_SQL = "SELECT id, last_update_date, experiment FROM experiments WHERE orig_id = ? ORDER BY last_update_date DESC"
 

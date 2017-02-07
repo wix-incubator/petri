@@ -42,6 +42,10 @@ class PetriRpcServer(experimentsDao: ExperimentsDao,
     experimentsDao.fetchAllExperimentsGroupedByOriginalId
   }
 
+  override def searchExperiments(parameters: SearchParameters): util.List[Experiment] = {
+    experimentsDao.searchExperiments(parameters)
+  }
+
   override def fetchRecentlyEndedExperimentsDueToEndDate(minutesEnded: Int): util.List[Experiment] = {
     val now = new DateTime
     val intervalStart = now.minusMinutes(minutesEnded)

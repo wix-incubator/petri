@@ -7,6 +7,7 @@ import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.experiments.domain.ExperimentSnapshot;
 import com.wixpress.petri.experiments.domain.ExperimentSpec;
 import org.joda.time.DateTime;
+import scala.NotImplementedError;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -123,6 +124,11 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
     public synchronized List<Experiment> fetchAllExperiments() {
         final ImmutableListMultimap<Integer, Experiment> groupedById = index(experiments.values(), experimentId());
         return newArrayList(transform(groupedById.asMap().values(), mostRecent()));
+    }
+
+    @Override
+    public List<Experiment> searchExperiments(SearchParameters parameters) {
+        throw new NotImplementedError("We do not support search in RAM petri client yet!");
     }
 
     @Override

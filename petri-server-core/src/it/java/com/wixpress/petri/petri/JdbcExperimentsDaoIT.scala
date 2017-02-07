@@ -13,10 +13,6 @@ import com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder
 import org.joda.time.{DateTime, DateTimeZone, Interval}
 import org.specs2.mutable.{Before, SpecWithJUnit}
 
-/**
- * @author dmitryk
- * @since 17-Sep-2015
- */
 class JdbcExperimentsDaoIT extends SpecWithJUnit with JMock {
 
   sequential
@@ -273,6 +269,68 @@ class JdbcExperimentsDaoIT extends SpecWithJUnit with JMock {
 
       dao.update(expUpdate.make, expected.getLastUpdated)
       dao.fetchExperimentById(exp.getId) must beSome(expected)
+    }
+  }
+
+  "searchExperiment" should {
+    "return empty list on wrong query" in new ctx {
+      val exp = givenExperimentWithSpec(snapshot)
+      val sp = SearchParameters(query = "something, that doesn't exist")
+
+      dao.searchExperiments(sp).map(e => (e.getId, e.getOriginalId)) must be_==(List())
+    }
+
+    "actually find an experiment by key" in new ctx {
+      val exp = givenExperimentWithSpec(snapshot)
+      val sp = SearchParameters(query = snapshot.key)
+
+      dao.searchExperiments(sp).map(e => (e.getId, e.getOriginalId)) must be_==(List((1, 1)))
+    }
+
+    "find experiment by string representation of date" in new ctx {
+      val exp = givenExperimentWithSpec(snapshot)
+      val sp = SearchParameters(query = snapshot.endDate.toString)
+
+      dao.searchExperiments(sp).map(e => (e.getId, e.getOriginalId)) must be_==(List((1, 1)))
+    }
+
+
+    "find new exp by old description" in new ctx {
+      private val newDescription: String = "new description"
+      val exp = givenExperimentWithSpec(snapshot)
+      val expUpdate = experiment.but(
+        withA(id, Int.box(exp.getId)),
+        withA(originalId, Int.box(exp.getOriginalId)),
+        withA(description, newDescription))
+      dao.update(expUpdate.make, exp.getLastUpdated.plusMinutes(35))
+
+      val sp = SearchParameters(query = exp.getDescription)
+
+      dao.searchExperiments(sp).map(e => e.getDescription) must be_==(List(newDescription))
+    }
+
+    "paginate output" in new ctx {
+      val exp1 = givenExperimentWithSpec(snapshot)
+
+      val expTime = exp1.getLastUpdated()
+
+      val exp2 = givenExperimentWithSpec(snapshot.copy(key="ex2"))
+      val exp3 = givenExperimentWithSpec(snapshot.copy(key="ex3"))
+      val exp4 = givenExperimentWithSpec(snapshot.copy(key="ex4"))
+      updateExperiment(exp2, expTime.plusMinutes(2))
+      updateExperiment(exp3, expTime.plusMinutes(3))
+      updateExperiment(exp4, expTime.plusMinutes(4))
+
+      val sp = SearchParameters(offset = 1, limit = 2)
+      dao.searchExperiments(sp).map(e => e.getKey) must be_==(List("ex3", "ex2"))
+
+      def updateExperiment(expToUpdate: Experiment, lastUpdated: DateTime) = {
+        val expUpdate = an(ExperimentMakers.Experiment,
+          withA(id, Int.box(expToUpdate.getId)),
+          withA(ExperimentMakers.key, expToUpdate.getKey),
+          withA(originalId, Int.box(expToUpdate.getOriginalId)))
+        dao.update(expUpdate.make, lastUpdated)
+      }
     }
   }
 
