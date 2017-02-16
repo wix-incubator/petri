@@ -23,9 +23,9 @@ public interface GuineapigExperimentMgmtService {
 
     ExperimentReport getExperimentReport(int experimentId);
 
-    boolean newExperiment(ExperimentSnapshot snapshot) throws IOException, IllegalArgumentException;
+    Experiment newExperiment(ExperimentSnapshot snapshot) throws IOException, IllegalArgumentException;
 
-    boolean updateExperiment(Experiment experiment, String userName) throws IOException, IllegalArgumentException;
+    Experiment updateExperiment(Experiment experiment, String userName) throws IOException, IllegalArgumentException;
 
     boolean pauseExperiment(int experimentId, String comment, String userName);
 
