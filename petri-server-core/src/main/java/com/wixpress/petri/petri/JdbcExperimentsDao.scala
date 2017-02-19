@@ -70,7 +70,7 @@ class JdbcExperimentsDao(jdbcTemplateRW: JdbcTemplate, jdbcTemplateRO: JdbcTempl
   }
 
   override def searchExperiments(parameters: SearchParameters): Seq[Experiment] = {
-    jdbcTemplateRO.query(SEARCH_SQL, rsExtractor, s"%${parameters.query}%", parameters.offset.toString, parameters.limit.toString)
+    jdbcTemplateRO.query(SEARCH_SQL, rsExtractor, s"%${parameters.query}%", Int.box(parameters.offset), Int.box(parameters.limit))
   }
 
   override def fetchExperimentById(experimentId: Int): Option[Experiment] = {
@@ -118,17 +118,7 @@ private object JdbcExperimentsDao {
 
   val FETCH_SQL = String.format(FETCH_SQL_FORMAT, "")
 
-  val FETCH_SQL_GROUPED_BY_ORIGINAL_ID = " " +
-    "SELECT recents.id, recents.last_update_date, recents.experiment " +
-    "FROM (" +
-    "  SELECT experiments.id, experiments.last_update_date, experiments.experiment FROM experiments " +
-    "  JOIN " +
-    "  (SELECT id, MAX(last_update_date) AS ts FROM experiments GROUP BY id) maxt " +
-    "  ON (experiments.id = maxt.id AND experiments.last_update_date = maxt.ts)) recents " +
-    "JOIN (SELECT MAX(id) AS id FROM experiments GROUP BY orig_id) highest_orig " +
-    "ON recents.id = highest_orig.id"
-
-  val SEARCH_SQL = " " +
+  val SEARCH_SQL_FORMAT = " " +
     "SELECT recents.id, recents.last_update_date, recents.experiment " +
     "FROM (" +
     "  SELECT experiments.id, experiments.last_update_date, experiments.experiment " +
@@ -137,13 +127,17 @@ private object JdbcExperimentsDao {
     "    SELECT id, MAX(last_update_date) AS ts FROM experiments GROUP BY id" +
     "  ) maxt " +
     "  ON (experiments.id = maxt.id AND experiments.last_update_date = maxt.ts) " +
-    "  WHERE experiments.experiment LIKE ? LIMIT ?,?" +
+    "  %s" +
     ") recents " +
     "JOIN (" +
     "  SELECT MAX(id) AS id FROM experiments GROUP BY orig_id" +
     ") highest_orig " +
     "ON recents.id = highest_orig.id " +
     "ORDER BY recents.last_update_date DESC"
+
+  val SEARCH_SQL = String.format(SEARCH_SQL_FORMAT, "WHERE experiments.experiment LIKE ? LIMIT ?,?")
+
+  val FETCH_SQL_GROUPED_BY_ORIGINAL_ID = String.format(SEARCH_SQL_FORMAT, "")
 
   val HISTORY_SQL = "SELECT id, last_update_date, experiment FROM experiments WHERE orig_id = ? ORDER BY last_update_date DESC"
 
