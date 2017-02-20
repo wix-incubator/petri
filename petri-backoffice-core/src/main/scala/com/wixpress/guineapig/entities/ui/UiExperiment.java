@@ -53,6 +53,7 @@ public class UiExperiment {
     final private List<String> metaSiteIds;
 
     final private int conductLimit;
+    final private boolean forRegisteredUsers;
 
 
     UiExperiment(
@@ -77,6 +78,7 @@ public class UiExperiment {
             Boolean paused,
 
             //filters :
+            boolean forRegisteredUsers,
             long parentStartTime,
             boolean editable,
             boolean wixUsers,
@@ -140,6 +142,7 @@ public class UiExperiment {
         this.conductLimit = conductLimit;
         this.nonRegistered = nonRegistered;
         this.excludeUserGroups = excludeUserGroups;
+        this.forRegisteredUsers = forRegisteredUsers;
     }
 
     public int getConductLimit() {return conductLimit;}
@@ -293,6 +296,10 @@ public class UiExperiment {
         return editable;
     }
 
+    public boolean isForRegisteredUsers() {
+        return forRegisteredUsers;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -319,6 +326,7 @@ public class UiExperiment {
         if (linkId != that.linkId) return false;
         if (excludeMetaSiteIds != that.excludeMetaSiteIds) return false;
         if (conductLimit != that.conductLimit) return false;
+        if (forRegisteredUsers != that.forRegisteredUsers) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (creator != null ? !creator.equals(that.creator) : that.creator != null) return false;
@@ -341,7 +349,6 @@ public class UiExperiment {
         if (excludeUserGroups != null ? !excludeUserGroups.equals(that.excludeUserGroups) : that.excludeUserGroups != null)
             return false;
         return metaSiteIds != null ? metaSiteIds.equals(that.metaSiteIds) : that.metaSiteIds == null;
-
     }
 
     @Override
@@ -384,6 +391,7 @@ public class UiExperiment {
         result = 31 * result + (excludeMetaSiteIds ? 1 : 0);
         result = 31 * result + (metaSiteIds != null ? metaSiteIds.hashCode() : 0);
         result = 31 * result + conductLimit;
+        result = 31 * result + (forRegisteredUsers ? 1 : 0);
         return result;
     }
 }
