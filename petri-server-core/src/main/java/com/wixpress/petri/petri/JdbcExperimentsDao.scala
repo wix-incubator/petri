@@ -127,17 +127,18 @@ private object JdbcExperimentsDao {
     "    SELECT id, MAX(last_update_date) AS ts FROM experiments GROUP BY id" +
     "  ) maxt " +
     "  ON (experiments.id = maxt.id AND experiments.last_update_date = maxt.ts) " +
-    "  %s" +
+    "  %s " +
     ") recents " +
     "JOIN (" +
     "  SELECT MAX(id) AS id FROM experiments GROUP BY orig_id" +
     ") highest_orig " +
     "ON recents.id = highest_orig.id " +
-    "ORDER BY recents.last_update_date DESC"
+    "ORDER BY recents.last_update_date DESC " +
+    "%s"
 
-  val SEARCH_SQL = String.format(SEARCH_SQL_FORMAT, "WHERE experiments.experiment LIKE ? LIMIT ?,?")
+  val SEARCH_SQL = String.format(SEARCH_SQL_FORMAT, "WHERE experiments.experiment LIKE ?", "LIMIT ?,?")
 
-  val FETCH_SQL_GROUPED_BY_ORIGINAL_ID = String.format(SEARCH_SQL_FORMAT, "")
+  val FETCH_SQL_GROUPED_BY_ORIGINAL_ID = String.format(SEARCH_SQL_FORMAT, "", "")
 
   val HISTORY_SQL = "SELECT id, last_update_date, experiment FROM experiments WHERE orig_id = ? ORDER BY last_update_date DESC"
 

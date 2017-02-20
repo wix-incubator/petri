@@ -324,6 +324,9 @@ class JdbcExperimentsDaoIT extends SpecWithJUnit with JMock {
       val sp = SearchParameters(offset = 1, limit = 2)
       dao.searchExperiments(sp).map(e => e.getKey) must be_==(List("ex3", "ex2"))
 
+      val sp2 = SearchParameters(offset = 0, limit = 3)
+      dao.searchExperiments(sp2).map(e => e.getKey) must be_==(List("ex4", "ex3", "ex2"))
+
       def updateExperiment(expToUpdate: Experiment, lastUpdated: DateTime) = {
         val expUpdate = an(ExperimentMakers.Experiment,
           withA(id, Int.box(expToUpdate.getId)),
