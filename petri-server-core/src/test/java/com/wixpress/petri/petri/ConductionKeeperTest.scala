@@ -6,7 +6,7 @@ import javax.mail.internet.InternetAddress
 import com.natpryce.makeiteasy.MakeItEasy
 import com.natpryce.makeiteasy.MakeItEasy._
 import com.wixpress.petri.experiments.domain.ExperimentBuilder._
-import com.wixpress.petri.experiments.domain.{Experiment, ExperimentSnapshot}
+import com.wixpress.petri.experiments.domain.{Experiment}
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers._
 import org.jmock.lib.concurrent.DeterministicScheduler
