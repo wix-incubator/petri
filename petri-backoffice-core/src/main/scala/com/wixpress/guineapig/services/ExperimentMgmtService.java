@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import static com.google.common.collect.Iterables.find;
 import static com.wixpress.guineapig.entities.ui.ExperimentReportBuilder.buildReport;
 import static com.wixpress.petri.experiments.domain.ExperimentPredicates.SpecHasKey.specHasKey;
+import com.wixpress.petri.petri.SearchParameters;
 
 public class ExperimentMgmtService implements GuineapigExperimentMgmtService {
     final EventPublisher experimentEventPublisher;
@@ -66,6 +67,11 @@ public class ExperimentMgmtService implements GuineapigExperimentMgmtService {
         return allExperiments;
     }
 
+    @Override
+    public List<Experiment> searchExperiments(SearchParameters parameters) throws JsonProcessingException, ClassNotFoundException {
+        return fullPetriClient.searchExperiments(parameters);
+    }
+
     // TODO: Throw exception here or use Option (instead of returning null)?
     @Override
     public ExperimentSpec getSpecForExperiment(String experimentKey) {
@@ -73,7 +79,7 @@ public class ExperimentMgmtService implements GuineapigExperimentMgmtService {
     }
 
     @Override
-    public boolean updateExperiment(Experiment updatedExperiment, String userName) throws IOException, IllegalArgumentException {
+    public Experiment updateExperiment(Experiment updatedExperiment, String userName) throws IOException, IllegalArgumentException {
         Experiment currentVersion = fullPetriClient.fetchExperimentById(updatedExperiment.getId());
 
         if (!containsValidFilters(updatedExperiment)) {
@@ -97,7 +103,7 @@ public class ExperimentMgmtService implements GuineapigExperimentMgmtService {
             experimentEventPublisher.publish(new ExperimentEvent(updatedExperiment, currentVersion, ExperimentEvent.UPDATED));
         }
 
-        return true;
+        return updatedExperiment;
     }
 
     private void terminateHistoryIfNeeded(final Experiment finalUpdatedExperiment, String userName, Experiment currentVersion, DateTime terminationTime) {
@@ -138,13 +144,13 @@ public class ExperimentMgmtService implements GuineapigExperimentMgmtService {
     }
 
     @Override
-    public boolean newExperiment(ExperimentSnapshot snapshot) throws IOException, IllegalArgumentException {
+    public Experiment newExperiment(ExperimentSnapshot snapshot) throws IOException, IllegalArgumentException {
         if (!containsValidFilters(snapshot))
             throw new IllegalArgumentException("Invalid filters for scopes " + snapshot.scopes().stream().reduce("", (a, b) -> a + "," + b) + ".");
 
         Experiment insertedExperiment = fullPetriClient.insertExperiment(snapshot);
         experimentEventPublisher.publish(new ExperimentEvent(insertedExperiment, null, ExperimentEvent.CREATED));
-        return true;
+        return insertedExperiment;
     }
 
     @Override

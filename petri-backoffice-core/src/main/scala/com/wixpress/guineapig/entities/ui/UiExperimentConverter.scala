@@ -18,7 +18,7 @@ object UiExperimentConverter {
   }
 
   @throws(classOf[IOException])
-  private def getExperimentSnapshot(experiment: UiExperiment, isNew: Boolean, spec: ExperimentSpec, hardCodedScopes: List[ScopeDefinition], filterAdapterExtender: FilterAdapterExtender, updater: String): ExperimentSnapshotBuilder = {
+  private def getExperimentSnapshot(experiment: UiExperiment, isNew: Boolean, spec: ExperimentSpec, hardCodedScopes: List[ScopeDefinition], filterAdapterExtender: FilterAdapterExtender, sessionUser: String): ExperimentSnapshotBuilder = {
     val filters = ExperimentFilterBuilder.extractFiltersFromUiExperiment(experiment).asScala ++ filterAdapterExtender.extractFiltersFromUiExperiment(experiment).asScala
 
     val testGroups = new ju.ArrayList[TestGroup]
@@ -35,7 +35,7 @@ object UiExperimentConverter {
       withLinkedId(experiment.getLinkId).
       withDescription(experiment.getDescription).
       withComment(experiment.getComment).
-      withUpdater(updater).
+      withUpdater(sessionUser).
       withStartDate(new DateTime(experiment.getStartDate)).
       withEndDate(new DateTime(experiment.getEndDate)).
       withGroups(testGroups).
@@ -45,7 +45,10 @@ object UiExperimentConverter {
       withFeatureToggle(experiment.getType == ExperimentType.FEATURE_TOGGLE.getType).
       withConductLimit(experiment.getConductLimit)
     if (isNew) {
-      experimentSnapshotBuilder = experimentSnapshotBuilder.withCreationDate(new DateTime).withOriginalId(Experiment.NO_ID)
+      experimentSnapshotBuilder = experimentSnapshotBuilder.
+        withCreationDate(new DateTime).
+        withOriginalId(Experiment.NO_ID).
+        withCreator(sessionUser)
     }
     else {
       experimentSnapshotBuilder = experimentSnapshotBuilder.withCreationDate(new DateTime(experiment.getCreationDate))

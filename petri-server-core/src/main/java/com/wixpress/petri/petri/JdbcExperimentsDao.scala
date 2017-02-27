@@ -16,13 +16,17 @@ import scala.util.control.NonFatal
  * @author dmitryk
  * @since 17-Sep-2015
  */
-class JdbcExperimentsDao(jdbcTemplate: JdbcTemplate, mapper: PetriMapper[Experiment]) extends ExperimentsDao {
+class JdbcExperimentsDao(jdbcTemplateRW: JdbcTemplate, jdbcTemplateRO: JdbcTemplate, mapper: PetriMapper[Experiment]) extends ExperimentsDao {
+
+  def this(jdbcTemplate: JdbcTemplate, mapper: PetriMapper[Experiment]) { // for OSS compatibility
+    this(jdbcTemplate, jdbcTemplate, mapper)
+  }
 
   override def add(spec: ExperimentSnapshot): Experiment = {
     val serialized = serializeWrapException(spec)
 
     val keyHolder = new GeneratedKeyHolder
-    jdbcTemplate.update(new InsertStatement(serialized, spec), keyHolder)
+    jdbcTemplateRW.update(new InsertStatement(serialized, spec), keyHolder)
 
     if (keyHolder.getKey == null) {
       throw new CreateFailed(new CreateFailedData(spec.getClass.getSimpleName, spec.key))
@@ -31,55 +35,59 @@ class JdbcExperimentsDao(jdbcTemplate: JdbcTemplate, mapper: PetriMapper[Experim
     val id = keyHolder.getKey.intValue()
 
     // set orig_id field as id unless already set
-    jdbcTemplate.update("UPDATE experiments SET orig_id = ? WHERE id = ? AND orig_id = 0", Int.box(id), Int.box(id))
+    jdbcTemplateRW.update("UPDATE experiments SET orig_id = ? WHERE id = ? AND orig_id = 0", Int.box(id), Int.box(id))
 
-    jdbcTemplate.queryForObject(SELECT_SQL, mapper, Int.box(id))
+    jdbcTemplateRW.queryForObject(SELECT_SQL, mapper, Int.box(id))
   }
 
   override def update(experiment: Experiment, currentDateTime: DateTime): Unit = {
     val serializedExperiment = serializeWrapException(experiment.getExperimentSnapshot)
-    val rowsAffected = jdbcTemplate.update(new UpdateStatement(experiment, serializedExperiment, currentDateTime))
+    val rowsAffected = jdbcTemplateRW.update(new UpdateStatement(experiment, serializedExperiment, currentDateTime))
     if (rowsAffected != 1) {
       throw new FullPetriClient.UpdateFailed(experiment)
     }
   }
 
   override def fetch(): Seq[Experiment] = {
-    jdbcTemplate.query(FETCH_SQL, rsExtractor)
+    jdbcTemplateRO.query(FETCH_SQL, rsExtractor)
   }
 
   override def fetchByLastUpdate(from: DateTime, to: DateTime): Seq[Experiment] = {
-    jdbcTemplate.query(FETCH_SQL_BY_LAST_UPDATE, rsExtractor, Long.box(getTimestamp(from)), Long.box(getTimestamp(to)))
+    jdbcTemplateRO.query(FETCH_SQL_BY_LAST_UPDATE, rsExtractor, Long.box(getTimestamp(from)), Long.box(getTimestamp(to)))
   }
 
   override def fetchBetweenStartEndDates(now: DateTime): Seq[Experiment] = {
-    jdbcTemplate.query(FETCH_SQL_FOR_BETWEEN_START_END, rsExtractor, Long.box(getTimestamp(now)))
+    jdbcTemplateRO.query(FETCH_SQL_FOR_BETWEEN_START_END, rsExtractor, Long.box(getTimestamp(now)))
   }
 
   override def getHistoryById(id: Int): Seq[Experiment] = {
-    val originalId = jdbcTemplate.query(SELECT_SQL, rsExtractor, Int.box(id)).head.getOriginalId
-    jdbcTemplate.query(HISTORY_SQL, rsExtractor, Int.box(originalId))
+    val originalId = jdbcTemplateRO.query(SELECT_SQL, rsExtractor, Int.box(id)).head.getOriginalId
+    jdbcTemplateRO.query(HISTORY_SQL, rsExtractor, Int.box(originalId))
   }
 
   override def fetchAllExperimentsGroupedByOriginalId: Seq[Experiment] = {
-    jdbcTemplate.query(FETCH_SQL_GROUPED_BY_ORIGINAL_ID, rsExtractor)
+    jdbcTemplateRO.query(FETCH_SQL_GROUPED_BY_ORIGINAL_ID, rsExtractor)
+  }
+
+  override def searchExperiments(parameters: SearchParameters): Seq[Experiment] = {
+    jdbcTemplateRO.query(SEARCH_SQL, rsExtractor, s"%${parameters.query}%", Int.box(parameters.offset), Int.box(parameters.limit))
   }
 
   override def fetchExperimentById(experimentId: Int): Option[Experiment] = {
-    jdbcTemplate.query(SELECT_SQL, rsExtractor, Int.box(experimentId)).headOption
+    jdbcTemplateRO.query(SELECT_SQL, rsExtractor, Int.box(experimentId)).headOption
   }
 
   override def fetchEndingBetween(from: DateTime, to: DateTime): Seq[Experiment] = {
-    jdbcTemplate.query(FETCH_SQL_FOR_ENDING_BETWEEN, rsExtractor, Long.box(getTimestamp(from.minusSeconds(2))), Long.box(getTimestamp(to)))
+    jdbcTemplateRO.query(FETCH_SQL_FOR_ENDING_BETWEEN, rsExtractor, Long.box(getTimestamp(from.minusSeconds(2))), Long.box(getTimestamp(to)))
   }
 
   override def migrateStartEndDates(): Int = {
-    val experiments = jdbcTemplate
+    val experiments = jdbcTemplateRW
       .query("SELECT id, last_update_date, experiment FROM experiments WHERE start_date = 0", rsExtractor)
       .filter(_ != null)
 
     for (exp <- experiments) {
-      val count = jdbcTemplate.update(
+      val count = jdbcTemplateRW.update(
         "UPDATE experiments SET start_date = ?, end_date = ? WHERE id = ? AND last_update_date = ?",
         Long.box(getTimestamp(exp.getStartDate)), Long.box(getTimestamp(exp.getEndDate)),
         Int.box(exp.getId), Long.box(getTimestamp(exp.getLastUpdated)))
@@ -110,15 +118,27 @@ private object JdbcExperimentsDao {
 
   val FETCH_SQL = String.format(FETCH_SQL_FORMAT, "")
 
-  val FETCH_SQL_GROUPED_BY_ORIGINAL_ID = " " +
+  val SEARCH_SQL_FORMAT = " " +
     "SELECT recents.id, recents.last_update_date, recents.experiment " +
     "FROM (" +
-    "  SELECT experiments.id, experiments.last_update_date, experiments.experiment FROM experiments " +
-    "  JOIN " +
-    "  (SELECT id, MAX(last_update_date) AS ts FROM experiments GROUP BY id) maxt " +
-    "  ON (experiments.id = maxt.id AND experiments.last_update_date = maxt.ts)) recents " +
-    "JOIN (SELECT MAX(id) AS id FROM experiments GROUP BY orig_id) highest_orig " +
-    "ON recents.id = highest_orig.id"
+    "  SELECT experiments.id, experiments.last_update_date, experiments.experiment " +
+    "  FROM experiments " +
+    "  JOIN (" +
+    "    SELECT id, MAX(last_update_date) AS ts FROM experiments GROUP BY id" +
+    "  ) maxt " +
+    "  ON (experiments.id = maxt.id AND experiments.last_update_date = maxt.ts) " +
+    "  %s " +
+    ") recents " +
+    "JOIN (" +
+    "  SELECT MAX(id) AS id FROM experiments GROUP BY orig_id" +
+    ") highest_orig " +
+    "ON recents.id = highest_orig.id " +
+    "ORDER BY recents.last_update_date DESC " +
+    "%s"
+
+  val SEARCH_SQL = String.format(SEARCH_SQL_FORMAT, "WHERE experiments.experiment LIKE ?", "LIMIT ?,?")
+
+  val FETCH_SQL_GROUPED_BY_ORIGINAL_ID = String.format(SEARCH_SQL_FORMAT, "", "")
 
   val HISTORY_SQL = "SELECT id, last_update_date, experiment FROM experiments WHERE orig_id = ? ORDER BY last_update_date DESC"
 

@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.Iterables.*;
 import static com.google.common.collect.Iterables.transform;
@@ -123,6 +124,14 @@ public class RAMPetriClient implements FullPetriClient, PetriClient, UserRequest
     public synchronized List<Experiment> fetchAllExperiments() {
         final ImmutableListMultimap<Integer, Experiment> groupedById = index(experiments.values(), experimentId());
         return newArrayList(transform(groupedById.asMap().values(), mostRecent()));
+    }
+
+    @Override
+    public List<Experiment> searchExperiments(SearchParameters parameters) {
+        List<Experiment> allExperiments = fetchAllExperiments();
+        return allExperiments.stream()
+                .filter(experiment -> experiment.toString().contains(parameters.query()))
+                .collect(Collectors.toList());
     }
 
     @Override

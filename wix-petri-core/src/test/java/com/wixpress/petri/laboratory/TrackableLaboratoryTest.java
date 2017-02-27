@@ -784,7 +784,7 @@ public class TrackableLaboratoryTest {
         addExperimentToCache(experimentWithWinningFirstGroup.but(with(scope, "someScope")).make());
         userInfoStorage.write(a(UserInfo, with(robot, true)).make());
 
-        assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
+         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE), is(FALLBACK_VALUE));
 
         Map<String, String> expected = new HashMap();
         assertThat(lab.conductAllInScope("someScope"), is(expected));
@@ -955,8 +955,8 @@ public class TrackableLaboratoryTest {
         lab.conductExperiment(TheKey, FALLBACK_VALUE);
 
         final Matcher<Throwable> matcher = anException(SlowExperimentException.class, allOf(
-                containsString("Slow Conducting time of experiment"),
-                containsString("Experiment{id=" + experimentWithSlowCalculationTime.getId()))
+                        containsString("Slow Conducting time of experiment"),
+                        containsString("Experiment{id=" + experimentWithSlowCalculationTime.getId()))
         );
 
         errorReportWasSent(matcher);
@@ -1144,7 +1144,7 @@ public class TrackableLaboratoryTest {
         userInfoStorage.write(someUserInfo);
 
         assertThat(lab.conductExperiment(TheKey, FALLBACK_VALUE,
-                conductionContextByOtherUser(experimentOnSomeUser, OTHER_USER_GUID)),
+                        conductionContextByOtherUser(experimentOnSomeUser, OTHER_USER_GUID)),
                 is(WINNING_VALUE));
     }
 
@@ -1163,7 +1163,7 @@ public class TrackableLaboratoryTest {
         returnUserStateFromServer("", OTHER_USER_GUID);
 
         assertThat(lab.conductExperiment(registeredKey, FALLBACK_VALUE, new StringConverter(),
-                conductionContextByOtherUser(experimentOnSomeUser, OTHER_USER_GUID)),
+                        conductionContextByOtherUser(experimentOnSomeUser, OTHER_USER_GUID)),
                 is(WINNING_VALUE));
     }
 
@@ -1213,12 +1213,12 @@ public class TrackableLaboratoryTest {
 
         userInfoStorage.write(AnonymousUserInfo.make());
         assertThat(lab.conductExperiment(registeredKey, FALLBACK_VALUE, new StringConverter(),
-                conductionContextBySiteId),
+                        conductionContextBySiteId),
                 is(FALLBACK_VALUE));
 
         userInfoStorage.write(aRegisteredUserInfo.make());
         assertThat(lab.conductExperiment(registeredKey, FALLBACK_VALUE, new StringConverter(),
-                conductionContextBySiteId),
+                        conductionContextBySiteId),
                 is(WINNING_VALUE));
     }
 

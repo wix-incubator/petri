@@ -24,7 +24,7 @@ class JdbcExperimentsDaoTest extends SpecWithJUnit with JMock {
         oneOf(mockMapper).serialize(snapshot) willThrow new JsonMappingException("")
       }
 
-      val dao = new JdbcExperimentsDao(jdbcTemplate = null, mapper = mockMapper)
+      val dao = new JdbcExperimentsDao(jdbcTemplateRW = null, jdbcTemplateRO = null, mapper = mockMapper)
 
       dao.add(snapshot) must throwA[FullPetriClient.PetriException]
     }

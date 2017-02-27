@@ -1,18 +1,15 @@
 package com.wixpress.petri.experiments.domain;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.DatabindContext;
 import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
+import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author: talyag
- * @since: 11/27/13
- */
-public class FilterTypeIdResolver implements TypeIdResolver {
+public class FilterTypeIdResolver extends TypeIdResolverBase {
 
     public static void useDynamicFilterClassLoading() {
         useDynamicFilterClassLoading("filters");
@@ -78,6 +75,11 @@ public class FilterTypeIdResolver implements TypeIdResolver {
 
     @Override
     public JavaType typeFromId(String id) {
+        return typeFromId(null, id);
+    }
+
+    @Override
+    public JavaType typeFromId(DatabindContext context, String id) {
         if (!typeIdsMap.containsKey(id)) {
             return TypeFactory.defaultInstance().constructType(UnrecognizedFilter.class);
         }
@@ -88,7 +90,4 @@ public class FilterTypeIdResolver implements TypeIdResolver {
     public JsonTypeInfo.Id getMechanism() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
-
-
-
 }

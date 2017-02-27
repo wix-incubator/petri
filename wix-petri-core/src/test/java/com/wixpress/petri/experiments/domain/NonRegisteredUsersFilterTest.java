@@ -1,4 +1,4 @@
-package com.wixpress.petri;
+package com.wixpress.petri.experiments.domain;
 
 import com.wixpress.petri.experiments.domain.NonRegisteredUsersFilter;
 import com.wixpress.petri.laboratory.UserInfo;

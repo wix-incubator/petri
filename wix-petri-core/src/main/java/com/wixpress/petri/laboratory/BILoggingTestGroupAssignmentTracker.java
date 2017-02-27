@@ -3,7 +3,6 @@ package com.wixpress.petri.laboratory;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.wixpress.petri.experiments.domain.Assignment;
-import com.wixpress.petri.experiments.domain.Experiment;
 import com.wixpress.petri.petri.Clock;
 import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
@@ -19,11 +18,6 @@ public class BILoggingTestGroupAssignmentTracker implements TestGroupAssignmentT
 
     public BILoggingTestGroupAssignmentTracker(Clock clock) {
         this.clock = clock;
-    }
-
-    //TODO - delete
-    public void newAssignment(UserInfo userInfo, int testGroupId, Experiment experiment) {
-        newAssignment(userInfo, testGroupId, BIAdditions$.MODULE$.Empty(), experiment.getId(), experiment.getScope());
     }
 
     public void newAssignment(UserInfo userInfo, int testGroupId, BIAdditions additions, int experimentId, String experimentScope) {

@@ -14,11 +14,11 @@ import org.specs2.specification.Scope
 class TransientCacheExperimentSourceTest extends SpecificationWithJUnit {
 
   trait Context extends Scope {
-    val underlyingCache = new AtomicReferenceCache[ConductibleExperiments]
-    val koboshiInterval = 5
-    val remoteFetchingLatencyDuration = 1
-    val aPointInTime = new Instant(5)
-    val timeToStale = Minutes.minutes(koboshiInterval).plus(remoteFetchingLatencyDuration).toStandardDuration
+      val underlyingCache = new AtomicReferenceCache[ConductibleExperiments]
+      val koboshiInterval = 5
+      val remoteFetchingLatencyDuration = 1
+      val aPointInTime = new Instant(5)
+      val timeToStale = Minutes.minutes(koboshiInterval).plus(remoteFetchingLatencyDuration).toStandardDuration
   }
 
 

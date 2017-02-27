@@ -13,10 +13,6 @@ import com.wixpress.petri.petri.SpecDefinition.ExperimentSpecBuilder
 import org.joda.time.{DateTime, DateTimeZone, Interval}
 import org.specs2.mutable.{Before, SpecWithJUnit}
 
-/**
- * @author dmitryk
- * @since 17-Sep-2015
- */
 class JdbcExperimentsDaoIT extends SpecWithJUnit with JMock {
 
   sequential
@@ -276,6 +272,71 @@ class JdbcExperimentsDaoIT extends SpecWithJUnit with JMock {
     }
   }
 
+  "searchExperiment" should {
+    "return empty list on wrong query" in new ctx {
+      val exp = givenExperimentWithSpec(snapshot)
+      val sp = SearchParameters(query = "something, that doesn't exist")
+
+      dao.searchExperiments(sp).map(e => (e.getId, e.getOriginalId)) must be_==(List())
+    }
+
+    "actually find an experiment by key" in new ctx {
+      val exp = givenExperimentWithSpec(snapshot)
+      val sp = SearchParameters(query = snapshot.key)
+
+      dao.searchExperiments(sp).map(e => (e.getId, e.getOriginalId)) must be_==(List((1, 1)))
+    }
+
+    "find experiment by string representation of date" in new ctx {
+      val exp = givenExperimentWithSpec(snapshot)
+      val sp = SearchParameters(query = snapshot.endDate.toString)
+
+      dao.searchExperiments(sp).map(e => (e.getId, e.getOriginalId)) must be_==(List((1, 1)))
+    }
+
+
+    "find new exp by old description" in new ctx {
+      private val newDescription: String = "new description"
+      val exp = givenExperimentWithSpec(snapshot)
+      val expUpdate = experiment.but(
+        withA(id, Int.box(exp.getId)),
+        withA(originalId, Int.box(exp.getOriginalId)),
+        withA(description, newDescription))
+      dao.update(expUpdate.make, exp.getLastUpdated.plusMinutes(35))
+
+      val sp = SearchParameters(query = exp.getDescription)
+
+      dao.searchExperiments(sp).map(e => e.getDescription) must be_==(List(newDescription))
+    }
+
+    "paginate output" in new ctx {
+      val exp1 = givenExperimentWithSpec(snapshot)
+
+      val expTime = exp1.getLastUpdated()
+
+      val exp2 = givenExperimentWithSpec(snapshot.copy(key="ex2"))
+      val exp3 = givenExperimentWithSpec(snapshot.copy(key="ex3"))
+      val exp4 = givenExperimentWithSpec(snapshot.copy(key="ex4"))
+      updateExperiment(exp2, expTime.plusMinutes(2))
+      updateExperiment(exp3, expTime.plusMinutes(3))
+      updateExperiment(exp4, expTime.plusMinutes(4))
+
+      val sp = SearchParameters(offset = 1, limit = 2)
+      dao.searchExperiments(sp).map(e => e.getKey) must be_==(List("ex3", "ex2"))
+
+      val sp2 = SearchParameters(offset = 0, limit = 3)
+      dao.searchExperiments(sp2).map(e => e.getKey) must be_==(List("ex4", "ex3", "ex2"))
+
+      def updateExperiment(expToUpdate: Experiment, lastUpdated: DateTime) = {
+        val expUpdate = an(ExperimentMakers.Experiment,
+          withA(id, Int.box(expToUpdate.getId)),
+          withA(ExperimentMakers.key, expToUpdate.getKey),
+          withA(originalId, Int.box(expToUpdate.getOriginalId)))
+        dao.update(expUpdate.make, lastUpdated)
+      }
+    }
+  }
+
   "migrateStartEndDates" should {
     "succeed" in new migrationCtx {
       /**
@@ -335,13 +396,19 @@ class JdbcExperimentsDaoIT extends SpecWithJUnit with JMock {
   trait BaseCtx extends Before {
     val now = nowTime
 
-    val dbDriver = DBDriver.dbDriver(DBDriver.JDBC_H2_IN_MEM_CONNECTION_STRING)
+    private val jdbcConnectionString: String = DBDriver.JDBC_H2_IN_MEM_CONNECTION_STRING
+    val dbDriver = DBDriver.dbDriver(jdbcConnectionString)
+    dbDriver.createSchema()
+    dbDriver.createReadOnlyH2User()
     val objectMapper = ObjectMapperFactory.makeObjectMapper
     val mappingErrorHandler = mock[MappingErrorHandler]
-    val dao = new JdbcExperimentsDao(dbDriver.jdbcTemplate, new ExperimentMapper(objectMapper, mappingErrorHandler))
+    val jdbcTemplateRW = dbDriver.jdbcTemplate
+    val jdbcTemplateRO = dbDriver.getJdbcTemplateRO(jdbcConnectionString)
+    val dao = new JdbcExperimentsDao(jdbcTemplateRW, jdbcTemplateRO, new ExperimentMapper(objectMapper, mappingErrorHandler))
 
     override def before: Any = {
       dbDriver.createSchema()
+      dbDriver.createReadOnlyH2User()
     }
 
     def givenSpec(key: String) = {

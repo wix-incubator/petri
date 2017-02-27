@@ -17,6 +17,20 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource
  */
 class DBDriver(val jdbcTemplate: JdbcTemplate, objectMapper: ObjectMapper) {
 
+  def createReadOnlyH2User() = {
+    jdbcTemplate.execute("CREATE USER IF NOT EXISTS auser_ro PASSWORD \'as\'")
+    jdbcTemplate.execute("GRANT SELECT ON experiments to auser_ro")
+  }
+
+  def createReadOnlyMysqlUser(url: String) = {
+    val conn: Connection = DriverManager.getConnection(url, "root", null)
+    val dataSource: SingleConnectionDataSource = new SingleConnectionDataSource(conn, false)
+    val rootTemplate = new JdbcTemplate(dataSource)
+
+    rootTemplate.execute("GRANT SELECT ON *.* TO \'auser_ro\'@\'%%\' IDENTIFIED BY \'as\'")
+    rootTemplate.execute("FLUSH PRIVILEGES")
+  }
+
   def createSchema() {
     dropTables()
 
@@ -116,6 +130,11 @@ class DBDriver(val jdbcTemplate: JdbcTemplate, objectMapper: ObjectMapper) {
     jdbcTemplate.update("INSERT INTO specs(fqn, spec) values (?, ?)", key, serializedSpec)
   }
 
+  import DBDriver.createTemplateRO
+  def getJdbcTemplateRO(url: String): JdbcTemplate = {
+    createTemplateRO(url)
+  }
+
   @throws(classOf[SQLException])
   def closeConnection() {
     jdbcTemplate.getDataSource.getConnection.close()
@@ -134,6 +153,12 @@ object DBDriver {
 
   private def createTemplate(url: String): JdbcTemplate = {
     val conn: Connection = DriverManager.getConnection(url, "auser", "sa")
+    val dataSource: SingleConnectionDataSource = new SingleConnectionDataSource(conn, false)
+    new JdbcTemplate(dataSource)
+  }
+
+  private def createTemplateRO(url: String): JdbcTemplate = {
+    val conn: Connection = DriverManager.getConnection(url, "auser_ro", "as")
     val dataSource: SingleConnectionDataSource = new SingleConnectionDataSource(conn, false)
     new JdbcTemplate(dataSource)
   }

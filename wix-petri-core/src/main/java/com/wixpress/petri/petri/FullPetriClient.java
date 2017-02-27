@@ -20,6 +20,8 @@ public interface FullPetriClient {
 
     List<Experiment> fetchAllExperimentsGroupedByOriginalId();
 
+    List<Experiment> searchExperiments(SearchParameters parameters);
+
     List<Experiment> fetchRecentlyEndedExperimentsDueToEndDate(int minutesEnded);
 
     Experiment fetchExperimentById(int experimentId);

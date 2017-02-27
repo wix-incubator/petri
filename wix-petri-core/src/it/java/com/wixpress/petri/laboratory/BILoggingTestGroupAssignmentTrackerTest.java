@@ -4,10 +4,13 @@ import com.google.common.base.Function;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.wixpress.petri.LogDriver;
+import com.wixpress.petri.experiments.domain.Assignment;
 import com.wixpress.petri.experiments.domain.Experiment;
+import com.wixpress.petri.experiments.domain.TestGroup;
 import com.wixpress.petri.experiments.jackson.ObjectMapperFactory;
 import com.wixpress.petri.laboratory.dsl.ExperimentMakers;
 import com.wixpress.petri.petri.Clock;
+import org.apache.commons.lang3.ObjectUtils;
 import org.hamcrest.Matcher;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -16,10 +19,14 @@ import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import scala.Option;
+import scala.Unit;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.Iterables.transform;
 import static com.natpryce.makeiteasy.MakeItEasy.a;
@@ -45,6 +52,12 @@ public class BILoggingTestGroupAssignmentTrackerTest {
     private DateTime theTime = new DateTime();
     private BILoggingTestGroupAssignmentTracker biLogger = new BILoggingTestGroupAssignmentTracker(clock);
     private LogDriver logDriver = new LogDriver();
+    private int testGroupId = 4;
+    private int executionTime = 300;
+    private TestGroup testGroup = new TestGroup(testGroupId, 0, "some_name");
+    private BIAdditions biAdditions = BIAdditions$.MODULE$.Empty();
+    private Experiment experiment = a(ExperimentMakers.Experiment).but(with(ExperimentMakers.id, 123)).make();
+
 
 
     @Before
@@ -106,10 +119,8 @@ public class BILoggingTestGroupAssignmentTrackerTest {
 
     @Test
     public void generatesCorrectLogLineWithParametersOrder() throws Exception {
-        int testGroupId = 4;
-        Experiment experiment = a(ExperimentMakers.Experiment).but(with(ExperimentMakers.id, 123)).make();
-
-        biLogger.newAssignment(userInfo, testGroupId, experiment);
+        Assignment assignment = new Assignment(userInfo, null, biAdditions, testGroup, experiment, executionTime);
+        biLogger.newAssignment(assignment);
 
         final String[] actual = parameterNamesOrdered();
         assertThat("log parameters order", actual, arrayContaining(
@@ -158,10 +169,8 @@ public class BILoggingTestGroupAssignmentTrackerTest {
 
     @Test
     public void generatesCorrectLogLine() throws Exception {
-        int testGroupId = 4;
-        Experiment experiment = a(ExperimentMakers.Experiment).but(with(ExperimentMakers.id, 123)).make();
-
-        biLogger.newAssignment(userInfo, testGroupId, experiment);
+        Assignment assignment = new Assignment(userInfo, null, biAdditions, testGroup, experiment, executionTime);
+        biLogger.newAssignment(assignment);
 
         Map<String, Object> actual = biReportLine();
         assertThat(actual, regularBiLine(testGroupId, experiment));

@@ -9,12 +9,12 @@ import org.joda.time.Duration;
 import org.joda.time.Minutes;
 
 /**
- * Created with IntelliJ IDEA.
- * User: sagyr
- * Date: 7/16/14
- * Time: 4:15 PM
- * To change this template use File | Settings | File Templates.
- */
+* Created with IntelliJ IDEA.
+* User: sagyr
+* Date: 7/16/14
+* Time: 4:15 PM
+* To change this template use File | Settings | File Templates.
+*/
 public class TransientCacheExperimentSource implements CachedExperiments.ExperimentsSource {
     private static final int KOBOSHI_INTERVAL = 5;
     private static final int REMOTE_FETCHING_LATENCY_DURATION = 1;

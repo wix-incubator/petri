@@ -53,6 +53,7 @@ public class UiExperimentBuilder {
     private int conductLimit;
     private boolean nonRegistered;
     private List<String> excludeUserGroups = new ArrayList<String>();
+    private boolean forRegisteredUsers = false;
 
     public static UiExperimentBuilder anUiExperiment() {
         return new UiExperimentBuilder();
@@ -248,6 +249,11 @@ public class UiExperimentBuilder {
         return this;
     }
 
+    public UiExperimentBuilder withForRegisteredUsers(boolean isForRegisteredUsers) {
+        this.forRegisteredUsers = isForRegisteredUsers;
+        return this;
+    }
+
     public static UiExperimentBuilder aCopyOf(UiExperiment uiExperiment) {
         return anUiExperiment().
                 withid(uiExperiment.getId()).
@@ -285,14 +291,15 @@ public class UiExperimentBuilder {
                 withIncludeUserAgentRegexes(uiExperiment.getIncludeUserAgentRegexes()).
                 withExcludeUserAgentRegexes(uiExperiment.getExcludeUserAgentRegexes()).
                 withMetaSiteIds(uiExperiment.getMetaSiteIds()).
-                withExcludeMetaSiteIds(uiExperiment.isExcludeMetaSiteIds())
-                .withConductLimit(uiExperiment.getConductLimit())
-                .withExcludeUserGroups(uiExperiment.getExcludeUserGroups());
+                withExcludeMetaSiteIds(uiExperiment.isExcludeMetaSiteIds()).
+                withConductLimit(uiExperiment.getConductLimit()).
+                withForRegisteredUsers(uiExperiment.isForRegisteredUsers()).
+                withExcludeUserGroups(uiExperiment.getExcludeUserGroups());
     }
 
 
     public UiExperiment build() {
-        UiExperiment uiExperiment = new UiExperiment(id, updater, originalId, linkId, name, type, creator, scope, lastUpdated, key, specKey, creationDate, description, comment, startDate, endDate, groups, state, paused, parentStartTime, editable, wixUsers, allRegistered, newRegistered, anonymous, includeGuids, excludeGuids, isExcludeGeo, geo, languages, hosts, includeUserAgentRegexes, excludeUserAgentRegexes, isExcludeMetaSite, metaSiteIds, conductLimit, nonRegistered, excludeUserGroups);
+        UiExperiment uiExperiment = new UiExperiment(id, updater, originalId, linkId, name, type, creator, scope, lastUpdated, key, specKey, creationDate, description, comment, startDate, endDate, groups, state, paused, forRegisteredUsers, parentStartTime, editable, wixUsers, allRegistered, newRegistered, anonymous, includeGuids, excludeGuids, isExcludeGeo, geo, languages, hosts, includeUserAgentRegexes, excludeUserAgentRegexes, isExcludeMetaSite, metaSiteIds, conductLimit, nonRegistered, excludeUserGroups);
         return uiExperiment;
     }
 }

@@ -73,7 +73,8 @@ public class ExperimentConverter {
                 .withIncludeUserAgentRegexes(adapter.getUserAgentRegex().includeUserAgentRegexes())
                 .withExcludeUserAgentRegexes(adapter.getUserAgentRegex().excludeUserAgentRegexes())
                 .withExcludeUserGroups(adapter.getUserNotInGroup().excludeUserGroups())
-                .withConductLimit(experiment.getExperimentSnapshot().conductLimit());
+                .withConductLimit(experiment.getExperimentSnapshot().conductLimit())
+                .withForRegisteredUsers(experiment.getExperimentSnapshot().isOnlyForLoggedInUsers());
 
         filterAdapterExtender.extendUiExperiment(experiment.getFilters(), uiExperimentBuilder);
 
