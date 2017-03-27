@@ -31,7 +31,7 @@ In order to solve this you can enable server side state.
 
 #### Cookies VS Server Side State: The Tradeoff
   - Cookies: no overhead, but you may loose stickiness sometimes (when an experiment is paused and a registered user changes the user agent).
-  - Server side state: overhead of another hop (for read. if conduction occurs then another for write, but not on the user request thread), but you gain correctness. Here's [how to config your app to use server side state]({{site.data.urls.integrating_petri_into_your_app.url}}). Default is 'off'.
+  - Server side state: overhead of another hop (for read. if conduction occurs then another for write), but you gain correctness. Here's [how to config your app to use server side state]({{site.data.urls.integrating_petri_into_your_app.url}}). Default is 'off'.
 
   - Therefore, you probably want to configure the server side state only for appropriate services (probably in your 'registered users' segment, thus allowing any 'public' segment to retain its SLA and not pay the overhead).
 
