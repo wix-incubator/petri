@@ -12,11 +12,11 @@ permalink: /user_experience_persistence/
   - Cookies are used to provide stickiness for users
 i.e , when running an A/B test and a user is given a choice between A or B, once a user receives B they should continue to do so on to the next visit.
 
-  - For anonymous (non-registered) users, the conduction is random as the best we can do is save cookies.
+  - For anonymous (non-registered) users, the conduction is random so the best we can do is save cookies.
 If the user changes user agent we have no means of identifying the same person (browser/machine) and stickiness will be lost.
 
   - For registered users, we use the UID as a seed for conduction, thereby providing consistent results regardless of the user agent.
-Despite the seed and results being consistent, we must still save a cookie as it is need for the 'pause' feature.
+Despite the seed and results being consistent, we must still save a cookie as it is needed for the 'pause' feature.
 
   - Cookies are saved separately.
 One cookie for anonymous experiments (shared by all anonymous users / experiments) on a given user agent, and another cookie per UID. 
