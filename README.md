@@ -15,8 +15,6 @@ Petri is used at large scale at [Wix](http://www.wix.com), supporting dozens of 
 * Conduction values are periodically reported back to the server to enable quick triaging as well as automatic pausing if a limit to the number of users is specified.
 
 
-**Visit our [documentation](http://wix.github.io/petri/) to learn more.**
-
 
 ### License
 
