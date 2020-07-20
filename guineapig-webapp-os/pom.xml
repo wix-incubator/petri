@@ -14,7 +14,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <org.springframework.security.version>3.1.4.RELEASE</org.springframework.security.version>
+        <org.springframework.security.version>5.3.3.RELEASE</org.springframework.security.version>
         <project.oauth.version>1.17.0-rc</project.oauth.version>
     </properties>
 
