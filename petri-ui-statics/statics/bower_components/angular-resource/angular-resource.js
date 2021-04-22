@@ -147,7 +147,7 @@ function shallowClearAndCopy(src, dst) {
  *     should abort the request when resolved.
  *   - **`withCredentials`** - `{boolean}` - whether to set the `withCredentials` flag on the
  *     XHR object. See
- *     [requests with credentials](https://developer.mozilla.org/en/http_access_control#section_5)
+ *     [requests with credentials](https://web.archive.org/web/20100527153021/https://developer.mozilla.org/En/HTTP_access_control)
  *     for more information.
  *   - **`responseType`** - `{string}` - see
  *     [requestType](https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest#responseType).
