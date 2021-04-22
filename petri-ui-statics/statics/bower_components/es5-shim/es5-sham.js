@@ -10,7 +10,7 @@
 ;
 
 // UMD (Universal Module Definition)
-// see https://github.com/umdjs/umd/blob/master/returnExports.js
+// see https://web.archive.org/web/20140724063136/https://github.com/umdjs/umd/blob/master/returnExports.js
 (function (root, factory) {
     'use strict';
     /*global define, exports, module */

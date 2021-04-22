@@ -9790,7 +9790,7 @@ function locationGetterSetter(property, preprocess) {
  *
  * @description
  * The $location service parses the URL in the browser address bar (based on the
- * [window.location](https://developer.mozilla.org/en/window.location)) and makes the URL
+ * [window.location](https://web.archive.org/web/20120509110621/https://developer.mozilla.org/en/window.location)) and makes the URL
  * available to your application. Changes to the URL in the address bar are reflected into
  * $location service and changes to $location are reflected into the browser address bar.
  *
