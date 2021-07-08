@@ -2,6 +2,8 @@
 ======
 
 [![Build Status](https://travis-ci.org/wix/petri.svg?branch=master)](https://travis-ci.org/wix/petri)
+[![Conference recommends](https://devternity.com/shields/recommends.svg)](https://devternity.com)
+
 
 Petri is [Wix](http://www.wix.com)’s holistic experiment system, it covers the lifecycle of product experimenting including A/B tests and feature toggles.
 
